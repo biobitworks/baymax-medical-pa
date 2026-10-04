@@ -1,0 +1,531 @@
+{
+  "catalog_sha256": "648e0e87bc4ec024dd1d46283bd7697fc9de266aef6980d336c113c7311d8d8a",
+  "corpus_sha256": "8e10ab3796ca5fd6eb3c0e4818a0ca2fb9dffea1eb07ebf396783dfc31e17618",
+  "results": [
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_000"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_001"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_002"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_003"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_004"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_005"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_006"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_007"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_008"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_009"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_010"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_011"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_012"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_013"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_014"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_015"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_016"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_017"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_018"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_019"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_020"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_021"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_000"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_001"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_002"
+    },
+    {
+      "EXPECTED_STATE": "ACCEPT",
+      "PYTHON_STATE": "ACCEPT",
+      "SWIFT_STATE": "ACCEPT",
+      "VECTOR_ID": "CLAUDE_v2_003"
+    },
+    {
+      "EXPECTED_STATE": "ACCEPT",
+      "PYTHON_STATE": "ACCEPT",
+      "SWIFT_STATE": "ACCEPT",
+      "VECTOR_ID": "CLAUDE_v2_004"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_005"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_006"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_007"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_008"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_009"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_010"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_011"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_012"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_013"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_014"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_015"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_016"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_017"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_018"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_019"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_020"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_021"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_022"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_023"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_024"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_025"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_026"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_027"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_028"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_029"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_030"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_031"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_032"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_033"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_034"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_035"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_036"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_037"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_038"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_039"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_040"
+    },
+    {
+      "EXPECTED_STATE": "ACCEPT",
+      "PYTHON_STATE": "ACCEPT",
+      "SWIFT_STATE": "ACCEPT",
+      "VECTOR_ID": "VALID_SELECTION"
+    },
+    {
+      "EXPECTED_STATE": "ACCEPT",
+      "PYTHON_STATE": "ACCEPT",
+      "SWIFT_STATE": "ACCEPT",
+      "VECTOR_ID": "VALID_EMPTY"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "FLOAT_ID"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "EXPONENT_ID"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "BOOL_ID"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "NEGATIVE_ID"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "HUGE_ID"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "REPEATED_ID"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRING_ID"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "NESTED_ID"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "NULL_ID"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "LEXICAL_EXPONENT"
+    },
+    {
+      "EXPECTED_STATE": "ACCEPT",
+      "PYTHON_STATE": "ACCEPT",
+      "SWIFT_STATE": "ACCEPT",
+      "VECTOR_ID": "NEGATIVE_ZERO"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "TRAILING_JSON"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "TRAILING_TEXT"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "TOP_ARRAY"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "TRAILING_COMMA"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "DUPLICATE"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "ESCAPED_DUPLICATE"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "NORMALIZED_COLLISION"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "NAN"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "OVERSIZE"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "WALLET_OBJECT"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "OBSERVED_AIRPLANE_RESPONSE"
+    }
+  ],
+  "schema": "baymax.model-parity.v1",
+  "state": "PASS",
+  "vector_count": 87
+}
