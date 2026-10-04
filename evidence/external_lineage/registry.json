@@ -1,0 +1,48 @@
+{
+  "schema": "baymax.external_lineage_registry.v1",
+  "project": "baymax-medical-pa",
+  "lineages": [
+    {
+      "type": "ExternalLineageReferenceFCO",
+      "repository": "https://github.com/jerelvelarde/baymax-medical-pa",
+      "commit": "74bfe7708ba1a94dd856bd69ed852f8288f72bf7",
+      "relationship": "UPSTREAM_FORK_PARENT",
+      "rights_state": "UNRESOLVED_ROOT_LICENSE",
+      "history_admission": "REFERENCE_ONLY"
+    },
+    {
+      "type": "ExternalLineageReferenceFCO",
+      "repository": "https://github.com/biobitworks/carescribe",
+      "commit": "90ac3d203cd5705421dc1926bce04e5f096a9531",
+      "relationship": "PRIVACY_CLINICAL_PROTOTYPE_REFERENCE",
+      "rights_state": "MIT_SOFTWARE",
+      "history_admission": "REFERENCE_ONLY"
+    },
+    {
+      "type": "ExternalLineageReferenceFCO",
+      "repository": "https://github.com/biobitworks/agent-foundry",
+      "commit": "caaae178bede2c314ab9e4fc9f2528e69b2a858c",
+      "relationship": "PROVIDER_NEUTRAL_EVENT_MERKLE_REPLAY_REFERENCE",
+      "rights_state": "REPOSITORY_LICENSE_UNSELECTED",
+      "history_admission": "REFERENCE_ONLY"
+    },
+    {
+      "type": "ExternalLineageReferenceFCO",
+      "repository": "https://github.com/biobitworks/vithia-verifiable-long-horizon-agents",
+      "commit": "3489da0e17ffb1a4b62b5549486b2240088a1a1d",
+      "relationship": "GOLDEN_ROUTE_BREAKPOINT_REFERENCE",
+      "rights_state": "MIXED_APACHE2_SOFTWARE_CC_BY_NC_ND_GOVERNED_CONTENT",
+      "history_admission": "REFERENCE_ONLY"
+    },
+    {
+      "type": "ExternalLineageReferenceFCO",
+      "repository": "https://github.com/biobitworks/jev-space-invaders",
+      "commit": "dbca313a22b3f3bdc35f7b4f45d5fd550b22b9b9",
+      "relationship": "FAIL_CLOSED_LICENSE_GATE_AND_MINIMUM_DISCLOSURE_REFERENCE",
+      "rights_state": "GENERAL_ROOT_LICENSE_NOT_RECOVERED",
+      "history_admission": "REFERENCE_ONLY"
+    }
+  ],
+  "mmr_continuity": "NONE",
+  "note": "Independent historical commitments are not concatenated into Baymax history."
+}

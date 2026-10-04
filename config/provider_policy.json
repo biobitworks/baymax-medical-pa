@@ -1,0 +1,33 @@
+{
+  "schema": "baymax.provider_policy.v1",
+  "default_external_health_data": "BLOCK",
+  "routes": {
+    "local": {
+      "raw_health_data": "CANDIDATE",
+      "requires_contract_verification": false
+    },
+    "deidentified_external": {
+      "raw_health_data": "BLOCK",
+      "requires_explicit_authorization": true
+    },
+    "contracted_external": {
+      "raw_health_data": "BLOCK_UNTIL_ACCOUNT_CONTRACT_CONFIGURATION_VERIFIED",
+      "requires_explicit_authorization": true
+    }
+  },
+  "providers": {
+    "liquid_local_weights": "CANDIDATE",
+    "mistral_local_weights": "CANDIDATE",
+    "qwen_local_weights": "CANDIDATE",
+    "neon": "CONTRACT_AND_CONFIGURATION_REQUIRED",
+    "exa": "DEIDENTIFIED_ONLY_UNTIL_CONTRACT_VERIFIED",
+    "mastra_hosted": "BLOCK_SENSITIVE_USE_PENDING_REVIEW",
+    "mastra_self_hosted": "CANDIDATE",
+    "fly": "CONTRACT_AND_CONFIGURATION_REQUIRED",
+    "assistant_ui": "UI_ONLY",
+    "coderabbit": "CODE_REVIEW_NO_PHI",
+    "executor": "LOCAL_DEV_PREFERRED",
+    "kernel": "UNKNOWN_FOR_PHI",
+    "agentmail": "BLOCK_PHI_PENDING_VENDOR_REVIEW"
+  }
+}
