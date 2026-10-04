@@ -16,6 +16,7 @@ rows = []; head = git("rev-parse", "HEAD")
 files = sorted(os.path.basename(p) for p in glob.glob("evidence/breakpoints/*.json"))
 ids = [f[:-5] for f in files]
 chain = [json.loads(l) for l in open("evidence/chain/CHAIN.jsonl") if l.strip()]
+chain_count_matches_breakpoints = len(chain) == len(files)
 prev = "0" * 64
 for i, f in enumerate(files):
     bid = f[:-5]; p = "evidence/breakpoints/" + f; res = {"breakpoint": bid, "checks": {}}; ok = res["checks"]
@@ -43,6 +44,7 @@ for i, f in enumerate(files):
         e = chain[i]; fsha = sha(git("show", f"{c}:{p}", raw=True)) if c else None
         ok["chain_id_index"] = e["breakpoint_id"] == bid and e["order_index"] == i
         ok["chain_file_sha_matches_admitted_bytes"] = e["file_sha256"] == fsha
+        ok["current_breakpoint_bytes_match_chain_file_sha"] = e["file_sha256"] == sha(open(p, "rb").read())
         ok["chain_prev_ok"] = e["previous_commitment"] == prev
         want = sha(f"baymax-chain-v1\n{prev}\n{e['file_sha256']}\n{e['merkle_root']}\n{bid}\n{i}".encode())
         ok["chain_commitment_recomputed"] = e["computed_commitment"] == want and e["merkle_root"] == m["merkle_root"]
@@ -51,9 +53,11 @@ for i, f in enumerate(files):
     ok["contained_in_HEAD"] = bool(c) and subprocess.run(["git", "merge-base", "--is-ancestor", c, "HEAD"]).returncode == 0
     res["result"] = "PASS" if all(ok.values()) else "FAIL"; rows.append(res)
 rem = git("ls-remote", "origin", "refs/heads/redteam/bp-0006-model-wallet").split()[0] if git("ls-remote", "origin", "refs/heads/redteam/bp-0006-model-wallet") else None
-out = {"schema": "baymax.redteam_lane.independent_custody.v1", "verified_commit": head, "primary_branch_remote_sha": rem, "chain_entries": len(chain), "breakpoint_files": len(files),
+out = {"schema": "baymax.redteam_lane.independent_custody.v2", "verified_commit": head, "primary_branch_remote_sha": rem, "chain_entries": len(chain), "breakpoint_files": len(files),
+       "global_checks": {"chain_entry_count_matches_breakpoint_count": chain_count_matches_breakpoints},
        "per_breakpoint": rows, "summary": {"PASS": sum(r["result"] == "PASS" for r in rows), "FAIL": sum(r["result"] == "FAIL" for r in rows)},
-       "claim_boundary": "Recomputes identity/ordering/consistency only. Not authenticity (UNSIGNED), not correctness, not MMR (NOT_COMPUTED). Remote parity != authenticity."}
+       "overall_result": "PASS" if chain_count_matches_breakpoints and all(r["result"] == "PASS" for r in rows) else "FAIL",
+       "claim_boundary": "Recomputes identity/ordering/consistency only. Checks current breakpoint bytes against admitted chain hashes and rejects chain/file count mismatch. Not authenticity (UNSIGNED), not correctness, not MMR (NOT_COMPUTED). Remote parity != authenticity."}
 json.dump(out, open(sys.argv[1], "w"), indent=1, sort_keys=True)
 for r in rows: print(r["breakpoint"], r["result"], r["admitting_commit"], [k for k, v in r["checks"].items() if not v])
-print(out["summary"], "chain=", len(chain), "files=", len(files))
+print(out["summary"], "chain=", len(chain), "files=", len(files), "count_match=", chain_count_matches_breakpoints, "overall=", out["overall_result"])
