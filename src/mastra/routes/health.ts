@@ -13,6 +13,8 @@ import {
   summarizeRuns,
 } from "../lib/health-data";
 
+import { buildFitnessOverview, getFitnessPreferences, goalsSchema, preferencesSchema, saveActivityGoals, saveFitnessPreferences } from "../lib/fitness";
+
 const checkinBody = z.object({
   energy: z.enum(ENERGY_LEVELS),
   note: z.string().trim().max(200).optional(),
@@ -33,6 +35,33 @@ const runBody = z.object({
  * agent tools use, so the agent always sees what the user sees.
  */
 export const healthRoutes = [
+  registerApiRoute("/health/fitness", {
+    method: "GET",
+    handler: async (c) => c.json({
+      ...buildFitnessOverview(getRecentMetrics(7), getFitnessPreferences().goals),
+      preferences: getFitnessPreferences(), source: "demo",
+    }),
+  }),
+  registerApiRoute("/health/preferences", {
+    method: "GET",
+    handler: async (c) => c.json(getFitnessPreferences()),
+  }),
+  registerApiRoute("/health/preferences", {
+    method: "POST",
+    handler: async (c) => {
+      const parsed = preferencesSchema.safeParse(await c.req.json().catch(() => ({})));
+      if (!parsed.success) return c.json({ error: "Invalid preferences" }, 400);
+      return c.json(saveFitnessPreferences(parsed.data));
+    },
+  }),
+  registerApiRoute("/health/goals", {
+    method: "POST",
+    handler: async (c) => {
+      const parsed = goalsSchema.safeParse(await c.req.json().catch(() => ({})));
+      if (!parsed.success) return c.json({ error: "Invalid activity goals" }, 400);
+      return c.json(saveActivityGoals(parsed.data));
+    },
+  }),
   registerApiRoute("/health/overview", {
     method: "GET",
     handler: async (c) => {

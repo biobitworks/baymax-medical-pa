@@ -51,6 +51,8 @@ import { PrescriptionShoppingCard } from "./components/PrescriptionShoppingCard"
 import { WebSearchCard } from "./components/WebSearchCard";
 import { searchCardFromEvent, type SearchCardPart, type WebSearchCardArgs } from "./components/web-search-state";
 import "./components/prescription-shopping.css";
+import { ActivityOnboarding, FitnessDashboard, FITNESS_CHANGED, fitnessRequest, type SavedPreferences } from "./components/Fitness";
+import type { FitnessOverview } from "./mastra/lib/fitness";
 
 // Triggers the agent to read all of the user's health data and answer with a
 // week-in-review, which also renders the water, movement, sleep, energy and
@@ -102,6 +104,8 @@ type RunSummary = {
 };
 type MetricKey = "hydration" | "movement" | "sleep";
 type HealthCardArgs =
+  | { metric: "fitness"; overview: FitnessOverview }
+  | { metric: "onboarding"; preferences: SavedPreferences }
   | {
       metric: MetricKey;
       /** Newest first, as returned by get-daily-metrics */
@@ -142,6 +146,12 @@ const healthCardPart = (args: HealthCardArgs): AgentToolPart => ({
 });
 function healthCardsFromTool(toolName: string, result: any): HealthCardArgs[] {
   if (!result || typeof result !== "object") return [];
+  if (toolName === "fitnessOverviewTool" && Array.isArray(result.daily)) {
+    return [{ metric: "fitness", overview: result }];
+  }
+  if (toolName === "onboardingTool" && result.preferences) {
+    return [{ metric: "onboarding", preferences: result.preferences }];
+  }
   if (toolName === "dailyMetricsTool" && Array.isArray(result.daily)) {
     const { daily, summary } = result;
     return (["hydration", "movement", "sleep"] as const).map((metric) => ({
@@ -726,6 +736,18 @@ const fixtureAdapter: ChatModelAdapter = {
         .map((p) => p.text)
         .join(" ")
         .toLowerCase() || "";
+    if (/fitness|activity goals|onboarding|set up activity/.test(query)) {
+      const setup = /onboarding|set up|get started/.test(query);
+      try {
+        const args: HealthCardArgs = setup
+          ? { metric: "onboarding", preferences: await fitnessRequest<SavedPreferences>("preferences") }
+          : { metric: "fitness", overview: await fitnessRequest<FitnessOverview>("fitness") };
+        if (!abortSignal.aborted) yield { content: [{ type: "text", text: "Here’s your activity space. Choose the goals that fit your day." }, healthCardPart(args)] };
+      } catch {
+        if (!abortSignal.aborted) yield { content: [{ type: "text", text: "I can’t reach your activity data right now. Try the Physical fitness page when Baymax is connected." }] };
+      }
+      return;
+    }
     const diabetes = query.includes("diabet");
     const kind =
       query.includes("doctor") || query.includes("brief")
@@ -952,7 +974,11 @@ const CareTool = makeAssistantToolUI<
 const HealthTool = makeAssistantToolUI<HealthCardArgs, { ready: boolean }>({
   toolName: "health_card",
   render: ({ args }) =>
-    args.metric === "energy" ? (
+    args.metric === "fitness" ? (
+      <FitnessDashboard initialData={args.overview} compact />
+    ) : args.metric === "onboarding" ? (
+      <ActivityOnboarding initialPreferences={args.preferences} />
+    ) : args.metric === "energy" ? (
       <EnergyCard {...args} />
     ) : args.metric === "running" ? (
       <RunCard {...args} />
@@ -1095,6 +1121,8 @@ function Chat() {
           <button type="button" onClick={() => setShowShopping(value => !value)} aria-expanded={showShopping}>{showShopping ? "Hide shopping demo" : "Shopping demo"}</button>
           {[
             { label: "Weekly summary", prompt: WEEKLY_SUMMARY_PROMPT },
+            { label: "Fitness", prompt: "Open my fitness dashboard" },
+            { label: "Activity setup", prompt: "Start my activity onboarding" },
             {
               label: "Prescription",
               prompt: "I need a diabetes medication refill while travelling",
@@ -1142,6 +1170,7 @@ const nav = [
   ["Today", LayoutDashboard],
   ["Talk to Baymax", MessageCircle],
   ["Your plan", Calendar],
+  ["Physical fitness", Footprints],
   ["Running", Activity],
   ["Travel care", Plane],
   ["Doctor brief", FileText],
@@ -1152,6 +1181,8 @@ function App() {
   const [modal, setModal] = useState("");
   const [name, setName] = useState("Alex");
   const [ready, setReady] = useState(false);
+  const [preferencesLoading, setPreferencesLoading] = useState(true);
+  const [fitnessPreferences, setFitnessPreferences] = useState<SavedPreferences>();
   const [energy, setEnergy] = useState("");
   const [done, setDone] = useState<string[]>([]);
   const [water, setWater] = useState(3);
@@ -1181,6 +1212,19 @@ function App() {
     setToast(s);
     setTimeout(() => setToast(""), 3500);
   };
+  useEffect(() => {
+    let active = true;
+    const apply = (preferences: SavedPreferences) => {
+      if (!active) return;
+      setName(preferences.name);
+      setFitnessPreferences(preferences);
+      if (preferences.onboarded) setReady(true);
+    };
+    const onChange = (event: Event) => apply((event as CustomEvent<SavedPreferences>).detail);
+    window.addEventListener(FITNESS_CHANGED, onChange);
+    void fitnessRequest<SavedPreferences>("preferences").then(apply).catch(() => {}).finally(() => { if (active) setPreferencesLoading(false); });
+    return () => { active = false; window.removeEventListener(FITNESS_CHANGED, onChange); };
+  }, []);
   // Load today's numbers and the last week from the Mastra server. The agent
   // tools read the same data, so the app and Baymax always agree.
   useEffect(() => {
@@ -1420,6 +1464,8 @@ function App() {
                       ? "Let’s talk."
                       : page === "Your plan"
                         ? "Make space for yourself."
+                        : page === "Physical fitness"
+                          ? "A little movement. Every day."
                         : page === "Running"
                           ? "One foot, then the other."
                         : page === "Travel care"
@@ -1435,6 +1481,8 @@ function App() {
                       ? "No judgment. Just a companion in your corner."
                       : page === "Your plan"
                         ? "Small, sustainable steps for the days ahead."
+                        : page === "Physical fitness"
+                          ? "Find your rhythm, set your goals, and watch the little things add up."
                         : page === "Running"
                           ? "Every mile is yours. Go at your own pace."
                         : page === "Travel care"
@@ -1732,6 +1780,7 @@ function App() {
                 </section>
               </div>
             )}
+            {page === "Physical fitness" && <FitnessDashboard />}
             {page === "Running" && <RunningSection />}
             {page === "Travel care" && (
               <>
@@ -1934,8 +1983,9 @@ function App() {
                   <ShieldCheck className="green-text" size={30} />
                   <h2>Privacy comes first.</h2>
                   <p>
-                    Your information stays in this session. Refreshing clears
-                    your profile, check-ins, and conversations.
+                    Activity goals and onboarding preferences stay in the demo
+                    server session and reset when the server restarts.
+                    Conversations and other page preferences reset on refresh.
                   </p>
                   <p className="fine">
                     Choose what you share. Review any brief before opening it in
@@ -1961,7 +2011,7 @@ function App() {
             </footer>
           </div>
           <nav className="bottom-nav" aria-label="Main navigation">
-            {[nav[1], nav[0], nav[2], nav[3], nav[4]].map(([item, I]) => (
+            {[nav[1], nav[0], nav[2], nav[3], nav[5]].map(([item, I]) => (
               <button
                 key={item}
                 aria-label={item}
@@ -1981,40 +2031,11 @@ function App() {
             onClick={() => setMobile(false)}
           />
         )}{" "}
-        {!ready && (
+        {!ready && !preferencesLoading && (
           <ModalShell welcome>
-            <section className="modal welcome">
-              <Mascot small />
-              <span className="eyebrow">MEET YOUR CARE COMPANION</span>
-              <h2>
-                A little adorable.
-                <br />A lot of love.
-              </h2>
-              <p>
-                I’m Baymax. I’ll help you make room for your health, even when
-                life gets busy.
-              </p>
-              <label>
-                What should I call you?
-                <input
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  maxLength={30}
-                />
-              </label>
-              <p className="fine">
-                Your space, your pace. You choose what to share.
-              </p>
-              <button
-                className="primary"
-                onClick={() => {
-                  setName(name.trim() || "Alex");
-                  setReady(true);
-                }}
-              >
-                Let’s take care of you <ArrowUpRight size={16} />
-              </button>
-            </section>
+            <ActivityOnboarding initialName={name} initialPreferences={fitnessPreferences} onCancel={() => { setReady(true); go("Physical fitness"); }} onComplete={(preferences) => {
+              setName(preferences.name); setReady(true); go("Physical fitness");
+            }} />
           </ModalShell>
         )}
         {modal && (
@@ -2111,8 +2132,15 @@ function App() {
                   <button
                     className="primary"
                     onClick={() => {
-                      setName(name.trim() || "Alex");
-                      setModal("");
+                      const displayName = name.trim() || "Alex";
+                      void (async () => {
+                        try {
+                          const current = fitnessPreferences ?? await fitnessRequest<SavedPreferences>("preferences");
+                          const saved = await fitnessRequest<SavedPreferences>("preferences", { name: displayName, goals: current.goals, notifications: current.notifications });
+                          window.dispatchEvent(new CustomEvent(FITNESS_CHANGED, { detail: saved }));
+                          setModal("");
+                        } catch { notify("Your name didn’t save. Please try again."); }
+                      })();
                     }}
                   >
                     Save name
@@ -2122,8 +2150,9 @@ function App() {
                 <>
                   <h2>Start fresh?</h2>
                   <p>
-                    This clears your check-ins, tasks, and preferences. Your
-                    downloaded brief stays on your device.
+                    This refreshes the app and clears the conversation and local
+                    tasks. Activity data and saved goals stay in the demo server
+                    session. Your downloaded brief stays on your device.
                   </p>
                   <button
                     className="primary"

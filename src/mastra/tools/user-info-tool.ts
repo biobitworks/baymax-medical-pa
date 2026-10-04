@@ -1,3 +1,4 @@
+import { getFitnessPreferences } from "../lib/fitness";
 import { createTool } from "@mastra/core/tools";
 import { z } from "zod";
 
@@ -21,7 +22,7 @@ export const userInfoTool = createTool({
   inputSchema: z.object({}),
   outputSchema: userInfoSchema,
   execute: async () => ({
-    name: "Alex",
+    name: getFitnessPreferences().name,
     age: 42,
     conditions: ["Type 2 diabetes"],
     medications: ["Metformin 500mg twice daily"],
