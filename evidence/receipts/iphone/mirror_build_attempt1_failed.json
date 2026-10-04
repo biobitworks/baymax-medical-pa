@@ -1,0 +1,8 @@
+{
+  "error": "v1 UI/harness restored alongside v2 inference after base adoption; incompatible signatures",
+  "log_sha256": "51f89e1f7906349247a4c1abb8316ddb521d60418bf27114b6db22d31290574f",
+  "physical_execution": "NOT_TESTED",
+  "repair": "Restore admitted BP26 UI/harness, then reapply interpolation and unicode-test cleanup",
+  "schema": "baymax.mirror_build_failure.v1",
+  "state": "FAILED"
+}

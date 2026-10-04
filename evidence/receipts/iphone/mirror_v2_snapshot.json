@@ -1,0 +1,14 @@
+{
+  "adoption": "FAST_FORWARD_VERIFIED_COMMITTED_BP26",
+  "corrections": [
+    "Repair literal SwiftUI interpolation",
+    "Exercise unicode-escaped duplicate key",
+    "Preserve v1 packet reproduction module",
+    "Build into fresh temporary directory without deleting prior builds",
+    "Update current v2 handoff documentation"
+  ],
+  "schema": "baymax.iphone_mirror_adoption.v1",
+  "source_branch": "integration/iphone-offline-v2",
+  "source_commit": "33a9cacd4336785a1857c5e08987024b77332520",
+  "source_worktree_modified": false
+}

@@ -1,0 +1,31 @@
+{
+  "app_binary_sha256": "7b16a892d46af6f868e696d20c105fdd1090c3b7c252e7251c5c6cdea4cc1039",
+  "base_implementation_breakpoint": "BAYMAX-BP-0026",
+  "build_log_sha256": "018ccf3c9b5de61449df30971aea7a208c8bafc1cf702db43bba0a7168906be1",
+  "cleanup": [
+    "Repair literal SwiftUI interpolation",
+    "Exercise unicode-escaped duplicate key",
+    "Preserve v1 packet reproduction module",
+    "Build into fresh temporary directory without deleting prior builds",
+    "Update current v2 handoff documentation"
+  ],
+  "exact_response_validation": "NOT_TESTED_NO_EXACT_BYTES",
+  "iphoneos_arm64_build": "PASS_UNSIGNED",
+  "legacy_v1_packet_bytes": "PRESERVED",
+  "medical_correctness": "UNKNOWN",
+  "native_local_model": "NOT_IMPLEMENTED_APOLLO_MANUAL_FALLBACK",
+  "offline_model_execution": "NOT_DEMONSTRATED_LTE_VISIBLE",
+  "parent_breakpoint": "BAYMAX-BP-0027",
+  "physical_baymax_app": "NOT_OBSERVED",
+  "provider_calls": 0,
+  "python_tests": "PASS_30_NO_SKIPS",
+  "recording": "GENERATION_AND_SELECTION_DISPLAY_OBSERVED",
+  "recording_selection_validation": "PASS_VISUAL_TRANSCRIPTION_ONLY",
+  "rejected_cases": 21,
+  "schema": "baymax.iphone_mirror_ready.v1",
+  "signing": "SELECT_TEAM_IN_XCODE",
+  "source_commit": "33a9cacd4336785a1857c5e08987024b77332520",
+  "source_worktree_modified": false,
+  "state": "PARTIAL_PHYSICAL_DEMO_READY",
+  "swift_contract": "PASS_POSITIVE_ID_SELECTION"
+}

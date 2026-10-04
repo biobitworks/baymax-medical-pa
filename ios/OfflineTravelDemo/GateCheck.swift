@@ -65,7 +65,7 @@ import Foundation
             }
         }
 
-        let unicodeDuplicate = #"{"summary":"SYNTHETIC_CONTEXT_ONLY","summary":"SYNTHETIC_CONTEXT_ONLY","known":[],"unknown":[],"recommended_questions":[],"medical_action":"NONE","requires_clinician":true}"#
+        let unicodeDuplicate = #"{"summary":"SYNTHETIC_CONTEXT_ONLY","\u0073ummary":"SYNTHETIC_CONTEXT_ONLY","known":[],"unknown":[],"recommended_questions":[],"medical_action":"NONE","requires_clinician":true}"#
         do {
             _ = try ModelOutput.parse(unicodeDuplicate, catalog: catalog)
             fatalError("unicode duplicate key accepted")
