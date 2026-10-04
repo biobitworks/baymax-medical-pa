@@ -1,0 +1,38 @@
+{
+ "schema": "baymax.redteam_lane.simulator_install.v1",
+ "observed_at": "2026-10-04T22:06:27Z",
+ "requested_by": "operator ('update xcode with simulator')",
+ "tool": "xcodebuild -downloadPlatform iOS (Apple's own Xcode component installer)",
+ "xcode": "26.1.1 (17B100)",
+ "before": {
+  "runtimes_installed": 0,
+  "devices": "all Unavailable (SimRuntime.iOS-26-1 missing)",
+  "sdks": "iphoneos26.1 + iphonesimulator26.1 SDKs present"
+ },
+ "installed": {
+  "runtime": "iOS 26.1 (26.1 - 23B86), arm64",
+  "identifier": "com.apple.CoreSimulator.SimRuntime.iOS-26-1",
+  "download_size": "8.32 GB",
+  "install_exit": 0
+ },
+ "safety": {
+  "disk_free_before_GiB": 15,
+  "disk_free_after_GiB": 13,
+  "watchdog": "abort if <3 GiB free; never triggered"
+ },
+ "verification": {
+  "devices_now_available": [
+   "iPhone 17 Pro",
+   "iPhone 17 Pro Max",
+   "iPhone Air",
+   "iPhone 17",
+   "iPhone 16e"
+  ],
+  "boot_test": "iPhone 17 Pro booted on iOS 26.1, then shut down"
+ },
+ "not_done": [
+  "Baymax app not installed or run in the simulator by this step",
+  "no airplane-mode or offline claim from the simulator"
+ ],
+ "claim_boundary": "A Simulator runtime enables simulator builds/tests only. It does NOT close the physical-iPhone acceptance criterion; the simulator shares the Mac's network and cannot demonstrate Airplane Mode."
+}
