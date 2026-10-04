@@ -1,0 +1,10 @@
+{
+  "schema": "baymax.verification_summary.v1",
+  "state": "PASS",
+  "unit_tests": {"count": 5, "exitcode": 0},
+  "py_compile_exitcode": 0,
+  "git_diff_check_exitcode": 0,
+  "gitleaks_exitcode": 0,
+  "initial_failure_preserved": "evidence/receipts/verification/unittest_initial_failure.json",
+  "claim_boundary": "Passing software checks do not establish HIPAA compliance, medical correctness, security of an undeployed system, or provider contractual eligibility."
+}

@@ -1,0 +1,32 @@
+{
+  "schema": "baymax.setup_receipt.v1",
+  "date": "2026-10-04",
+  "upstream": {
+    "repository": "jerelvelarde/baymax-medical-pa",
+    "commit": "74bfe7708ba1a94dd856bd69ed852f8288f72bf7",
+    "push_permission_observed": false
+  },
+  "fork": {
+    "repository": "biobitworks/baymax-medical-pa",
+    "visibility": "PUBLIC",
+    "relationship": "fork",
+    "local_path": "/Users/byron/projects/active/baymax-medical-pa",
+    "origin": "https://github.com/biobitworks/baymax-medical-pa.git",
+    "upstream_remote": "https://github.com/jerelvelarde/baymax-medical-pa.git",
+    "head_after_clone": "74bfe7708ba1a94dd856bd69ed852f8288f72bf7"
+  },
+  "attempts": [
+    {
+      "state": "FAILED",
+      "operation": "gh repo fork with unsupported --remote=false combination",
+      "effect": "NO_CLONE_NO_PUSH",
+      "reason": "CLI argument combination rejected"
+    },
+    {
+      "state": "EXECUTED",
+      "operation": "gh repo fork --clone=false, git clone fork, add upstream remote",
+      "effect": "FORK_AND_LOCAL_CLONE_CREATED"
+    }
+  ],
+  "secret_values_recorded": false
+}

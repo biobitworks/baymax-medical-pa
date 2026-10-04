@@ -95,3 +95,20 @@ Baymax is intended to support organization, habits, and healthcare conversations
 ---
 
 **Baymax: caring enough to remind you again.**
+
+## Biobitworks compliance-backend successor
+
+The Biobitworks fork adds a compliance-first backend track while preserving this repository's original README and medical claim boundary.
+
+Current architecture documents:
+
+- [Canon](CANON.md)
+- [Compliance backend](docs/COMPLIANCE_BACKEND.md)
+- [Model/provider matrix](docs/MODEL_PROVIDER_MATRIX.md)
+- [Golden Path to Golden Years](docs/GOLDEN_PATH_TO_GOLDEN_YEARS.md)
+- [Architecture](docs/ARCHITECTURE.md)
+- [Licensing status](LICENSES.md)
+
+The first enforcement component is a deterministic, fail-closed routing prototype in `src/baymax_compliance/policy.py`. Models never authorize their own access to sensitive data.
+
+Historical CareScribe, Agent Foundry, Vithia, and JEV commitments remain independent external lineages; their MMRs/Merkle histories are not concatenated into Baymax.

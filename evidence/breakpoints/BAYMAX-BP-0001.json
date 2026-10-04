@@ -1,0 +1,84 @@
+{
+  "base_head": "74bfe7708ba1a94dd856bd69ed852f8288f72bf7",
+  "branch": "compliance/golden-years-backend-v01",
+  "breakpoint_id": "BAYMAX-BP-0001",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 8571,
+        "path": "evidence/breakpoints/BAYMAX-BP-0000.json",
+        "sha256": "f8d9a021858d417bb83b5ad4aa060de6134e6ce6aa37817c75e883f290152e0f"
+      },
+      {
+        "bytes": 371,
+        "path": ".gitignore",
+        "sha256": "782d3d42fe05c2ec1b43967900549b52e4b023970900d2e227b18a5d13d6f3bb"
+      },
+      {
+        "bytes": 2057,
+        "path": "docs/BREAKPOINT_PROTOCOL.md",
+        "sha256": "cffaa993409b2295448c61339d99bfe78a59d2ad62cf2d46a097d5b1a9f5c12a"
+      },
+      {
+        "bytes": 1791,
+        "path": "docs/PREDECESSOR_REUSE_MATRIX.md",
+        "sha256": "39a7a6dad177aa9e564895e46216c008d6b3d9e4b538ff1e8be1e11550cf704b"
+      },
+      {
+        "bytes": 0,
+        "path": "evidence/receipts/verification/successor_unittest.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "bytes": 558,
+        "path": "evidence/receipts/verification/successor_unittest.stderr",
+        "sha256": "baa7fd90b9b01aa4f7fab216dd609e2c6501172e507ec1389e2a2a77facc699c"
+      },
+      {
+        "bytes": 2,
+        "path": "evidence/receipts/verification/successor_unittest.exitcode",
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      },
+      {
+        "bytes": 2,
+        "path": "evidence/receipts/verification/successor_diff.exitcode",
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      },
+      {
+        "bytes": 2,
+        "path": "evidence/receipts/verification/successor_gitleaks.exitcode",
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      },
+      {
+        "bytes": 3,
+        "path": "evidence/receipts/verification/successor_gitleaks.json",
+        "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 10,
+    "leaf_hashes": [
+      "977316581583cd0b73926b9a7ca7a0531e278bd192f2cec541751670f9474913",
+      "a077c7800b8e71b9ca330bca8c3a4fc2a5fcfd49b8b44539a49dd68f79dfc0f0",
+      "97dca52556d9e9c0ab7de24ac173a4b9d7a7a16f80fc8facd7547b00eb545919",
+      "187b99f95ee8a226cfd188003e2938017a8988e0d5e9487244796b04af0a1bd3",
+      "85093841ec2c440c86bf0fc8d39c765cbc06143d62182965613b7e54f77e7a2a",
+      "d296ecfcc42d810a8b92507e1584832351a92b4a771a99c9f5105aa5284ef5d9",
+      "63b3738885f6448c8737229e1b3071fc01092a79fef17df487222905b3015e21",
+      "c433d46311c85f8876d111f0005b06ece4b458f0d3aaa5cb2a8c5b8732453091",
+      "e67b3860c6f38b20d9f423d397a1b04ccae84cc6f1fcb768f4fcc09f9c8f75fc",
+      "7a1193a701557e8e980ab426b84e634e047d927047e2fd915b76c70bbcfd11bd"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "9ab9144240c904375cdca252bf3ce577c163380f64b8a0f88aa451a7acdbcb31"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "Binds the first breakpoint bytes to the explicit in-turn capture protocol, predecessor reuse/license guard, public-repo ignore rules, and passing successor checks.",
+  "parent": "BAYMAX-BP-0000",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "BREAKPOINT_PROTOCOL_AND_REUSE_GUARD",
+  "state": "PASS",
+  "timestamp_utc": "2026-10-04T18:42:08.717199+00:00"
+}
