@@ -2062,7 +2062,7 @@ function App() {
         )}{" "}
         {!ready && !preferencesLoading && (
           <ModalShell welcome>
-            <ActivityOnboarding initialName={name} initialPreferences={fitnessPreferences} onCancel={() => { setReady(true); go("Physical fitness"); }} onComplete={(preferences) => {
+            <ActivityOnboarding initialName={name} initialPreferences={fitnessPreferences} welcomeExtra={<label className="consent"><input type="checkbox" checked={workspace.remember} onChange={e => setField("remember", e.target.checked)} />Remember my care space across visits in this browser.</label>} onCancel={() => { setReady(true); go("Physical fitness"); }} onComplete={(preferences) => {
               setName(preferences.name); setReady(true); go("Physical fitness");
             }} />
           </ModalShell>

@@ -14,7 +14,8 @@ import {
   summarizeRuns,
 } from "../lib/health-data";
 
-import { buildFitnessOverview, getFitnessPreferences, goalsSchema, preferencesSchema, saveActivityGoals, saveFitnessPreferences } from "../lib/fitness";
+import { buildFitnessOverview, goalsSchema, preferencesSchema } from "../lib/fitness";
+import { getFitnessPreferences, saveActivityGoals, saveFitnessPreferences } from "../lib/fitness-store";
 
 const checkinBody = z.object({
   energy: z.enum(ENERGY_LEVELS),
@@ -38,21 +39,24 @@ const runBody = z.object({
 export const healthRoutes = [
   registerApiRoute("/health/fitness", {
     method: "GET",
-    handler: async (c) => c.json({
-      ...buildFitnessOverview(await getRecentMetrics(7), getFitnessPreferences().goals),
-      preferences: getFitnessPreferences(), source: "demo",
-    }),
+    handler: async (c) => {
+      const preferences = await getFitnessPreferences();
+      return c.json({
+        ...buildFitnessOverview(await getRecentMetrics(7), preferences.goals),
+        preferences, source: "demo",
+      });
+    },
   }),
   registerApiRoute("/health/preferences", {
     method: "GET",
-    handler: async (c) => c.json(getFitnessPreferences()),
+    handler: async (c) => c.json(await getFitnessPreferences()),
   }),
   registerApiRoute("/health/preferences", {
     method: "POST",
     handler: async (c) => {
       const parsed = preferencesSchema.safeParse(await c.req.json().catch(() => ({})));
       if (!parsed.success) return c.json({ error: "Invalid preferences" }, 400);
-      return c.json(saveFitnessPreferences(parsed.data));
+      return c.json(await saveFitnessPreferences(parsed.data));
     },
   }),
   registerApiRoute("/health/goals", {
@@ -60,7 +64,7 @@ export const healthRoutes = [
     handler: async (c) => {
       const parsed = goalsSchema.safeParse(await c.req.json().catch(() => ({})));
       if (!parsed.success) return c.json({ error: "Invalid activity goals" }, 400);
-      return c.json(saveActivityGoals(parsed.data));
+      return c.json(await saveActivityGoals(parsed.data));
     },
   }),
   registerApiRoute("/health/overview", {
