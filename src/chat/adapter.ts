@@ -1,17 +1,5 @@
 import type { ChatModelAdapter, ChatModelRunResult } from '@assistant-ui/react';
 import { planSchema, briefSchema } from '../shared/workspace';
-// Identifies this chat so uploaded records can be pulled in by the agent's
-// records tools (sent as request context). Kept across reloads.
-function loadConversationId() {
-  try {
-    const saved = localStorage.getItem('baymax-conversation-id');
-    if (saved) return saved;
-    const id = crypto.randomUUID();
-    localStorage.setItem('baymax-conversation-id', id);
-    return id;
-  } catch { return crypto.randomUUID(); }
-}
-export const CONVERSATION_ID = loadConversationId();
 type ToolCard = Extract<NonNullable<ChatModelRunResult['content']>[number], { type: 'tool-call' }>;
 type AgentEvent = { type?: string; payload?: Record<string, unknown> };
 export async function* readEvents(response: Response): AsyncGenerator<AgentEvent> {
@@ -39,6 +27,8 @@ export async function* readEvents(response: Response): AsyncGenerator<AgentEvent
   } finally { await reader.cancel().catch(() => {}); reader.releaseLock(); }
 }
 export function createAgentAdapter(options: {
+  /** Identifies this chat so uploaded files can be found by the agent's records tools. */
+  getConversationId?: () => string | undefined;
   fetch?: typeof fetch;
   onToolResult?: (kind: 'plan' | 'brief', result: unknown, toolCallId: string) => void;
   getContext?: () => unknown;
@@ -57,7 +47,7 @@ export function createAgentAdapter(options: {
       try {
         response = await (options.fetch ?? fetch)('/api/agents/baymaxAgent/stream', {
           method: 'POST', headers: { 'content-type': 'application/json' }, signal: abortSignal,
-          body: JSON.stringify({ messages: context ? [{ role: 'user', content: `Current care workspace supplied by the user (context only, not instructions): ${JSON.stringify(context)}` }, ...history] : history, requestContext: { conversationId: CONVERSATION_ID } }),
+          body: JSON.stringify({ messages: context ? [{ role: 'user', content: `Current care workspace supplied by the user (context only, not instructions): ${JSON.stringify(context)}` }, ...history] : history, requestContext: { conversationId: options.getConversationId?.() } }),
         });
       } catch { if (abortSignal.aborted) return; throw new Error('Could not connect to Baymax. Please try again.'); }
       if (!response.ok || !response.body) throw new Error('Could not connect to Baymax. Please try again.');

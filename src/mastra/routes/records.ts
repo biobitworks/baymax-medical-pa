@@ -24,7 +24,7 @@ export const recordsRoutes = [
   registerApiRoute("/records", {
     method: "GET",
     handler: async (c) =>
-      c.json({ records: listRecords(c.req.query("conversationId")) }),
+      c.json({ records: await listRecords(c.req.query("conversationId")) }),
   }),
 
   registerApiRoute("/records/upload", {
@@ -37,7 +37,7 @@ export const recordsRoutes = [
         return c.json({ error: "Only text files (txt, md, csv, json) are supported" }, 415);
       if (Buffer.byteLength(content) > MAX_UPLOAD_BYTES)
         return c.json({ error: "File is too large (200 KB max)" }, 413);
-      return c.json({ record: addUpload(conversationId, name, content) });
+      return c.json({ record: await addUpload(conversationId, name, content) });
     },
   }),
 
@@ -46,7 +46,7 @@ export const recordsRoutes = [
     handler: async (c) => {
       const parsed = removeBody.safeParse(await c.req.json().catch(() => ({})));
       if (!parsed.success) return c.json({ error: "Invalid request" }, 400);
-      return c.json({ removed: removeUpload(parsed.data.conversationId, parsed.data.id) });
+      return c.json({ removed: await removeUpload(parsed.data.conversationId, parsed.data.id) });
     },
   }),
 ];

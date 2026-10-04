@@ -31,7 +31,7 @@ export const listRecordsTool = createTool({
     ),
   }),
   execute: async (_input, context) => ({
-    records: listRecords(conversationIdOf(context)),
+    records: await listRecords(conversationIdOf(context)),
   }),
 });
 
@@ -54,7 +54,7 @@ export const readRecordTool = createTool({
     error: z.string().optional(),
   }),
   execute: async ({ id, offset }, context) => {
-    const record = readRecord(id, conversationIdOf(context), offset);
+    const record = await readRecord(id, conversationIdOf(context), offset);
     if (!record)
       return {
         found: false,

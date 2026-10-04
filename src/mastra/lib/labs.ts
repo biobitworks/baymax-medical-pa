@@ -1,6 +1,7 @@
-import { getRecordText, listRecords } from "./records";
+import { type Ctx, dbOf, userIdOf } from "./demo-user";
+import { type LabRow, norm } from "./lab-parse";
 
-/** One biomarker measurement pulled from a record. */
+/** One biomarker measurement. */
 export interface LabPoint {
   date: string; // YYYY-MM-DD
   value: number;
@@ -16,115 +17,25 @@ export interface LabSeries {
   points: LabPoint[];
 }
 
-interface Row {
-  biomarker: string;
-  unit: string;
-  panel?: string;
-  date: string;
-  value: number;
-  low?: number;
-  high?: number;
-}
-
-const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
-const num = (v: unknown): number | undefined => {
-  if (v === null || v === undefined || v === "") return undefined;
-  const n = Number(v);
-  return Number.isFinite(n) ? n : undefined;
-};
-
-function rowsFromJson(text: string): Row[] {
-  let data: any;
-  try {
-    data = JSON.parse(text);
-  } catch {
-    return [];
-  }
-  const rows: Row[] = [];
-  for (const panel of data?.lab_panels ?? []) {
-    for (const r of panel.results ?? []) {
-      const value = num(r.value);
-      if (value === undefined || !r.biomarker || !panel.date) continue;
-      rows.push({
-        biomarker: String(r.biomarker),
-        unit: String(r.unit ?? ""),
-        panel: panel.name,
-        date: String(panel.date),
-        value,
-        low: num(r.reference_range?.low),
-        high: num(r.reference_range?.high),
-      });
-    }
-  }
-  return rows;
-}
-
-/** Minimal CSV parser with quoted-field support. */
-function parseCsv(text: string): string[][] {
-  const out: string[][] = [];
-  let row: string[] = [];
-  let cell = "";
-  let quoted = false;
-  for (let i = 0; i < text.length; i++) {
-    const ch = text[i];
-    if (quoted) {
-      if (ch === '"' && text[i + 1] === '"') (cell += '"'), i++;
-      else if (ch === '"') quoted = false;
-      else cell += ch;
-    } else if (ch === '"') quoted = true;
-    else if (ch === ",") (row.push(cell), (cell = ""));
-    else if (ch === "\n" || ch === "\r") {
-      if (ch === "\r" && text[i + 1] === "\n") i++;
-      row.push(cell);
-      cell = "";
-      if (row.some((c) => c.trim())) out.push(row);
-      row = [];
-    } else cell += ch;
-  }
-  row.push(cell);
-  if (row.some((c) => c.trim())) out.push(row);
-  return out;
-}
-
-function rowsFromCsv(text: string): Row[] {
-  const [header, ...body] = parseCsv(text);
-  if (!header) return [];
-  const col = (name: string) => header.findIndex((h) => norm(h) === norm(name));
-  const iDate = col("measurement_date") >= 0 ? col("measurement_date") : col("date");
-  const iBio = col("biomarker");
-  const iVal = col("value");
-  if (iDate < 0 || iBio < 0 || iVal < 0) return [];
-  const iUnit = col("unit");
-  const iPanel = col("panel");
-  const iLow = col("reference_low");
-  const iHigh = col("reference_high");
-  const rows: Row[] = [];
-  for (const r of body) {
-    const value = num(r[iVal]);
-    if (value === undefined || !r[iBio] || !r[iDate]) continue;
-    rows.push({
-      biomarker: r[iBio].trim(),
-      unit: iUnit >= 0 ? r[iUnit].trim() : "",
-      panel: iPanel >= 0 ? r[iPanel].trim() : undefined,
-      date: r[iDate].trim(),
-      value,
-      low: iLow >= 0 ? num(r[iLow]) : undefined,
-      high: iHigh >= 0 ? num(r[iHigh]) : undefined,
-    });
-  }
-  return rows;
-}
-
-/** Every lab row across the built-in records and this conversation's uploads. */
-function allRows(conversationId?: string): Row[] {
-  const rows: Row[] = [];
-  for (const rec of listRecords(conversationId)) {
-    const file = getRecordText(rec.id, conversationId);
-    if (!file) continue;
-    if (rec.format === "json") rows.push(...rowsFromJson(file.text));
-    else if (rec.format === "csv") rows.push(...rowsFromCsv(file.text));
-  }
-  return rows;
+/** Every lab row across the user's built-in records and this conversation's uploads. */
+async function allRows(conversationId: string | undefined, ctx: Ctx): Promise<LabRow[]> {
+  const rows = await dbOf(ctx)(
+    `SELECT l.biomarker, l.unit, l.panel, to_char(l.measured_on, 'YYYY-MM-DD') AS date, l.value,
+            l.reference_low AS low, l.reference_high AS high
+     FROM lab_results l JOIN records r ON r.user_id = l.user_id AND r.id = l.record_id
+     WHERE l.user_id = $1 AND (r.source = 'library' OR r.conversation_id = $2)
+     ORDER BY r.source, r.id, l.id`,
+    [userIdOf(ctx), conversationId ?? null],
+  );
+  return rows.map((r) => ({
+    biomarker: String(r.biomarker),
+    unit: String(r.unit ?? ""),
+    panel: r.panel == null ? undefined : String(r.panel),
+    date: String(r.date),
+    value: Number(r.value),
+    low: r.low == null ? undefined : Number(r.low),
+    high: r.high == null ? undefined : Number(r.high),
+  }));
 }
 
 export interface LabQuery {
@@ -133,11 +44,12 @@ export interface LabQuery {
   since?: string; // YYYY-MM-DD
 }
 
-export function queryLabSeries(
+export async function queryLabSeries(
   query: LabQuery,
   conversationId?: string,
-): { series: LabSeries[]; unmatched: string[]; available: string[] } {
-  const rows = allRows(conversationId);
+  ctx: Ctx = {},
+): Promise<{ series: LabSeries[]; unmatched: string[]; available: string[] }> {
+  const rows = await allRows(conversationId, ctx);
   const available = [...new Set(rows.map((r) => r.biomarker))].sort();
   const wanted = (query.biomarkers ?? []).map((b) => ({ raw: b, key: norm(b) }));
   const panelKey = query.panel ? norm(query.panel) : undefined;

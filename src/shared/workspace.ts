@@ -46,7 +46,7 @@ export type CareWorkspace = z.infer<typeof workspaceSchema>;
 export type StoredConversation = CareWorkspace['conversation'];
 export function createWorkspace(): CareWorkspace {
   return {
-    version: 1, remember: false, ready: false, name: 'Alex', energy: '', activeMinutes: 0, week: [], done: [], water: 3,
+    version: 1, remember: false, ready: false, name: 'Jordan', energy: '', activeMinutes: 0, week: [], done: [], water: 3,
     tripReady: false, checklist: [], reminders: true, nudge: 'Gentle', city: 'San Francisco', travelDate: '2026-10-09', date: '2026-10-10', goal: 'Build Personal Agents Hackathon',
     planItems: ['Take a 10-minute walk', 'Make time for a real meal', 'Pack medication documents', 'Set a wind-down reminder', 'Schedule your next routine checkup'].map(label => ({ label, done: false })),
     brief: 'MY HEALTH BRIEF — review and complete before sharing\n\nPatient: [Your name]\nReason for visit: Establishing care while travelling.\nMedications: [Add your prescribed medication and dose.]\nAllergies: Not yet confirmed.\nRelevant history: Not yet confirmed.\nQuestions: What records do you need? How can I arrange follow-up care?',

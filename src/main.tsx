@@ -45,6 +45,8 @@ import {
   Sparkles,
   Menu,
   Mail,
+  Trash2,
+  History,
 } from "lucide-react";
 import {
   DEFAULT_TRAVEL_CHECKLIST,
@@ -52,7 +54,8 @@ import {
 } from "./mastra/lib/brief";
 import "./style.css";
 import { initializeHealthOverview } from "./persistence/health-overview";
-import { createAgentAdapter, CONVERSATION_ID } from "./chat/adapter";
+import { createAgentAdapter } from "./chat/adapter";
+import { conversationsApi, relativeTime, EMPTY_CONVERSATION, type ConversationSummary } from "./chat/conversations-client";
 import { applyToolResult, historicalCard } from "./chat/cards";
 import { useCareWorkspace } from "./persistence/use-care-workspace";
 import { type CareWorkspace, type StoredConversation } from "./shared/workspace";
@@ -591,12 +594,10 @@ function ModalShell({
     </dialog>
   );
 }
-// Identifies this chat session so uploaded files can be pulled in by the
-// agent's records tools (sent as request context).
 const TEXT_FILE_ACCEPT = ".txt,.md,.csv,.tsv,.json,.xml,.log,text/*,application/json";
 // Uploads go to the server as conversation artifacts; the agent reads them
 // with list-medical-records / read-medical-record rather than inline text.
-const attachmentAdapter: AttachmentAdapter = {
+const createAttachmentAdapter = (conversationId: string): AttachmentAdapter => ({
   accept: TEXT_FILE_ACCEPT,
   async add({ file }) {
     return {
@@ -613,7 +614,7 @@ const attachmentAdapter: AttachmentAdapter = {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
-        conversationId: CONVERSATION_ID,
+        conversationId,
         name: attachment.name,
         content: await attachment.file.text(),
       }),
@@ -637,7 +638,7 @@ const attachmentAdapter: AttachmentAdapter = {
     };
   },
   async remove() {},
-};
+});
 type CareState = {
   activePlanId: string | null;
   activeBriefId: string | null;
@@ -940,22 +941,25 @@ function AssistantMessage() {
     </MessagePrimitive.Root>
   );
 }
-function Chat({ conversation, onConversation, onToolResult, workspace }: {
+function Chat({ conversationId, conversation, onConversation, onToolResult, workspace }: {
+  conversationId: string;
   conversation: StoredConversation;
-  onConversation: (conversation: StoredConversation) => void;
+  onConversation: (conversationId: string, conversation: StoredConversation) => void;
   onToolResult: (kind: "plan" | "brief", result: unknown, toolCallId: string) => void;
   workspace: CareWorkspace;
 }) {
   const current = useRef({ workspace, onToolResult, onConversation });
   current.current = { workspace, onToolResult, onConversation };
   const adapter = useMemo(() => createAgentAdapter({
+    getConversationId: () => conversationId,
     onToolResult: (kind, result, id) => current.current.onToolResult(kind, result, id),
     getToolCards: (tool, result, id) => healthCardsFromTool(tool, result).map(args => ({ ...healthCardPart(args), toolCallId: `${id}-${args.metric}` })),
     getContext: () => {
       const w = current.current.workspace;
       return { name: w.name, goal: w.goal, date: w.date, planItems: w.planItems, city: w.city, travelDate: w.travelDate, brief: w.brief, energy: w.energy };
     },
-  }), []);
+  }), [conversationId]);
+  const attachmentAdapter = useMemo(() => createAttachmentAdapter(conversationId), [conversationId]);
   const [showShopping, setShowShopping] = useState(false);
   const runtime = useLocalRuntime(adapter, { adapters: { attachments: attachmentAdapter } });
   const initialConversation = useRef(conversation);
@@ -972,7 +976,7 @@ function Chat({ conversation, onConversation, onToolResult, workspace }: {
       const serialized = JSON.stringify(runtime.thread.export());
       if (serialized !== lastExport.current) {
         lastExport.current = serialized;
-        current.current.onConversation(JSON.parse(serialized));
+        current.current.onConversation(conversationId, JSON.parse(serialized));
       }
     });
     const beforeUnload = (event: BeforeUnloadEvent) => {
@@ -980,7 +984,7 @@ function Chat({ conversation, onConversation, onToolResult, workspace }: {
     };
     window.addEventListener("beforeunload", beforeUnload);
     return () => { window.removeEventListener("beforeunload", beforeUnload); unsubscribe(); runtime.thread.cancelRun(); };
-  }, [runtime]);
+  }, [runtime, conversationId]);
   const { setResponding } = useContext(MascotActivity);
   useEffect(() => {
     const sync = () => setResponding(runtime.thread.getState().isRunning);
@@ -1086,6 +1090,83 @@ function Chat({ conversation, onConversation, onToolResult, workspace }: {
     </AssistantRuntimeProvider>
   );
 }
+function ChatHub({ workspace, onToolResult }: {
+  workspace: CareWorkspace;
+  onToolResult: (kind: "plan" | "brief", result: unknown, toolCallId: string) => void;
+}) {
+  const [chats, setChats] = useState<ConversationSummary[]>([]);
+  const [activeId, setActiveId] = useState<string>(() => crypto.randomUUID());
+  const [initial, setInitial] = useState<StoredConversation | null>(EMPTY_CONVERSATION);
+  const [open, setOpen] = useState(false);
+  const [error, setError] = useState("");
+  const latest = useRef(activeId);
+  latest.current = activeId;
+  const refresh = useCallback(async () => {
+    try { setChats(await conversationsApi.list()); setError(""); }
+    catch { setError("Your previous chats are unavailable right now."); }
+  }, []);
+  useEffect(() => { void refresh(); }, [refresh]);
+  const openChat = async (id: string) => {
+    setOpen(false);
+    if (id === latest.current) return;
+    setInitial(null);
+    setActiveId(id);
+    try {
+      const loaded = await conversationsApi.load(id);
+      if (latest.current === id) setInitial(loaded);
+    } catch {
+      if (latest.current === id) { setError("That chat could not be opened."); setInitial(EMPTY_CONVERSATION); }
+    }
+  };
+  const newChat = () => {
+    setOpen(false);
+    setActiveId(crypto.randomUUID());
+    setInitial(EMPTY_CONVERSATION);
+  };
+  const remove = async (id: string) => {
+    try {
+      await conversationsApi.remove(id);
+      if (id === latest.current) newChat();
+      await refresh();
+    } catch { setError("That chat could not be deleted."); }
+  };
+  const save = useCallback(async (id: string, conversation: StoredConversation) => {
+    if (!conversation.messages.length) return;
+    try { await conversationsApi.save(id, conversation); await refresh(); }
+    catch { setError("Your last message could not be saved to your chat history."); }
+  }, [refresh]);
+  return (
+    <div className="chat-hub">
+      <div className="chat-hub-bar">
+        <button className="text-btn" aria-expanded={open} aria-controls="chat-history" onClick={() => setOpen(value => !value)}>
+          <History size={15} /> Chats
+        </button>
+        <button className="text-btn" onClick={newChat}><Plus size={15} /> New chat</button>
+      </div>
+      {error && <p role="alert" className="notice chat-hub-error">{error}</p>}
+      {open && (
+        <aside id="chat-history" className="chat-history" aria-label="Previous chats">
+          {chats.length === 0 ? <p className="muted">No saved chats yet.</p> : (
+            <ul>
+              {chats.map(chat => (
+                <li key={chat.id} className={chat.id === activeId ? "active" : ""}>
+                  <button className="chat-history-item" onClick={() => void openChat(chat.id)} title={chat.title}>
+                    <span>{chat.title}</span>
+                    <time dateTime={chat.updatedAt}>{relativeTime(chat.updatedAt)}</time>
+                  </button>
+                  <button className="chat-history-delete" aria-label={`Delete chat: ${chat.title}`} onClick={() => void remove(chat.id)}>
+                    <Trash2 size={14} />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </aside>
+      )}
+      {initial && <Chat key={activeId} conversationId={activeId} conversation={initial} workspace={workspace} onConversation={save} onToolResult={onToolResult} />}
+    </div>
+  );
+}
 const nav = [
   ["Today", LayoutDashboard],
   ["Talk to Baymax", MessageCircle],
@@ -1115,7 +1196,6 @@ function App() {
   const setBrief = (value: string) => setField("brief", value);
   const setRecipient = (value: string) => setField("recipient", value);
   const setSubject = (value: string) => setField("subject", value);
-  const onConversation = useCallback((conversation: StoredConversation) => setField("conversation", conversation), [setField]);
   const onToolResult = useCallback((kind: "plan" | "brief", result: unknown, toolCallId: string) => {
     setWorkspace(previous => applyToolResult(previous, kind, result, toolCallId));
   }, [setWorkspace]);
@@ -1633,7 +1713,7 @@ function App() {
               hidden={page !== "Talk to Baymax"}
               className="panel chat-panel"
             >
-              <Chat key={persistence.resetKey} conversation={workspace.conversation} workspace={workspace} onConversation={onConversation} onToolResult={onToolResult} />
+              <ChatHub key={persistence.resetKey} workspace={workspace} onToolResult={onToolResult} />
             </section>
             {page === "Your plan" && (
               <div className="two-col">
@@ -1888,7 +1968,7 @@ function App() {
                     Remember across visits
                   </label>
                   <p>
-                    Save your profile, care plans, check-ins, preferences, and conversation for your next visit in this browser.
+                    Save your profile, care plans, and preferences for your next visit in this browser. Your chat history and health data are saved to your account.
                     Turning this off deletes the saved copy and keeps your current care space for this visit.
                   </p>
                   <p className="fine">
@@ -1966,7 +2046,7 @@ function App() {
               <button
                 className="primary"
                 onClick={() => {
-                  setName(name.trim() || "Alex");
+                  setName(name.trim() || "Jordan");
                   setReady(true);
                 }}
               >
@@ -2069,7 +2149,7 @@ function App() {
                   <button
                     className="primary"
                     onClick={() => {
-                      setName(name.trim() || "Alex");
+                      setName(name.trim() || "Jordan");
                       setModal("");
                     }}
                   >
@@ -2080,7 +2160,7 @@ function App() {
                 <>
                   <h2>Start fresh?</h2>
                   <p>
-                    This deletes your saved profile, care plans, check-ins, preferences, brief, and conversation.
+                    This clears your saved profile, care plans, preferences, and brief, and restores the sample chats, check-ins, and health history.
                     Your downloaded brief stays on your device.
                   </p>
                   {persistence.error && <p role="alert" className="notice">{persistence.error}</p>}
@@ -2088,6 +2168,7 @@ function App() {
                     className="primary"
                     disabled={persistence.busy}
                     onClick={async () => {
+                      try { await conversationsApi.resetDemo(); } catch { setToast("Could not restore the sample data. Please try again."); return; }
                       if (await persistence.reset()) { setModal(""); setPage("Talk to Baymax"); }
                     }}
                   >

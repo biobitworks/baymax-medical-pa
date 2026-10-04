@@ -9,13 +9,15 @@ import { baymaxAgent } from "./agents/baymax-agent";
 import { healthRoutes } from "./routes/health";
 import { travelRoutes } from "./routes/travel";
 import { recordsRoutes } from "./routes/records";
+import { conversationRoutes } from "./routes/conversations";
+import { demoRoutes } from "./routes/demo";
 
 const handleCareState = createStateHandler(new CareStore(query));
 
 export const mastra = new Mastra({
   agents: { baymaxAgent },
   server: {
-    apiRoutes: [...travelRoutes, ...healthRoutes, ...recordsRoutes, ...["GET", "PUT", "DELETE"].map(method =>
+    apiRoutes: [...travelRoutes, ...healthRoutes, ...recordsRoutes, ...conversationRoutes, ...demoRoutes, ...["GET", "PUT", "DELETE"].map(method =>
       registerApiRoute("/care-state", {
         method: method as "GET" | "PUT" | "DELETE",
         handler: c => handleCareState(c.req.raw),

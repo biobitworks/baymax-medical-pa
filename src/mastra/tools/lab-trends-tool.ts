@@ -52,7 +52,7 @@ export const labTrendsTool = createTool({
         available: [],
       };
     }
-    const found = queryLabSeries({ biomarkers, panel, since }, conversationId);
+    const found = await queryLabSeries({ biomarkers, panel, since }, conversationId);
     return {
       title:
         title ??

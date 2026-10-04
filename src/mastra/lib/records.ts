@@ -1,15 +1,18 @@
-import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
-import { join, resolve } from "node:path";
+import { type Ctx, dbOf, userIdOf } from "./demo-user";
+import type { Query } from "../persistence/store";
+import { type LabRow, rowsForFormat } from "./lab-parse";
 
 /**
- * Medical records the agent can browse. Two sources share one id space:
- *  - "library": built-in files under data/synthetic (the fake user's records)
- *  - "upload": files the user attached in chat, kept in memory per conversation
+ * Medical records the agent can browse, stored in Postgres. Two sources share
+ * one id space:
+ *  - "library": the user's built-in records (seeded from data/synthetic)
+ *  - "upload": files the user attached in chat, scoped to that conversation
+ * Lab values in JSON and CSV records are also extracted into lab_results.
  */
 
 export const MAX_UPLOAD_BYTES = 200_000;
 export const MAX_READ_CHARS = 20_000;
-const TEXT_EXTENSIONS = [".txt", ".md", ".csv", ".json", ".tsv", ".xml", ".log"];
+export const TEXT_EXTENSIONS = [".txt", ".md", ".csv", ".json", ".tsv", ".xml", ".log"];
 
 export type RecordSource = "library" | "upload";
 
@@ -21,91 +24,89 @@ export interface RecordSummary {
   sizeBytes: number;
 }
 
-interface Upload {
-  id: string;
-  name: string;
-  content: string;
-  uploadedAt: string;
-}
-
-const uploads = new Map<string, Map<string, Upload>>();
-
-function dataDir(): string {
-  if (process.env.RECORDS_DIR) return process.env.RECORDS_DIR;
-  // The working directory varies (project root, .mastra/output, src/mastra/public),
-  // so walk up until data/synthetic is found.
-  let dir = process.cwd();
-  while (true) {
-    const candidate = resolve(dir, "data/synthetic");
-    if (existsSync(candidate)) return candidate;
-    const parent = resolve(dir, "..");
-    if (parent === dir) return candidate;
-    dir = parent;
-  }
-}
-
-function extOf(name: string): string {
+export function extOf(name: string): string {
   const i = name.lastIndexOf(".");
   return i === -1 ? "" : name.slice(i).toLowerCase();
-}
-
-function libraryFiles(): RecordSummary[] {
-  const dir = dataDir();
-  if (!dir || !existsSync(dir)) return [];
-  return readdirSync(dir)
-    .filter((f) => TEXT_EXTENSIONS.includes(extOf(f)))
-    .sort()
-    .map((f) => ({
-      id: `library:${f}`,
-      name: f,
-      source: "library" as const,
-      format: extOf(f).slice(1),
-      sizeBytes: statSync(join(dir, f)).size,
-    }));
 }
 
 export function isSupportedUpload(name: string): boolean {
   return TEXT_EXTENSIONS.includes(extOf(name));
 }
 
-export function addUpload(
+const summarize = (r: Record<string, unknown>): RecordSummary => ({
+  id: String(r.id),
+  name: String(r.name),
+  source: r.source as RecordSource,
+  format: String(r.format),
+  sizeBytes: Number(r.size_bytes),
+});
+
+/** Inserts parsed lab rows for a record. Re-inserting the same rows is a no-op. */
+export async function insertLabRows(q: Query, userId: string, recordId: string, rows: LabRow[]) {
+  const chunk = 200;
+  for (let i = 0; i < rows.length; i += chunk) {
+    const part = rows.slice(i, i + chunk);
+    const params: unknown[] = [userId, recordId];
+    const values = part.map((r, n) => {
+      const b = 2 + n * 9;
+      params.push(r.panel ?? null, r.biomarker, r.unit, r.value, r.low ?? null, r.high ?? null, r.flag ?? null, r.notes ?? null, r.date);
+      return `($1, $2, $${b + 1}, $${b + 2}, $${b + 3}, $${b + 4}, $${b + 5}, $${b + 6}, $${b + 7}, $${b + 8}, $${b + 9}::date)`;
+    });
+    await q(
+      `INSERT INTO lab_results (user_id, record_id, panel, biomarker, unit, value, reference_low, reference_high, flag, notes, measured_on)
+       VALUES ${values.join(", ")} ON CONFLICT DO NOTHING`,
+      params,
+    );
+  }
+}
+
+/** Stores a record and extracts its lab values. Used by uploads and seeding. */
+export async function storeRecord(
+  ctx: Ctx,
+  rec: { id: string; name: string; source: RecordSource; content: string; conversationId?: string },
+): Promise<RecordSummary> {
+  const q = dbOf(ctx);
+  const userId = userIdOf(ctx);
+  const format = extOf(rec.name).slice(1) || "txt";
+  const sizeBytes = Buffer.byteLength(rec.content);
+  await q(
+    `INSERT INTO records (user_id, id, name, source, format, content, size_bytes, conversation_id)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+     ON CONFLICT (user_id, id) DO UPDATE SET name = EXCLUDED.name, format = EXCLUDED.format, content = EXCLUDED.content, size_bytes = EXCLUDED.size_bytes`,
+    [userId, rec.id, rec.name, rec.source, format, rec.content, sizeBytes, rec.conversationId ?? null],
+  );
+  await q("DELETE FROM lab_results WHERE user_id = $1 AND record_id = $2", [userId, rec.id]);
+  await insertLabRows(q, userId, rec.id, rowsForFormat(format, rec.content));
+  return { id: rec.id, name: rec.name, source: rec.source, format, sizeBytes };
+}
+
+export async function addUpload(
   conversationId: string,
   name: string,
   content: string,
-): RecordSummary {
+  ctx: Ctx = {},
+): Promise<RecordSummary> {
   const safeName = name.replace(/[\\/]/g, "_").slice(0, 120) || "upload.txt";
-  const bucket = uploads.get(conversationId) ?? new Map<string, Upload>();
-  uploads.set(conversationId, bucket);
   const id = `upload:${crypto.randomUUID().slice(0, 8)}`;
-  bucket.set(id, {
-    id,
-    name: safeName,
-    content,
-    uploadedAt: new Date().toISOString(),
-  });
-  return {
-    id,
-    name: safeName,
-    source: "upload",
-    format: extOf(safeName).slice(1) || "txt",
-    sizeBytes: Buffer.byteLength(content),
-  };
+  return storeRecord(ctx, { id, name: safeName, source: "upload", content, conversationId });
 }
 
-export function removeUpload(conversationId: string, id: string): boolean {
-  return uploads.get(conversationId)?.delete(id) ?? false;
+export async function removeUpload(conversationId: string, id: string, ctx: Ctx = {}): Promise<boolean> {
+  const rows = await dbOf(ctx)(
+    "DELETE FROM records WHERE user_id = $1 AND id = $2 AND source = 'upload' AND conversation_id = $3 RETURNING id",
+    [userIdOf(ctx), id, conversationId],
+  );
+  return rows.length > 0;
 }
 
-export function listRecords(conversationId?: string): RecordSummary[] {
-  const bucket = conversationId ? uploads.get(conversationId) : undefined;
-  const uploaded: RecordSummary[] = [...(bucket?.values() ?? [])].map((u) => ({
-    id: u.id,
-    name: u.name,
-    source: "upload",
-    format: extOf(u.name).slice(1) || "txt",
-    sizeBytes: Buffer.byteLength(u.content),
-  }));
-  return [...libraryFiles(), ...uploaded];
+export async function listRecords(conversationId?: string, ctx: Ctx = {}): Promise<RecordSummary[]> {
+  const rows = await dbOf(ctx)(
+    `SELECT id, name, source, format, size_bytes FROM records
+     WHERE user_id = $1 AND (source = 'library' OR conversation_id = $2)
+     ORDER BY source, name, created_at`,
+    [userIdOf(ctx), conversationId ?? null],
+  );
+  return rows.map(summarize);
 }
 
 export interface RecordContent {
@@ -118,31 +119,28 @@ export interface RecordContent {
   content: string;
 }
 
-/** Full text of a record, or null if it does not exist. */
-export function getRecordText(
+/** Full text of a record, or null if it does not exist for this user/conversation. */
+export async function getRecordText(
   id: string,
   conversationId: string | undefined,
-): { name: string; text: string } | null {
-  if (id.startsWith("upload:")) {
-    const upload = conversationId ? uploads.get(conversationId)?.get(id) : undefined;
-    return upload ? { name: upload.name, text: upload.content } : null;
-  }
-  if (id.startsWith("library:")) {
-    // Only serve files that appear in the library listing (blocks traversal).
-    const file = libraryFiles().find((f) => f.id === id);
-    if (!file) return null;
-    return { name: file.name, text: readFileSync(join(dataDir(), file.name), "utf8") };
-  }
-  return null;
+  ctx: Ctx = {},
+): Promise<{ name: string; text: string } | null> {
+  const [row] = await dbOf(ctx)(
+    `SELECT name, content FROM records
+     WHERE user_id = $1 AND id = $2 AND (source = 'library' OR conversation_id = $3)`,
+    [userIdOf(ctx), id, conversationId ?? null],
+  );
+  return row ? { name: String(row.name), text: String(row.content) } : null;
 }
 
-export function readRecord(
+export async function readRecord(
   id: string,
   conversationId: string | undefined,
   offset = 0,
   maxChars = MAX_READ_CHARS,
-): RecordContent | null {
-  const record = getRecordText(id, conversationId);
+  ctx: Ctx = {},
+): Promise<RecordContent | null> {
+  const record = await getRecordText(id, conversationId, ctx);
   if (!record) return null;
   const { name, text } = record;
   const limit = Math.min(maxChars, MAX_READ_CHARS);
