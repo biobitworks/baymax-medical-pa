@@ -1,0 +1,165 @@
+{
+ "schema": "baymax.redteam_lane.apollo_iphone_review.v1",
+ "observed_at": "2026-10-04T20:21:16Z",
+ "execution_agent": "Claude",
+ "recovered_state": {
+  "integration_branch": {
+   "head": "1174d0a0fd64c1aa5998bdd3c19a2ed49298e3cf",
+   "latest_bp": "BAYMAX-BP-0020",
+   "chain_entries": 21,
+   "origin_parity": "PASS",
+   "synthea_draft": "still untracked in that worktree"
+  },
+  "codex_branch": {
+   "name": "codex/synthea-pinned-iphone-fixture-v1",
+   "head": "9e08b7c4b748cfc1f97a0907dc77ff21f6823187",
+   "latest_bp": "BAYMAX-BP-0023",
+   "chain_entries": 24,
+   "origin_parity": "PASS",
+   "worktree": "DIRTY (12 entries; ios/, ModelInference.swift, apollo packet scripts, xcodeproj uncommitted; Apollo code appeared DURING this review)",
+   "reviewed_as": "hashed read-only snapshot, not the live tree",
+   "snapshot_sha256": {
+    "ios/OfflineTravelDemo/ModelInference.swift": "45ad00856c8227052ddcfc5664ebb5a90b947a6ab3a9ea807716bb1980893215",
+    "ios/OfflineTravelDemo/OfflineTravelApp.swift": "9c60795a9ac2b06c17b4745f64931c419076907f54fa10ab97af8e2dc585aa58",
+    "ios/OfflineTravelDemo/TravelModel.swift": "23aa45189c0093eef6a697c7398fb6678d94f8bfa18aa1a06886f144be12b588",
+    "ios/OfflineTravelDemo/GateCheck.swift": "e9b6d977a4f975d7960b3c5a2679cdf14dfc72a534f83e5399f2f09a171ccd0a",
+    "src/baymax_travel/model.py": "3fc91191a2e974dfbb97576eeb9be07f43201668b84bf9bbe4758eab3195dd59",
+    "fixtures/iphone/apollo_context_packet_v1.txt": "b7ef25064b0af0368d1a95f3551e2c1d9f134cd7d26306eee600de8184ff2cac",
+    "fixtures/iphone/OfflineTravelBundleFCO.json": "4f03387a3a2c407371d7538ddd4d9a108063358adfbf47294624f13748b2ba33"
+   }
+  },
+  "redirect_request": "'Have the primary lane commit its draft': NOT POSSIBLE for me - ListAgents shows no other Claude session; primary is a Codex session in its own worktree; no race attempted. Codex committed BP-0021..0023 itself; phone app/Apollo flow remains UNCOMMITTED so no breakpoint binds it.",
+  "upstream_main": "44bd211 (moved again)"
+ },
+ "physical_device": {
+  "PHYSICAL_IPHONE": "NOT_TESTED (red-team lane has simulator-only tooling; cannot observe a physical device)",
+  "built_app": "IOSSIMULATOR arm64, ad-hoc signed, no TeamIdentifier; build script targets arm64-apple-ios17.0-simulator only",
+  "simulator_closes_physical_criterion": false,
+  "receipt_self_statement": "apollo_packet.json: physical_execution=NOT_TESTED, inter_app_api=NOT_IMPLEMENTED, model=OBSERVE_ON_DEVICE"
+ },
+ "apollo": {
+  "APOLLO_VERSION": "UNKNOWN",
+  "APOLLO_MODEL_IDENTITY": "UNKNOWN (app records a FREE-TEXT field 'Observed Apollo model'; any non-empty string accepted)",
+  "NETWORK_OFFLINE": "USER_ATTESTED_ONLY (checkbox 'I observed Apollo inference in airplane mode'; app cannot observe)",
+  "LOCAL_GENERATION_OBSERVED": "NOT_TESTED by red team",
+  "integration": "MANUAL_CLIPBOARD_MEDIATED; no inter-app API (app text says so) - correct classification: Baymax context app + human transfer + Apollo local inference",
+  "APOLLO_OFFLINE_LOCAL": "NOT_ESTABLISHED (neither PASS nor FAIL: no observation by verifier)"
+ },
+ "context_packet_custody": {
+  "source_packet_sha256": "b7ef25064b0af0368d1a95f3551e2c1d9f134cd7d26306eee600de8184ff2cac",
+  "bytes": 1986,
+  "regenerated_from_committed_bundle_IDENTICAL_BYTES": true,
+  "source_bundle_sha256": "36d5d72c202da795db07d50d807747e94922f3b958b9ee25fd646e3d038a0c93",
+  "transformation_sha_match": true,
+  "SOURCE_PACKET_IDENTITY": "PASS",
+  "DESTINATION_PACKET_IDENTITY": "NOT_VERIFIED (clipboard transfer; Apollo reports no received hash; field name 'context_packet_sha256' is unqualified and records the app's own copy)",
+  "identifiers_in_packet": "none found (no patient name/uuid/SSN/real facility strings); contact OMITTED; stock UNKNOWN",
+  "sensitive_category_note": "synthetic medication list includes an HIV antiretroviral regimen - special-category if real"
+ },
+ "offline_bundle": {
+  "load_with_network_denied": "PASS for Swift decoder+ComplianceGate compiled from the app's own sources, run under sandbox-exec (deny network*); negative control proved sandbox blocks network (same python call reachable without it)",
+  "gate_cases": "24 cases, provider_calls=0, dispatch=false in every case; offline+consent: READ_CONTEXT/WALLET_PREVIEW LOCAL_ONLY, CLOUD_SUMMARY/FLY_SYNC/CALL DEFERRED, PURCHASE BLOCKED",
+  "app_in_simulator_offline": "NOT_TESTED",
+  "wallet_state_in_app": "NOT_IMPLEMENTED (wallet preview is a gate stub; Python wallet not integrated)",
+  "bundle_mismatch": "committed offline_travel_bundle_v1.json (157,744 B, schema baymax.offline-travel.v1) is rejected by the app's OfflineTravelBundleFCO decoder (20,000 B cap, different schema); app ships a separate uncommitted 9 KB bundle (schema ...-bundle-fco.v1). Later WIP adds a legacy loader for the committed schema - unverified",
+  "directory": "HAND_AUTHORED_SYNTHETIC (one entry, phone UNKNOWN/null, availability UNKNOWN, call/purchase disabled); map point at real Bali coordinates (-8.65,115.22) flagged SYNTHETIC accuracy UNKNOWN navigation disabled",
+  "real_provider_leak": "NONE FOUND in packet/bundles; Synthea raw FHIR kept LOCAL_OUTSIDE_GIT; excluded Organization/Location/Practitioner carry UNKNOWN_PUBLIC_PROVIDER_POSSIBLE"
+ },
+ "transform_re_attack": {
+  "baymax_evidence_fhir_py": "UNCHANGED since my first review: all defects remain (silent drops, hard-coded SYNTHETIC, no clinical content) - superseded in practice by baymax_synthea but still committed and tested",
+  "baymax_synthea_transform": {
+   "repaired": [
+    "every entry accounted: nodes+excluded==entries (672=279+393 on my bundle)",
+    "excluded resources listed NOT_MAPPED with sha256",
+    "units carried (125/125 valueQuantity with unit+code+system)",
+    "per-node unmapped_fields NOT_MAPPED; missing -> UNKNOWN",
+    "no patient identifiers in graph"
+   ],
+   "still_failing": [
+    "synthetic_state hard-coded SYNTHETIC: real-looking bundle (SSN identifier + REAL_PATIENT_PHI tag) labeled SYNTHETIC",
+    "duplicate resource -> duplicate node ids",
+    "entry without resource / resourceType -> uncaught KeyError (fail-closed, unstructured)",
+    "missing id becomes literal 'UNKNOWN' (collision-prone)",
+    "23 component-valued Observations (e.g. blood pressure) NOT_MAPPED; MedicationRequest via medicationReference -> identity UNKNOWN (4 of 33 in my bundle)",
+    "only DERIVED_FROM edges; subject/encounter relationships NOT_MAPPED"
+   ]
+  },
+  "US_CORE_conformance": "NOT_TESTED",
+  "clinical_correctness": "UNKNOWN",
+  "generated_data_terms": "UNKNOWN_TERMS (now recorded as such in bundle/unknown_states)"
+ },
+ "model_output_attack": {
+  "method": "app's REAL Swift ModelOutput.parse compiled into a harness + Python mirror; 22 SIMULATED model-text cases (labeled SIMULATED; no real Apollo output exists)",
+  "controls_rejected": [
+   "increase",
+   "prescribe",
+   "buy",
+   "in stock",
+   "requires_clinician=false",
+   "extra key wallet_action",
+   "malformed",
+   "oversize"
+  ],
+  "unsafe_text_ACCEPTED": [
+   "BYPASS diagnosis",
+   "BYPASS dose synonym: double",
+   "BYPASS dose synonym: raise to 1000 mg",
+   "BYPASS dose: cut in half",
+   "BYPASS substitution: switch/swap",
+   "BYPASS stock synonym",
+   "BYPASS purchase synonym: order/checkout/pay",
+   "BYPASS policy override",
+   "BYPASS wallet JSON in string",
+   "BYPASS homoglyph (Cyrillic i in increase)",
+   "BYPASS soft-hyphen split",
+   "BYPASS stop-taking",
+   "DUP-KEY via unicode escape (hidden second summary)"
+  ],
+  "defect": "output gate is a keyword denylist + schema; diagnosis, dose/substitution/stock/purchase synonyms, policy-override instruction, wallet JSON-in-string, homoglyph and soft-hyphen splits all pass; requires_clinician=true is trivially satisfiable",
+  "validator_divergence": "duplicate key via \\u0073ummary: Swift ACCEPTED, Python REJECTED",
+  "identity_misattribution": "ModelInferenceFCO.record(): execution_substrate='Liquid Apollo' and provider='Liquid AI' are CONSTANTS; model is free text. A response labeled 'OpenRouter gpt-5-6-luna (cloud)' with offline box ticked is recorded as Liquid Apollo / Liquid AI / network OFFLINE",
+  "MODEL_OUTPUT_CLASS": "MODEL_INFERRED, correctness UNKNOWN, medical_authority NONE, wallet_authority NONE (labels correct)",
+  "downstream_action_control": "HOLDS: model output reaches only Text() displays; wallet/call/purchase buttons call fixed gate actions that do not read the response; unsafe text is a USER-FACING DISPLAY risk, not an automation risk"
+ },
+ "wallet_boundary": {
+  "WALLET_DIRECT_MUTATION": "REJECT (4/4 simulated model outputs: wallet.admit=MALFORMED, classify_proposal=DENY; balance 100000 and sequence unchanged)",
+  "path": "model -> proposal only -> policy -> user authorization -> signed wallet entry still required"
+ },
+ "correction_to_my_prior_receipt": {
+  "file": "evidence/receipts/redteam_lane/synthea_independent_verification.json",
+  "wrong_statement": "medication_identity_lost: 'gen run: 33/33 via reference'",
+  "truth": "I generalized from the first MedicationRequest. Under baymax_synthea 4 of 33 MedicationRequest in my generated bundle lack inline medicationCodeableConcept (reference-style); the old fhir.py still carries none of them. Primary-fixture figure (1/4) stands",
+  "handling": "successor correction; prior receipt NOT edited"
+ },
+ "custody": {
+  "independent_merkle_recompute_codex_head": "BP-0021, BP-0022, BP-0023 PASS (22/24 overall; BP-0002/0003 known own-lane gap)",
+  "chain_verify": "PASS (24 entries; consistency only)",
+  "legacy_verify": "FAIL (unchanged)",
+  "actor_signature": {
+   "BP": "0021",
+   "algorithm": "Ed25519",
+   "verified_independently": true,
+   "public_key_fingerprint_recomputed": true,
+   "signed_message": "actor_admission.json bytes (sha256 13e05b55...)",
+   "limits": "key minted at signing (dedicated_key_preexisting=false); public key stored in the same repo => key possession only, no external anchor; NOT a Git signature",
+   "actor_id": "chatgpt-codex-synthea-v1"
+  },
+  "git_signature": "UNSIGNED",
+  "mmr": "NOT_COMPUTED",
+  "remote_parity": "PASS (codex head == origin; not authenticity)",
+  "breakpoint_state_label": "BP-0021/0023 use state 'SUPPORTED' while their own notes say correctness UNKNOWN and Git unsigned - label scope should be stated (reproducibility/identity only)",
+  "distinction": "actor signature != Git signature != Merkle commitment != remote parity"
+ },
+ "offline_claim_hygiene": "Fixture/gate behaviour != offline local AI. No real model ran in anything I can observe.",
+ "claim_ceiling": "Static + executed-harness review of a hashed snapshot of an in-progress Codex worktree and committed BP-0021..0023. No physical iPhone, no Apollo observation, no simulator offline UI run, no real model output. Vendor privacy statements not treated as evidence; no HIPAA claim.",
+ "required_repair": [
+  "Qualify packet hash: source_packet_sha256 + destination_packet_sha256=NOT_VERIFIED; do not name it context_packet_sha256",
+  "Do not hard-code execution_substrate/provider; derive from verified evidence or record as HUMAN_REPORTED with UNVERIFIED model identity; reject cloud-looking model strings",
+  "Replace denylist with positive structure: allowed-claim templates, require every known_fact to cite a source FCO id, deny diagnosis/dose/stock/purchase classes by semantic categories, normalize unicode (NFKC, strip zero-width/soft-hyphen/homoglyphs) before checks; align Swift and Python duplicate-key handling",
+  "Treat 'offline observed' as USER_ATTESTED; capture device model, iOS version, Apollo version, airplane-mode screenshot hash as separate attested fields",
+  "Make the app load exactly the BP-admitted bundle (or admit the 9 KB bundle); commit the phone app and mint a breakpoint",
+  "Derive synthetic_state from evidence; fail closed for unknown sources; dedupe ids; structured errors; map component values and medicationReference",
+  "Run on a physical iPhone with device signing and record PHYSICAL_IPHONE evidence distinct from simulator"
+ ],
+ "next_action": "Codex commits the phone app + Apollo flow as a PARTIAL breakpoint (without overwriting BP-0021..23), then user runs Apollo on the physical iPhone in airplane mode and supplies device model, iOS version, Apollo version, model label and screenshots; red-team re-verifies hashes and re-runs the output-gate bypass suite against the repaired validator."
+}

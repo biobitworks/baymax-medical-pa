@@ -1,0 +1,262 @@
+{
+ "schema": "baymax.redteam_lane.synthea_independent_verification.v1",
+ "observed_at": "2026-10-04T20:01:43Z",
+ "execution_agent": "Claude",
+ "role": "INDEPENDENT_RED_TEAM_VERIFICATION_LANE",
+ "scope_note": "Reviews the primary lane's UNCOMMITTED draft (fixtures/, evidence/datasets, evidence/transforms, src/baymax_evidence) plus committed BP-0019 (BLOCKED java) and BP-0020 (FAILED generation). Nothing from the draft is bound by a breakpoint yet.",
+ "primary": {
+  "commit": "1174d0a0fd64c1aa5998bdd3c19a2ed49298e3cf",
+  "latest_breakpoint": "BAYMAX-BP-0020",
+  "remote_parity": "PASS (not authenticity)",
+  "committed_synthea_state": "BP-0019 BLOCKED(java), BP-0020 FAILED(generation attempt; external checkout concurrently removed/replaced) - preserved honestly"
+ },
+ "sources": {
+  "synthea_git_master": "d9d07a6eef91ee5144293b42ab64224d84d124f8",
+  "synthea_git_v4.0.0_tag_commit": "0185c09ea9d10a822c6f5f3ef9bdcbcbe960c813",
+  "wiki_git_HEAD": "3962d91559edf8b401511457b4c54dc76c97bab2",
+  "sample_data_git_master": "9959d9178ea28f4ec10f17ee238b6fabe6eb0de5",
+  "roles": {
+   "synthea.git": "executable/source identity",
+   "synthea.wiki.git": "documentation/procedure identity ONLY (not executable provenance)",
+   "synthea.mitre.org/downloads": "artifact provenance + prose terms (page says it is moving)"
+  }
+ },
+ "claims_checked": {
+  "sample_archive_sha256": {
+   "claimed": "56cb9e49f7ba6ad4e61c40aa80999f8c10a710823fed1becdf2502053777a521",
+   "recomputed": "56cb9e49f7ba6ad4e61c40aa80999f8c10a710823fed1becdf2502053777a521",
+   "bytes": 29595199,
+   "result": "VERIFIED_IDENTITY",
+   "fetched": "official repo at pinned commit via gh api raw"
+  },
+  "fixture_vs_archive_member": {
+   "member": "Brock407_Lockman863_a406f356-c8b4-54ad-e79c-54a5e15ffc19.json",
+   "sha256": "93e322ae61082775f578b8833c343551939206bba8838af65e296994f2eb5504",
+   "bytes": 892247,
+   "IDENTICAL_BYTES": true
+  },
+  "generator_recipe_sha256": {
+   "claimed": "2c1d00e84946927424bd87e5470441bd82e2b664ac2593a6a12cdb68924697e4",
+   "recomputed": "2c1d00e84946927424bd87e5470441bd82e2b664ac2593a6a12cdb68924697e4",
+   "result": "VERIFIED",
+   "recipe": "run_synthea -p 100 + exporter flags; NO -s, NO -cs, NO -r => UNSEEDED => sample archive NOT REPRODUCIBLE by design"
+  },
+  "archive_generator_revision": {
+   "primary_says": "UNKNOWN",
+   "evidence": "pinned sample-data commit message: 'Update from synthea/commit/d9d07a6e...' (author account synthetichealth, commit unsigned/unverified)",
+   "reclassification": "SUPPORTED_BY_UNSIGNED_COMMIT_MESSAGE (not authenticated); primary's UNKNOWN is more conservative than evidence"
+  },
+  "license_field": {
+   "primary_value": "OFFICIAL_SYNTHEA_GENERATED_DATA_USE_WITHOUT_RESTRICTION",
+   "finding": "favorable inference from website prose; synthea-sample-data repo has no detected licence => formal terms UNKNOWN_TERMS; redistribution of fixture in public repo unresolved"
+  }
+ },
+ "java": {
+  "vendor": "Homebrew (OpenJDK)",
+  "version": "17.0.20.1",
+  "java_home": "/opt/homebrew/Cellar/openjdk@17/17.0.20.1/libexec/openjdk.jdk/Contents/Home",
+  "requirement": "JDK 17+ (README: LTS 17 or 25)",
+  "requirement_met": true,
+  "previous": "/usr/bin/java was macOS stub (no runtime)"
+ },
+ "jar": {
+  "release": "v4.0.0",
+  "sha256": "ed43c20ad40ba5c3bc724503a5af032715fe3c491620b766148e7c2361e6ecc1",
+  "bytes": 201164144,
+  "matches_github_digest": true,
+  "digest_independence": "same publisher; identity only, not authenticity",
+  "embedded_build_version": "v3.4.0-18-ga07a65555",
+  "build_timestamp": "2026-03-05T14:41:42-0500",
+  "finding": "jar built from a07a65555 which is ONE commit BEFORE tag commit 0185c09e ('4.0.0 release', 22:20Z; jar built 19:41Z) => jar != tagged source exactly; ARTIFACT_PROVENANCE=PARTIAL"
+ },
+ "reproduction": {
+  "args": "-s 4242 -cs 4242 -r 20260101 -p 1 Massachusetts --exporter.baseDirectory=<dir>",
+  "seed": 4242,
+  "clinician_seed": 4242,
+  "reference_time_ms": 1767225600000,
+  "population": 1,
+  "fhir": "R4 transaction Bundle, US Core profiles (master/4.x default)",
+  "runs": 2,
+  "per_file": {
+   "patient_bundle": {
+    "A_sha256": "37c906dd5c4d75babba4c1745bfa4ded79d3649ef81e3046cc2ac0de7fadee52",
+    "B_sha256": "37c906dd5c4d75babba4c1745bfa4ded79d3649ef81e3046cc2ac0de7fadee52",
+    "bytes": [
+     2297930,
+     2297930
+    ],
+    "IDENTICAL_BYTES": true
+   },
+   "hospitalInformation": {
+    "A_sha256": "e63215b28a5972d38be3efc2b439bce5b2c53fce6ee1abb5e5a46990e0bf3467",
+    "B_sha256": "e63215b28a5972d38be3efc2b439bce5b2c53fce6ee1abb5e5a46990e0bf3467",
+    "bytes": [
+     19553,
+     19553
+    ],
+    "IDENTICAL_BYTES": true
+   },
+   "practitionerInformation": {
+    "A_sha256": "fca3ca90a880730b51a61e78899dbfbc48f867798e97ff3711b1dbd5fa8ad531",
+    "B_sha256": "fca3ca90a880730b51a61e78899dbfbc48f867798e97ff3711b1dbd5fa8ad531",
+    "bytes": [
+     19842,
+     19842
+    ],
+    "IDENTICAL_BYTES": true
+   },
+   "metadata": {
+    "A_sha256": "329f704a140f1b0b6206fcd9efed13ef88d30d9cb233401cc6d19db272b753c1",
+    "B_sha256": "721b043c5b271327d14429f836410b89286d9df7f598337121f192e66aeaffdf",
+    "bytes": [
+     496,
+     496
+    ],
+    "IDENTICAL_BYTES": false
+   }
+  },
+  "BYTE_IDENTITY": "IDENTICAL_BYTES for patient bundle (2297930 B), hospitalInformation, practitionerInformation; metadata DIFFERS (runID, runStartTime, runTimeInSeconds only); filenames embed wall-clock ms for info files",
+  "sensitivity": {
+   "no_-r": {
+    "IDENTICAL_BYTES": false,
+    "entries": "672 -> 5453",
+    "birthDate": "1973-02-15 -> 1973-11-19",
+    "class": "DIVERGENT"
+   },
+   "no_-cs": {
+    "IDENTICAL_BYTES": false,
+    "entries": "672 -> 672 (same)",
+    "class": "DIVERGENT (provider selection)"
+   }
+  },
+  "DETERMINISM": "DETERMINISTIC_GIVEN(-s,-cs,-r,jar,config) n=2; wiki's 'seed+version' statement is INCOMPLETE",
+  "sample_size_caveat": "n=2 runs, one config, one machine/JDK"
+ },
+ "fhir_attack": {
+  "generated_bundle_census": "see counts",
+  "census_fixture_primary": {
+   "census": {
+    "Patient": 1,
+    "Encounter": 16,
+    "CareTeam": 2,
+    "CarePlan": 2,
+    "DiagnosticReport": 30,
+    "DocumentReference": 16,
+    "Claim": 20,
+    "ExplanationOfBenefit": 20,
+    "AllergyIntolerance": 7,
+    "MedicationRequest": 4,
+    "Condition": 15,
+    "Procedure": 35,
+    "Observation": 74,
+    "Immunization": 7,
+    "Device": 1,
+    "SupplyDelivery": 3,
+    "Medication": 1,
+    "MedicationAdministration": 1,
+    "Provenance": 1
+   },
+   "dropped": {
+    "CareTeam": 2,
+    "DiagnosticReport": 30,
+    "DocumentReference": 16,
+    "Claim": 20,
+    "ExplanationOfBenefit": 20,
+    "Procedure": 35,
+    "Immunization": 7,
+    "Device": 1,
+    "SupplyDelivery": 3,
+    "Medication": 1,
+    "MedicationAdministration": 1,
+    "Provenance": 1
+   },
+   "total": 256
+  },
+  "findings": {
+   "silently_dropped": {
+    "entries_dropped_of_total": "137/256 (54%) in primary fixture",
+    "types": {
+     "CareTeam": 2,
+     "DiagnosticReport": 30,
+     "DocumentReference": 16,
+     "Claim": 20,
+     "ExplanationOfBenefit": 20,
+     "Procedure": 35,
+     "Immunization": 7,
+     "Device": 1,
+     "SupplyDelivery": 3,
+     "Medication": 1,
+     "MedicationAdministration": 1,
+     "Provenance": 1
+    },
+    "manifest_hides_it": "fixture_resource_counts lists only the 7 kept types"
+   },
+   "graph_content": "nodes carry identity+hash only; NO codes, units, dates, values; only edge type DERIVED_FROM; no typed clinical relationships",
+   "medication_identity_lost": "MedicationRequest may use medicationReference (gen run: 33/33 via reference; primary fixture 1/4); Medication resources dropped; no codes carried => drug unidentifiable from FCG",
+   "units_lost": "62/74 Observations with valueQuantity in primary fixture; none carried",
+   "conditional_references": "942/3596 (26%) references in generated bundle are conditional (Practitioner/Location/Organization?identifier=) resolving to separate info files not imported",
+   "synthetic_label_unconditional": "synthetic_state hard-coded SYNTHETIC; bundle with SSN identifier + REAL_PATIENT_PHI tag still labeled SYNTHETIC",
+   "empty_graph_silent": "bundle of only unsupported types => 0 nodes, SYNTHETIC label, no UNKNOWN/dropped record",
+   "duplicates": "duplicate resource => duplicate fco_id emitted (no dedupe/detect)",
+   "null_entries": "entries without resource skipped silently",
+   "vacuous_guard": "SENSITIVE_KEYS assertion checks node's own fixed keys; cannot fire",
+   "fail_closed_ok": [
+    "missing resource id raises",
+    "non-Bundle raises"
+   ]
+  },
+  "classification": {
+   "FHIR_PARSED": "PASS",
+   "FHIR_TRANSFORMED": "PARTIAL (identity index only)",
+   "FHIR_SEMANTIC_CORRECTNESS": "NOT_ESTABLISHED (clinical content not mapped; 54% dropped)",
+   "ROUNDTRIP": "NOT_SUPPORTED (graph cannot reconstruct source)"
+  }
+ },
+ "synthetic_markers_observed": {
+  "name_numeric_suffix": true,
+  "ssn_prefix_999": true,
+  "driver_licence_prefix_S99": true,
+  "phone_555_patient": true,
+  "note": "markers are config/version defaults; not proof of synthetic status; SSN-shaped strings will trip PII scanners"
+ },
+ "real_entity_exposure": {
+  "hospitalInformation": "6 Organizations are real Massachusetts facilities; 6/6 phone numbers are NOT 555 (real-looking)",
+  "primary_fixture": "Encounter.serviceProvider.display embeds real facility names (e.g. Vibra Hospital of Western Massachusetts LLC; Cardiovascular Center at Tufts Medical Center Inc)",
+  "implication": "directory/map/call lane must tag SYNTHETIC_FIXTURE_NOT_LIVE_DIRECTORY; never render as callable"
+ },
+ "iphone_fixture": {
+  "state": "NOT_IMPLEMENTED (no derived offline bundle, no Swift/Xcode in tree)",
+  "OFFLINE_LOAD": "NOT_TESTED",
+  "PROVENANCE_PRESERVED": "NOT_TESTED",
+  "UNKNOWN_PRESERVED": "FAIL_AT_TRANSFORM (silent drops without UNKNOWN)"
+ },
+ "custody": {
+  "independent_recompute_at_primary_head": {
+   "FAIL": 2,
+   "PASS": 19
+  },
+  "chain_entries": 21,
+  "note": "BP-0002/0003 unverifiable against git (own-lane squashed commit, previously reported); BP-0004..0020 PASS; no breakpoint yet binds the Synthea draft",
+  "CHAIN_VERIFY": "PASS (consistency only)",
+  "LEGACY_VERIFY": "FAIL (unchanged conflict)",
+  "MMR_STATE": "NOT_COMPUTED",
+  "SIGNATURE_STATE": "UNSIGNED",
+  "distinction": "fixture sha256 != breakpoint Merkle root != signature"
+ },
+ "not_committed_here": [
+  "raw Synthea outputs (UNKNOWN_TERMS + real-looking facility phones)",
+  "jar (201MB)"
+ ],
+ "claim_ceiling": "Verified identity of archive/fixture/jar bytes and one 2-run determinism test of Synthea v4.0.0 on one JDK. No clinical correctness, no iPhone/offline test (nothing exists), no Kaggle review.",
+ "required_repair": [
+  "Transform: carry codes (system+code), units (UCUM), dates, and typed edges (subject, encounter, medication) into FCOs",
+  "Resolve Medication via medicationReference; import hospitalInformation/practitionerInformation or mark references UNRESOLVED",
+  "Record every dropped resource type+count and emit UNKNOWN nodes; put full census in manifest",
+  "Derive synthetic_state from evidence (source class + markers), never hard-code; fail closed for unknown source",
+  "Dedupe/detect duplicate resource ids",
+  "Set license to UNKNOWN_TERMS with prose recorded separately; decide redistribution before committing fixture",
+  "Record seed/-cs/-r/jar sha256/java vendor+version for any self-generated fixture; prefer self-generated fixed-seed over unseeded sample",
+  "Tag real facility names/phones as SYNTHETIC_FIXTURE_NOT_LIVE_DIRECTORY"
+ ],
+ "next_action": "Primary lane commits its draft with the transform repairs above (as FAILED/PARTIAL successor, not overwriting); red-team lane then re-verifies the transform on the same generated bundle and tests an actual offline bundle once one exists."
+}

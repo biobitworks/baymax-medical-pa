@@ -1,0 +1,42 @@
+{
+ "schema": "baymax.redteam_lane.integration_custody_recompute.v1",
+ "observed_at": "2026-10-04T21:17:46Z",
+ "integration_head": "510859101618ad5085f72691e47fcac96a726f3b",
+ "latest_bp": "BAYMAX-BP-0032",
+ "chain_entries": 33,
+ "summary": {
+  "FAIL": 2,
+  "PASS": 31
+ },
+ "breakpoints_0025_to_0032": {
+  "BAYMAX-BP-0025": "PASS",
+  "BAYMAX-BP-0026": "PASS",
+  "BAYMAX-BP-0027": "PASS",
+  "BAYMAX-BP-0028": "PASS",
+  "BAYMAX-BP-0029": "PASS",
+  "BAYMAX-BP-0030": "PASS",
+  "BAYMAX-BP-0031": "PASS",
+  "BAYMAX-BP-0032": "PASS"
+ },
+ "known_failures": [
+  "BAYMAX-BP-0002",
+  "BAYMAX-BP-0003 (own-lane batched commit; unchanged)"
+ ],
+ "remote_parity": "PASS (local ref 5108591 == ls-remote)",
+ "chain_verify": "PASS (consistency only)",
+ "legacy_verify": "FAIL (BP-0002 conflict unchanged)",
+ "mmr": "NOT_COMPUTED",
+ "git_signature": "UNSIGNED",
+ "actor_signatures": {
+  "count": 3,
+  "all_verify_independently": true,
+  "payloads": [
+   "codex_synthea/actor_admission.json",
+   "receipts/iphone/actor_execution.json",
+   "receipts/iphone/icloud_delivery.json"
+  ],
+  "distinct_public_keys": 1,
+  "limits": "key possession only; public key stored in the same repo; not a Git signature"
+ },
+ "claim_ceiling": "Identity/order/consistency; not authenticity or correctness."
+}

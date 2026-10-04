@@ -1,0 +1,95 @@
+{
+ "schema": "baymax.redteam_lane.synthea_source_review.v1",
+ "observed_at": "2026-10-04T19:51:33Z",
+ "execution_agent": "Claude",
+ "lane": "INDEPENDENT_RED_TEAM",
+ "sources_read": [
+  "https://github.com/synthetichealth/synthea/wiki/Basic-Setup-and-Running",
+  "https://synthea.mitre.org/downloads",
+  "https://synthea.mitre.org/terms",
+  "https://github.com/synthetichealth/synthea/wiki/Provider-Data",
+  "GitHub API: synthetichealth/synthea, releases, contents (read-only)"
+ ],
+ "nothing_downloaded": true,
+ "nothing_executed": true,
+ "java_available_locally": false,
+ "java_note": "/usr/bin/java is the macOS stub ('Unable to locate a Java Runtime'); earlier 'which java' hit was misleading. Synthea RUN = BLOCKED_NO_JDK",
+ "verified_facts": {
+  "repo": {
+   "full_name": "synthetichealth/synthea",
+   "license_spdx": "Apache-2.0",
+   "license_file_header": "Apache License Version 2.0",
+   "NOTICE_file_present": true,
+   "archived": false,
+   "last_push": "2026-08-18"
+  },
+  "wiki_install_artifact": {
+   "url": "github.com/synthetichealth/synthea/releases/download/master-branch-latest/synthea-with-dependencies.jar",
+   "MUTABLE_TAG": true,
+   "release_target": "master (branch name, not a commit SHA)",
+   "jar_sha256": "018ad7f04f7aacb995804d7d4781c76d5fc714f7f23257ba50daa9eefae224ac",
+   "jar_bytes": 197025542,
+   "rebuilt": "2026-08-18T16:19:44Z"
+  },
+  "pinnable_alternative": {
+   "tag": "v4.0.0",
+   "tag_commit": "0185c09ea9d10a822c6f5f3ef9bdcbcbe960c813",
+   "release_target_branch": "jdk25",
+   "jar_sha256": "ed43c20ad40ba5c3bc724503a5af032715fe3c491620b766148e7c2361e6ecc1",
+   "jar_bytes": 201164144,
+   "published": "2026-03-05",
+   "source_compat": "Java 17",
+   "readme": "requires JDK 17+; LTS 17 or 25 recommended"
+  },
+  "master_defaults_seen": {
+   "exporter.fhir.export": true,
+   "exporter.fhir.use_us_core_ig": true,
+   "exporter.fhir.us_core_version": "6.1.0",
+   "exporter.fhir.transaction_bundle": true,
+   "exporter.hospital.fhir.export": true,
+   "exporter.practitioner.fhir.export": true,
+   "generate.append_numbers_to_person_names": true,
+   "exporter.years_of_history": 10
+  },
+  "wiki_stale_vs_master": "wiki says pass --exporter.fhir.use_us_core_ig true to get US Core; master default is already true => defaults are version-dependent",
+  "determinism_statement": "wiki: same seed + same version => identical. INCOMPLETE: age depends on reference date (-r) and provider selection on clinician seed (-cs); config also matters",
+  "provider_data": "default providers are REAL US facilities post-processed from CMS public data incl. name, address, PHONE, emergency flag; quality score 'does nothing'; non-US requires custom demographics/zip/provider files (wiki UK example)",
+  "site_statements_PROSE": {
+   "terms_quote_short": "data free from cost, privacy, and security restrictions; usable without restriction for secondary uses in academia, research, industry, government",
+   "citation_requested": "JAMIA 2018;25(3):230-238 doi:10.1093/jamia/ocx079",
+   "downloads_page_notice": "page is moving to synthetichealth.github.io/downloads.html",
+   "bulk_data": "SyntheticMass v2 (2017) FHIR 3.0.1; v1 FHIR 1.8.0",
+   "sample_zips": "'latest' URLs (mutable): FHIR R4/STU3/DSTU2, CSV, C-CDA",
+   "sample_data_repo_license": null
+  }
+ },
+ "classification": {
+  "DATA_SOURCE_PROVENANCE": "PARTIAL: official upstream identified and pinnable; NO Baymax fixture generated or verified yet (NOT_TESTED)",
+  "LICENSE_GATE": {
+   "software_jar_and_code": "VERIFIED Apache-2.0 (+NOTICE obligations on redistribution)",
+   "generated_output_formal_terms": "UNKNOWN_TERMS (Apache covers the software; site prose is not a license instrument)",
+   "site_prose": "PERMISSIVE_PROSE_ONLY",
+   "sample_data_zips": "UNKNOWN_TERMS (synthea-sample-data repo has no detected license)",
+   "training_rights": "UNKNOWN_TERMS (prose mentions secondary uses incl. industry; silent on ML training/redistribution/derivatives)",
+   "attribution": "requested (cite JAMIA); NOTICE file for software redistribution",
+   "MIMIC_IV": "OUT_OF_SCOPE"
+  },
+  "SYNTHETIC_vs_CLINICALLY_VALID": "Synthea output is synthetic; NOT clinically validated. Names carry numeric suffixes by default (config-dependent marker, not a guarantee)",
+  "REAL_ENTITY_LEAK_RISK": "HIGH for directory/map/call lane: Synthea Organization/Location resources are real facilities with real phone numbers attached to synthetic patients",
+  "BALI_CLAIM": "A Bali fixture 'generated from Synthea' needs custom demographics/zip/provider inputs (US-default); those inputs need their own provenance+rights. Else it is hand-authored, not Synthea output",
+  "FHIR_TRANSFORM": "NOT_TESTED (LOADS/TRANSFORMS/ROUNDTRIP/SEMANTIC all NOT_TESTED); expect transaction Bundles with urn:uuid refs + separate hospital/practitioner info files"
+ },
+ "requirements_for_primary_lane": [
+  "pin v4.0.0 (commit+jar sha256 above) or record the sha256 of whatever jar is used; never use master-branch-latest unrecorded",
+  "record: jar sha256, java -version, full CLI args incl -s -cs -r, effective synthea.properties hash, output file sha256s",
+  "set/record generate.append_numbers_to_person_names and synthetic label on every FCO",
+  "mark Synthea Organization/Location/phone as SYNTHETIC_FIXTURE_NOT_LIVE_DIRECTORY; never render as callable",
+  "separate DatasetSourceFCO per artifact with license=UNKNOWN_TERMS where applicable",
+  "no 'US Core conformant' claim without running a validator"
+ ],
+ "human_gates": [
+  "download of ~201 MB jar (v4.0.0) needs explicit approval",
+  "JDK install (system change) needs explicit approval"
+ ],
+ "claim_ceiling": "Source/licence/provenance review of documentation and GitHub metadata only. No artifact downloaded, no Synthea executed, no data inspected."
+}

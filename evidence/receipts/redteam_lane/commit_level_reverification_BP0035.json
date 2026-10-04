@@ -1,0 +1,100 @@
+{
+ "schema": "baymax.redteam_lane.commit_level_reverification.v1",
+ "observed_at": "2026-10-04T21:49:29Z",
+ "lane": "INDEPENDENT_RED_TEAM_SIDE_LANE (no canonical BP minted; no worktree modified)",
+ "trigger": "Codex committed the validator repair (codex/model-admission-parity d4edcfd) and the primary lane integrated it as BP-0035 (integration/iphone-offline-v2 7fa2399)",
+ "supersedes": "snapshot-level verification in codex_repair_verification.json (same bytes)",
+ "commits_verified": {
+  "d4edcfdeeb27d275f89894f0200a7c1faa630f7c": "codex/model-admission-parity",
+  "7fa2399e543841a83c134a3bc391780a6fd93c98": "integration/iphone-offline-v2 (BP-0035)"
+ },
+ "byte_identity_to_earlier_snapshot": {
+  "ModelInference.swift": "IDENTICAL (0b364f57...)",
+  "model.py": "IDENTICAL (3cde9c74...)",
+  "OfflineTravelApp.swift": "IDENTICAL",
+  "TravelModel.swift": "IDENTICAL",
+  "GateCheck.swift": "IDENTICAL",
+  "catalog_v2": "IDENTICAL (648e0e87...)",
+  "packet_v2": "IDENTICAL (80e92bd4...)",
+  "OfflineTravelBundleFCO.json": "IDENTICAL"
+ },
+ "PARITY": {
+  "result": "PASS",
+  "engine": "parity_runner_v3.py on the COMMITTED files (my harness over real Swift ModelOutput.parse + real Python validate_response)",
+  "executions_per_commit": 351,
+  "unique_texts": 285,
+  "disagreements": 0,
+  "by_corpus": {
+   "codex_corpus_v4_snapshot_copy.json": {
+    "n": 136,
+    "swift_wrong": 0,
+    "python_wrong": 0,
+    "disagree": 0
+   },
+   "parity_vectors_138_SIMULATED.json": {
+    "n": 138,
+    "swift_wrong": 1,
+    "python_wrong": 1,
+    "disagree": 0
+   },
+   "fresh_vectors_77_SIMULATED.json": {
+    "n": 77,
+    "swift_wrong": 0,
+    "python_wrong": 0,
+    "disagree": 0
+   }
+  },
+  "results_identical_across_the_two_commits": true,
+  "unsafe_content_accepted": 0,
+  "crashes": 0,
+  "documented_difference_from_my_expectation": "'-0' accepted by both (decodes to id 0; Codex lists NEGATIVE_ZERO as accept)",
+  "pin_and_identity": {
+   "identity_cloud_label": {
+    "execution_substrate": "OpenRouter",
+    "model_label": "gpt-5-6-luna (cloud)",
+    "model_revision": "UNKNOWN",
+    "model_revision_state": "UNKNOWN",
+    "network_ui_state": "USER_REPORTED_AIRPLANE_MODE",
+    "provider": "UNKNOWN",
+    "provider_state": "HUMAN_REPORTED_UNVERIFIED"
+   },
+   "record_exact_packet_and_catalog": "ACCEPTED",
+   "record_packet_one_char_changed": "REJECTED",
+   "record_with_tampered_catalog_struct": "REJECTED",
+   "tampered_catalog_decode": "REJECTED"
+  }
+ },
+ "corpus_correction": {
+  "earlier_statement": "I said the 136-vector corpus file was not in the repo",
+  "finding": "WRONG. Committed model_admission_v3.json (87) + model_admission_strict_edges_v1.json (49) = 136 vectors and equal the uncommitted model_admission_v4.json exactly (same VECTOR_ID, raw bytes, expected state). My runs used a content-identical copy (sha256 1cdca39a...)",
+  "handling": "corrected here as a successor record; earlier receipts not edited"
+ },
+ "BP_0035_review": {
+  "stage": "VALIDATOR_STRUCTURAL_REPAIR",
+  "state": "PARTIAL",
+  "merkle_recompute": "PASS",
+  "overall_recompute": "34/36 (BP-0002/0003 known own-lane gaps)",
+  "chain_verify": "PASS (36 entries; consistency only)",
+  "legacy_verify": "FAIL (BP-0002 conflict unchanged)",
+  "remote_parity": "PASS (7fa2399 == ls-remote)",
+  "git_signature": "UNSIGNED",
+  "mmr_state": "NOT_COMPUTED (36/36)",
+  "python_tests": "34 pass",
+  "secret_gate": "PASS (305 tracked files)",
+  "claim_blocked_provider_account": "BP-0035 records 'Independent Claude re-verification BLOCKED_PROVIDER_ACCOUNT'. That receipt (CLAUDE-LANE-MODEL-ADMISSION-REDTEAM-001) honestly records a failed launch of ANOTHER Claude invocation (HTTP 412 account/billing, test_execution NOT_STARTED, not promoted). It does not describe this lane. This receipt supplies the independent verification at the same bytes; the primary lane may admit it by reference in a successor (state change from BLOCKED to verified-by-side-lane is the primary's decision)",
+  "not_misattributed": true
+ },
+ "STILL_OPEN": {
+  "F3_lineage_split": "UNCHANGED at 7fa2399",
+  "F4_dataset_text_injection": "UNCHANGED at 7fa2399",
+  "TypeScript_validator_parity": "NOT_TESTED (node blocked)",
+  "WebKit_flows": "NOT_TESTED",
+  "device_vs_simulator_identity": "UIDevice.current.model does not distinguish",
+  "airplane_mode_rerun_raw_bytes_and_reachability": "operator run still needed"
+ },
+ "simulator": {
+  "state_at_write": "iOS 26.1 Simulator runtime (23B86 arm64, 8.32 GB) download IN PROGRESS via 'xcodebuild -downloadPlatform iOS' with a 3 GiB free-disk watchdog; 15 GiB free at start; result recorded in a successor receipt"
+ },
+ "claim_ceiling": "Committed-byte verification of the Swift/Python validator pair and custody; simulated vectors; no device run; no TS/WebKit verification.",
+ "next_action": "Primary lane admits this receipt by reference (or mints its own successor); fix F3/F4; add TS validator to the parity corpus where node is permitted"
+}

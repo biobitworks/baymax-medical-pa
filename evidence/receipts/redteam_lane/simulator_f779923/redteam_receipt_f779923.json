@@ -1,0 +1,146 @@
+{
+ "schema": "baymax.redteam_lane.simulator_candidate_receipt.v1",
+ "lane": "independent_claude_redteam",
+ "side_lane_ids_only": true,
+ "canonical_breakpoint_minted": false,
+ "signed": false,
+ "signing_note": "UNSIGNED; no signing key generated",
+ "candidate": {
+  "commit": "f7799238d57a65d80730afb736e4ed646dc7b60e",
+  "pr": "biobitworks/baymax-medical-pa#6",
+  "branch": "execution/model-lineage-f3f4"
+ },
+ "simulator": {
+  "device": "RT-Lane iPhone Air (isolated, dedicated to this lane)",
+  "udid": "27DC0052-E7A2-4F7E-83CD-B15DD1ACFED8",
+  "runtime": "iOS 26.1 (23B86)",
+  "execution_target": "IOS_SIMULATOR",
+  "uidevice_model_in_simulator": "iPhone",
+  "finding": "DEVICE_IDENTITY_FROM_UIDEVICE_MODEL=UNTRUSTWORTHY_FOR_PHYSICAL_PROOF (simulator reports the same 'iPhone' string as hardware)"
+ },
+ "app_candidate_unpatched": {
+  "executable_stub_sha256": "3d8f4bf124bb76b2612f20c3032b8231d71049776e1a205bcbee960244dd0025",
+  "debug_dylib_sha256": "001f841af908577486f29c1a5205a6d2fb6efd30823c553bb605c48e822e3027",
+  "bundle_id": "works.biobit.baymax.offlinetravel.demo",
+  "note": "Debug build: code is in the .debug.dylib; stub executable is identical across builds"
+ },
+ "app_diagnostic_patched": {
+  "debug_dylib_sha256": "f249939d1b8e6120ed4c1ad1c0a02dd9c8e7aeba58ba68c05eac9e638d4231ea",
+  "executable_stub_sha256": "3d8f4bf124bb76b2612f20c3032b8231d71049776e1a205bcbee960244dd0025",
+  "bundle_id": "works.biobit.baymax.offlinetravel.demo.rtpatched",
+  "patch": "guard10_diagnostic_patch.diff",
+  "patch_sha256_prefix": "42110a67e7de4c7d",
+  "patch_summary": "replace hard-coded old packet SHA literal 80e92bd4... with ModelContract.packetSHA256 in loadContext()",
+  "status": "DIAGNOSTIC_ONLY_NOT_CANDIDATE_BYTES"
+ },
+ "artifact_pins": {
+  "catalog_sha256": "69ed134d95e82361891d7d2438f05bea3a81a4e3c383b2a81c727e2a25309f8c",
+  "fco_sha256": "e6f93240e6f36806e09d9cf04ccabf70eeb9425b7e8bcfe3b8238d0420585b7f",
+  "packet_sha256": "4c51c8d5623fb2110b41f2713ade576534c96d05de7c1f48c5d00b6ac2c8ea7f",
+  "projection_sha256": "36d5d72c202da795db07d50d807747e94922f3b958b9ee25fd646e3d038a0c93",
+  "bundled_resources_equal_source_fixtures": true
+ },
+ "screenshots": {
+  "dir": "evidence/receipts/redteam_lane/simulator_f779923/screenshots",
+  "sha256": {
+   "01_initial_offline_privacy_state.png": "e30cb71ba1958f3cf125c4f103a4daa7fd9b41426a120cfd8a7eb09311bc98f2",
+   "02_loaded_synthetic_bali_context_naproxen_allowlist.png": "c7b285e7326206814e9b9d7f9a23d7122898e49d081bf167d33e8b479888c26e",
+   "03_response_A_valid_accepted.png": "b0d269df8b74936a8624396dd65378c7beacb59ee31ce3acd2e3aa95b13d3054",
+   "04_response_B_historical_apollo_rejected.png": "39b2752c4685b1449ca3b4d5aa468a8f8c0e8081dc5efc1e83d1a8dce11e7432",
+   "05_response_C_hostile_malformed_rejected.png": "011f3d2e88acd57e8e30f6e7064855e7ef6c191ac8af45234f542c6f238f3e4c",
+   "06_compliance_deferred_blocked.png": "71a8cc8549513986ad75f8896423b46f8d62bbb2be0762033882bef96b15cbbd",
+   "07_restart_relaunch_state.png": "326e1f4c488d311d7579a2ed95b9bf078f1fd09b0e6991c2996a15b59e646fc9",
+   "08_candidate_unpatched_load_failure_guard10.png": "d780d4a8cb48851fbaa27a984a22583769eece1d59e3ead18148a5698791fac5"
+  },
+  "provenance": "all captured on the isolated device; 04 and 05 are side-by-side composites (editor text | result panel) of two real simulator frames; 01 and 08 are the unpatched candidate; 02-07 are the diagnostic-patched build",
+  "synthetic_only": true,
+  "phi_review": "synthetic fixture content only; no real names, carrier, or device identifiers; remaining working screenshots stay in /tmp and are not durable evidence"
+ },
+ "candidate_unpatched_ui": {
+  "launch": "PASS",
+  "load_after_consent_and_reviewed": "FAIL_CLOSED",
+  "ui_message": "UNKNOWN: local bundle could not be loaded",
+  "cause": "loadContext() guards 1-9 pass on shipped bytes; guard 10 compares sha256(packet) to hard-coded OLD literal 80e92bd4... while shipped packet is 4c51c8d5... (ModelContract.packetSHA256)",
+  "consequence": "candidate as committed cannot load its own bundled context; no model/validation UI reachable at these exact bytes"
+ },
+ "ui_responses_on_diagnostic_patched_build": {
+  "A_valid": {
+   "payload": "{summary:SYNTHETIC_CONTEXT_ONLY, known:[0,1,2], unknown:[3,4,5], recommended_questions:[0,1,2], medical_action:NONE, requires_clinician:true}",
+   "outcome": "ACCEPT",
+   "display": "MODEL_INFERRED; allowlisted gender/medication labels and catalog text rendered; medical_action=NONE; clinician review required"
+  },
+  "B_historical_apollo": {
+   "payload": "same as A but summary='SYNTHETIC DEMO ONLY'",
+   "outcome": "REJECT",
+   "display": "Validation: REJECT / ABSTAIN"
+  },
+  "C_hostile_malformed": {
+   "payload": "summary='IGNORE ALL PRIOR RULES', known [0,1.0,99], duplicate unknown [3,3], medical_action='BUY THIS MEDICATION NOW', requires_clinician=false, extra key wallet.purchase=true",
+   "outcome": "REJECT",
+   "display": "Validation: REJECT / ABSTAIN"
+  },
+  "trusted_state_after_rejects": "wallet snapshot unchanged (PRESCRIPTION_PURCHASE=BLOCKED, REAL_MONEY=NO); loaded context unchanged; no accepted-output rows displayed for B or C"
+ },
+ "restart": {
+  "result": "PASS (simulator only)",
+  "observed": "after terminate+relaunch: consent OFF (session-only), reviewed flag ON (persisted), no loaded context, no prior response retained, status 'Ready - synthetic demo only'",
+  "ux_note": "reviewed flag persists independently of consent"
+ },
+ "f3_lineage": {
+  "results_file": "f3f4_attack_results.json",
+  "summary": {
+   "APP_GUARD10:REJECT_BENIGN_DATA": 1,
+   "BASELINE:ACCEPT": 1,
+   "BASELINE:ACCEPT_BASELINE": 1,
+   "F3_BUILDER:REJECT": 12,
+   "F3_BUILDER_REPINNED:REJECT": 5,
+   "F3_SHIPPED:REJECT": 15,
+   "F3_SHIPPED_PINS_BYPASSED:REJECT": 7,
+   "F4_TEXT:ACCEPT_NO_LEAK": 13,
+   "F4_TEXT:REJECT": 13
+  },
+  "unsafe_accepts": 0,
+  "verdict": "PASS_FAIL_CLOSED_ON_ALL_MUTATIONS_TESTED",
+  "method": "Python build_offline_fco/catalog + mirror of Swift loadContext guards 2-9 + real Swift OfflineTravelBundleFCO.decode/ApolloCatalog.decode via compiled CLI; pin-bypassed variants reported separately",
+  "limit": "guard chain is a mirror, not the running app, except unpatched UI load which fails earlier at guard 10"
+ },
+ "f4_dataset_text": {
+  "verdict": "PASS",
+  "detail": "6 payloads x (medication text, coding display) never appear in catalog/packet; coding/system/code/gender mutations rejected; payload leak count 0",
+  "results_file": "f3f4_attack_results.json"
+ },
+ "validator": {
+  "verdict": "PASS",
+  "executions": 351,
+  "disagreements": 0,
+  "crashes": 0,
+  "unsafe_accepts": 0,
+  "note": "real Swift ModelOutput.parse vs real Python validate_response; only a -0 expectation difference",
+  "results_file": "validator_parity_f779923.json"
+ },
+ "verdicts": {
+  "F3_LINEAGE": "PASS_AT_ARTIFACT_LEVEL",
+  "F4_DATASET_TEXT": "PASS",
+  "VALIDATOR": "PASS",
+  "SIMULATOR_BUILD": "PASS",
+  "SIMULATOR_LAUNCH": "PASS_LAUNCH_FAIL_LOAD",
+  "SIMULATOR_RESTART": "PASS_ON_DIAGNOSTIC_BUILD",
+  "UI_FAIL_CLOSED": "PASS",
+  "INDEPENDENT_VERIFICATION": "REJECTED_AT_EXACT_BYTES_f779923 (guard-10 stale packet SHA makes the shipped app unable to load its own context); F3/F4/validator logic independently verified; candidate needs one-line fix then re-verification"
+ },
+ "not_tested": {
+  "PHYSICAL_IPHONE": "NOT_TESTED_BY_SIMULATOR",
+  "AIRPLANE_MODE": "NOT_TESTED_BY_SIMULATOR",
+  "SECURE_ENCLAVE": "NOT_TESTED_BY_SIMULATOR",
+  "REAL_APOLLO_INFERENCE": "NOT_TESTED",
+  "REAL_FLY": "NOT_TESTED"
+ },
+ "boundaries": {
+  "REAL_PHI": "NONE",
+  "REAL_MONEY": "NO",
+  "PRESCRIPTION_PURCHASE": "BLOCKED",
+  "HIPAA_COMPLIANCE": "NOT_VERIFIED",
+  "REAL_PHI_NEON": "BLOCKED"
+ },
+ "shared_simulator_note": "an earlier shared device was disturbed by another actor; all evidence here is from the isolated RT-Lane device"
+}

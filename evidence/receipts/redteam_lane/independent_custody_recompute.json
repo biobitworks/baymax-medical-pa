@@ -1,0 +1,334 @@
+{
+ "breakpoint_files": 17,
+ "chain_entries": 17,
+ "claim_boundary": "Recomputes identity/ordering/consistency only. Not authenticity (UNSIGNED), not correctness, not MMR (NOT_COMPUTED). Remote parity != authenticity.",
+ "per_breakpoint": [
+  {
+   "admitting_commit": "4b26dd15eb",
+   "artifact_mismatches": [],
+   "breakpoint": "BAYMAX-BP-0000",
+   "checks": {
+    "artifacts_match_bytes_at_admitting_commit": true,
+    "chain_commitment_recomputed": true,
+    "chain_file_sha_matches_admitted_bytes": true,
+    "chain_id_index": true,
+    "chain_prev_ok": true,
+    "committed": true,
+    "contained_in_HEAD": true,
+    "parent_declared_ok": true,
+    "paths_unique": true,
+    "root_recomputed_from_descriptors": true
+   },
+   "result": "PASS"
+  },
+  {
+   "admitting_commit": "4b26dd15eb",
+   "artifact_mismatches": [],
+   "breakpoint": "BAYMAX-BP-0001",
+   "checks": {
+    "artifacts_match_bytes_at_admitting_commit": true,
+    "chain_commitment_recomputed": true,
+    "chain_file_sha_matches_admitted_bytes": true,
+    "chain_id_index": true,
+    "chain_prev_ok": true,
+    "committed": true,
+    "contained_in_HEAD": true,
+    "parent_declared_ok": true,
+    "paths_unique": true,
+    "root_recomputed_from_descriptors": true
+   },
+   "result": "PASS"
+  },
+  {
+   "admitting_commit": "d3308c7c46",
+   "artifact_mismatches": [
+    [
+     "scripts/verify_chain.py",
+     "bytes differ at admitting commit"
+    ],
+    [
+     "redteam/custody_attacks.py",
+     "bytes differ at admitting commit"
+    ]
+   ],
+   "breakpoint": "BAYMAX-BP-0002",
+   "checks": {
+    "artifacts_match_bytes_at_admitting_commit": false,
+    "chain_commitment_recomputed": true,
+    "chain_file_sha_matches_admitted_bytes": true,
+    "chain_id_index": true,
+    "chain_prev_ok": true,
+    "committed": true,
+    "contained_in_HEAD": true,
+    "parent_declared_ok": true,
+    "paths_unique": true,
+    "root_recomputed_from_descriptors": true
+   },
+   "result": "FAIL"
+  },
+  {
+   "admitting_commit": "d3308c7c46",
+   "artifact_mismatches": [
+    [
+     "evidence/receipts/redteam/gitleaks_bp0002_finding.json",
+     "bytes differ at admitting commit"
+    ]
+   ],
+   "breakpoint": "BAYMAX-BP-0003",
+   "checks": {
+    "artifacts_match_bytes_at_admitting_commit": false,
+    "chain_commitment_recomputed": true,
+    "chain_file_sha_matches_admitted_bytes": true,
+    "chain_id_index": true,
+    "chain_prev_ok": true,
+    "committed": true,
+    "contained_in_HEAD": true,
+    "parent_declared_ok": true,
+    "paths_unique": true,
+    "root_recomputed_from_descriptors": true
+   },
+   "result": "FAIL"
+  },
+  {
+   "admitting_commit": "d3308c7c46",
+   "artifact_mismatches": [],
+   "breakpoint": "BAYMAX-BP-0004",
+   "checks": {
+    "artifacts_match_bytes_at_admitting_commit": true,
+    "chain_commitment_recomputed": true,
+    "chain_file_sha_matches_admitted_bytes": true,
+    "chain_id_index": true,
+    "chain_prev_ok": true,
+    "committed": true,
+    "contained_in_HEAD": true,
+    "parent_declared_ok": true,
+    "paths_unique": true,
+    "root_recomputed_from_descriptors": true
+   },
+   "result": "PASS"
+  },
+  {
+   "admitting_commit": "d3308c7c46",
+   "artifact_mismatches": [],
+   "breakpoint": "BAYMAX-BP-0005",
+   "checks": {
+    "artifacts_match_bytes_at_admitting_commit": true,
+    "chain_commitment_recomputed": true,
+    "chain_file_sha_matches_admitted_bytes": true,
+    "chain_id_index": true,
+    "chain_prev_ok": true,
+    "committed": true,
+    "contained_in_HEAD": true,
+    "parent_declared_ok": true,
+    "paths_unique": true,
+    "root_recomputed_from_descriptors": true
+   },
+   "result": "PASS"
+  },
+  {
+   "admitting_commit": "e6c1456db3",
+   "artifact_mismatches": [],
+   "breakpoint": "BAYMAX-BP-0006",
+   "checks": {
+    "artifacts_match_bytes_at_admitting_commit": true,
+    "chain_commitment_recomputed": true,
+    "chain_file_sha_matches_admitted_bytes": true,
+    "chain_id_index": true,
+    "chain_prev_ok": true,
+    "committed": true,
+    "contained_in_HEAD": true,
+    "parent_declared_ok": true,
+    "paths_unique": true,
+    "root_recomputed_from_descriptors": true
+   },
+   "result": "PASS"
+  },
+  {
+   "admitting_commit": "d5f76662df",
+   "artifact_mismatches": [],
+   "breakpoint": "BAYMAX-BP-0007",
+   "checks": {
+    "artifacts_match_bytes_at_admitting_commit": true,
+    "chain_commitment_recomputed": true,
+    "chain_file_sha_matches_admitted_bytes": true,
+    "chain_id_index": true,
+    "chain_prev_ok": true,
+    "committed": true,
+    "contained_in_HEAD": true,
+    "parent_declared_ok": true,
+    "paths_unique": true,
+    "root_recomputed_from_descriptors": true
+   },
+   "result": "PASS"
+  },
+  {
+   "admitting_commit": "a2a1862863",
+   "artifact_mismatches": [],
+   "breakpoint": "BAYMAX-BP-0008",
+   "checks": {
+    "artifacts_match_bytes_at_admitting_commit": true,
+    "chain_commitment_recomputed": true,
+    "chain_file_sha_matches_admitted_bytes": true,
+    "chain_id_index": true,
+    "chain_prev_ok": true,
+    "committed": true,
+    "contained_in_HEAD": true,
+    "parent_declared_ok": true,
+    "paths_unique": true,
+    "root_recomputed_from_descriptors": true
+   },
+   "result": "PASS"
+  },
+  {
+   "admitting_commit": "666f4419e6",
+   "artifact_mismatches": [],
+   "breakpoint": "BAYMAX-BP-0009",
+   "checks": {
+    "artifacts_match_bytes_at_admitting_commit": true,
+    "chain_commitment_recomputed": true,
+    "chain_file_sha_matches_admitted_bytes": true,
+    "chain_id_index": true,
+    "chain_prev_ok": true,
+    "committed": true,
+    "contained_in_HEAD": true,
+    "parent_declared_ok": true,
+    "paths_unique": true,
+    "root_recomputed_from_descriptors": true
+   },
+   "result": "PASS"
+  },
+  {
+   "admitting_commit": "1bf1371e84",
+   "artifact_mismatches": [],
+   "breakpoint": "BAYMAX-BP-0010",
+   "checks": {
+    "artifacts_match_bytes_at_admitting_commit": true,
+    "chain_commitment_recomputed": true,
+    "chain_file_sha_matches_admitted_bytes": true,
+    "chain_id_index": true,
+    "chain_prev_ok": true,
+    "committed": true,
+    "contained_in_HEAD": true,
+    "parent_declared_ok": true,
+    "paths_unique": true,
+    "root_recomputed_from_descriptors": true
+   },
+   "result": "PASS"
+  },
+  {
+   "admitting_commit": "6b9b0a5a69",
+   "artifact_mismatches": [],
+   "breakpoint": "BAYMAX-BP-0011",
+   "checks": {
+    "artifacts_match_bytes_at_admitting_commit": true,
+    "chain_commitment_recomputed": true,
+    "chain_file_sha_matches_admitted_bytes": true,
+    "chain_id_index": true,
+    "chain_prev_ok": true,
+    "committed": true,
+    "contained_in_HEAD": true,
+    "parent_declared_ok": true,
+    "paths_unique": true,
+    "root_recomputed_from_descriptors": true
+   },
+   "result": "PASS"
+  },
+  {
+   "admitting_commit": "3bdf82c0d1",
+   "artifact_mismatches": [],
+   "breakpoint": "BAYMAX-BP-0012",
+   "checks": {
+    "artifacts_match_bytes_at_admitting_commit": true,
+    "chain_commitment_recomputed": true,
+    "chain_file_sha_matches_admitted_bytes": true,
+    "chain_id_index": true,
+    "chain_prev_ok": true,
+    "committed": true,
+    "contained_in_HEAD": true,
+    "parent_declared_ok": true,
+    "paths_unique": true,
+    "root_recomputed_from_descriptors": true
+   },
+   "result": "PASS"
+  },
+  {
+   "admitting_commit": "20550fc1fd",
+   "artifact_mismatches": [],
+   "breakpoint": "BAYMAX-BP-0013",
+   "checks": {
+    "artifacts_match_bytes_at_admitting_commit": true,
+    "chain_commitment_recomputed": true,
+    "chain_file_sha_matches_admitted_bytes": true,
+    "chain_id_index": true,
+    "chain_prev_ok": true,
+    "committed": true,
+    "contained_in_HEAD": true,
+    "parent_declared_ok": true,
+    "paths_unique": true,
+    "root_recomputed_from_descriptors": true
+   },
+   "result": "PASS"
+  },
+  {
+   "admitting_commit": "9da98e00fc",
+   "artifact_mismatches": [],
+   "breakpoint": "BAYMAX-BP-0014",
+   "checks": {
+    "artifacts_match_bytes_at_admitting_commit": true,
+    "chain_commitment_recomputed": true,
+    "chain_file_sha_matches_admitted_bytes": true,
+    "chain_id_index": true,
+    "chain_prev_ok": true,
+    "committed": true,
+    "contained_in_HEAD": true,
+    "parent_declared_ok": true,
+    "paths_unique": true,
+    "root_recomputed_from_descriptors": true
+   },
+   "result": "PASS"
+  },
+  {
+   "admitting_commit": "fdaee9d640",
+   "artifact_mismatches": [],
+   "breakpoint": "BAYMAX-BP-0015",
+   "checks": {
+    "artifacts_match_bytes_at_admitting_commit": true,
+    "chain_commitment_recomputed": true,
+    "chain_file_sha_matches_admitted_bytes": true,
+    "chain_id_index": true,
+    "chain_prev_ok": true,
+    "committed": true,
+    "contained_in_HEAD": true,
+    "parent_declared_ok": true,
+    "paths_unique": true,
+    "root_recomputed_from_descriptors": true
+   },
+   "result": "PASS"
+  },
+  {
+   "admitting_commit": "afaf213f72",
+   "artifact_mismatches": [],
+   "breakpoint": "BAYMAX-BP-0016",
+   "checks": {
+    "artifacts_match_bytes_at_admitting_commit": true,
+    "chain_commitment_recomputed": true,
+    "chain_file_sha_matches_admitted_bytes": true,
+    "chain_id_index": true,
+    "chain_prev_ok": true,
+    "committed": true,
+    "contained_in_HEAD": true,
+    "parent_declared_ok": true,
+    "paths_unique": true,
+    "root_recomputed_from_descriptors": true
+   },
+   "result": "PASS"
+  }
+ ],
+ "primary_branch_remote_sha": "06d402fcee381f64d72410171f7384dd3d1fc909",
+ "schema": "baymax.redteam_lane.independent_custody.v1",
+ "summary": {
+  "FAIL": 2,
+  "PASS": 15
+ },
+ "verified_commit": "afaf213f72be111ea17a702ddcb6fff05874773c"
+}

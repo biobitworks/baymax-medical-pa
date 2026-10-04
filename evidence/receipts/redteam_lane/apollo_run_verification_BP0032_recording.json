@@ -1,0 +1,108 @@
+{
+ "schema": "baymax.redteam_lane.apollo_run_verification.v1",
+ "observed_at": "2026-10-04T21:17:04Z",
+ "lane": "SIDE_LANE_NO_CANONICAL_BP",
+ "repo_commit_used": "510859101618ad5085f72691e47fcac96a726f3b",
+ "recording": {
+  "sha256": "a3c25ef13c01e59a0be4c4a0f14f244b35a88e7f477d9493cff7c47f1900ab5c",
+  "bytes": 25617197,
+  "ffprobe": {
+   "programs": [],
+   "stream_groups": [],
+   "streams": [
+    {
+     "codec_name": "hevc",
+     "codec_type": "video",
+     "width": 828,
+     "height": 1792
+    },
+    {
+     "codec_name": "aac",
+     "codec_type": "audio"
+    }
+   ],
+   "format": {
+    "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+    "duration": "60.447256",
+    "size": "25617197",
+    "tags": {
+     "creation_time": "2026-10-04T20:59:41.000000Z"
+    }
+   }
+  },
+  "frames_sampled": [
+   {
+    "t_seconds": 0,
+    "frame_sha256": "c50fe873a4ea2c19da3965e9360f5a3218ac548aac86f72541b3abdf6ebe10a1"
+   },
+   {
+    "t_seconds": 5,
+    "frame_sha256": "7aa3e16db24846e9a5dae5db58050e5fe7785790b0c64ae2f023588e9e61f90c"
+   },
+   {
+    "t_seconds": 10,
+    "frame_sha256": "2541ba229dc54b5a94b9b0343322c1e805368d6161b533038979d144d740b709"
+   },
+   {
+    "t_seconds": 15,
+    "frame_sha256": "8286b8e72f9583c9bc811740300ede69794cc33003e6c2ca9079c0952c0fcf43"
+   },
+   {
+    "t_seconds": 20,
+    "frame_sha256": "58f79dbcba90ad4b0cf176daf3e5d8e6fc946af7a6ce68fab3db89edbf8a1d93"
+   },
+   {
+    "t_seconds": 25,
+    "frame_sha256": "4476b5a155ab64d228b771b6ca7845a61b957c974465a41a6fd33b9a956c1007"
+   },
+   {
+    "t_seconds": 30,
+    "frame_sha256": "d628261d51d56d7201351ee19fde9686e0063007388d0f13cd29867ccfa20867"
+   },
+   {
+    "t_seconds": 35,
+    "frame_sha256": "fc7611624a534b8bc66701b363a769f0676bc25076e5818f52912771442edcc5"
+   },
+   {
+    "t_seconds": 40,
+    "frame_sha256": "6983acb3e7d2a9ef59c4426a59b76c636ed43f58feca344da849b0439557e0e8"
+   },
+   {
+    "t_seconds": 45,
+    "frame_sha256": "8d1b283e9dee1d3bccfe626483ec453700e17cbd4af2832535110647fa29bae5"
+   },
+   {
+    "t_seconds": 50,
+    "frame_sha256": "53d4de5d8df83acadfc778014244abebb9e36cc8f5c0ad6fc148d80854859d63"
+   },
+   {
+    "t_seconds": 55,
+    "frame_sha256": "954c17c23325caa2df5ec42a910cf06b96f4be65d0f7d334f9aee7df7f75eb5d"
+   }
+  ],
+  "network_and_device_state": "REVIEW_FRAMES_MANUALLY (airplane icon, Wi-Fi off, model label, response) - not machine-derivable",
+  "reachability_probe": "NOT_EXECUTED"
+ },
+ "response": {
+  "sha256": "55c6a0609dece7df2148c71d4fce61e2f3aaee659e8b2934b81d9a48956c729e",
+  "bytes": 149,
+  "bytes_source": "FILE SUPPLIED BY OPERATOR (verify it is the copied model output, not a transcription)",
+  "contract": {
+   "state": "CONTRACT_FAIL",
+   "validator": "REAL Swift ModelOutput.parse from commit",
+   "parsed_known_ids": null
+  }
+ },
+ "frozen_inputs_at_commit": {
+  "packet_v2_sha256": "80e92bd4d0583fb58b261164ba2e53543ce7482a0f767bc7c3368c460de54147",
+  "catalog_v2_sha256": "648e0e87bc4ec024dd1d46283bd7697fc9de266aef6980d336c113c7311d8d8a",
+  "ModelInference_swift_sha256": "bcd89a9833e055f957e55fcf1f6509fd87d9c05d90f4780d66c6b3e2f9b6f77a"
+ },
+ "not_verified": [
+  "destination packet bytes (clipboard/paste)",
+  "exact Apollo version",
+  "full model identity (UI truncates label)",
+  "physical-device identity from bytes alone"
+ ],
+ "claim_ceiling": "Identity of supplied files + contract check only. Human frame review is required for airplane-mode/physical-device claims."
+}
