@@ -1,0 +1,1 @@
+{"decision":"keep prior agent PR branch untouched; successor branch redteam/bp-0002-custody","decision2":"no key generated; signing BLOCKED_HUMAN_SIGNING_SETUP; commit local+unsigned, no tag, no push","ts":"2026-10-04"}

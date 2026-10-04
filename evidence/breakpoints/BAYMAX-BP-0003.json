@@ -1,0 +1,42 @@
+{
+  "base_head": "4b26dd15eb9b81008920d2649df0be1f780c89dc",
+  "branch": "redteam/bp-0002-custody",
+  "breakpoint_id": "BAYMAX-BP-0003",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 7924,
+        "path": "redteam/custody_attacks.py",
+        "sha256": "c9af19fe83cbe651f76a31f50d873444ca0726e2b52acfe71e5148fe67deadb3"
+      },
+      {
+        "bytes": 1209,
+        "path": "evidence/receipts/redteam/gitleaks_bp0002_finding.json",
+        "sha256": "b00aa7c894699d0dfd418701339b00a61395380f23dcee55659384a3cd8d30e3"
+      },
+      {
+        "bytes": 2986,
+        "path": "evidence/breakpoints/BAYMAX-BP-0002.json",
+        "sha256": "1e15b686a70db856422c61454679017bf9027764e14a5c54f6001c9460cb211a"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 3,
+    "leaf_hashes": [
+      "ca2d76e6c9109d671734293a795e03aaeb7807f3242b98af9d94802cfb6ae397",
+      "c3110c2aeb95c00c37ddb3ab688e10eff09234afc03b18496a2a736bac36a13b",
+      "bbff295f471ce86e34af63c28cc6015a68ca0ebaba899f74160eb2b01562e781"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "68fb1570fda58ec8f80ae123599ff32c5b64dbdf03899abebfa0798f2d7f7c0c"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "Successor to BP-0002: gitleaks flagged synthetic fixture literal in harness; fixture now assembled at runtime. Finding preserved (redacted).",
+  "parent": "BAYMAX-BP-0002",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "REDTEAM_SECRET_GATE_REMEDIATION",
+  "state": "PASS",
+  "timestamp_utc": "2026-10-04T18:50:57.348621+00:00"
+}
