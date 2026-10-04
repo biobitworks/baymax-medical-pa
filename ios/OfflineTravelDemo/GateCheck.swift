@@ -34,6 +34,46 @@ import Foundation
               display.known.allSatisfy({ !$0.source_fco_id.isEmpty })
         else { fatalError("materialization") }
 
+        func record(_ raw: String, _ sourcePacket: String, _ sourceCatalog: ApolloCatalog) throws -> ModelInferenceFCO {
+            try ModelInferenceFCO.record(
+                response: raw, packet: sourcePacket, catalog: sourceCatalog,
+                substrateReported: "Host runtime", modelReported: "Host model",
+                apolloVersionReported: "UNKNOWN", offlineUserAttested: false,
+                iosVersionObserved: "HOST_TEST", deviceClassObserved: "HOST_TEST",
+                providerObserved: "Host provider", modelRevisionObserved: "Host revision"
+            )
+        }
+        let fco = try record(good, packet, catalog)
+        guard fco.provider == "Host provider", fco.execution_substrate == "Host runtime",
+              fco.model_label_observed == "Host model", fco.model_revision == "Host revision",
+              fco.model_identity_state == "HUMAN_REPORTED_UNVERIFIED",
+              fco.context_packet_sha256 == ModelContract.packetSHA256,
+              fco.catalog_sha256 == ModelContract.catalogSHA256,
+              fco.wallet_authority == "NONE", fco.medical_authority == "NONE"
+        else { fatalError("execution metadata / source binding") }
+        do {
+            _ = try record(good, packet + " ", catalog)
+            fatalError("modified packet admitted")
+        } catch {}
+        var modifiedCatalogObject = try JSONSerialization.jsonObject(with: JSONEncoder().encode(catalog)) as! [String: Any]
+        modifiedCatalogObject["claim_boundary"] = "modified"
+        let modifiedCatalogData = try JSONSerialization.data(withJSONObject: modifiedCatalogObject)
+        do {
+            _ = try ApolloCatalog.decode(modifiedCatalogData)
+            fatalError("modified catalog bytes admitted")
+        } catch {}
+        let modifiedCatalog = try JSONDecoder().decode(ApolloCatalog.self, from: modifiedCatalogData)
+        do {
+            _ = try record(good, packet, modifiedCatalog)
+            fatalError("modified catalog object admitted")
+        } catch {}
+        for key in ["provider", "execution_substrate", "model_label_observed", "model_revision", "wallet_authority"] {
+            do {
+                _ = try record(encoded(goodObject.merging([key: "self-claimed"]) { _, new in new }), packet, catalog)
+                fatalError("response self-identification admitted")
+            } catch {}
+        }
+
         let bypassText = [
             "diagnosis: hypertension",
             "double the dose",
@@ -117,6 +157,8 @@ import Foundation
         let output: [String: Any] = [
             "schema": "baymax.swift_gate_run.v2",
             "decode": "PASS",
+            "source_binding_and_execution_metadata": "PASS",
+            "wallet_authority": "NONE",
             "model_contract": "PASS_POSITIVE_ID_SELECTION",
             "redteam_bypass_rejected": rejected,
             "case_count": cases.count,

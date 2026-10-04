@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import unicodedata
 from . import canonical
 
 OUTPUT_KEYS = {
@@ -15,6 +16,9 @@ OUTPUT_KEYS = {
 }
 SUMMARY_CODE = "SYNTHETIC_CONTEXT_ONLY"
 MEDICAL_ACTION = "NONE"
+PACKET_SHA256 = "80e92bd4d0583fb58b261164ba2e53543ce7482a0f767bc7c3368c460de54147"
+CATALOG_SHA256 = "648e0e87bc4ec024dd1d46283bd7697fc9de266aef6980d336c113c7311d8d8a"
+CATALOG_CANONICAL_SHA256 = "b4696fa3f798cf36df10d7b06efd9093c9492c5a4bcc5176ace7dc03200badff"
 
 def _first_patient(bundle):
     return (bundle.get("synthetic_patient_context") or [{}])[0]
@@ -114,9 +118,12 @@ CATALOG_JSON=
 
 def _unique_object(pairs):
     out = {}
+    normalized = set()
     for k, v in pairs:
-        if k in out:
+        norm = unicodedata.normalize("NFC", k)
+        if norm in normalized:
             raise ValueError("duplicate key")
+        normalized.add(norm)
         out[k] = v
     return out
 
@@ -131,9 +138,16 @@ def _validate_ids(values, size, field):
         raise ValueError(field + " range")
 
 def validate_response(raw, cat):
-    if len(raw.encode("utf-8")) > 4096:
+    if not isinstance(raw, str) or len(raw.encode("utf-8")) > 4096:
         raise ValueError("response size limit")
-    out = json.loads(raw, object_pairs_hook=_unique_object)
+    def reject_number(token):
+        raise ValueError("integer JSON tokens only")
+
+    try:
+        out = json.loads(raw, object_pairs_hook=_unique_object,
+                         parse_float=reject_number, parse_constant=reject_number)
+    except RecursionError as exc:
+        raise ValueError("response nesting limit") from exc
     if not isinstance(out, dict) or set(out) != OUTPUT_KEYS:
         raise ValueError("schema")
     if out["summary"] != SUMMARY_CODE:
@@ -169,17 +183,37 @@ def inference_fco(
     apollo_version="UNKNOWN",
     ios_version="UNKNOWN",
     device_class="UNKNOWN",
+    execution_receipt=None,
 ):
+    """Record caller-owned execution metadata, never model-supplied identity.
+
+    execution_receipt must come from the host/observation path. This function
+    does not authenticate a runtime or upgrade human observations to verified.
+    """
+    catalog_raw = canonical(cat)
+    catalog_sha = hashlib.sha256(catalog_raw).hexdigest()
+    if source_packet_sha256 != PACKET_SHA256 or catalog_sha != CATALOG_CANONICAL_SHA256:
+        raise ValueError("frozen source identity")
     result = validate_response(raw, cat)
     if not observed_at.strip() or not substrate_label.strip() or not model_label.strip():
         raise ValueError("human observation labels required")
+    receipt = execution_receipt or {}
     return {
         "fco_type": "ModelInferenceFCO",
+        "execution_substrate": receipt.get("execution_substrate", substrate_label),
+        "model_label_observed": receipt.get("model_label_observed", model_label),
+        "model_revision": receipt.get("model_revision", "UNKNOWN"),
+        "model_revision_state": "UNKNOWN" if receipt.get("model_revision", "UNKNOWN") == "UNKNOWN" else "HUMAN_REPORTED_UNVERIFIED",
+        "network_ui_state": receipt.get("network_ui_state", "UNKNOWN"),
+        "context_packet_sha256": source_packet_sha256,
+        "catalog_sha256": CATALOG_SHA256,
+        "validator_state": "ACCEPT",
         "execution_substrate_reported": substrate_label,
         "execution_substrate_identity_state": "HUMAN_REPORTED_UNVERIFIED",
         "model_reported": model_label,
         "model_identity_state": "HUMAN_REPORTED_UNVERIFIED",
-        "provider": "UNKNOWN",
+        "provider": receipt.get("provider", "UNKNOWN"),
+        "provider_identity_state": "HUMAN_REPORTED_UNVERIFIED",
         "apollo_version_reported": apollo_version or "UNKNOWN",
         "ios_version_reported": ios_version or "UNKNOWN",
         "device_class_reported": device_class or "UNKNOWN",
