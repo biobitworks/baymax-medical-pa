@@ -1,0 +1,65 @@
+{
+ "schema": "baymax.redteam_lane.apple_health_pr20_review.v1",
+ "observed_at": "2026-10-04T21:32:25Z",
+ "pr": "jerelvelarde/baymax-medical-pa#20 (head 5d03a476a35efe5f9876346eaa53bcec628cba0b, thinkun, OPEN not draft)",
+ "method": "STATIC code review of PR head from git objects; the PR's 36 tests NOT re-run (node blocked in this workspace); physical iPhone Shortcut run NOT performed",
+ "critical_question": {
+  "q": "Could a connected/possibly connected real-health user ever receive synthetic medical facts silently?",
+  "expected": "NO",
+  "answer": "NOT ESTABLISHED - paths exist",
+  "paths": [
+   "importedHealth() returns {connected:false} when the request has no valid baymax_session cookie (cleared cookie, private mode, different browser, the phone's own browser while the Shortcut paired to the Mac browser's workspace) -> get-user-info returns demo profile 'Alex, 42, Type 2 diabetes, Metformin 500mg twice daily' as 'the current user'; only a notes field and the agent prompt label it synthetic; get-daily-metrics returns source:'demo' sample metrics (UI shows 'Sample data' badge, but user-info path has no badge tie)",
+   "status() requires workspace state.remember=='true'; if memory/consent is turned off the connection row remains but status->disconnected -> demo facts again",
+   "Postgres 42P01 (missing table, e.g. migration not applied or WRONG DATABASE - this project already has a known Neon project mismatch) returns disconnected -> demo data, contradicting the PR text 'a database outage does not substitute demo data' (other DB errors do throw = fail closed)"
+  ],
+  "verdict": "FAIL for the expected NO; mitigations are prompt/UI-level, not enforced at the tool boundary",
+  "repair": "tool must fail closed (return UNKNOWN/NOT_PROVIDED, never a populated demo profile) unless an explicit demo-mode flag is set server-side; never infer 'not connected' from a missing cookie; surface source on every tool output and block demo-source facts in real-user sessions"
+ },
+ "verified_strengths": [
+  "server middleware binds session from HttpOnly cookie and overwrites client-supplied request context (covers all Mastra routes incl. agent stream)",
+  "pairing/import/status all require saved workspace consent (remember=true)",
+  "connection key stored as hash only; rotation replaces hash immediately; revocation cascades day rows",
+  "exportedAt window enforced (+5 min future, -24 h) and per-day older snapshots ignored (>= guard)",
+  "missing categories modelled as null/unknown; summaries state 'Missing readings are unknown, not zero'",
+  "connected sessions get empty runs/checkins with explanatory notes; user-info returns 'Not provided' with empty lists"
+ ],
+ "findings": [
+  {
+   "id": "AH-1",
+   "p": "P1*",
+   "text": "synthetic/demo medical facts reachable for non-cookie / consent-off / missing-table sessions (see critical_question)",
+   "scope": "*P1 for real-health users; fine for synthetic demo"
+  },
+  {
+   "id": "AH-2",
+   "p": "P1*",
+   "text": "disconnect/delete covers Postgres tables only; Mastra Observability DefaultExporter + LibSQLStore (file mastra.db) persist agent/tool spans; SensitiveDataFilter targets credential-like keys, not health values -> imported readings and chat likely retained in traces after disconnect (LIKELY from code; not executed)"
+  },
+  {
+   "id": "AH-3",
+   "p": "P1*",
+   "text": "imported readings and chat flow to an external model (neon/gpt-5-6-luna) with no deterministic compliance pre-gate (same class as earlier RT-01)"
+  },
+  {
+   "id": "AH-4",
+   "p": "P2",
+   "text": "Shortcut/pairing over plain HTTP on the LAN sends bearer key + health summaries in clear (doc says hosted use should be HTTPS)"
+  },
+  {
+   "id": "AH-5",
+   "p": "P2",
+   "text": "merge semantics metrics || jsonb_strip_nulls(new): a later null cannot clear a prior value; revoked iOS permissions/deleted Health data persist until disconnect"
+  },
+  {
+   "id": "AH-6",
+   "p": "P2",
+   "text": "per-source max (not sum) selection can overstate if a third-party source logs more; documented but affects trend claims"
+  },
+  {
+   "id": "AH-7",
+   "p": "P2",
+   "text": "no rate limiting/lockout on bearer-key import endpoint (256-bit key makes brute force impractical)"
+  }
+ ],
+ "claim_ceiling": "Static review only. No physical Shortcut run, no real readings used or committed."
+}
