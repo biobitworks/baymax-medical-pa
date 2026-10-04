@@ -48,6 +48,8 @@ import {
 import "./style.css";
 import Mascot, { MascotActivity } from "./Mascot";
 import { PrescriptionShoppingCard } from "./components/PrescriptionShoppingCard";
+import { WebSearchCard } from "./components/WebSearchCard";
+import { searchCardFromEvent, type SearchCardPart, type WebSearchCardArgs } from "./components/web-search-state";
 import "./components/prescription-shopping.css";
 
 // Triggers the agent to read all of the user's health data and answer with a
@@ -624,11 +626,22 @@ const adapter: ChatModelAdapter = {
     let cardKind: string | undefined;
     // One card per metric; a later tool result replaces an earlier one.
     const healthCards = new Map<string, AgentToolPart>();
+    const searchCards = new Map<string, SearchCardPart>();
+    const messageContent = () => [
+      { type: "text" as const, text }, ...healthCards.values(), ...searchCards.values(),
+    ];
     const reader = res.body.getReader();
     const decoder = new TextDecoder();
     let buffer = "";
     while (true) {
-      const { done, value } = await reader.read();
+      let next: ReadableStreamReadResult<Uint8Array>;
+      try {
+        next = await reader.read();
+      } catch {
+        if (abortSignal.aborted) return;
+        break;
+      }
+      const { done, value } = next;
       if (done) break;
       buffer += decoder.decode(value, { stream: true });
       const events = buffer.split("\n\n");
@@ -642,9 +655,14 @@ const adapter: ChatModelAdapter = {
         } catch {
           continue;
         }
+        const searchCard = searchCardFromEvent(chunk);
+        if (searchCard) {
+          searchCards.set(searchCard.toolCallId, searchCard);
+          yield { content: messageContent() };
+        }
         if (chunk.type === "text-delta") {
           text += String(chunk.payload?.text ?? "");
-          yield { content: [{ type: "text", text }, ...healthCards.values()] };
+          yield { content: messageContent() };
         } else if (chunk.type === "tool-call") {
           cardKind = TOOL_TO_CARD[String(chunk.payload?.toolName)] ?? cardKind;
         } else if (chunk.type === "tool-result") {
@@ -655,11 +673,18 @@ const adapter: ChatModelAdapter = {
           for (const card of cards)
             healthCards.set(card.metric, healthCardPart(card));
           if (cards.length)
-            yield { content: [{ type: "text", text }, ...healthCards.values()] };
+            yield { content: messageContent() };
         }
       }
     }
     if (abortSignal.aborted) return;
+    // A stream ending without a tool result must not leave a permanent spinner.
+    for (const [id, card] of searchCards) {
+      if (card.args.state === "loading") {
+        const args: WebSearchCardArgs = { state: "error" };
+        searchCards.set(id, { ...card, args, argsText: JSON.stringify(args) });
+      }
+    }
 
     const keywordKind =
       lastUser.includes("diabet") ||
@@ -671,15 +696,14 @@ const adapter: ChatModelAdapter = {
           : undefined;
     const kind = cardKind ?? keywordKind;
     if (!kind) {
-      if (healthCards.size)
-        yield { content: [{ type: "text", text }, ...healthCards.values()] };
+      if (healthCards.size || searchCards.size)
+        yield { content: messageContent() };
       return;
     }
     const diabetes = lastUser.includes("diabet");
     yield {
       content: [
-        { type: "text", text },
-        ...healthCards.values(),
+        ...messageContent(),
         {
           type: "tool-call",
           toolCallId: crypto.randomUUID(),
@@ -936,6 +960,10 @@ const HealthTool = makeAssistantToolUI<HealthCardArgs, { ready: boolean }>({
       <MetricCard {...args} />
     ),
 });
+const WebSearchTool = makeAssistantToolUI<WebSearchCardArgs, { ready: boolean }>({
+  toolName: "web_search",
+  render: ({ args }) => <WebSearchCard args={args} />,
+});
 function renderInline(text: string): React.ReactNode[] {
   const out: React.ReactNode[] = [];
   const re = /\*\*(.+?)\*\*|`([^`]+)`|(?<![*\w])\*([^*\s][^*]*?)\*(?![*\w])/g;
@@ -1025,6 +1053,7 @@ function Chat() {
     <AssistantRuntimeProvider runtime={runtime}>
       <CareTool />
       <HealthTool />
+      <WebSearchTool />
       <ThreadPrimitive.Root className="chat">
         <ThreadPrimitive.Viewport className="transcript">
           {!showShopping && <ThreadPrimitive.Empty>

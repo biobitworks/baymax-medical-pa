@@ -50,6 +50,8 @@ Open the local URL Vite prints.
 Baymax's Mastra agent has a server-side `search-web` tool powered by
 [Exa Search](https://exa.ai/docs/reference/search). It returns source links,
 publication dates when available, and relevant excerpts for current web information.
+Search calls also render a sources card in chat with clickable titles, domains,
+dates, and excerpts. The card shows searching, empty, and unavailable states.
 
 Add `EXA_API_KEY` to your local `.env` (see `.env.example`), keep the existing
 Neon AI Gateway credentials, and start the agent:
