@@ -4,6 +4,8 @@
 
 **Build Personal Agents Hackathon Project Submission**
 
+**Project site:** [thinkun.github.io/baymax-site](https://thinkun.github.io/baymax-site/) (source in [`site/`](site/index.html))
+
 Baymax is a privacy-first personal medical assistant that helps you take care of yourself before health becomes an emergency. It remembers what matters, nudges you to follow through, and helps you carry your health context wherever life takes you.
 
 ## UI walkthroughs
