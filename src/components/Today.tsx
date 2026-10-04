@@ -26,10 +26,11 @@ export function Today({ workspace, onWater, onToggle, onCheckin, onNavigate }: {
   return <div className="today-journal">
     <section className="daily-checkin" aria-labelledby="checkin-question">
       <div className="checkin-note">
-        <div className="checkin-author"><Mascot small /><span>From Baymax<span className="note-dot" aria-hidden="true" /></span></div>
+        <div className="checkin-author"><span>From Baymax<span className="note-dot" aria-hidden="true" /></span></div>
         <h2 id="checkin-question">Before you get on with your day.</h2>
         <p>How’s your energy? I’ll keep that in mind.</p>
       </div>
+      <div className="checkin-mascot"><Mascot /></div>
       <div className="checkin-response">
         <div className="energy-choices" role="group" aria-label="Your energy today">
           {(['Low', 'Okay', 'Good', 'Great'] as const).map((value, index) => <button key={value} type="button" aria-pressed={choice === value} disabled={saving} onClick={() => setChoice(value)}>

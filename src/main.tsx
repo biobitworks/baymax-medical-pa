@@ -1072,7 +1072,7 @@ function Chat({ conversationId, conversation, onConversation, onToolResult, work
           <ThreadPrimitive.Empty>
             <div className="chat-welcome">
               <div className="conversation-intro"><Mascot small /><span>Baymax<span className="note-dot" aria-hidden="true" /></span></div>
-              <h2>What’s on your mind{workspace.name.trim() ? <>,<br /><em>{workspace.name.trim()}?</em></> : '?'}</h2>
+              <h2>What’s on your mind{workspace.name.trim() ? <>, {workspace.name.trim()}?</> : '?'}</h2>
               <p>Bloodwork, a bad night’s sleep, or just a question.<br className="desktop-break" /> We can start anywhere.</p>
               <div className="suggestions" aria-label="Conversation starters">
                 {[
@@ -1080,10 +1080,10 @@ function Chat({ conversationId, conversation, onConversation, onToolResult, work
                   { prompt: "Help me understand my latest bloodwork", title: "Talk me through my bloodwork", detail: "Make sense of my records", Icon: FileText },
                   { prompt: "Help me prepare a brief for my next doctor appointment", title: "Get me ready for my doctor", detail: "Bring the right questions", Icon: ArrowUpRight },
                 ].map(({ prompt, title, detail, Icon }, index) => (
-                  <ThreadPrimitive.Suggestion key={prompt} prompt={prompt} method="replace" autoSend className="welcome-action">
-                    <span className="welcome-action-number">0{index + 1}</span>
+                  <ThreadPrimitive.Suggestion key={prompt} prompt={prompt} method="replace" autoSend className={`welcome-action ${["sage", "peach", "lilac"][index]}`}>
+                    <span className="welcome-action-icon"><Icon size={23} aria-hidden="true" /></span>
                     <span className="welcome-action-copy"><strong>{title}</strong><small>{detail}</small></span>
-                    <Icon className="welcome-action-arrow" size={19} aria-hidden="true" />
+                    <ArrowUpRight className="welcome-action-arrow" size={19} aria-hidden="true" />
                   </ThreadPrimitive.Suggestion>
                 ))}
               </div>
