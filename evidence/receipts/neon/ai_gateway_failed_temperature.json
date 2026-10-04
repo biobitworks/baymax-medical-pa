@@ -1,0 +1,17 @@
+{
+  "attempt": "synthetic unified chat-completions inference",
+  "catalog_count": 49,
+  "catalog_http": "200",
+  "claim_ceiling": "request-shape incompatibility only; gateway catalog/auth remained observed",
+  "error_code": "BAD_REQUEST",
+  "http_status": "400",
+  "model": "claude-opus-4-8",
+  "repair_proposed": "retry same synthetic request without temperature; do not change evidence from failed attempt",
+  "request_identity": "0c2482c16f37405c5d7869ec4c412c8da36aab5b77cfeb2f40312507b67d6ed1",
+  "response_identity": "0b534fbb04dc6ea836a58d0943a87f2e1e1c144afdca5ae487e4f86bc678a6a1",
+  "sanitized_error": "ai gateway upstream model rejected the request: selected Anthropic model does not support the temperature parameter",
+  "schema": "baymax.integration_error.v1",
+  "state": "FAILED",
+  "technology_id": "NEON_AI_GATEWAY",
+  "vendor": "Neon"
+}
