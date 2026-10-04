@@ -28,6 +28,14 @@ Edit the brief in chat, enter a recipient, and review the email before opening a
 
 ![Doctor brief email walkthrough](docs/media/doctor-email.gif)
 
+### Mobile reminders: medication, refills and movement
+
+A mobile notification concept shows Baymax asking you to take your scheduled medication as prescribed, buy your next refill, and start a ten-minute walk. Each reminder opens a corresponding care action. The lock screen and care screens are simulated using fictional information; live push delivery and refill purchases are not connected.
+
+![Mobile notification demo: medication, refills and exercise](docs/media/mobile-notifications.gif)
+
+[Watch the MP4 recording](docs/media/mobile-notifications.mp4). After starting the app, open `/demo/notifications.html` to replay the interactive demo. Re-record it with `npm run record:notifications` while the production preview is running (default: `http://localhost:4181`, configurable with `BAYMAX_DEMO_URL`). Requires FFmpeg and Playwright Chromium.
+
 ### Our 2D companion
 
 SVG animation with gentle breathing, waving, and blinking. Respects reduced-motion preferences.

@@ -9,7 +9,8 @@
     "preview": "vite preview --host 0.0.0.0",
     "agent:dev": "mastra dev",
     "test:pwa": "npm run build && playwright test",
-    "icons": "node scripts/generate-icons.mjs"
+    "icons": "node scripts/generate-icons.mjs",
+    "record:notifications": "node scripts/record-notifications.mjs"
   },
   "dependencies": {
     "@assistant-ui/react": "0.11.54",
