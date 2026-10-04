@@ -45,6 +45,7 @@ import {
   formatDoctorBrief,
 } from "./mastra/lib/brief";
 import "./style.css";
+import { PwaControls } from "./pwa/PwaControls";
 
 function ModalShell({
   children,
@@ -1551,5 +1552,6 @@ function App() {
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <App />
+    <PwaControls />
   </React.StrictMode>,
 );

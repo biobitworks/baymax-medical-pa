@@ -7,7 +7,9 @@
     "dev": "vite --host 0.0.0.0",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview --host 0.0.0.0",
-    "agent:dev": "mastra dev"
+    "agent:dev": "mastra dev",
+    "test:pwa": "npm run build && playwright test",
+    "icons": "node scripts/generate-icons.mjs"
   },
   "dependencies": {
     "@assistant-ui/react": "0.11.54",
@@ -19,11 +21,17 @@
   },
   "devDependencies": {
     "@neon/config": "^1.8.3",
+    "@playwright/test": "^1.63.0",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "mastra": "^1.32.1",
+    "sharp": "^0.35.5",
     "typescript": "^5.9.3",
-    "vite": "^7.3.1"
+    "vite": "^7.3.1",
+    "vite-plugin-pwa": "^2.0.0",
+    "workbox-precaching": "^7.4.1",
+    "workbox-routing": "^7.4.1",
+    "workbox-strategies": "^7.4.1"
   },
   "overrides": {
     "nanoid": "^5.1.16"

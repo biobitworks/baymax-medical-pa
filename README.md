@@ -36,7 +36,7 @@ SVG animation with gentle breathing, waving, and blinking. Respects reduced-moti
 
 ## Run locally
 
-Requires Node.js 22+.
+Requires Node.js 22.22+ or 24.11+ (Node.js 24 LTS recommended).
 
 ```bash
 npm ci
@@ -60,6 +60,22 @@ npm run preview
 - Daily check-ins, hydration logging, movement tasks, and preferences.
 - Session-only state; navigation preserves the conversation, refresh clears it.
 - Mobile and desktop layouts, keyboard-accessible dialogs, and reduced-motion support.
+
+## Install Baymax on your phone (PWA)
+
+The production frontend is an installable Progressive Web App with a standalone window and Baymax home-screen icons.
+
+- **Android / Chrome:** open the hosted app and tap **Install Baymax** when available, or use the browser’s install menu.
+- **iPhone / iPad:** open the hosted app in Safari, choose **Share → Add to Home Screen → Add**. The in-app install button shows these instructions.
+- **Desktop:** use Chrome or Edge’s install option when available.
+
+Installation requires HTTPS hosting (localhost is allowed for development). The normal Vite development server does not register a worker. Test the production version with `npm run build` followed by `npm run preview`. A plain HTTP address on your local network will not enable phone installation.
+
+Only public JavaScript, CSS, icons, the manifest and a static offline page are stored in the service-worker cache. Conversations, health profiles, API responses and travel responses are not cached by the worker. When opened offline, Baymax shows a reconnect page; chat still needs a network connection. Installation does not add persistent health memory or background reminders.
+
+New versions wait until you select **Update now**. Updating reloads the app and clears its current session; **Later** preserves your active session. The included Nginx configuration revalidates files and serves missing worker/manifest assets as 404s.
+
+Verify PWA behavior with `npx playwright install chromium` (once) and `npm run test:pwa`. The suite checks manifest/icons, installation controls, offline/reconnect behavior, sensitive request exclusion and update consent. Regenerate the checked-in PNG icons with `npm run icons`.
 
 ## Sponsor integration status
 
