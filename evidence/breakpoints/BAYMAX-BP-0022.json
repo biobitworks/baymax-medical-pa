@@ -1,0 +1,42 @@
+{
+  "base_head": "ecda695f20d2a32083068bc8dd3750c4a159ecf4",
+  "branch": "codex/synthea-pinned-iphone-fixture-v1",
+  "breakpoint_id": "BAYMAX-BP-0022",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 7068,
+        "path": "evidence/breakpoints/BAYMAX-BP-0021.json",
+        "sha256": "d20e6b909bf6d9faa9e0d2fe7a53b97439417953c2be9fac78db9e9b7c4d684a"
+      },
+      {
+        "bytes": 3320,
+        "path": "docs/DEMO_ACCEPTANCE_SCOPE.md",
+        "sha256": "e3b4193b7ab16de7ffe77c241510d255f42d5db843107a8f03a6aef3f3611227"
+      },
+      {
+        "bytes": 1575,
+        "path": "evidence/receipts/tasks/codex_demo_scope_correction.json",
+        "sha256": "6e89f028bc46cd73d4bd5d0385d6a602b20c7848080dc22be2b778930c433088"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 3,
+    "leaf_hashes": [
+      "74d3d3788de713e3e88135588fd0d45516d05db7dacdb6994f536b80eac8392e",
+      "6c1ae3ad7cb1ac29909656884e5b2bca87fdf290379242d0f101f6376a1a640e",
+      "0326650878abf900333504961358e5826ee6dc5345218bc66a44c6ae3e871165"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "8ba2e66c649762c8cec5fddbb212260f8ffce57f9c35b3a662392dc2efc00efe"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "Scope correction only: optional integrations and certification do not block synthetic demo; remaining issue acceptance evidence stays PARTIAL.",
+  "parent": "BAYMAX-BP-0021",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "DEMO_ACCEPTANCE_SCOPE_CORRECTION",
+  "state": "SUPPORTED",
+  "timestamp_utc": "2026-10-04T20:07:20.400999+00:00"
+}

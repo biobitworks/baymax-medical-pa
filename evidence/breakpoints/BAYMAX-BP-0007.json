@@ -1,0 +1,120 @@
+{
+  "base_head": "e6c1456db3a4a3c47c82f81c4521171e7e9a3a54",
+  "branch": "redteam/bp-0006-model-wallet",
+  "breakpoint_id": "BAYMAX-BP-0007",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 79,
+        "path": "src/baymax_wallet/__init__.py",
+        "sha256": "f9869ea35a7880df8a8e92f92bba7bab5791769cddaaa0e104ad384a688faa62"
+      },
+      {
+        "bytes": 1080,
+        "path": "src/baymax_wallet/canon.py",
+        "sha256": "166c5d4f75383fcd36abafc7ed0fecb1e7cb74f3f6541674f4551ed779044035"
+      },
+      {
+        "bytes": 1438,
+        "path": "src/baymax_wallet/mmr.py",
+        "sha256": "7e2be9e4e74dcca49e433e7d40cdc3cce6b2ee8b8774b1b8ab54858ef6552f7a"
+      },
+      {
+        "bytes": 1067,
+        "path": "src/baymax_wallet/keys.py",
+        "sha256": "6747e9fed2c582a95d2fe638623ce6694ddb23ded32c1e08867e825cd4800e88"
+      },
+      {
+        "bytes": 8228,
+        "path": "src/baymax_wallet/ledger.py",
+        "sha256": "9697e1fa694633c7d33c6287661110f627ebaed4c7b50edc1ff8ec8ebb275102"
+      },
+      {
+        "bytes": 4754,
+        "path": "src/baymax_wallet/replica.py",
+        "sha256": "e9ad8217e53bd9e81e58564f19130d11cfec624cf8131064a7304f89437f54f5"
+      },
+      {
+        "bytes": 3228,
+        "path": "src/baymax_wallet/build.py",
+        "sha256": "149ac896fa640d2606ae7d44198987dcc444d520defbc07f55d5b74108947427"
+      },
+      {
+        "bytes": 2001,
+        "path": "src/baymax_wallet/proposal.py",
+        "sha256": "8313a2907dcc5399f0dd5aca8e82a1a0eae9a07a20a911d451fc5793ca09b12a"
+      },
+      {
+        "bytes": 13479,
+        "path": "redteam/wallet_attacks.py",
+        "sha256": "c12d91512cea9989f7b6f27212259670d2006eec99124d3e2224a444f2b9396a"
+      },
+      {
+        "bytes": 3450,
+        "path": "demo/e2e_local.py",
+        "sha256": "c059f95459cb0701deb6ba20a2094bbea92a1f753d710edbfbe958e73d70ccad"
+      },
+      {
+        "bytes": 1789,
+        "path": "tests/test_wallet.py",
+        "sha256": "c4bd5042ca990c307175177909a629277830cb8d7bc812e3961dfdfa057256a2"
+      },
+      {
+        "bytes": 1156,
+        "path": "tests/vectors/wallet_vectors.json",
+        "sha256": "131b6f2588eeb2e33de0772abcfac247cb8e8047813f663346e3389fb0624ea7"
+      },
+      {
+        "bytes": 732,
+        "path": "scripts/secret_gate.py",
+        "sha256": "7afe6e954fc61d22e278631420e730e158faa54c19c1c525e2e4dc3a23ac35d5"
+      },
+      {
+        "bytes": 8375,
+        "path": "evidence/receipts/wallet/wallet_attacks.json",
+        "sha256": "94feb0fdca2d23258cb4fff3fecb5c737f6b208cd36b1eef2bc4b5e191b4a4b5"
+      },
+      {
+        "bytes": 1672,
+        "path": "evidence/receipts/wallet/e2e_local.json",
+        "sha256": "b8808e0e6f85ffc9f1af00fad1a7e94ef85e5f150d0d8cf178bccf0d41c18f09"
+      },
+      {
+        "bytes": 3138,
+        "path": "evidence/breakpoints/BAYMAX-BP-0006.json",
+        "sha256": "05272fa613f7c7ac85419baf97039c9f1b0fea99a8499b44e4f009dbe3abc909"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 16,
+    "leaf_hashes": [
+      "cb6cf3f0841f103de05e0c56f1f91667987425b578288439691a07fd3360cc0d",
+      "672ef92907fcdc11a961508ed981c563ad80ec9cfe36f2750bc6497898f3c67e",
+      "6dde3d4c935df0f937776fa889c7540383f77d71ef67eed53a9d4f2693adf0ed",
+      "e1ea59d133ff6977106bda8977d0489ef8daab1995944cbb96be5b9d20858ce5",
+      "763719d33a490429ab109acccee3ebf35641f38fbc4b6700d8867747c009ba45",
+      "5c3d8731f3b0a688521d232722aee1146657ef58d2f31a08bc063b17161f8107",
+      "7d42487dfe1c90bc6845ccd7bbea3c14491aed0298773bf3143ee7b58c178b20",
+      "400e898b2242ec04d8281f679ac45001a2aea819bddea0277b2b4f0f36a99ea1",
+      "7118a96241673fdd5df785976c3c9fff4af06f91b64605a4b8270d52b123498c",
+      "9514fa00aba59d8448b8185cfbcc45494419fc57640e878c2b3ced135b459450",
+      "dd22b03ec3614210215832cf03de8b36e0c49c9fdd63c48f579a23db43d9983a",
+      "526df9fa2a77cf34020a57329049d9e726f28e09f297d13be88a8f0f31448388",
+      "4d06ca1260e186153c6410a9323795c29b2df262dead823db4e5093cb7a06aa6",
+      "62355e0acb6196e6de25354322c9eee3afbc361b1be9c88100b3b97257e20660",
+      "73e2e56ff41a6697cb759abdbf7acfc78a2cfec4f9cc7e09745d9df797ef7bdd",
+      "29b0c299d860e963d5f81b6d19a0e2bbe88c4671938900436cac5693c7b06972"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "734a5bb3f179716a4e944a00342583909d2e4ba8921093bd9c320f076e08dacb"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "Synthetic zero-funds wallet: canon-v1, MMR v1 (2 impls), ledger/policy engine, phone-root vs Fly-delegate Ed25519 (SIMULATED_KEY), replicas w/ fork/rollback/checkpoint detection. 35 attacks pass, 3 NOT_TESTED (Signet x2, Fly down), tail-truncation w/o checkpoint = confirmed LIMITATION. In-process only: NO Fly, NO iPhone, NO network sync, NO Signet. PERSISTENT_WALLET_DEMO=PARTIAL.",
+  "parent": "BAYMAX-BP-0006",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "SYNTHETIC_WALLET_V0_LOCAL",
+  "state": "PARTIAL",
+  "timestamp_utc": "2026-10-04T19:06:37.027952+00:00"
+}

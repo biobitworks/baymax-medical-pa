@@ -1,0 +1,63 @@
+{
+  "schema": "baymax.public_source_review.v1",
+  "date": "2026-10-04",
+  "state": "OBSERVED_PUBLIC_DOCUMENTATION",
+  "sources": [
+    {
+      "subject": "Liquid LFM2.5 1.2B Thinking",
+      "url": "https://www.liquid.ai/blog/lfm2-5-1-2b-thinking-on-device-reasoning-under-1gb",
+      "observation": "Liquid states it runs entirely on-device and fits within 900 MB on a phone."
+    },
+    {
+      "subject": "Liquid ExecuTorch",
+      "url": "https://www.liquid.ai/blog/how-liquid-ai-uses-executorch-to-power-efficient-flexible-on-device-intelligence",
+      "observation": "Liquid documents LFM2 deployment through ExecuTorch and on-device execution."
+    },
+    {
+      "subject": "Liquid license",
+      "url": "https://www.liquid.ai/lfm-license",
+      "observation": "LFM Open License v1.0 is Apache-derived with a commercial-use threshold at $10M annual revenue."
+    },
+    {
+      "subject": "Mistral Ministral 3 3B",
+      "url": "https://docs.mistral.ai/models/ministral-3-3b-25-12",
+      "observation": "Edge-oriented 3B model, Apache 2.0."
+    },
+    {
+      "subject": "Mistral Ministral 3 8B",
+      "url": "https://docs.mistral.ai/models/ministral-3-8b-25-12",
+      "observation": "Edge-oriented 8B model, Apache 2.0."
+    },
+    {
+      "subject": "Mistral Shieldstral",
+      "url": "https://docs.mistral.ai/models/shieldstral-1-0",
+      "observation": "Self-hostable policy-adaptive safety model, Apache 2.0; auxiliary reviewer only."
+    },
+    {
+      "subject": "Qwen3",
+      "url": "https://qwenlm.github.io/blog/qwen3/",
+      "observation": "Dense 0.6B/1.7B/4B/8B/14B/32B Qwen3 models are listed under Apache 2.0 with multiple local-runtime options."
+    },
+    {
+      "subject": "Neon HIPAA",
+      "url": "https://neon.com/blog/hipaa",
+      "observation": "Neon documents HIPAA audit status, BAA requirement, and warns that PHI belongs in data rows rather than logs/schema metadata."
+    },
+    {
+      "subject": "Exa enterprise",
+      "url": "https://exa.ai/enterprise",
+      "observation": "Exa advertises HIPAA safeguards, BAA availability, and zero-data-retention arrangements."
+    },
+    {
+      "subject": "Mastra regulated agents",
+      "url": "https://mastra.ai/blog/secure-governed-agents-regulated-enterprise",
+      "observation": "Mastra recommends self-hosting regulated/PHI workloads while hosted HIPAA compliance remains forthcoming."
+    },
+    {
+      "subject": "Fly.io compliance",
+      "url": "https://fly.io/documents",
+      "observation": "Fly.io offers a HIPAA Business Associate Agreement to eligible customers."
+    }
+  ],
+  "claim_boundary": "Public vendor documentation describes capabilities/terms. It does not prove the Baymax account has an executed BAA, correct configuration, legal eligibility, or production compliance."
+}

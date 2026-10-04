@@ -1,0 +1,19 @@
+{
+  "airplane_mode": "NOT_TESTED",
+  "app_install": "NOT_TESTED",
+  "app_launch": "NOT_TESTED",
+  "apple_account_secret_recorded": false,
+  "claim_ceiling": "Device discoverability only.",
+  "device_class": "UNKNOWN",
+  "devicectl_exit_code": 0,
+  "ios_version": "UNKNOWN",
+  "observed_at": "2026-10-04T20:41:31.997723+00:00",
+  "offline_ui": "NOT_TESTED",
+  "physical_iphone_count": 0,
+  "real_phi": "NONE",
+  "restart_persistence": "NOT_TESTED",
+  "schema": "baymax.physical_iphone_probe.v1",
+  "serial_recorded": false,
+  "state": "BLOCKED_DEVICE_CONNECTION",
+  "udid_recorded": false
+}

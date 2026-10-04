@@ -270,3 +270,23 @@ Run `npm run test:fitness` for goal validation and progress calculations, and `n
 Baymax and you can share a persistent browser, an isolated Linux terminal, and files under `/workspace`. Open **Computer** to unlock access, watch or control browsing, run commands with saved receipts, and edit text files. The agent uses the same computer from chat. This adapts OpenMuse’s MIT-licensed browser worker and container helpers while keeping Baymax’s Mastra agent.
 
 See [setup, access, and verification](docs/baymax-computer.md). The feature needs explicit server configuration, a browser worker, and Docker for terminal/files. Commands run inside a network-disabled container, never on the server host.
+
+---
+
+## Biobitworks compliance-backend successor
+
+The Biobitworks fork adds a compliance-first backend and evidence track while preserving the upstream application's medical claim boundary.
+
+Current architecture documents:
+
+- [Canon](CANON.md)
+- [Compliance backend](docs/COMPLIANCE_BACKEND.md)
+- [Model/provider matrix](docs/MODEL_PROVIDER_MATRIX.md)
+- [Golden Path to Golden Years](docs/GOLDEN_PATH_TO_GOLDEN_YEARS.md)
+- [Architecture](docs/ARCHITECTURE.md)
+- [Licensing status](LICENSES.md)
+- [HIPAA / Neon technical qualification](docs/HIPAA_NEON_TECHNICAL_QUALIFICATION.md)
+
+The deterministic routing prototype in `src/baymax_compliance/policy.py` remains fail-closed: models do not authorize their own access to sensitive data. The current controlled Neon qualification does **not** establish HIPAA compliance and keeps real PHI blocked pending the recorded technical and contractual gates.
+
+Historical CareScribe, Agent Foundry, Vithia, JEV, and other independent lineages remain external references; their MMRs/Merkle histories are not concatenated into Baymax.

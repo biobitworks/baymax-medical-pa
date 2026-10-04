@@ -1,0 +1,54 @@
+{
+  "base_head": "232ecea1eb56548e12cc6ba8fe859550b577b0c5",
+  "branch": "execution/hipaa-neon-qualification",
+  "breakpoint_id": "BAYMAX-BP-0040",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 1729,
+        "path": "evidence/breakpoints/BAYMAX-BP-0039.json",
+        "sha256": "3e60fdc29f6540aaa4b6bdf7411226051edf22ad9ad12579c9802aa0ee86c592"
+      },
+      {
+        "bytes": 1640,
+        "path": "evidence/receipts/github/bp0040_upstream_main_reconciliation.json",
+        "sha256": "d9bf0154e4f33c27a5d57b816997a46adc7c8085d057bbdabc3e73473d1a96c8"
+      },
+      {
+        "bytes": 424,
+        "path": ".gitignore",
+        "sha256": "bb30c75181309d48cc159cbdc203210932f8ee9ed6d25e29456b2f3e5d96a5db"
+      },
+      {
+        "bytes": 19264,
+        "path": "README.md",
+        "sha256": "b3ded03d36aaac8cf3103d436e8763a4a13de1e8780b89bb1ed045950318874d"
+      },
+      {
+        "bytes": 2511,
+        "path": "skills-lock.json",
+        "sha256": "27119523f4db90ea454a84d2f429b58c88d8094edd368dbc6c2a780bc2434c73"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 5,
+    "leaf_hashes": [
+      "4307f53c356ebbcd03e62183a26a09fa95d355ab9af63dcd86eef0dc5d12cc23",
+      "e6ec087d0b9a3b27627045584bc5f760b4529a8848aa6ee3d22e890a7fa31d11",
+      "4f0ef18241c246786c7348734efb6111a8d062b65af1b2bb3da6bb2220c2dea1",
+      "52dc1d60a57c835236c53f6284a31ec58dcfa477572b9eb9af2cd3f55a814e52",
+      "c1102a2aabd367737f4588b97be4251674fed74fb6cc471c27abfe2f04fb686a"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "eed0e9c8bdf02e1defef66f159b9010e6c2ab7cc09780251e3403488a5d00861"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "Reconcile PR #38 candidate with upstream/main 0fccd24; resolve three conflicts; Python 37/37 PASS; Node 64/64 PASS; npm build PASS; secret gate PASS. Local cryptographic signature NOT_COMPUTED because no signing key is configured.",
+  "parent": "BAYMAX-BP-0039",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "UPSTREAM_MAIN_RECONCILIATION",
+  "state": "PASS",
+  "timestamp_utc": "2026-10-04T22:19:14.227308+00:00"
+}

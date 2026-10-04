@@ -1,0 +1,47 @@
+{
+  "canonical_branch": "integration/iphone-offline-v2",
+  "canonical_parent_breakpoint": "BAYMAX-BP-0033",
+  "canonical_parent_head": "d4389ecfa7589c4e376d9be14658b9d4494f7fd5",
+  "canonical_project": "baymax-medical-pa",
+  "observed_at": "2026-10-04T21:26:39.011823+00:00",
+  "references": [
+    {
+      "actor": "Claude",
+      "branch": "redteam/lane-golden-path-audit",
+      "canonical_breakpoint_minted": false,
+      "head": "53666f3b587ee9e6b41ceef943ccf3cd80fc749c",
+      "notable_result": "Independent custody/Synthea/Apollo review; earlier free-text validator bypasses identified; no canonical BP minted.",
+      "pull_request": 4,
+      "repository": "biobitworks/baymax-medical-pa",
+      "role": "INDEPENDENT_RED_TEAM_VERIFICATION",
+      "state": "OBSERVED_REMOTE",
+      "type": "ExternalLineageReferenceFCO"
+    },
+    {
+      "actor": "Codex",
+      "branch": "codex/apollo-offline-verification",
+      "canonical_breakpoint_minted": false,
+      "head": "87f9608e7e4722bed6074db20f98cd82866bbe9e",
+      "notable_result": "Exact Apollo capture verifier, wallet unchanged check, recording identity and Airplane Mode handoff; primary admission required.",
+      "pull_request": 5,
+      "repository": "biobitworks/baymax-medical-pa",
+      "role": "INDEPENDENT_IMPLEMENTATION_VERIFICATION",
+      "state": "OBSERVED_REMOTE",
+      "type": "ExternalLineageReferenceFCO"
+    },
+    {
+      "actor": "ChatGPT",
+      "branch": "integration/iphone-offline-v2",
+      "canonical_breakpoint_minted": true,
+      "head": "d4389ecfa7589c4e376d9be14658b9d4494f7fd5",
+      "notable_result": "Canonical integration through BP-0033, including physical-iPhone/Airplane Mode observations and exact recording custody.",
+      "pull_request": 3,
+      "repository": "biobitworks/baymax-medical-pa",
+      "role": "CANONICAL_INTEGRATION",
+      "state": "CANONICAL_PARENT",
+      "type": "ExternalLineageReferenceFCO"
+    }
+  ],
+  "rule": "Independent lineages are referenced, not concatenated into the canonical chain or MMR.",
+  "schema": "baymax.external_lineage_reference_set.v1"
+}

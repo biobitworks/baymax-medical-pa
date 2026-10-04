@@ -1,0 +1,69 @@
+{
+  "A": [
+    {
+      "intent": "general_chat",
+      "requests": [
+        "payment_request"
+      ],
+      "requires_external_location_lookup": true,
+      "requires_medical_advice": false,
+      "requires_private_health_context": false
+    },
+    {
+      "intent": "general_chat",
+      "requests": [
+        "payment_request"
+      ],
+      "requires_external_location_lookup": true,
+      "requires_medical_advice": false,
+      "requires_private_health_context": false
+    },
+    {
+      "intent": "general_chat",
+      "requests": [
+        "payment_request"
+      ],
+      "requires_external_location_lookup": true,
+      "requires_medical_advice": false,
+      "requires_private_health_context": false
+    }
+  ],
+  "B": [
+    {
+      "accessibility": "UNKNOWN",
+      "license_status": "UNKNOWN",
+      "opening_hours": "UNKNOWN",
+      "price": "UNKNOWN",
+      "stock": "UNKNOWN",
+      "supported": [
+        "FCO-MED-1",
+        "FCO-LOC-1",
+        "NONE"
+      ]
+    },
+    {
+      "accessibility": "UNKNOWN",
+      "license_status": "UNKNOWN",
+      "opening_hours": "UNKNOWN",
+      "price": "UNKNOWN",
+      "stock": "UNKNOWN",
+      "supported": [
+        "FCO-MED-1",
+        "FCO-LOC-1",
+        "NONE"
+      ]
+    },
+    {
+      "accessibility": "UNKNOWN",
+      "license_status": "UNKNOWN",
+      "opening_hours": "UNKNOWN",
+      "price": "UNKNOWN",
+      "stock": "UNKNOWN",
+      "supported": [
+        "FCO-MED-1",
+        "FCO-LOC-1",
+        "NONE"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+ "canon": [
+  {
+   "canon_utf8": "{\"a\":[true,null,\"x\"],\"b\":1}",
+   "in": {
+    "a": [
+     true,
+     null,
+     "x"
+    ],
+    "b": 1
+   },
+   "sha256": "54a65415ad370228851a1da4b31b6fd42dc58b19a50d35cae759325f7388ce64"
+  }
+ ],
+ "mmr": [
+  {
+   "leaves": [
+    "a"
+   ],
+   "n": 1,
+   "root": "a94fe96b1c38a1bdfb72939d6cd46bc31a31bfe1ad0d960804189a287b6558a0"
+  },
+  {
+   "leaves": [
+    "a",
+    "b"
+   ],
+   "n": 2,
+   "root": "4c18b87ee623a3dfbcfefc3b002d3334c0554f545f9ef9dadec271daec0b399b"
+  },
+  {
+   "leaves": [
+    "a",
+    "b",
+    "c"
+   ],
+   "n": 3,
+   "root": "7d36854b375536f2bb96cbc87f12825048cc9888d457bfa7a25e1b30df5f6da8"
+  },
+  {
+   "leaves": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "n": 4,
+   "root": "3145cd8b5da4dc806f28605366aa6609e3787ba6560489b85a70eba60c3bffb5"
+  },
+  {
+   "leaves": [
+    "a",
+    "b",
+    "c",
+    "d",
+    "e"
+   ],
+   "n": 5,
+   "root": "18949a0a0f9894ca630d9057e57e45b148a1d82c2a303251f3dd06a4bca92752"
+  },
+  {
+   "leaves": [
+    "a",
+    "b",
+    "c",
+    "d",
+    "e",
+    "f",
+    "g"
+   ],
+   "n": 7,
+   "root": "1254d630a26a102514343febe68d0bb8d138e02220416715d30605af9d79edf9"
+  }
+ ]
+}

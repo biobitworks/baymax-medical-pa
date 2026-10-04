@@ -1,0 +1,54 @@
+{
+  "base_head": "fdaee9d640f436808fdc1217383a8b7b75c4a389",
+  "branch": "redteam/bp-0006-model-wallet",
+  "breakpoint_id": "BAYMAX-BP-0016",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 5613,
+        "path": "experiments/neon_control_plane.py",
+        "sha256": "851cd03090dd81e530f794e69bd68e3f4208459463c2e93ae0e9a8b5aa0c31c7"
+      },
+      {
+        "bytes": 5228,
+        "path": "experiments/neon_control_plane_v1_attempt2.py",
+        "sha256": "0defaebfaa15d69a3f73a62350708f31da8ee86ab76703ff67a24af210ab45b5"
+      },
+      {
+        "bytes": 2452,
+        "path": "evidence/receipts/neon/neon_control_plane_attempt2.json",
+        "sha256": "2bd376aa801c8beea5264a5747988c35f881082c25d6c34fc3f4eb2b71e2f63b"
+      },
+      {
+        "bytes": 2616,
+        "path": "evidence/receipts/neon/neon_control_plane_attempt3.json",
+        "sha256": "f50215a8567797f787b530a5595510b791c47c42b50afc50aca864bd0f9a8f18"
+      },
+      {
+        "bytes": 1649,
+        "path": "evidence/breakpoints/BAYMAX-BP-0015.json",
+        "sha256": "d78b685986583ba945ce89b1a2ebe7e3aab2898023835659568c8f6fa8efd360"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 5,
+    "leaf_hashes": [
+      "15fa8f02f484d7a95f410bfa640d8e6b5843cf95d0e326db86e896c5e6cb41f3",
+      "d5215fb9d5a6db2a283cd624fa0094f1af125b8d366a8624ad130f45f120cbc8",
+      "5b92f6c1d40cf4910dacec412ddc9b382d7efb6f0dd20a50195a136ebd42108e",
+      "7067babee51608dbbaa907beb728b5ead4967b831ac49925f3dda703cea02469",
+      "2f19a5171b4d0dbd2777d89a6dbbbabad9c8db0e612edbaad29cc4ec8e3916ea"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "eedc77dc2f05ed609e16c02aef46011e1c89d78fa88f403f185333265ac1e67b"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "Neon control plane: key authenticates; it is ORGANIZATION-scoped (CLI: not allowed for organization API keys; /users/me 404). attempt2 (no org_id) saw 0 projects = probe flaw, preserved. attempt3 (org-aware): 1 org visible, 0 projects, project behind DATABASE_URL NOT found => UNRESOLVED scope/org mismatch. No Neon resources mutated. Project/org IDs hashed only. Key scope INFERRED. Unsigned.",
+  "parent": "BAYMAX-BP-0015",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "NEON_CONTROL_PLANE_PROBE",
+  "state": "PARTIAL",
+  "timestamp_utc": "2026-10-04T19:31:13.474812+00:00"
+}

@@ -1,0 +1,22 @@
+{
+  "schema": "baymax.turn_input.v1",
+  "id": "BAYMAX-TURN-0001",
+  "source": "user_chat",
+  "captured_at_date": "2026-10-04",
+  "request": [
+    "Review jerelvelarde/baymax-medical-pa.",
+    "Track turn input and work through Merkle-tree breakpoints.",
+    "Make compliance and privacy the governing objective.",
+    "Compare Liquid AI, Mistral, Qwen, and hackathon sponsors.",
+    "Set up a local repository that can be pushed under Biobitworks.",
+    "Review CareScribe, Agent Foundry, Vithia long-horizon, and JEV Space Invaders as related backend lineages.",
+    "Define the Golden Path to Golden Years."
+  ],
+  "redactions": [
+    "Terminal session account/email details were not copied into this public evidence artifact.",
+    "Desktop Commander device/session identifiers were not copied into this public evidence artifact.",
+    "No credential or token values are recorded."
+  ],
+  "canonical_chat_bytes_available": false,
+  "claim": "This is a sanitized semantic capture of the user request, not a byte-exact transcript of the chat message."
+}

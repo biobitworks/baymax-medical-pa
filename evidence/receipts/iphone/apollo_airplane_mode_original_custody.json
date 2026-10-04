@@ -1,0 +1,101 @@
+{
+  "artifact_bytes": 25617197,
+  "artifact_path": "evidence/media/iphone/apollo_airplane_mode_original_2026-10-04.mp4",
+  "artifact_sha256": "a3c25ef13c01e59a0be4c4a0f14f244b35a88e7f477d9493cff7c47f1900ab5c",
+  "chat_upload_derivative": {
+    "byte_identity": "DIFFERENT",
+    "bytes": 16321771,
+    "duration_seconds": 60.446667,
+    "filename": "ScreenRecording_10-04-2026 13-59-40_1.mp4",
+    "relationship": "SAME_VISUAL_RECORDING_CONTENT_DIFFERENT_ENCODING_SUPPORTED_BY_PERCEPTUAL_SAMPLE",
+    "sha256": "0a27258360baff39f01cce47fb63148b6e2104c2d3e5bf0f1033447bc0e95866",
+    "video_codec": "h264",
+    "video_dimensions": "512x1108"
+  },
+  "claim_ceiling": "This receipt establishes custody and identity of the exact magicPRO local original plus sampled visual equivalence to the separately hashed chat-upload derivative. It does not establish byte identity between encodings, independent packet-level network isolation, clinical correctness, or a complete Baymax-app offline end-to-end flow.",
+  "execution_observation": {
+    "airplane_mode": "OBSERVED_ENABLED",
+    "baymax_gate": "PASS_BY_REJECTION",
+    "full_baymax_app_offline_e2e": "NOT_YET_OBSERVED",
+    "liquid_apollo_generation": "OBSERVED",
+    "physical_iphone_via_mirroring": "OBSERVED",
+    "raw_model_output_contract": "FAIL",
+    "swift_validator": "REJECTED_EXPECTED",
+    "wifi": "OBSERVED_DISABLED"
+  },
+  "magicstudio": {
+    "byte_identity_verification": "DEFERRED",
+    "remote_device_state": "OFFLINE_AT_VERIFICATION_TIME",
+    "user_reported_copy_sent": true
+  },
+  "media": {
+    "audio_codec": "aac",
+    "container": "MP4",
+    "duration_seconds": 60.447256,
+    "video_codec": "hevc",
+    "video_dimensions": "828x1792"
+  },
+  "observed_at": "2026-10-04T21:15:31.225927+00:00",
+  "parent_breakpoint": "BAYMAX-BP-0032",
+  "perceptual_equivalence": {
+    "algorithm": "64-bit dHash on grayscale 9x8 LANCZOS-resized decoded frames",
+    "chat_upload_hashes": [
+      "a8a88c9eba8a83ab",
+      "a8a88c9efa8a932b",
+      "a8a88c9efa8a932b",
+      "89e830b28a008061",
+      "b870008882920823",
+      "b870008882920823",
+      "b8f0808483920823",
+      "b8f090a082920823",
+      "b97030b092920823"
+    ],
+    "claim": "Supports visual-content equivalence; does not establish byte identity.",
+    "hamming_distances": [
+      0,
+      0,
+      0,
+      0,
+      1,
+      1,
+      2,
+      1,
+      1
+    ],
+    "local_original_hashes": [
+      "a8a88c9eba8a83ab",
+      "a8a88c9efa8a932b",
+      "a8a88c9efa8a932b",
+      "89e830b28a008061",
+      "b87000888292082b",
+      "b87000888292082b",
+      "b8f090848392082b",
+      "b8f090a08292082b",
+      "b97030b09292082b"
+    ],
+    "sample_seconds": [
+      0,
+      2,
+      3,
+      10,
+      20,
+      30,
+      40,
+      50,
+      58
+    ]
+  },
+  "privacy_review": {
+    "audio_review_limitation": "Speech recognition is not a definitive guarantee that audio contains no private information.",
+    "audio_review_method": "OpenAI Whisper tiny.en local best-effort transcription",
+    "audio_transcription_summary": "Only repeated 'You' tokens recognized; no meaningful speech recovered.",
+    "real_phi_observed": "NONE",
+    "secrets_observed": "NONE",
+    "visual_review": "PASS_SYNTHETIC_DEMO_ONLY"
+  },
+  "raw_file_committed": true,
+  "related_execution_breakpoint": "BAYMAX-BP-0032",
+  "schema": "baymax.iphone_airplane_recording_custody.v1",
+  "source": "MAGICPRO_LOCAL_ORIGINAL",
+  "source_path": "/Users/byron/Downloads/ScreenRecording_10-04-2026 13-59-40_1.MP4"
+}

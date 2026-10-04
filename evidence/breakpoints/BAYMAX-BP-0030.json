@@ -1,0 +1,42 @@
+{
+  "base_head": "74eab8e1fa63b3935e556b3900fac7dc4a5daad4",
+  "branch": "integration/iphone-offline-v2",
+  "breakpoint_id": "BAYMAX-BP-0030",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 1753,
+        "path": "evidence/breakpoints/BAYMAX-BP-0029.json",
+        "sha256": "bd7d1ed8cba29d778ea33a493f398f4b9ec0c98809cd22bfb0e049ff69060f65"
+      },
+      {
+        "bytes": 9014548,
+        "path": "evidence/media/iphone/apollo_local_model_screen_recording_2026-10-04.mov",
+        "sha256": "ef8b2d2b1d90bfd838d4a1e9be4ef3937b15b45b25d474375ea232c1ff1fc12b"
+      },
+      {
+        "bytes": 2236,
+        "path": "evidence/receipts/iphone/apollo_screen_recording_custody.json",
+        "sha256": "b9abb25d8d49880364da1080da794ca9fb3c87a14d8c07f79de56f86e2f397e6"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 3,
+    "leaf_hashes": [
+      "38dfef423deec6b7768540e25d8b32fcef8a6ea2ff26dfe9fd63ed760b6b9aae",
+      "b7a1796d5a98bb386585f38118e9abb8caeb70f68ef807e4f8948677a6ec0517",
+      "157d4862cc189078702720d0da107e60e89e003b9dabb7977a2dfbd0265c82ee"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "2996196d45e3df806fe9fc7a84ecb8c887016197b5fe54dd11025b7b04e72ce1"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "Commit exact original Apple iPhone Mirroring/Liquid Apollo screen recording as chain-of-custody evidence for BP-0028. Exact bytes match the previously observed/uploaded SHA-256. LTE remains visible; offline inference is NOT_TESTED.",
+  "parent": "BAYMAX-BP-0029",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "PHYSICAL_IPHONE_APOLLO_RECORDING_CUSTODY",
+  "state": "PASS",
+  "timestamp_utc": "2026-10-04T20:57:17.382330+00:00"
+}

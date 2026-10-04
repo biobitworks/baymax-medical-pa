@@ -1,0 +1,66 @@
+{
+  "base_head": "d3308c7c46f40364d1a52bc11de56f8c1ef87b4c",
+  "branch": "redteam/bp-0006-model-wallet",
+  "breakpoint_id": "BAYMAX-BP-0006",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 5864,
+        "path": "experiments/model_experiment.py",
+        "sha256": "314427b86db1dfa9b55f550ff48e85a9d31880d0e96152ff0d0455242e2dc5c1"
+      },
+      {
+        "bytes": 1252,
+        "path": "experiments/model_escalation.py",
+        "sha256": "86d9a71c511d2c3f0cd78a7ab95836c2d4763423547d7fff5c832a1768f5c8c0"
+      },
+      {
+        "bytes": 5353,
+        "path": "evidence/receipts/model/model_execution.json",
+        "sha256": "61b823632f776131117b6a41cf1f4c002166a2ca6ea86e2ecfa6b14b80635366"
+      },
+      {
+        "bytes": 1498,
+        "path": "evidence/receipts/model/model_outputs_parsed.json",
+        "sha256": "b8eab4a4d6a71f13c70353945ae6979cc1efd085ef8d668b1c241c84636eb6e9"
+      },
+      {
+        "bytes": 4698,
+        "path": "evidence/receipts/model/model_escalation_routing.json",
+        "sha256": "6fa82a32fdb83c7eb2f1e82d1ea91f5c7273ea641a990f4f53086a64e14a9010"
+      },
+      {
+        "bytes": 701,
+        "path": "evidence/receipts/model/model_followup_2p6B.json",
+        "sha256": "585b4618210a3bb9937120e17b247753e53841abeda76eee716b580ac9ce6a2e"
+      },
+      {
+        "bytes": 2695,
+        "path": "evidence/breakpoints/BAYMAX-BP-0005.json",
+        "sha256": "081dd27711e3b8db3550f9080ec3c0c652be5c6f994eb4d568310704a75df868"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 7,
+    "leaf_hashes": [
+      "024f4863ee70ce9236a25cd3fd720b0b17f9188eb91524a35df6dfe9e921b193",
+      "14fa6bfef20473428a8aa8c37e2ef9a2e2a847bb2281ef5ccddf0ec025350e8a",
+      "3e66f6e3ece09ff0c18984d2077d8478fd62e2be1884fba1e20ade1a246d5226",
+      "3b3eadfb5510c87297da9c222f71ec65817ded05cfbaf91c07775c024a8d1894",
+      "07441716d13f93e0508237625b38cdd8b97ea703b8e78cf24becec7fa865d634",
+      "b1e55a81151ae4ba885985a7f8124c71d2c628a4fc35807126ae63ecc38638f8",
+      "7c3510b81190b71f3ea38ec2a6d75c7a78accf36ce7ffcf0688ae6d3c375dd9c"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "96016be790d7b5dfcd91cdea1db91482a2471ab747f4f8b5a5318ad4bb9d9ae8"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "Ollama local exec, seed42 temp0 x3. Routing: 350M NEGATIVE(general_chat), 1.2B NEGATIVE(requires_medical_advice), 2.6B NEGATIVE(requires_private_health_context; first attempt HARNESS_LIMITED). Synthesis 1.2B PASS on weak check ('NONE' cited). No model VALIDATED; claim promotion denied. Host Mac only, not iPhone.",
+  "parent": "BAYMAX-BP-0005",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "LOCAL_LIQUID_MODEL_EXECUTED",
+  "state": "PARTIAL",
+  "timestamp_utc": "2026-10-04T19:01:33.728421+00:00"
+}

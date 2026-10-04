@@ -1,0 +1,42 @@
+{
+  "base_head": "510859101618ad5085f72691e47fcac96a726f3b",
+  "branch": "integration/iphone-offline-v2",
+  "breakpoint_id": "BAYMAX-BP-0033",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 2704,
+        "path": "evidence/breakpoints/BAYMAX-BP-0032.json",
+        "sha256": "8402e0df8bed437dbecac228201eeee4bbbbb04f0a8940fbc092fd83b2beb52e"
+      },
+      {
+        "bytes": 25617197,
+        "path": "evidence/media/iphone/apollo_airplane_mode_original_2026-10-04.mp4",
+        "sha256": "a3c25ef13c01e59a0be4c4a0f14f244b35a88e7f477d9493cff7c47f1900ab5c"
+      },
+      {
+        "bytes": 3505,
+        "path": "evidence/receipts/iphone/apollo_airplane_mode_original_custody.json",
+        "sha256": "2772622078e58024716a7f97512adde75d0687e0355cdba5a0bea88a6d137ec4"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 3,
+    "leaf_hashes": [
+      "13e465927d8fa02aa551a8b03ae37c047bf81ff189da830d7b7c20ead7134f92",
+      "360fb5dc22c8f2b3098010731426628bbd607eb32f64d098603ea677900d9c75",
+      "36f97754153208b7d505464f355d2dc2d1b1122f4d8fdd720646998437fcfbbe"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "ee51fe916b91cc8628f2a37e34f7acc9e92b46c9c0cd31c8c445b3119339b3b8"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "Commit the exact magicPRO local original of the Airplane Mode Liquid Apollo recording. Local original is a higher-resolution HEVC encoding distinct from the chat-upload H.264 derivative; nine sampled perceptual hashes support same visual recording content. magicSTUDIO copy is user-reported but verification is DEFERRED because the device is offline.",
+  "parent": "BAYMAX-BP-0032",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "PHYSICAL_IPHONE_APOLLO_AIRPLANE_RECORDING_CUSTODY",
+  "state": "PASS",
+  "timestamp_utc": "2026-10-04T21:15:31.377475+00:00"
+}

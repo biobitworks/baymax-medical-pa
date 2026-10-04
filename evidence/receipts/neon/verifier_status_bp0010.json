@@ -1,0 +1,24 @@
+{
+  "schema": "baymax.verifier_status.v1",
+  "legacy_verify_breakpoints": {
+    "exit": 1,
+    "output_head": [
+      "VERIFY=FAIL",
+      "FAILURE=BAYMAX-BP-0002.json: artifact descriptors mismatch",
+      "FAILURE=BAYMAX-BP-0002.json: leaf hashes mismatch",
+      "FAILURE=BAYMAX-BP-0002.json: root mismatch",
+      "FAILURE=BAYMAX-BP-0003.json: artifact descriptors mismatch",
+      "FAILURE=BAYMAX-BP-0003.json: leaf hashes mismatch"
+    ]
+  },
+  "verify_chain": {
+    "exit": 1,
+    "output_head": [
+      "VERIFY=FAIL",
+      "FAILURE=artifact experiments/neon_probe.py: bytes differ from latest breakpoint that lists it",
+      "FAILURE=artifact scripts/env_hygiene.py: bytes differ from latest breakpoint that lists it"
+    ]
+  },
+  "explanation": "legacy verifier checks EVERY historical breakpoint's artifacts against the CURRENT worktree; verify_chain checks each path against the LATEST breakpoint listing it. They disagree after legitimate re-listing. Global verifier PASS NOT claimed; reconciliation = explicit successor design (PROPOSED).",
+  "global_verifier_pass": "NOT_CLAIMED"
+}

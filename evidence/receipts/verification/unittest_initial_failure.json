@@ -1,0 +1,9 @@
+{
+  "schema": "baymax.verification_failure.v1",
+  "state": "FAILED",
+  "check": "python3 -m unittest discover -s tests -v",
+  "observed_runtime": "Apple/Xcode Python 3.9",
+  "error": "ImportError: enum.StrEnum is unavailable in Python 3.9",
+  "repair": "Use str + Enum compatibility and lower declared minimum Python to >=3.9",
+  "source_receipt": "evidence/receipts/verification/unittest.stderr"
+}

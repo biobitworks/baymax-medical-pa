@@ -1,0 +1,170 @@
+{
+  "claim_boundary": "n=1 task x 3 identical-seed runs per model. Not validation. Output is untrusted input; semantic checks are deterministic string/JSON field comparisons only.",
+  "claim_promotion_permitted": false,
+  "device_note": "host Mac, Ollama GPU per `ollama ps`; NOT iPhone",
+  "model_identity": {
+    "hf.co/LiquidAI/LFM2.5-1.2B-Instruct-GGUF:Q4_K_M": {
+      "family": "lfm2",
+      "format": "gguf",
+      "model": "hf.co/LiquidAI/LFM2.5-1.2B-Instruct-GGUF:Q4_K_M",
+      "parameter_size": "1.17B",
+      "quantization": "Q4_K_M"
+    },
+    "hf.co/LiquidAI/LFM2.5-350M-GGUF:Q4_K_M": {
+      "family": "lfm2",
+      "format": "gguf",
+      "model": "hf.co/LiquidAI/LFM2.5-350M-GGUF:Q4_K_M",
+      "parameter_size": "354M",
+      "quantization": "Q4_K_M"
+    }
+  },
+  "prompt_version": "baymax-prompt-v1",
+  "runtime": "ollama (localhost, HTTP /api/chat)",
+  "schema": "baymax.model_execution_receipt.v1",
+  "seed": 42,
+  "temperature": 0,
+  "testA_350M_routing": {
+    "assessment": [
+      {
+        "all_match": false,
+        "field_match": {
+          "intent": false,
+          "requires_external_location_lookup": true,
+          "requires_medical_advice": true,
+          "requires_payment": false,
+          "requires_private_health_context": false
+        },
+        "parsed": true
+      },
+      {
+        "all_match": false,
+        "field_match": {
+          "intent": false,
+          "requires_external_location_lookup": true,
+          "requires_medical_advice": true,
+          "requires_payment": false,
+          "requires_private_health_context": false
+        },
+        "parsed": true
+      },
+      {
+        "all_match": false,
+        "field_match": {
+          "intent": false,
+          "requires_external_location_lookup": true,
+          "requires_medical_advice": true,
+          "requires_payment": false,
+          "requires_private_health_context": false
+        },
+        "parsed": true
+      }
+    ],
+    "classification": "NEGATIVE",
+    "expected": {
+      "intent": "travel_medication_access",
+      "requires_external_location_lookup": true,
+      "requires_medical_advice": false,
+      "requires_payment": false,
+      "requires_private_health_context": true
+    },
+    "runs": [
+      {
+        "eval_count": 56,
+        "model_total_s": 1.931,
+        "prompt_eval_count": 109,
+        "request_sha256": "c111666f0d401895219743248f142a521d2d4ec12e45ea9668b72d3405d8633a",
+        "response_sha256": "71cbbda31a6f672a3d09f78d0efae9468e6a170b5f4ac8837e7745e629f4a725",
+        "text_sha256_only": null,
+        "wall_s": 1.933
+      },
+      {
+        "eval_count": 56,
+        "model_total_s": 0.384,
+        "prompt_eval_count": 109,
+        "request_sha256": "c111666f0d401895219743248f142a521d2d4ec12e45ea9668b72d3405d8633a",
+        "response_sha256": "71cbbda31a6f672a3d09f78d0efae9468e6a170b5f4ac8837e7745e629f4a725",
+        "text_sha256_only": null,
+        "wall_s": 0.385
+      },
+      {
+        "eval_count": 56,
+        "model_total_s": 0.421,
+        "prompt_eval_count": 109,
+        "request_sha256": "c111666f0d401895219743248f142a521d2d4ec12e45ea9668b72d3405d8633a",
+        "response_sha256": "71cbbda31a6f672a3d09f78d0efae9468e6a170b5f4ac8837e7745e629f4a725",
+        "text_sha256_only": null,
+        "wall_s": 0.422
+      }
+    ]
+  },
+  "testB_1p2B_bounded_synthesis": {
+    "assessment": [
+      {
+        "cites_fco": true,
+        "parsed": true,
+        "pass": true,
+        "unknown_fields_correct": {
+          "accessibility": true,
+          "license_status": true,
+          "opening_hours": true,
+          "price": true,
+          "stock": true
+        }
+      },
+      {
+        "cites_fco": true,
+        "parsed": true,
+        "pass": true,
+        "unknown_fields_correct": {
+          "accessibility": true,
+          "license_status": true,
+          "opening_hours": true,
+          "price": true,
+          "stock": true
+        }
+      },
+      {
+        "cites_fco": true,
+        "parsed": true,
+        "pass": true,
+        "unknown_fields_correct": {
+          "accessibility": true,
+          "license_status": true,
+          "opening_hours": true,
+          "price": true,
+          "stock": true
+        }
+      }
+    ],
+    "classification": "PASS",
+    "runs": [
+      {
+        "eval_count": 84,
+        "model_total_s": 2.356,
+        "prompt_eval_count": 310,
+        "request_sha256": "8d952d6ec1bfbbc83232d07fd1313f6a9fd0d4afaa8058190b77bd0fbe1c2b81",
+        "response_sha256": "fafb6482e2847ff9a18a09d5f59de529ab031a47b0edb2fd99d503d065171f5b",
+        "text_sha256_only": null,
+        "wall_s": 2.364
+      },
+      {
+        "eval_count": 84,
+        "model_total_s": 0.755,
+        "prompt_eval_count": 310,
+        "request_sha256": "8d952d6ec1bfbbc83232d07fd1313f6a9fd0d4afaa8058190b77bd0fbe1c2b81",
+        "response_sha256": "fafb6482e2847ff9a18a09d5f59de529ab031a47b0edb2fd99d503d065171f5b",
+        "text_sha256_only": null,
+        "wall_s": 0.761
+      },
+      {
+        "eval_count": 84,
+        "model_total_s": 0.748,
+        "prompt_eval_count": 310,
+        "request_sha256": "8d952d6ec1bfbbc83232d07fd1313f6a9fd0d4afaa8058190b77bd0fbe1c2b81",
+        "response_sha256": "fafb6482e2847ff9a18a09d5f59de529ab031a47b0edb2fd99d503d065171f5b",
+        "text_sha256_only": null,
+        "wall_s": 0.749
+      }
+    ]
+  }
+}

@@ -1,0 +1,198 @@
+{
+  "base_head": "74bfe7708ba1a94dd856bd69ed852f8288f72bf7",
+  "branch": "compliance/golden-years-backend-v01",
+  "breakpoint_id": "BAYMAX-BP-0000",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 5631,
+        "path": "README.md",
+        "sha256": "b32f920cdee46d5ef96923c3cbd19db5c42a81c661c42fbf9aa259a5d6640dff"
+      },
+      {
+        "bytes": 2447,
+        "path": "CANON.md",
+        "sha256": "92bf2a1d1099d8dde111fdae22358ec50bdd8f334f7259a30a6b36d05a3e1f11"
+      },
+      {
+        "bytes": 1454,
+        "path": "AGENTS.md",
+        "sha256": "8f6bd09e1f4ea28a1208a9e7cc12aaf0b7d9b5e32832397ed8f3454e32fdd490"
+      },
+      {
+        "bytes": 1511,
+        "path": "LICENSES.md",
+        "sha256": "a9bfdedfc156ecd7702cfe2d363bd458642a3a6c992d3fc850326f8e01411910"
+      },
+      {
+        "bytes": 390,
+        "path": "pyproject.toml",
+        "sha256": "065e2c7f0a211b7022b1be0fadba17bccb8b83dd06daf597b4692ef8e1a1bb15"
+      },
+      {
+        "bytes": 2425,
+        "path": "docs/ARCHITECTURE.md",
+        "sha256": "bded558fea134b6d8ff2c82037ed34d73ba73cb23fcd13f07499968a9dde9a79"
+      },
+      {
+        "bytes": 1902,
+        "path": "docs/COMPLIANCE_BACKEND.md",
+        "sha256": "acd47d6d7dc368dfd35a45db50e1d8582471a599de979a7297cbbe6738dd6bb4"
+      },
+      {
+        "bytes": 1607,
+        "path": "docs/GOLDEN_PATH_TO_GOLDEN_YEARS.md",
+        "sha256": "3bd3374df66c38b4262f470a847cad2c5bc43d35fa7f51feb518fecf9b6876b0"
+      },
+      {
+        "bytes": 4787,
+        "path": "docs/MODEL_PROVIDER_MATRIX.md",
+        "sha256": "03201d003580ffe8fd815ffd94d63dbeec2ad2f3258b5b970cbabdd07fd112f0"
+      },
+      {
+        "bytes": 1084,
+        "path": "config/provider_policy.json",
+        "sha256": "95754ab211fbb222ff847818960331bde9538e4a65f99f16dce0f34fcf515327"
+      },
+      {
+        "bytes": 222,
+        "path": "src/baymax_compliance/__init__.py",
+        "sha256": "209c8cdeae5e47eb81ebf15a24d0078e11f2c43b451d945609dca04afe161e27"
+      },
+      {
+        "bytes": 2934,
+        "path": "src/baymax_compliance/policy.py",
+        "sha256": "0b6f25aa49ed00f5be887943452b53287022416c5cb42a45af8fd396d243faf5"
+      },
+      {
+        "bytes": 2464,
+        "path": "tests/test_policy.py",
+        "sha256": "25d6828ea99e15c2defe1f416bb74e462feaedcab192381d176efe1398f3d78a"
+      },
+      {
+        "bytes": 1858,
+        "path": "scripts/breakpoint_common.py",
+        "sha256": "81f0464ef88a87aeb779ad8ffccda1da2df2f93219da0790db68541cd3dfa128"
+      },
+      {
+        "bytes": 1970,
+        "path": "scripts/create_breakpoint.py",
+        "sha256": "2d41f0cbf688a0d6931344e3533562768e2ddbdda5030b4ec3084ce5970d9357"
+      },
+      {
+        "bytes": 1803,
+        "path": "scripts/verify_breakpoints.py",
+        "sha256": "3162be2391f001824ae05602cc296cbc85384d6b4b72a08742291f56357d0604"
+      },
+      {
+        "bytes": 2008,
+        "path": "evidence/external_lineage/registry.json",
+        "sha256": "6eb00f149f086bf3aef3cc226373197359c2cd97d0af484d14a14895198affa2"
+      },
+      {
+        "bytes": 1055,
+        "path": "evidence/turns/BAYMAX-TURN-0001.json",
+        "sha256": "b560e5372f9929bd9c88ac82ee5be1dffe7b903d8529daacf5c58b11b510ae96"
+      },
+      {
+        "bytes": 1077,
+        "path": "evidence/receipts/setup/fork_setup.json",
+        "sha256": "fb7b85b5120ec29e05a492b5894d6a98083cc9b1d26f5c545436e27ab3105e38"
+      },
+      {
+        "bytes": 2795,
+        "path": "evidence/receipts/research/model_provider_review_20261004.json",
+        "sha256": "4d9eb32911016edcdc6255681feef7a8fd80ae7679315f51df01e7e9a53769e6"
+      },
+      {
+        "bytes": 399,
+        "path": "evidence/receipts/verification/unittest_initial_failure.json",
+        "sha256": "091084f4d7ade1f46ec10c789e41af7b184d49bc7d1a9f861f652358675b999c"
+      },
+      {
+        "bytes": 0,
+        "path": "evidence/receipts/verification/unittest_final.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "bytes": 558,
+        "path": "evidence/receipts/verification/unittest_final.stderr",
+        "sha256": "fbf7d94478ba1f343c7952207bf4a941d2358ce2bf877c2306a131f5a5b26ffe"
+      },
+      {
+        "bytes": 2,
+        "path": "evidence/receipts/verification/unittest_final.exitcode",
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      },
+      {
+        "bytes": 2,
+        "path": "evidence/receipts/verification/pycompile_final.exitcode",
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      },
+      {
+        "bytes": 2,
+        "path": "evidence/receipts/verification/diff_check_final.exitcode",
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      },
+      {
+        "bytes": 2,
+        "path": "evidence/receipts/verification/gitleaks_final.exitcode",
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      },
+      {
+        "bytes": 3,
+        "path": "evidence/receipts/verification/gitleaks_final.json",
+        "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+      },
+      {
+        "bytes": 468,
+        "path": "evidence/receipts/verification/verification_summary.json",
+        "sha256": "df68371dd51577230741800af80f38af6ed63fef1308757699dbe775ffe353f6"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 29,
+    "leaf_hashes": [
+      "698aa1b9c59ca31289cee57f11a99952bcccdd9296d3f302aa3b50acb5c47df0",
+      "18a16bcfa1eca0b3177c42502396f1d7c2041b0fca38bd64b806608abec69cf2",
+      "65f0114f63123896bb9b678dab9c47d99653452cff4934985373d4a55eee384f",
+      "4cd5516bcb498d4cf04c9830c6f9a0342bd9cdabf254aaa8110cd5464ff81385",
+      "62f0c9d827bcb6ae9b646453d84f217edb469264f2a4e3e9eea8919763236e61",
+      "991802520b1807d26b2fefe45158e34afd508ea438859b0cfdbf1ebb81057eac",
+      "617bb50ce200307632195b3edaad88fa8d7a0d1f5c7b96851057795b62e5c334",
+      "c8cd44efee457cbe7f709eb8212d9142e565c044cb7dd39cefd8ea3280a395f7",
+      "696049faebdd101f5055fd0233457ce76f119bd33a7bd18f11176f2a442c63dc",
+      "129ab46e307ac3afbe154c0f30a47d5da7f4cd1202c350ae101763085d6f9765",
+      "d055d5f5b37018960445293747ab964ee51f49f7103cd78bda19a8b36633061e",
+      "dd764bc4de66e28df92db86ece71623cf855f3ea3ade985fe44d155357ea5611",
+      "721fb5aec66a986861db4cca7d39b7827e3dbdef0ef6814f8c529cbdd1566704",
+      "7679c72feec55999780af1554eaa3eba38da98a232cee9f1bcb4ee8e39d7aeb0",
+      "f8b9b3bc5455202bcaf8051cafeb38c3643d7ba943e4ce142f72fe5eae702680",
+      "ce025584534250d7603a5151f9ed76dda0be0507b57d337c0f9f1fa26277a0cf",
+      "6ba3ff332752bf17775aa0764dbe4f648eeeb263d65b542498d34381106b2311",
+      "e038691b291bdd3a6d1e99b5c80a1cca6e4e399b2d88d3c751027b0c6f91ab3a",
+      "a14fc746f4f04ecdfe4da1f4b0f7f33065f721b00bab6887f53a6253846eab30",
+      "d626d0b91f42379dd7847b5e5df2b79c16229ed555b9faa7f699d148bc59206e",
+      "4445f841b6097f368fda60df1612766e095ff63800f908a0d714295499b4a0f5",
+      "a4428e6b91558c628fdc57c13e11d963d3841b0ef333518faf6dc7b3fdbdb3a3",
+      "bc5eb9266eded840f67244be93e7bd925c8d68a01552fde2e1c9ec3e4f1e80a3",
+      "077edfe669fcc3df9af43e3016dd9bc10540fb0fda3adca6114e5ecc12847e4b",
+      "a07c7ab1ec2b27671f2862f3ab0a491d659064b436af60256a1f40762137a0f9",
+      "d4da69b796cab5fcf1996683a450b4ddeda720cc8b78e020ecb3276f4d0bb7c5",
+      "365af08379adde4301bd1385dcb91fa926e06bc4614e752723a5434ac8152c79",
+      "268fd50f33bd9e9d6c796ed2ccda329dc6e50b345b212401efd9e0a954dcab3b",
+      "5077a9d503098847f5c0c71f6dc8558c4cb417b8a36fd43fd57a916606f85c15"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "c742e860bdc8519e3f5180666a12d24afba2930f5bdebfced01c0f421d7c3cf0"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "Fork/bootstrap, external lineage registry, compliance-first golden path, model/provider review, deterministic fail-closed router, and verified software checks. Full medical/privacy compliance remains NOT_TESTED/NOT_SUPPORTED.",
+  "parent": "NONE",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "COMPLIANCE_BACKEND_BOOTSTRAP",
+  "state": "PARTIAL",
+  "timestamp_utc": "2026-10-04T18:41:02.408077+00:00"
+}

@@ -1,0 +1,57 @@
+{
+  "capability": "connect, isolated schema, insert, readback, cleanup",
+  "claim_ceiling": "Synthetic round-trip on the project's default database only. Not a compliance statement; Postgres is not the canonical private-health store.",
+  "cli_version": null,
+  "config_file_identities": {
+    "upstream_neon.ts_git_blob": "a44c615eab4779333b0d47cad6a3344965d1f7a3"
+  },
+  "credential_presence": {
+    "DATABASE_URL": "PRESENT",
+    "DATABASE_URL_UNPOOLED": "PRESENT",
+    "NEON_BRANCH": "PRESENT"
+  },
+  "env_var_names": [
+    "DATABASE_URL",
+    "DATABASE_URL_UNPOOLED",
+    "NEON_BRANCH"
+  ],
+  "executed": true,
+  "implemented": true,
+  "latency_s_total": 2.947,
+  "lockfile_identity": {
+    "note": "upstream lockfile contains 0 '@neon' entries",
+    "upstream_package-lock_git_blob": "3c679a532ac39cac2dec6982c115136c7a9c9115"
+  },
+  "observed": true,
+  "observed_at": "2026-10-04T19:11:34Z",
+  "phi": "none; synthetic data only",
+  "result": "PASS",
+  "sanitized_endpoint": "<branch-id>.c-6.<REDACTED>.aws.neon.tech",
+  "sanitized_response_identity": {
+    "readback_sha256": "d01e941c15465e6cf13b5e3f3d47e431c0ad3d6b18f7e1916da25e0a27870707"
+  },
+  "schema": "baymax.technology_receipt.v1",
+  "sdk": "psycopg2",
+  "sdk_present": true,
+  "sdk_version": "2.9.12",
+  "server_product": "PostgreSQL 18.6 (4e955f5)",
+  "server_version": "18.6 (4e955f5)",
+  "source_commit": "34f992dd0cb2f06df7d2be05b7d3bc2edf77d6ef",
+  "steps": {
+    "cleanup_schema_gone": true,
+    "connect": "OK",
+    "create_schema_table": "OK",
+    "insert": "OK",
+    "readback_identity_match": true,
+    "unpooled_connect": true
+  },
+  "synthetic_request_identity": {
+    "row_sha256": "d01e941c15465e6cf13b5e3f3d47e431c0ad3d6b18f7e1916da25e0a27870707",
+    "schema": "baymax_probe_6499cafd"
+  },
+  "tags": [
+    "NEON",
+    "POSTGRES"
+  ],
+  "technology_id": "NEON_POSTGRES"
+}

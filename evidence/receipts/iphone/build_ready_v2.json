@@ -1,0 +1,62 @@
+{
+  "base_breakpoint": "BAYMAX-BP-0025",
+  "base_commit": "226ddfeba4d0ce1e29c534f44a6132a423133b6b",
+  "bundled_resources": {
+    "OfflineTravelBundleFCO.json": "4f03387a3a2c407371d7538ddd4d9a108063358adfbf47294624f13748b2ba33",
+    "apollo_catalog_v2.json": "648e0e87bc4ec024dd1d46283bd7697fc9de266aef6980d336c113c7311d8d8a",
+    "apollo_context_packet_v2.txt": "80e92bd4d0583fb58b261164ba2e53543ce7482a0f767bc7c3368c460de54147",
+    "offline_travel_bundle_v1.json": "36d5d72c202da795db07d50d807747e94922f3b958b9ee25fd646e3d038a0c93",
+    "wallet_state_v1.json": "dbf446d55ef7d1516ac8f060682185b1973dd05fd880e9fd7958f9bb933d053e"
+  },
+  "claim_ceiling": "Build-ready unsigned iPhoneOS app, deterministic local policy/model-output gate, and exact bundled-resource identity. No physical iPhone install/launch/offline restart, no Apollo execution, and no clinical correctness.",
+  "code_signing": "BLOCKED_NO_VALID_IDENTITY",
+  "iphoneos_build": {
+    "app_binary_sha256": "0f46d550ac8b4ea51c49bae61778a771ea46c1e0df6ed35973436506bbfead85",
+    "app_bytes": 1020051,
+    "build_log_sha256": "f1e2cbdf2f5c3cf20e5a42c488fda415b0c72ddb867dd81a49e8ef7f512e15e3",
+    "code_signing_allowed": false,
+    "sdk": "iphoneos26.1",
+    "state": "PASS",
+    "target": "arm64-apple-ios17.0",
+    "xcode": "26.1.1 (17B100)"
+  },
+  "model_boundary": {
+    "apollo_used": "NO",
+    "destination_packet_identity": "NOT_INDEPENDENTLY_VERIFIED",
+    "model_identity": "HUMAN_REPORTED_UNVERIFIED_IF_USED",
+    "model_output_class": "MODEL_INFERRED",
+    "native_local_model": "NOT_IMPLEMENTED",
+    "output_contract": "POSITIVE_ID_SELECTION_FROM_LOCAL_CATALOG",
+    "substrate_identity": "HUMAN_REPORTED_UNVERIFIED_IF_USED"
+  },
+  "observed_at": "2026-10-04T20:41:31.731851+00:00",
+  "persistence": {
+    "consent_persistence": "SESSION_ONLY_BY_DESIGN",
+    "implemented": "AppStorage for offline-demo and pack-reviewed flags",
+    "physical_restart_observed": "NOT_TESTED"
+  },
+  "physical_iphone": "BLOCKED_DEVICE_CONNECTION",
+  "python_tests": {
+    "count": 30,
+    "log_sha256": "9c8aa2b3e4eef3bd884b80f05364e1718e6c691661df180d7e3745d4c64541f5",
+    "state": "PASS"
+  },
+  "real_phi": "NONE",
+  "resource_identity_match": true,
+  "schema": "baymax.iphone_offline_build_ready.v1",
+  "swift_gate": {
+    "case_count": 24,
+    "model_contract": "PASS_POSITIVE_ID_SELECTION",
+    "provider_calls": 0,
+    "receipt_sha256": "6997e442ce097f3b4b22a71335bcc9da228e07ba5191c1762a0e1325e31f07f0",
+    "redteam_bypass_rejected": 21,
+    "schema": "baymax.swift_gate_run.v2",
+    "state": "PASS"
+  },
+  "wallet": {
+    "autonomous_pharmacy_purchase": "NO",
+    "prescription_purchase": "BLOCKED",
+    "real_money": "NO",
+    "state": "AVAILABLE_LOCAL_READ_ONLY_SNAPSHOT"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "schema": "baymax.vendor_public_baseline.v1",
+  "sponsor": "Neon",
+  "service": "Postgres",
+  "accessed_date": "2026-10-04",
+  "source_class": "PUBLIC_VENDOR_DOCUMENTATION",
+  "sources": [
+    {
+      "url": "https://neon.com/blog/hipaa",
+      "supports": ["HIPAA service availability", "BAA required for HIPAA customers", "vendor-described encryption/access/audit safeguards"]
+    },
+    {
+      "url": "https://neon.com/security",
+      "supports": ["TLS 1.2+ in transit", "AES-256 at rest", "AWS KMS/Azure Key Vault key management", "vendor-described audit logging", "encrypted backups"]
+    },
+    {
+      "url": "https://neon.com/hipaa-contractors",
+      "supports": ["published PHI subcontractor list incorporated into Neon BAA"]
+    }
+  ],
+  "vendor_level_states": {
+    "HIPAA_SERVICE_AVAILABLE": "SUPPORTED_PUBLIC_VENDOR_DOCUMENTATION",
+    "BAA_REQUIRED_FOR_HIPAA_CUSTOMERS": "SUPPORTED_PUBLIC_VENDOR_DOCUMENTATION",
+    "TLS_IN_TRANSIT": "SUPPORTED_PUBLIC_VENDOR_DOCUMENTATION",
+    "ENCRYPTION_AT_REST": "SUPPORTED_PUBLIC_VENDOR_DOCUMENTATION",
+    "AUDIT_LOGGING": "SUPPORTED_PUBLIC_VENDOR_DOCUMENTATION",
+    "BACKUP_ENCRYPTION": "SUPPORTED_PUBLIC_VENDOR_DOCUMENTATION",
+    "SUBPROCESSOR_LIST": "SUPPORTED_PUBLIC_VENDOR_DOCUMENTATION"
+  },
+  "account_specific_states": {
+    "BAA_PRESENT": "BLOCKED_HUMAN_VERIFICATION",
+    "BAA_SCOPE": "UNKNOWN",
+    "HIPAA_FEATURE_STATE": "UNKNOWN",
+    "DPA_STATE": "UNKNOWN",
+    "AUDIT_LOG_ACCESS": "UNKNOWN",
+    "BACKUP_RETENTION": "UNKNOWN",
+    "PITR_STATE": "UNKNOWN"
+  },
+  "claim_ceiling": "Public vendor documentation is not proof that the exact Baymax Neon account/project has an executed BAA, HIPAA feature enablement, correct configuration, or inspected account audit logs."
+}

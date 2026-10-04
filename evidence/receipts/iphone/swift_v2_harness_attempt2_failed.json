@@ -1,0 +1,13 @@
+{
+  "claim_ceiling": "Validator implementation failure before model acceptance test; no physical-device claim.",
+  "effect": "Swift validator binary compiled; execution aborted before adversarial cases.",
+  "error": "Swift NSRegularExpression pattern used for decoded-key extraction was invalid after source-escape normalization.",
+  "error_class": "DUPLICATE_KEY_REGEX_INVALID",
+  "observed_at": "2026-10-04T20:38:18.950053+00:00",
+  "real_phi": "NONE",
+  "repair": "Replace regex key extraction with a deterministic top-level JSON string/key scanner and JSON decode of each key token.",
+  "schema": "baymax.iphone_repair_failure.v1",
+  "secret_values_recorded": false,
+  "stage": "SWIFT_REDTEAM_HARNESS_RUNTIME_V2",
+  "state": "FAILED"
+}

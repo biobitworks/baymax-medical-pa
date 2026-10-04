@@ -1,0 +1,48 @@
+{
+  "base_head": "d4389ecfa7589c4e376d9be14658b9d4494f7fd5",
+  "branch": "integration/iphone-offline-v2",
+  "breakpoint_id": "BAYMAX-BP-0034",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 2201,
+        "path": "evidence/breakpoints/BAYMAX-BP-0033.json",
+        "sha256": "e94e03f7f7f2d305d27a35660ab58e24550e60657a5506fe88ddab6c3368b4df"
+      },
+      {
+        "bytes": 13057,
+        "path": "docs/PROJECT3_INFERENCE_CUSTODY_MAP.md",
+        "sha256": "66fa02a71c631e700d6c05a8e8f431efdd69f89e85c82ed92925450b1ddfe390"
+      },
+      {
+        "bytes": 2089,
+        "path": "evidence/lineage/project3_actor_lineages.json",
+        "sha256": "525b7fc463ba3465b206d389e8af85db1d760c7a42f6aba71051ca327be0ab81"
+      },
+      {
+        "bytes": 3951,
+        "path": "evidence/receipts/tasks/project3_inference_custody_reconciliation.json",
+        "sha256": "a4ff67614a37a55ab9fd7d1579553fae66898f1330f93298d1e7450e97aa6702"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 4,
+    "leaf_hashes": [
+      "2ac4735c514baa30bc1b3dd5da1853ce3b8472d9b75455114cbeb4b3fb556004",
+      "25653caf05d8798345ebfb5e09df7995d52a4e704bcaa72b2f0851437be7b9f5",
+      "3a65c805789d5a675d02da7a021ef19b2d4515379b44e502290e618ba0b75ca6",
+      "d1408cd88f5926b9a4c854b76adceeccbc8c7d7d0e4be2402726931111171b13"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "1b040be05e85722a25df8bb2caf0d3e4be6ab3adfc5d21e5ce82940ad87c99fc"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "Reconcile Project 3 inference tiers, persistent wallet/Fly boundaries, Bali offline/reconnect custody, current upstream main, and independent Claude/Codex lineages. Reconciliation itself PASS; issue #3/#4 remain PARTIAL and real Fly deployment remains NOT_TESTED.",
+  "parent": "BAYMAX-BP-0033",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "PROJECT3_INFERENCE_CUSTODY_RECONCILIATION",
+  "state": "PASS",
+  "timestamp_utc": "2026-10-04T21:27:02.855497+00:00"
+}

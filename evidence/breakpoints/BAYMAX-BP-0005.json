@@ -1,0 +1,54 @@
+{
+  "base_head": "4b26dd15eb9b81008920d2649df0be1f780c89dc",
+  "branch": "redteam/bp-0002-custody",
+  "breakpoint_id": "BAYMAX-BP-0005",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 10107,
+        "path": "evidence/receipts/redteam/custody_attacks_v3_final.json",
+        "sha256": "4ad38da29df057d014d73a6743bbf2ef9becbf8d4329e0078fc82f780d20ed73"
+      },
+      {
+        "bytes": 10643,
+        "path": "evidence/receipts/redteam/custody_attacks_v2_post_bp0003.json",
+        "sha256": "0061eea58643db4c6abfb43bb65c1e8c197aa2caaf33a7378937dfd5b3bddd4a"
+      },
+      {
+        "bytes": 16,
+        "path": "evidence/receipts/redteam/gitleaks_post_bp0003.txt",
+        "sha256": "a8500ee00f99129fb434240592f432d3ca25cd227c4c9a83a7014cf1dfbdd229"
+      },
+      {
+        "bytes": 16,
+        "path": "evidence/receipts/redteam/gitleaks_final.txt",
+        "sha256": "15a15d8d069674a971d4a7648b2d6e6b727f70fc6d9730fe8e44cfd33572fee9"
+      },
+      {
+        "bytes": 2493,
+        "path": "evidence/breakpoints/BAYMAX-BP-0004.json",
+        "sha256": "c5cfa28be54c10863a9afd50b80926d79385f71638aa53a024e522fb54167d64"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 5,
+    "leaf_hashes": [
+      "6d5637670efe01d4a8089cf2c0834d6da10f2fa46a615ceab5a2f6f3f91091f7",
+      "7ac46c1d6cbc13a2d27d38cb3d13d9c52d2c9b158fe60a7edf6c70cadbcf4c24",
+      "921536e08069279ea920c9e4624d90803d0486a4670cd096b816d5d3dce1367a",
+      "7ded9e8965260d7784a69395026a5a5b6af648663833547b6e6fa1101eb054f5",
+      "7a74dcc363f137fe896e0e1d4c447d494abca72122b58f82c30f99f5b21614ed"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "d4548b0a7e4d3dd52584b4d9962692c69f781cb1ecaf366a54a151aac446d631"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "Final harness run 19/19 vs verify_chain v2, control clean, gitleaks clean. CAVEAT: 02c PASS is INCIDENTAL (tail BP-0004 re-lists verify_chain.py so truncation causes artifact drift); tail truncation is NOT generally detectable without a signed external anchor. Signing BLOCKED; commit unsigned; no tag; no push. Models/iOS/sponsors/FCO-FCG-preprocessing NOT_TESTED.",
+  "parent": "BAYMAX-BP-0004",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "REDTEAM_FINAL_RECEIPTS",
+  "state": "PARTIAL",
+  "timestamp_utc": "2026-10-04T18:52:14.208107+00:00"
+}

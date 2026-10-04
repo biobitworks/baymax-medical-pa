@@ -1,0 +1,162 @@
+{
+  "base_head": "1174d0a0fd64c1aa5998bdd3c19a2ed49298e3cf",
+  "branch": "codex/synthea-pinned-iphone-fixture-v1",
+  "breakpoint_id": "BAYMAX-BP-0021",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 1421,
+        "path": "evidence/breakpoints/BAYMAX-BP-0020.json",
+        "sha256": "4f9426386a2d9352ac4a930b0bc0a995ce5afde9e2e9f14403c7fdef73d5f491"
+      },
+      {
+        "bytes": 574,
+        "path": "evidence/codex_synthea/actor_admission.json",
+        "sha256": "13e05b55bb1d98615a47af6c12f4cc41e3c7ce67bcf2504589cec313a38e9ef2"
+      },
+      {
+        "bytes": 715,
+        "path": "evidence/codex_synthea/actor_signature.json",
+        "sha256": "45c3f85108fa303e2b8dcb2d1655842ae52f3756eb20d68f6240d5161f446dcd"
+      },
+      {
+        "bytes": 513,
+        "path": "evidence/codex_synthea/base_successor.json",
+        "sha256": "0d8fd82bc0b640dc34ddde36c2e9121938ee7cc757d95ae3039c64db7fe025d0"
+      },
+      {
+        "bytes": 687,
+        "path": "evidence/codex_synthea/jdk.json",
+        "sha256": "6ba2d7ccace4a097bf74a0dbaa41ca9c1d7899dad65912023da22582b31c886c"
+      },
+      {
+        "bytes": 713,
+        "path": "evidence/codex_synthea/source.json",
+        "sha256": "1959c6ab588dcefba8ce0bf45dc8d1c09da06681c8e004e0b45142e20df717c3"
+      },
+      {
+        "bytes": 11357,
+        "path": "evidence/codex_synthea/SYNTHEA_LICENSE",
+        "sha256": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1"
+      },
+      {
+        "bytes": 2209,
+        "path": "evidence/codex_synthea/SYNTHEA_NOTICE",
+        "sha256": "aefac5c5d632a0cf595688712eff8a45da0bdadc92c07718aef9876f2f346b97"
+      },
+      {
+        "bytes": 17746,
+        "path": "evidence/codex_synthea/effective.properties",
+        "sha256": "dbf557d1e1870b77bfd8b1d0837ed6902cfb9587a74f297b2d1786f0806e7ef7"
+      },
+      {
+        "bytes": 17474,
+        "path": "evidence/codex_synthea/jar-default.properties",
+        "sha256": "be7d6ba5a217423b94c7d28a307361e05ed3728f1544841282656565b8896920"
+      },
+      {
+        "bytes": 17474,
+        "path": "evidence/codex_synthea/upstream.properties",
+        "sha256": "be7d6ba5a217423b94c7d28a307361e05ed3728f1544841282656565b8896920"
+      },
+      {
+        "bytes": 815,
+        "path": "evidence/codex_synthea/recipe.json",
+        "sha256": "5c4bdc23ba503466adb0d9d866a4b8e00c00649b9cf8091dd0ffcc81c3f1b556"
+      },
+      {
+        "bytes": 543,
+        "path": "evidence/codex_synthea/fhir_manifest.json",
+        "sha256": "a06b18798d97823cca47fe6aa706de76866da57346c8dcf581cebae618985e9c"
+      },
+      {
+        "bytes": 551,
+        "path": "evidence/codex_synthea/reproducibility.json",
+        "sha256": "85300c5895a2e17e5ed0a26d8e3355b4681d52bfd6861b0b10b824f1cfdb55e2"
+      },
+      {
+        "bytes": 681,
+        "path": "evidence/codex_synthea/dataset_source_fco.json",
+        "sha256": "0d61da53c64f471b7d8fdca311a79d1aa820f7c74ca006225b935161498892ba"
+      },
+      {
+        "bytes": 518802,
+        "path": "evidence/codex_synthea/fcg.json",
+        "sha256": "52af08f613a0eb51ab76458d71913a7fb0cf6a39ce713e1ec99a25e60fc57f8f"
+      },
+      {
+        "bytes": 157744,
+        "path": "fixtures/iphone/offline_travel_bundle_v1.json",
+        "sha256": "36d5d72c202da795db07d50d807747e94922f3b958b9ee25fd646e3d038a0c93"
+      },
+      {
+        "bytes": 1606,
+        "path": "fixtures/iphone/OfflineBundle.swift",
+        "sha256": "52a4a98e3be547c336651ceecaa4f605c21ae48ce1586c277042cb97e6d3d3ef"
+      },
+      {
+        "bytes": 3508,
+        "path": "src/baymax_synthea/__init__.py",
+        "sha256": "71c9f765c940c5343369aa1f9b5cc923dddec0abd451a733455f970123ecca44"
+      },
+      {
+        "bytes": 2150,
+        "path": "scripts/build_codex_synthea.py",
+        "sha256": "76afa062e32e141bee85e7cc065ac24ff370724bb9fbb9c09dab9c4c5699c51f"
+      },
+      {
+        "bytes": 2779,
+        "path": "tests/test_codex_synthea.py",
+        "sha256": "6b64da4298e4fc1d0243add834b37e6a67b0b4244fdae6dc9ce8401611923df2"
+      },
+      {
+        "bytes": 12227,
+        "path": "evidence/codex_synthea/tests.json",
+        "sha256": "476c5a5d5c5a5dbcc747754fb7ecdf92dcfda0cace080b8b6f819a9f78be05af"
+      },
+      {
+        "bytes": 2994,
+        "path": "evidence/codex_synthea/README.md",
+        "sha256": "568f22f50bb9924a1d3187c5f0df83b19f02ae9a135114e7ef28b15df2394e74"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 23,
+    "leaf_hashes": [
+      "3fdac5e60c17fb695a8bf9b046e158404475e89adf5d4ebe7cf6ae10348c59b5",
+      "06b34fcb32bf291058e2125a929080f0dde6da1d18c72f26f74c2a84fb33f80d",
+      "04fdadfef19becf6b1417df312855e2b59b63795c4e86b25fc184a206d3692db",
+      "9215e0c260b0a16d48920467e860481d50e7a898d29dc2c682efb72c324a15cd",
+      "0e0f4143701f36ef49f4580018d0591930baf2b6ce10ac0a8d278d5e3fecda28",
+      "238553020cd86c9cca1ddd409b358335837309a0b4a06927057451bb431f6e61",
+      "fdd855877927c0d4960b56b7c04f3b68cb6857093fd9323765b0ed40fad3563c",
+      "2ca6eab7b9b90ad59dd32dd03b56d9fd726c67858219eebeec6920ee3d2e070b",
+      "70316d86031072b6e7434a31227683da14a495b965de294372b8c9ff500dff6d",
+      "0dbf9573f5d8c264cb9707c0dcb8810ed2c99e18aa37ca62d0237773d084f083",
+      "d64ab299f6d1342c4ca45b875e12c072c165b108579fe68aeff9ca28272d602e",
+      "8dcd113e7d1918086e3e112a5bf3623d8cd6d90cd360d328fbe87e0e0ecc1018",
+      "87009c68b2dd819d27995c6a18d7aed301539620de4bc8a9a62e2517bb0685ac",
+      "440135808cefd893526b0de0385512b40f1043f1b324bb31a324974eaa9c51c5",
+      "b05fea47e20f1bd7dfb42c4ab8d32381001cfbbf1f350de75f36453441874298",
+      "3afe4a153225484fe37820cb57f41ebce290afd02498a93d26119eeedd039764",
+      "dc646f4d60692006f5b9d76458fc00c5e626e16a1683bb90ab5469933ac4ea48",
+      "916fe589c319eb549889d161e5cfacbda12eeba01101e2e5cab62534fd4ed187",
+      "41f82d9c01d6f49be96c1882961b6dbc487598129bbf834ea3cda13a51cbe910",
+      "b47851fafceef73fac459ec57eba129cb180500733c09ea71eb8be9adfb6200d",
+      "fa67aea22473a1db707f7a8222511fcf5fc85904339caa640a050d73411cf3ce",
+      "9ca3388fd0da51562219a102d2fbb888426f2bcaa1610ee13587827dd5f37c6e",
+      "e499485af8e405591abce93781d9a8a2bda00b29cf120935f85ce2fee65a391f"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "df7dee178f825544bed92435634545c6504ba6b4075d4ea5c09686dfd34c7528"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "Synthetic offline fixture; actor key possession verified; byte-identical runs; correctness and generated-data terms UNKNOWN; Git unsigned.",
+  "parent": "BAYMAX-BP-0020",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "SYNTHEA_PINNED_GENERATION_AND_ACTOR_ADMISSION",
+  "state": "SUPPORTED",
+  "timestamp_utc": "2026-10-04T20:03:55.159920+00:00"
+}

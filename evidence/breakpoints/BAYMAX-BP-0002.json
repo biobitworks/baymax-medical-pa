@@ -1,0 +1,66 @@
+{
+  "base_head": "4b26dd15eb9b81008920d2649df0be1f780c89dc",
+  "branch": "redteam/bp-0002-custody",
+  "breakpoint_id": "BAYMAX-BP-0002",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 3791,
+        "path": "evidence/breakpoints/BAYMAX-BP-0001.json",
+        "sha256": "4509ca3fee3aef3b3aa4b52e05b3de2ca31f96abbbe11c4f23f307732044eaed"
+      },
+      {
+        "bytes": 5764,
+        "path": "scripts/verify_chain.py",
+        "sha256": "a9e2ce0a8bb68fab2136395ead0023ab44ac1aa8e075314b367b9f743e5b036b"
+      },
+      {
+        "bytes": 1203,
+        "path": "scripts/chain_append.py",
+        "sha256": "9f592e9b89b5fa9c99aaa2ae5368e562fcbe4c6ebd9b1d6223eff42b7ad22b5a"
+      },
+      {
+        "bytes": 7820,
+        "path": "redteam/custody_attacks.py",
+        "sha256": "5f11fcd6e7f0447c994846153202d12ffdfa815dd2ab8d5891c889b6eea85a60"
+      },
+      {
+        "bytes": 7905,
+        "path": "evidence/receipts/redteam/custody_attacks_v1_baseline.json",
+        "sha256": "b25a8bcb888def970701659863c33e2e4bd31fde2c0173793eee3c54318e89f8"
+      },
+      {
+        "bytes": 7968,
+        "path": "evidence/receipts/redteam/custody_attacks_v2_hardened.json",
+        "sha256": "6df079fd4252b5133dd5f0594a710993baa6cb57e7e56435133957e1df5fa752"
+      },
+      {
+        "bytes": 1627,
+        "path": "evidence/receipts/redteam/baseline_state.json",
+        "sha256": "a9cdffc24fa4b0ac239c9e34fa3bd2cddc268a949d23b1f889e87f723fe7bddb"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 7,
+    "leaf_hashes": [
+      "71a482ea000126749d6730e45d50531078a0868098e49c39b38fef64f67cba1b",
+      "c58eb1fa3e8f941fb76860d9bb6f5864e8e0420e5dfe77dc0bac1d5f96eed311",
+      "6fd6686e65a0460dafc37c9c3f7400e4680675c25edb1bb1168caede051a1831",
+      "1b1967b6fe94c31209fae616e41bfd927d68f961a0959fedb8e7774f678dbac4",
+      "cb6061fe86bbd539179cf27a6245a53e9847d84ae17eb110869122317ad109f6",
+      "818dce4da7c8fcb67481d52faee4f0faff0978486edd8466ae5e3acb91f8cbee",
+      "22c6300fd7dbd76b8b92eeb9adfc259164d5bbbe366fb0346055322d1504cb06"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "ce65f31955303b294d110473613887a4053c6c105c46b1d0d377c55662397b31"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "Independent red-team: v1 verifier 8/19 attacks rejected; hardened verify_chain v2 18/19 (02c tail-truncation needs signed anchor). Signing BLOCKED. Models/iOS/sponsors NOT_TESTED.",
+  "parent": "BAYMAX-BP-0001",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "INDEPENDENT_REDTEAM_CUSTODY_BASELINE",
+  "state": "PARTIAL",
+  "timestamp_utc": "2026-10-04T18:50:07.793027+00:00"
+}

@@ -1,0 +1,36 @@
+{
+  "base_head": "9da98e00fcd2c4b1c4e8fb1b3f52103d532ae869",
+  "branch": "redteam/bp-0006-model-wallet",
+  "breakpoint_id": "BAYMAX-BP-0015",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 1707,
+        "path": "evidence/breakpoints/BAYMAX-BP-0014.json",
+        "sha256": "10331404271e0ae3a934d80c8276ae6d661331ef77a0a538f6ba39dac3b33624"
+      },
+      {
+        "bytes": 2847,
+        "path": "docs/TEAM_HANDOFF.md",
+        "sha256": "aa793dfebc38abf19381701f0c043f87165128b29bf2c3a42f90b48feddb7f5f"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 2,
+    "leaf_hashes": [
+      "a77c88b2c56fa5192395dcd2dd8ef988b502f295ba48cff4682897350aa853ab",
+      "63a73823bfc853af49bf1e8ee97e6aa98f95449bcbc8a4c19c4dfe64ca927c7f"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "a65539c4b09c1969d84fadd9bafaaabf10a606ed71e8cdb6d2acc1dd3b4ac39c"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "Corrects the concurrently staged TEAM_HANDOFF custody text to reference its pushed parent anchor BP-0014 without circularly claiming its own future root.",
+  "parent": "BAYMAX-BP-0014",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "TEAM_HANDOFF_CUSTODY_CORRECTION",
+  "state": "PASS",
+  "timestamp_utc": "2026-10-04T19:23:41.143694+00:00"
+}

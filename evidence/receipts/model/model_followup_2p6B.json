@@ -1,0 +1,19 @@
+{
+  "content_empty": false,
+  "eval_count": 1424,
+  "has_thinking_field": true,
+  "match": false,
+  "note": "first 2.6B attempt (num_predict=400) returned empty content: HARNESS_LIMITED, not a capability negative",
+  "num_predict": 2000,
+  "parsed": {
+    "intent": "travel_medication_access",
+    "requires_external_location_lookup": true,
+    "requires_medical_advice": false,
+    "requires_payment": false,
+    "requires_private_health_context": false
+  },
+  "request_sha256": "0c307355079ee93a7c530e861d2ca4431739b6ec4471bd00438a53c0f3bb6717",
+  "response_sha256": "1309e52a2247e30c4809d8592335f1389e00b9853b8fd5df403eaee9f5823355",
+  "schema": "baymax.model_followup_2p6B.v1",
+  "wall_s": 31.47
+}

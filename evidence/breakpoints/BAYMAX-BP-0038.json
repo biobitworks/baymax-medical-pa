@@ -1,0 +1,36 @@
+{
+  "base_head": "ac2b1710a8550064ae27e7e128cd41ff24bc4e48",
+  "branch": "execution/hipaa-neon-qualification",
+  "breakpoint_id": "BAYMAX-BP-0038",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 5173,
+        "path": "evidence/breakpoints/BAYMAX-BP-0037.json",
+        "sha256": "cf3d4806af17498de9f3b55893fcd78b0bcc90f9920c9c87c0ed5ba330a6a113"
+      },
+      {
+        "bytes": 2547,
+        "path": "evidence/receipts/github/bp0037_hipaa_publication.json",
+        "sha256": "ce6fbe81980d6e28142a75225a6ef31093aedc6a11a76413f7ae81c4c055dd1a"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 2,
+    "leaf_hashes": [
+      "2da0c218dfb889876cb906af4fd3fd1d17919102486f7f7abe5dbf130d943dcb",
+      "c68ea316e46961e73fa470be0da87a3c5ed13e896038a72046c590e78a6ee05c"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "726c81d8f0da185a0e4f7827ab8e073ff1711f593b86621222309ceadd7d6535"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "Publish BP-0037 HIPAA/Neon technical qualification to upstream Issue #4 and materially affected child issues #22/#24/#27/#28/#30/#31/#32 plus Biobitworks PR #3. Nine GitHub comment actions returned success. Project-v2 fields were not updated and are not claimed.",
+  "parent": "BAYMAX-BP-0037",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "GITHUB_PUBLICATION",
+  "state": "PASS",
+  "timestamp_utc": "2026-10-04T22:02:43.827128+00:00"
+}

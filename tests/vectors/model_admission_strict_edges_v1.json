@@ -1,0 +1,296 @@
+[
+  {
+    "VECTOR_ID": "STRICT_BOM",
+    "raw": "\ufeff{\"summary\":\"SYNTHETIC_CONTEXT_ONLY\",\"known\":[0],\"unknown\":[],\"recommended_questions\":[],\"medical_action\":\"NONE\",\"requires_clinician\":true}",
+    "raw_base64": "77u/eyJzdW1tYXJ5IjoiU1lOVEhFVElDX0NPTlRFWFRfT05MWSIsImtub3duIjpbMF0sInVua25vd24iOltdLCJyZWNvbW1lbmRlZF9xdWVzdGlvbnMiOltdLCJtZWRpY2FsX2FjdGlvbiI6Ik5PTkUiLCJyZXF1aXJlc19jbGluaWNpYW4iOnRydWV9",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_BOM_AFTER_SPACE",
+    "raw": " \ufeff{\"summary\":\"SYNTHETIC_CONTEXT_ONLY\",\"known\":[0],\"unknown\":[],\"recommended_questions\":[],\"medical_action\":\"NONE\",\"requires_clinician\":true}",
+    "raw_base64": "IO+7v3sic3VtbWFyeSI6IlNZTlRIRVRJQ19DT05URVhUX09OTFkiLCJrbm93biI6WzBdLCJ1bmtub3duIjpbXSwicmVjb21tZW5kZWRfcXVlc3Rpb25zIjpbXSwibWVkaWNhbF9hY3Rpb24iOiJOT05FIiwicmVxdWlyZXNfY2xpbmljaWFuIjp0cnVlfQ==",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_ARRAY_TRAILING_COMMA",
+    "raw": "{\"summary\":\"SYNTHETIC_CONTEXT_ONLY\",\"known\":[0,],\"unknown\":[],\"recommended_questions\":[],\"medical_action\":\"NONE\",\"requires_clinician\":true}",
+    "raw_base64": "eyJzdW1tYXJ5IjoiU1lOVEhFVElDX0NPTlRFWFRfT05MWSIsImtub3duIjpbMCxdLCJ1bmtub3duIjpbXSwicmVjb21tZW5kZWRfcXVlc3Rpb25zIjpbXSwibWVkaWNhbF9hY3Rpb24iOiJOT05FIiwicmVxdWlyZXNfY2xpbmljaWFuIjp0cnVlfQ==",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_OBJECT_TRAILING_COMMA",
+    "raw": "{\"summary\":\"SYNTHETIC_CONTEXT_ONLY\",\"known\":[0],\"unknown\":[],\"recommended_questions\":[],\"medical_action\":\"NONE\",\"requires_clinician\":true,}",
+    "raw_base64": "eyJzdW1tYXJ5IjoiU1lOVEhFVElDX0NPTlRFWFRfT05MWSIsImtub3duIjpbMF0sInVua25vd24iOltdLCJyZWNvbW1lbmRlZF9xdWVzdGlvbnMiOltdLCJtZWRpY2FsX2FjdGlvbiI6Ik5PTkUiLCJyZXF1aXJlc19jbGluaWNpYW4iOnRydWUsfQ==",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_COMMENT",
+    "raw": "/* x */{\"summary\":\"SYNTHETIC_CONTEXT_ONLY\",\"known\":[0],\"unknown\":[],\"recommended_questions\":[],\"medical_action\":\"NONE\",\"requires_clinician\":true}",
+    "raw_base64": "LyogeCAqL3sic3VtbWFyeSI6IlNZTlRIRVRJQ19DT05URVhUX09OTFkiLCJrbm93biI6WzBdLCJ1bmtub3duIjpbXSwicmVjb21tZW5kZWRfcXVlc3Rpb25zIjpbXSwibWVkaWNhbF9hY3Rpb24iOiJOT05FIiwicmVxdWlyZXNfY2xpbmljaWFuIjp0cnVlfQ==",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_LINE_COMMENT",
+    "raw": "{\"summary\":\"SYNTHETIC_CONTEXT_ONLY\",\"known\":[0],\"unknown\":[],\"recommended_questions\":[],\"medical_action\":\"NONE\",\"requires_clinician\":true}//x",
+    "raw_base64": "eyJzdW1tYXJ5IjoiU1lOVEhFVElDX0NPTlRFWFRfT05MWSIsImtub3duIjpbMF0sInVua25vd24iOltdLCJyZWNvbW1lbmRlZF9xdWVzdGlvbnMiOltdLCJtZWRpY2FsX2FjdGlvbiI6Ik5PTkUiLCJyZXF1aXJlc19jbGluaWNpYW4iOnRydWV9Ly94",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_CODE_FENCE",
+    "raw": "```json\n{\"summary\":\"SYNTHETIC_CONTEXT_ONLY\",\"known\":[0],\"unknown\":[],\"recommended_questions\":[],\"medical_action\":\"NONE\",\"requires_clinician\":true}\n```",
+    "raw_base64": "YGBganNvbgp7InN1bW1hcnkiOiJTWU5USEVUSUNfQ09OVEVYVF9PTkxZIiwia25vd24iOlswXSwidW5rbm93biI6W10sInJlY29tbWVuZGVkX3F1ZXN0aW9ucyI6W10sIm1lZGljYWxfYWN0aW9uIjoiTk9ORSIsInJlcXVpcmVzX2NsaW5pY2lhbiI6dHJ1ZX0KYGBg",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_NON_JSON_SPACE",
+    "raw": "\u00a0{\"summary\":\"SYNTHETIC_CONTEXT_ONLY\",\"known\":[0],\"unknown\":[],\"recommended_questions\":[],\"medical_action\":\"NONE\",\"requires_clinician\":true}",
+    "raw_base64": "wqB7InN1bW1hcnkiOiJTWU5USEVUSUNfQ09OVEVYVF9PTkxZIiwia25vd24iOlswXSwidW5rbm93biI6W10sInJlY29tbWVuZGVkX3F1ZXN0aW9ucyI6W10sIm1lZGljYWxfYWN0aW9uIjoiTk9ORSIsInJlcXVpcmVzX2NsaW5pY2lhbiI6dHJ1ZX0=",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_LEADING_ZERO",
+    "raw": "{\"summary\":\"SYNTHETIC_CONTEXT_ONLY\",\"known\":[00],\"unknown\":[],\"recommended_questions\":[],\"medical_action\":\"NONE\",\"requires_clinician\":true}",
+    "raw_base64": "eyJzdW1tYXJ5IjoiU1lOVEhFVElDX0NPTlRFWFRfT05MWSIsImtub3duIjpbMDBdLCJ1bmtub3duIjpbXSwicmVjb21tZW5kZWRfcXVlc3Rpb25zIjpbXSwibWVkaWNhbF9hY3Rpb24iOiJOT05FIiwicmVxdWlyZXNfY2xpbmljaWFuIjp0cnVlfQ==",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_PLUS_ID",
+    "raw": "{\"summary\":\"SYNTHETIC_CONTEXT_ONLY\",\"known\":[+0],\"unknown\":[],\"recommended_questions\":[],\"medical_action\":\"NONE\",\"requires_clinician\":true}",
+    "raw_base64": "eyJzdW1tYXJ5IjoiU1lOVEhFVElDX0NPTlRFWFRfT05MWSIsImtub3duIjpbKzBdLCJ1bmtub3duIjpbXSwicmVjb21tZW5kZWRfcXVlc3Rpb25zIjpbXSwibWVkaWNhbF9hY3Rpb24iOiJOT05FIiwicmVxdWlyZXNfY2xpbmljaWFuIjp0cnVlfQ==",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_EMPTY",
+    "raw": "",
+    "raw_base64": "",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_TRUNCATED",
+    "raw": "{\"summary\":\"SYNTHETIC_CONTEXT_ONLY\",\"known\":[0],\"unknown\":[],\"recommended_questions\":[],\"medical_action\":\"NONE\",\"requires_clinician\":true",
+    "raw_base64": "eyJzdW1tYXJ5IjoiU1lOVEhFVElDX0NPTlRFWFRfT05MWSIsImtub3duIjpbMF0sInVua25vd24iOltdLCJyZWNvbW1lbmRlZF9xdWVzdGlvbnMiOltdLCJtZWRpY2FsX2FjdGlvbiI6Ik5PTkUiLCJyZXF1aXJlc19jbGluaWNpYW4iOnRydWU=",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_UNPAIRED_SURROGATE_KEY",
+    "raw": "{\"summary\":\"SYNTHETIC_CONTEXT_ONLY\",\"known\":[0],\"unknown\":[],\"recommended_questions\":[],\"medical_action\":\"NONE\",\"requires_clinician\":true,\"\\ud800\":0}",
+    "raw_base64": "eyJzdW1tYXJ5IjoiU1lOVEhFVElDX0NPTlRFWFRfT05MWSIsImtub3duIjpbMF0sInVua25vd24iOltdLCJyZWNvbW1lbmRlZF9xdWVzdGlvbnMiOltdLCJtZWRpY2FsX2FjdGlvbiI6Ik5PTkUiLCJyZXF1aXJlc19jbGluaWNpYW4iOnRydWUsIlx1ZDgwMCI6MH0=",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_NESTED_DUPLICATE",
+    "raw": "{\"summary\":\"SYNTHETIC_CONTEXT_ONLY\",\"known\":[{\"x\":0,\"\\u0078\":0}],\"unknown\":[],\"recommended_questions\":[],\"medical_action\":\"NONE\",\"requires_clinician\":true}",
+    "raw_base64": "eyJzdW1tYXJ5IjoiU1lOVEhFVElDX0NPTlRFWFRfT05MWSIsImtub3duIjpbeyJ4IjowLCJcdTAwNzgiOjB9XSwidW5rbm93biI6W10sInJlY29tbWVuZGVkX3F1ZXN0aW9ucyI6W10sIm1lZGljYWxfYWN0aW9uIjoiTk9ORSIsInJlcXVpcmVzX2NsaW5pY2lhbiI6dHJ1ZX0=",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_NFC_COLLISION",
+    "raw": "{\"summary\":\"SYNTHETIC_CONTEXT_ONLY\",\"known\":[0],\"unknown\":[],\"recommended_questions\":[],\"medical_action\":\"NONE\",\"requires_clinician\":true,\"\u00e9\":0,\"e\\u0301\":1}",
+    "raw_base64": "eyJzdW1tYXJ5IjoiU1lOVEhFVElDX0NPTlRFWFRfT05MWSIsImtub3duIjpbMF0sInVua25vd24iOltdLCJyZWNvbW1lbmRlZF9xdWVzdGlvbnMiOltdLCJtZWRpY2FsX2FjdGlvbiI6Ik5PTkUiLCJyZXF1aXJlc19jbGluaWNpYW4iOnRydWUsIsOpIjowLCJlXHUwMzAxIjoxfQ==",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_INTEGER_CLINICIAN",
+    "raw": "{\"summary\":\"SYNTHETIC_CONTEXT_ONLY\",\"known\":[0],\"unknown\":[],\"recommended_questions\":[],\"medical_action\":\"NONE\",\"requires_clinician\":1}",
+    "raw_base64": "eyJzdW1tYXJ5IjoiU1lOVEhFVElDX0NPTlRFWFRfT05MWSIsImtub3duIjpbMF0sInVua25vd24iOltdLCJyZWNvbW1lbmRlZF9xdWVzdGlvbnMiOltdLCJtZWRpY2FsX2FjdGlvbiI6Ik5PTkUiLCJyZXF1aXJlc19jbGluaWNpYW4iOjF9",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_STRING_CLINICIAN",
+    "raw": "{\"summary\":\"SYNTHETIC_CONTEXT_ONLY\",\"known\":[0],\"unknown\":[],\"recommended_questions\":[],\"medical_action\":\"NONE\",\"requires_clinician\":\"true\"}",
+    "raw_base64": "eyJzdW1tYXJ5IjoiU1lOVEhFVElDX0NPTlRFWFRfT05MWSIsImtub3duIjpbMF0sInVua25vd24iOltdLCJyZWNvbW1lbmRlZF9xdWVzdGlvbnMiOltdLCJtZWRpY2FsX2FjdGlvbiI6Ik5PTkUiLCJyZXF1aXJlc19jbGluaWNpYW4iOiJ0cnVlIn0=",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_FALSE_CLINICIAN",
+    "raw": "{\"summary\":\"SYNTHETIC_CONTEXT_ONLY\",\"known\":[0],\"unknown\":[],\"recommended_questions\":[],\"medical_action\":\"NONE\",\"requires_clinician\":false}",
+    "raw_base64": "eyJzdW1tYXJ5IjoiU1lOVEhFVElDX0NPTlRFWFRfT05MWSIsImtub3duIjpbMF0sInVua25vd24iOltdLCJyZWNvbW1lbmRlZF9xdWVzdGlvbnMiOltdLCJtZWRpY2FsX2FjdGlvbiI6Ik5PTkUiLCJyZXF1aXJlc19jbGluaWNpYW4iOmZhbHNlfQ==",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_NULL_CLINICIAN",
+    "raw": "{\"summary\":\"SYNTHETIC_CONTEXT_ONLY\",\"known\":[0],\"unknown\":[],\"recommended_questions\":[],\"medical_action\":\"NONE\",\"requires_clinician\":null}",
+    "raw_base64": "eyJzdW1tYXJ5IjoiU1lOVEhFVElDX0NPTlRFWFRfT05MWSIsImtub3duIjpbMF0sInVua25vd24iOltdLCJyZWNvbW1lbmRlZF9xdWVzdGlvbnMiOltdLCJtZWRpY2FsX2FjdGlvbiI6Ik5PTkUiLCJyZXF1aXJlc19jbGluaWNpYW4iOm51bGx9",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_SUMMARY_CASE",
+    "raw": "{\"summary\":\"synthetic_context_only\",\"known\":[0],\"unknown\":[],\"recommended_questions\":[],\"medical_action\":\"NONE\",\"requires_clinician\":true}",
+    "raw_base64": "eyJzdW1tYXJ5Ijoic3ludGhldGljX2NvbnRleHRfb25seSIsImtub3duIjpbMF0sInVua25vd24iOltdLCJyZWNvbW1lbmRlZF9xdWVzdGlvbnMiOltdLCJtZWRpY2FsX2FjdGlvbiI6Ik5PTkUiLCJyZXF1aXJlc19jbGluaWNpYW4iOnRydWV9",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_SUMMARY_SUFFIX",
+    "raw": "{\"summary\":\"SYNTHETIC_CONTEXT_ONLY \",\"known\":[0],\"unknown\":[],\"recommended_questions\":[],\"medical_action\":\"NONE\",\"requires_clinician\":true}",
+    "raw_base64": "eyJzdW1tYXJ5IjoiU1lOVEhFVElDX0NPTlRFWFRfT05MWSAiLCJrbm93biI6WzBdLCJ1bmtub3duIjpbXSwicmVjb21tZW5kZWRfcXVlc3Rpb25zIjpbXSwibWVkaWNhbF9hY3Rpb24iOiJOT05FIiwicmVxdWlyZXNfY2xpbmljaWFuIjp0cnVlfQ==",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_ACTION_CASE",
+    "raw": "{\"summary\":\"SYNTHETIC_CONTEXT_ONLY\",\"known\":[0],\"unknown\":[],\"recommended_questions\":[],\"medical_action\":\"none\",\"requires_clinician\":true}",
+    "raw_base64": "eyJzdW1tYXJ5IjoiU1lOVEhFVElDX0NPTlRFWFRfT05MWSIsImtub3duIjpbMF0sInVua25vd24iOltdLCJyZWNvbW1lbmRlZF9xdWVzdGlvbnMiOltdLCJtZWRpY2FsX2FjdGlvbiI6Im5vbmUiLCJyZXF1aXJlc19jbGluaWNpYW4iOnRydWV9",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_DEEP_NESTING",
+    "raw": "{\"summary\":\"SYNTHETIC_CONTEXT_ONLY\",\"known\":[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[0]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]],\"unknown\":[],\"recommended_questions\":[],\"medical_action\":\"NONE\",\"requires_clinician\":true}",
+    "raw_base64": "eyJzdW1tYXJ5IjoiU1lOVEhFVElDX0NPTlRFWFRfT05MWSIsImtub3duIjpbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbWzBdXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXSwidW5rbm93biI6W10sInJlY29tbWVuZGVkX3F1ZXN0aW9ucyI6W10sIm1lZGljYWxfYWN0aW9uIjoiTk9ORSIsInJlcXVpcmVzX2NsaW5pY2lhbiI6dHJ1ZX0=",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_KNOWN_FLOAT",
+    "raw": "{\"summary\":\"SYNTHETIC_CONTEXT_ONLY\",\"known\":[0.0],\"unknown\":[],\"recommended_questions\":[],\"medical_action\":\"NONE\",\"requires_clinician\":true}",
+    "raw_base64": "eyJzdW1tYXJ5IjoiU1lOVEhFVElDX0NPTlRFWFRfT05MWSIsImtub3duIjpbMC4wXSwidW5rbm93biI6W10sInJlY29tbWVuZGVkX3F1ZXN0aW9ucyI6W10sIm1lZGljYWxfYWN0aW9uIjoiTk9ORSIsInJlcXVpcmVzX2NsaW5pY2lhbiI6dHJ1ZX0=",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_KNOWN_EXPONENT",
+    "raw": "{\"summary\":\"SYNTHETIC_CONTEXT_ONLY\",\"known\":[0e0],\"unknown\":[],\"recommended_questions\":[],\"medical_action\":\"NONE\",\"requires_clinician\":true}",
+    "raw_base64": "eyJzdW1tYXJ5IjoiU1lOVEhFVElDX0NPTlRFWFRfT05MWSIsImtub3duIjpbMGUwXSwidW5rbm93biI6W10sInJlY29tbWVuZGVkX3F1ZXN0aW9ucyI6W10sIm1lZGljYWxfYWN0aW9uIjoiTk9ORSIsInJlcXVpcmVzX2NsaW5pY2lhbiI6dHJ1ZX0=",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_KNOWN_BOOL",
+    "raw": "{\"summary\":\"SYNTHETIC_CONTEXT_ONLY\",\"known\":[true],\"unknown\":[],\"recommended_questions\":[],\"medical_action\":\"NONE\",\"requires_clinician\":true}",
+    "raw_base64": "eyJzdW1tYXJ5IjoiU1lOVEhFVElDX0NPTlRFWFRfT05MWSIsImtub3duIjpbdHJ1ZV0sInVua25vd24iOltdLCJyZWNvbW1lbmRlZF9xdWVzdGlvbnMiOltdLCJtZWRpY2FsX2FjdGlvbiI6Ik5PTkUiLCJyZXF1aXJlc19jbGluaWNpYW4iOnRydWV9",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_UNKNOWN_FLOAT",
+    "raw": "{\"summary\":\"SYNTHETIC_CONTEXT_ONLY\",\"known\":[0],\"unknown\":[0.0],\"recommended_questions\":[],\"medical_action\":\"NONE\",\"requires_clinician\":true}",
+    "raw_base64": "eyJzdW1tYXJ5IjoiU1lOVEhFVElDX0NPTlRFWFRfT05MWSIsImtub3duIjpbMF0sInVua25vd24iOlswLjBdLCJyZWNvbW1lbmRlZF9xdWVzdGlvbnMiOltdLCJtZWRpY2FsX2FjdGlvbiI6Ik5PTkUiLCJyZXF1aXJlc19jbGluaWNpYW4iOnRydWV9",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_UNKNOWN_EXPONENT",
+    "raw": "{\"summary\":\"SYNTHETIC_CONTEXT_ONLY\",\"known\":[0],\"unknown\":[0e0],\"recommended_questions\":[],\"medical_action\":\"NONE\",\"requires_clinician\":true}",
+    "raw_base64": "eyJzdW1tYXJ5IjoiU1lOVEhFVElDX0NPTlRFWFRfT05MWSIsImtub3duIjpbMF0sInVua25vd24iOlswZTBdLCJyZWNvbW1lbmRlZF9xdWVzdGlvbnMiOltdLCJtZWRpY2FsX2FjdGlvbiI6Ik5PTkUiLCJyZXF1aXJlc19jbGluaWNpYW4iOnRydWV9",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_UNKNOWN_BOOL",
+    "raw": "{\"summary\":\"SYNTHETIC_CONTEXT_ONLY\",\"known\":[0],\"unknown\":[true],\"recommended_questions\":[],\"medical_action\":\"NONE\",\"requires_clinician\":true}",
+    "raw_base64": "eyJzdW1tYXJ5IjoiU1lOVEhFVElDX0NPTlRFWFRfT05MWSIsImtub3duIjpbMF0sInVua25vd24iOlt0cnVlXSwicmVjb21tZW5kZWRfcXVlc3Rpb25zIjpbXSwibWVkaWNhbF9hY3Rpb24iOiJOT05FIiwicmVxdWlyZXNfY2xpbmljaWFuIjp0cnVlfQ==",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_RECOMMENDED_QUESTIONS_FLOAT",
+    "raw": "{\"summary\":\"SYNTHETIC_CONTEXT_ONLY\",\"known\":[0],\"unknown\":[],\"recommended_questions\":[0.0],\"medical_action\":\"NONE\",\"requires_clinician\":true}",
+    "raw_base64": "eyJzdW1tYXJ5IjoiU1lOVEhFVElDX0NPTlRFWFRfT05MWSIsImtub3duIjpbMF0sInVua25vd24iOltdLCJyZWNvbW1lbmRlZF9xdWVzdGlvbnMiOlswLjBdLCJtZWRpY2FsX2FjdGlvbiI6Ik5PTkUiLCJyZXF1aXJlc19jbGluaWNpYW4iOnRydWV9",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_RECOMMENDED_QUESTIONS_EXPONENT",
+    "raw": "{\"summary\":\"SYNTHETIC_CONTEXT_ONLY\",\"known\":[0],\"unknown\":[],\"recommended_questions\":[0e0],\"medical_action\":\"NONE\",\"requires_clinician\":true}",
+    "raw_base64": "eyJzdW1tYXJ5IjoiU1lOVEhFVElDX0NPTlRFWFRfT05MWSIsImtub3duIjpbMF0sInVua25vd24iOltdLCJyZWNvbW1lbmRlZF9xdWVzdGlvbnMiOlswZTBdLCJtZWRpY2FsX2FjdGlvbiI6Ik5PTkUiLCJyZXF1aXJlc19jbGluaWNpYW4iOnRydWV9",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_RECOMMENDED_QUESTIONS_BOOL",
+    "raw": "{\"summary\":\"SYNTHETIC_CONTEXT_ONLY\",\"known\":[0],\"unknown\":[],\"recommended_questions\":[true],\"medical_action\":\"NONE\",\"requires_clinician\":true}",
+    "raw_base64": "eyJzdW1tYXJ5IjoiU1lOVEhFVElDX0NPTlRFWFRfT05MWSIsImtub3duIjpbMF0sInVua25vd24iOltdLCJyZWNvbW1lbmRlZF9xdWVzdGlvbnMiOlt0cnVlXSwibWVkaWNhbF9hY3Rpb24iOiJOT05FIiwicmVxdWlyZXNfY2xpbmljaWFuIjp0cnVlfQ==",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_SELF_IDENTIFY_PROVIDER",
+    "raw": "{\"summary\": \"SYNTHETIC_CONTEXT_ONLY\", \"known\": [0], \"unknown\": [], \"recommended_questions\": [], \"medical_action\": \"NONE\", \"requires_clinician\": true, \"provider\": \"MODEL_CLAIM\"}",
+    "raw_base64": "eyJzdW1tYXJ5IjogIlNZTlRIRVRJQ19DT05URVhUX09OTFkiLCAia25vd24iOiBbMF0sICJ1bmtub3duIjogW10sICJyZWNvbW1lbmRlZF9xdWVzdGlvbnMiOiBbXSwgIm1lZGljYWxfYWN0aW9uIjogIk5PTkUiLCAicmVxdWlyZXNfY2xpbmljaWFuIjogdHJ1ZSwgInByb3ZpZGVyIjogIk1PREVMX0NMQUlNIn0=",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_SELF_IDENTIFY_EXECUTION_SUBSTRATE",
+    "raw": "{\"summary\": \"SYNTHETIC_CONTEXT_ONLY\", \"known\": [0], \"unknown\": [], \"recommended_questions\": [], \"medical_action\": \"NONE\", \"requires_clinician\": true, \"execution_substrate\": \"MODEL_CLAIM\"}",
+    "raw_base64": "eyJzdW1tYXJ5IjogIlNZTlRIRVRJQ19DT05URVhUX09OTFkiLCAia25vd24iOiBbMF0sICJ1bmtub3duIjogW10sICJyZWNvbW1lbmRlZF9xdWVzdGlvbnMiOiBbXSwgIm1lZGljYWxfYWN0aW9uIjogIk5PTkUiLCAicmVxdWlyZXNfY2xpbmljaWFuIjogdHJ1ZSwgImV4ZWN1dGlvbl9zdWJzdHJhdGUiOiAiTU9ERUxfQ0xBSU0ifQ==",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_SELF_IDENTIFY_MODEL_LABEL_OBSERVED",
+    "raw": "{\"summary\": \"SYNTHETIC_CONTEXT_ONLY\", \"known\": [0], \"unknown\": [], \"recommended_questions\": [], \"medical_action\": \"NONE\", \"requires_clinician\": true, \"model_label_observed\": \"MODEL_CLAIM\"}",
+    "raw_base64": "eyJzdW1tYXJ5IjogIlNZTlRIRVRJQ19DT05URVhUX09OTFkiLCAia25vd24iOiBbMF0sICJ1bmtub3duIjogW10sICJyZWNvbW1lbmRlZF9xdWVzdGlvbnMiOiBbXSwgIm1lZGljYWxfYWN0aW9uIjogIk5PTkUiLCAicmVxdWlyZXNfY2xpbmljaWFuIjogdHJ1ZSwgIm1vZGVsX2xhYmVsX29ic2VydmVkIjogIk1PREVMX0NMQUlNIn0=",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_SELF_IDENTIFY_MODEL_REVISION",
+    "raw": "{\"summary\": \"SYNTHETIC_CONTEXT_ONLY\", \"known\": [0], \"unknown\": [], \"recommended_questions\": [], \"medical_action\": \"NONE\", \"requires_clinician\": true, \"model_revision\": \"MODEL_CLAIM\"}",
+    "raw_base64": "eyJzdW1tYXJ5IjogIlNZTlRIRVRJQ19DT05URVhUX09OTFkiLCAia25vd24iOiBbMF0sICJ1bmtub3duIjogW10sICJyZWNvbW1lbmRlZF9xdWVzdGlvbnMiOiBbXSwgIm1lZGljYWxfYWN0aW9uIjogIk5PTkUiLCAicmVxdWlyZXNfY2xpbmljaWFuIjogdHJ1ZSwgIm1vZGVsX3JldmlzaW9uIjogIk1PREVMX0NMQUlNIn0=",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_SELF_IDENTIFY_VALIDATOR_STATE",
+    "raw": "{\"summary\": \"SYNTHETIC_CONTEXT_ONLY\", \"known\": [0], \"unknown\": [], \"recommended_questions\": [], \"medical_action\": \"NONE\", \"requires_clinician\": true, \"validator_state\": \"MODEL_CLAIM\"}",
+    "raw_base64": "eyJzdW1tYXJ5IjogIlNZTlRIRVRJQ19DT05URVhUX09OTFkiLCAia25vd24iOiBbMF0sICJ1bmtub3duIjogW10sICJyZWNvbW1lbmRlZF9xdWVzdGlvbnMiOiBbXSwgIm1lZGljYWxfYWN0aW9uIjogIk5PTkUiLCAicmVxdWlyZXNfY2xpbmljaWFuIjogdHJ1ZSwgInZhbGlkYXRvcl9zdGF0ZSI6ICJNT0RFTF9DTEFJTSJ9",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_SELF_IDENTIFY_WALLET_AUTHORITY",
+    "raw": "{\"summary\": \"SYNTHETIC_CONTEXT_ONLY\", \"known\": [0], \"unknown\": [], \"recommended_questions\": [], \"medical_action\": \"NONE\", \"requires_clinician\": true, \"wallet_authority\": \"MODEL_CLAIM\"}",
+    "raw_base64": "eyJzdW1tYXJ5IjogIlNZTlRIRVRJQ19DT05URVhUX09OTFkiLCAia25vd24iOiBbMF0sICJ1bmtub3duIjogW10sICJyZWNvbW1lbmRlZF9xdWVzdGlvbnMiOiBbXSwgIm1lZGljYWxfYWN0aW9uIjogIk5PTkUiLCAicmVxdWlyZXNfY2xpbmljaWFuIjogdHJ1ZSwgIndhbGxldF9hdXRob3JpdHkiOiAiTU9ERUxfQ0xBSU0ifQ==",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_SELF_IDENTIFY_MEDICAL_AUTHORITY",
+    "raw": "{\"summary\": \"SYNTHETIC_CONTEXT_ONLY\", \"known\": [0], \"unknown\": [], \"recommended_questions\": [], \"medical_action\": \"NONE\", \"requires_clinician\": true, \"medical_authority\": \"MODEL_CLAIM\"}",
+    "raw_base64": "eyJzdW1tYXJ5IjogIlNZTlRIRVRJQ19DT05URVhUX09OTFkiLCAia25vd24iOiBbMF0sICJ1bmtub3duIjogW10sICJyZWNvbW1lbmRlZF9xdWVzdGlvbnMiOiBbXSwgIm1lZGljYWxfYWN0aW9uIjogIk5PTkUiLCAicmVxdWlyZXNfY2xpbmljaWFuIjogdHJ1ZSwgIm1lZGljYWxfYXV0aG9yaXR5IjogIk1PREVMX0NMQUlNIn0=",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_SELF_IDENTIFY_SOURCE_PACKET_SHA256",
+    "raw": "{\"summary\": \"SYNTHETIC_CONTEXT_ONLY\", \"known\": [0], \"unknown\": [], \"recommended_questions\": [], \"medical_action\": \"NONE\", \"requires_clinician\": true, \"source_packet_sha256\": \"MODEL_CLAIM\"}",
+    "raw_base64": "eyJzdW1tYXJ5IjogIlNZTlRIRVRJQ19DT05URVhUX09OTFkiLCAia25vd24iOiBbMF0sICJ1bmtub3duIjogW10sICJyZWNvbW1lbmRlZF9xdWVzdGlvbnMiOiBbXSwgIm1lZGljYWxfYWN0aW9uIjogIk5PTkUiLCAicmVxdWlyZXNfY2xpbmljaWFuIjogdHJ1ZSwgInNvdXJjZV9wYWNrZXRfc2hhMjU2IjogIk1PREVMX0NMQUlNIn0=",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_SELF_IDENTIFY_CATALOG_SHA256",
+    "raw": "{\"summary\": \"SYNTHETIC_CONTEXT_ONLY\", \"known\": [0], \"unknown\": [], \"recommended_questions\": [], \"medical_action\": \"NONE\", \"requires_clinician\": true, \"catalog_sha256\": \"MODEL_CLAIM\"}",
+    "raw_base64": "eyJzdW1tYXJ5IjogIlNZTlRIRVRJQ19DT05URVhUX09OTFkiLCAia25vd24iOiBbMF0sICJ1bmtub3duIjogW10sICJyZWNvbW1lbmRlZF9xdWVzdGlvbnMiOiBbXSwgIm1lZGljYWxfYWN0aW9uIjogIk5PTkUiLCAicmVxdWlyZXNfY2xpbmljaWFuIjogdHJ1ZSwgImNhdGFsb2dfc2hhMjU2IjogIk1PREVMX0NMQUlNIn0=",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_MISSING_SUMMARY",
+    "raw": "{\"known\": [0], \"unknown\": [], \"recommended_questions\": [], \"medical_action\": \"NONE\", \"requires_clinician\": true}",
+    "raw_base64": "eyJrbm93biI6IFswXSwgInVua25vd24iOiBbXSwgInJlY29tbWVuZGVkX3F1ZXN0aW9ucyI6IFtdLCAibWVkaWNhbF9hY3Rpb24iOiAiTk9ORSIsICJyZXF1aXJlc19jbGluaWNpYW4iOiB0cnVlfQ==",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_MISSING_KNOWN",
+    "raw": "{\"summary\": \"SYNTHETIC_CONTEXT_ONLY\", \"unknown\": [], \"recommended_questions\": [], \"medical_action\": \"NONE\", \"requires_clinician\": true}",
+    "raw_base64": "eyJzdW1tYXJ5IjogIlNZTlRIRVRJQ19DT05URVhUX09OTFkiLCAidW5rbm93biI6IFtdLCAicmVjb21tZW5kZWRfcXVlc3Rpb25zIjogW10sICJtZWRpY2FsX2FjdGlvbiI6ICJOT05FIiwgInJlcXVpcmVzX2NsaW5pY2lhbiI6IHRydWV9",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_MISSING_UNKNOWN",
+    "raw": "{\"summary\": \"SYNTHETIC_CONTEXT_ONLY\", \"known\": [0], \"recommended_questions\": [], \"medical_action\": \"NONE\", \"requires_clinician\": true}",
+    "raw_base64": "eyJzdW1tYXJ5IjogIlNZTlRIRVRJQ19DT05URVhUX09OTFkiLCAia25vd24iOiBbMF0sICJyZWNvbW1lbmRlZF9xdWVzdGlvbnMiOiBbXSwgIm1lZGljYWxfYWN0aW9uIjogIk5PTkUiLCAicmVxdWlyZXNfY2xpbmljaWFuIjogdHJ1ZX0=",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_MISSING_RECOMMENDED_QUESTIONS",
+    "raw": "{\"summary\": \"SYNTHETIC_CONTEXT_ONLY\", \"known\": [0], \"unknown\": [], \"medical_action\": \"NONE\", \"requires_clinician\": true}",
+    "raw_base64": "eyJzdW1tYXJ5IjogIlNZTlRIRVRJQ19DT05URVhUX09OTFkiLCAia25vd24iOiBbMF0sICJ1bmtub3duIjogW10sICJtZWRpY2FsX2FjdGlvbiI6ICJOT05FIiwgInJlcXVpcmVzX2NsaW5pY2lhbiI6IHRydWV9",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_MISSING_MEDICAL_ACTION",
+    "raw": "{\"summary\": \"SYNTHETIC_CONTEXT_ONLY\", \"known\": [0], \"unknown\": [], \"recommended_questions\": [], \"requires_clinician\": true}",
+    "raw_base64": "eyJzdW1tYXJ5IjogIlNZTlRIRVRJQ19DT05URVhUX09OTFkiLCAia25vd24iOiBbMF0sICJ1bmtub3duIjogW10sICJyZWNvbW1lbmRlZF9xdWVzdGlvbnMiOiBbXSwgInJlcXVpcmVzX2NsaW5pY2lhbiI6IHRydWV9",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_MISSING_REQUIRES_CLINICIAN",
+    "raw": "{\"summary\": \"SYNTHETIC_CONTEXT_ONLY\", \"known\": [0], \"unknown\": [], \"recommended_questions\": [], \"medical_action\": \"NONE\"}",
+    "raw_base64": "eyJzdW1tYXJ5IjogIlNZTlRIRVRJQ19DT05URVhUX09OTFkiLCAia25vd24iOiBbMF0sICJ1bmtub3duIjogW10sICJyZWNvbW1lbmRlZF9xdWVzdGlvbnMiOiBbXSwgIm1lZGljYWxfYWN0aW9uIjogIk5PTkUifQ==",
+    "EXPECTED_STATE": "REJECT"
+  },
+  {
+    "VECTOR_ID": "STRICT_ESCAPED_VALID_KEY",
+    "raw": "{\"\\u0073ummary\":\"SYNTHETIC_CONTEXT_ONLY\",\"known\":[0],\"unknown\":[],\"recommended_questions\":[],\"medical_action\":\"NONE\",\"requires_clinician\":true}",
+    "raw_base64": "eyJcdTAwNzN1bW1hcnkiOiJTWU5USEVUSUNfQ09OVEVYVF9PTkxZIiwia25vd24iOlswXSwidW5rbm93biI6W10sInJlY29tbWVuZGVkX3F1ZXN0aW9ucyI6W10sIm1lZGljYWxfYWN0aW9uIjoiTk9ORSIsInJlcXVpcmVzX2NsaW5pY2lhbiI6dHJ1ZX0=",
+    "EXPECTED_STATE": "ACCEPT"
+  },
+  {
+    "VECTOR_ID": "STRICT_WHITESPACE",
+    "raw": " \t\r\n{\"summary\":\"SYNTHETIC_CONTEXT_ONLY\",\"known\":[0],\"unknown\":[],\"recommended_questions\":[],\"medical_action\":\"NONE\",\"requires_clinician\":true}\n\t ",
+    "raw_base64": "IAkNCnsic3VtbWFyeSI6IlNZTlRIRVRJQ19DT05URVhUX09OTFkiLCJrbm93biI6WzBdLCJ1bmtub3duIjpbXSwicmVjb21tZW5kZWRfcXVlc3Rpb25zIjpbXSwibWVkaWNhbF9hY3Rpb24iOiJOT05FIiwicmVxdWlyZXNfY2xpbmljaWFuIjp0cnVlfQoJIA==",
+    "EXPECTED_STATE": "ACCEPT"
+  }
+]

@@ -1,0 +1,60 @@
+{
+  "base_head": "666f4419e662e44c29d672d61d130a73a0a6d840",
+  "branch": "redteam/bp-0006-model-wallet",
+  "breakpoint_id": "BAYMAX-BP-0010",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 15446,
+        "path": "experiments/neon_probe.py",
+        "sha256": "5452415a052ab6336b15694192778faaec5e25684f7ad85da9ed3b9bec089ee0"
+      },
+      {
+        "bytes": 3705,
+        "path": "scripts/env_hygiene.py",
+        "sha256": "70af368a030c8321c2baeae6854c0030186ab0c965ff469858723fadbaa61633"
+      },
+      {
+        "bytes": 4176,
+        "path": "evidence/receipts/neon/neon_ai_gateway_attempt2.json",
+        "sha256": "94be4b0812acfc992353998d95f8ac812185bbda73ae837978f0899afc16b626"
+      },
+      {
+        "bytes": 3258,
+        "path": "evidence/receipts/neon/neon_ai_gateway_unpatched_rerun_FAILED.json",
+        "sha256": "cd671e84317aa5b6161134a4c2fb6f13e3adb560bb1ea4944d99e1267537c521"
+      },
+      {
+        "bytes": 1097,
+        "path": "evidence/receipts/neon/verifier_status_bp0010.json",
+        "sha256": "62472f003a721a2d9058b70acaa90d5f02bf5b2cbe00c620b46c7630415dfc30"
+      },
+      {
+        "bytes": 3695,
+        "path": "evidence/breakpoints/BAYMAX-BP-0009.json",
+        "sha256": "a8e531cff2871c3f83c22de4b9648f7572beecc99c0c650db1e3d4f1b77f9377"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 6,
+    "leaf_hashes": [
+      "e83cb4a89a76b11ed26bc7be976fb2da29b42b821ec92297eee772fd47ebee85",
+      "2598b67824b8f0f600e79c3c480b7c65a7785cf7ac54990ba3867885cd4d4dbf",
+      "70c4e661bbd1f37bdad283f796f09f2a12b718c51b519793a8cf307d014a25ff",
+      "a98b11c8f7690c9cffe05ee75e1cc18ad5a7e879ef015dd3dfa1047eee9a25c9",
+      "304265ea797c7f1f7eb9df245cc000a82d51ea0794daa6a365bd6493bc6e759f",
+      "d408be9d391a49158a8cb39628de066e5e9fc87daf0962cff21d34fcd74693b0"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "af73c83ccfb6263f8d76566f1ee05338a072bb8e85874f24415e281075b03ca9"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "Successor to FAILED BP-0009. Gateway repair: exclude non-chat models; independent single-lane retry PASS (qwen3-next-80b-a3b-instruct, 200, req id captured, routing 5/5 fields, n=1). Stray unpatched all-lane rerun preserved as FAILED receipt. Control plane still BLOCKED (NEON_API_KEY empty). Auth PARTIAL. Postgres/storage PASS (BP-0009). Whitespace fix. Legacy verifier conflict explicit; global verify NOT claimed. External inference lane; not local Liquid.",
+  "parent": "BAYMAX-BP-0009",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "NEON_GATEWAY_REPAIR_RETRY",
+  "state": "PARTIAL",
+  "timestamp_utc": "2026-10-04T19:13:39.330009+00:00"
+}

@@ -1,0 +1,13 @@
+{
+  "claim_ceiling": "Test-harness compile failure only; not a product validator result.",
+  "effect": "Python contract tests PASS; Swift validator attack execution did not run.",
+  "error": "Adversarial harness dynamic JSON string construction was mangled during shell-authored source creation.",
+  "error_class": "SWIFT_HARNESS_STRING_ESCAPE",
+  "observed_at": "2026-10-04T20:37:46.775633+00:00",
+  "real_phi": "NONE",
+  "repair": "Construct adversarial JSON using JSONSerialization instead of manual quoting/interpolation.",
+  "schema": "baymax.iphone_repair_failure.v1",
+  "secret_values_recorded": false,
+  "stage": "SWIFT_REDTEAM_HARNESS_COMPILE_V2",
+  "state": "FAILED"
+}

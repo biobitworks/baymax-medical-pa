@@ -1,0 +1,10 @@
+test_credentials_always_block (test_policy.ComplianceRouterTests) ... ok
+test_deidentified_health_research_can_leave_when_authorized (test_policy.ComplianceRouterTests) ... ok
+test_medication_change_requires_human_review_even_local (test_policy.ComplianceRouterTests) ... ok
+test_phi_external_without_contract_routes_local (test_policy.ComplianceRouterTests) ... ok
+test_phi_external_without_local_or_contract_blocks (test_policy.ComplianceRouterTests) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.001s
+
+OK

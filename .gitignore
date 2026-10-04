@@ -1,12 +1,40 @@
-node_modules/
-dist/
+# Secrets / local configuration
+.env
 .env.*
 !.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# JS/build
+node_modules/
+.next/
+dist/
+build/
 .mastra/
 test-results/
 playwright-report/
 mastra.db*
-
 .baymax-computer/
-
 .openmuse/
+
+# OS/editor
+.DS_Store
+.vscode/
+.idea/
+
+# Sensitive/runtime payloads: commit only sanitized receipts/manifests
+private/
+sensitive/
+artifacts/private/
+evidence/runtime/
+*.sqlite
+*.db

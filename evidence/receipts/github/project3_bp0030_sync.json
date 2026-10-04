@@ -1,0 +1,91 @@
+{
+  "autonomous_pharmacy_purchase": "NO",
+  "base_breakpoint": "BAYMAX-BP-0030",
+  "base_commit": "7d425b42bf920e9225c48bf174c77dfd1ee61f13",
+  "claim_ceiling": "GitHub publication/task synchronization and recording custody status only. Project board column values were not read or mutated because the authenticated GitHub CLI lacks project scopes. This does not establish offline network isolation, issue closure, clinical correctness, HIPAA compliance, or medication-purchase authorization.",
+  "github_updates": [
+    {
+      "comment_id": 5984309115,
+      "issue": 2,
+      "purpose": "recording milestone",
+      "repo": "jerelvelarde/baymax-medical-pa"
+    },
+    {
+      "comment_id": 5984309377,
+      "issue": 4,
+      "purpose": "privacy scope update",
+      "repo": "jerelvelarde/baymax-medical-pa"
+    },
+    {
+      "comment_id": 5984309627,
+      "issue": 5,
+      "purpose": "wallet boundary",
+      "repo": "jerelvelarde/baymax-medical-pa"
+    },
+    {
+      "comment_id": 5984309910,
+      "issue": 8,
+      "purpose": "Fly scope",
+      "repo": "jerelvelarde/baymax-medical-pa"
+    },
+    {
+      "comment_id": 5984320166,
+      "issue": 2,
+      "purpose": "BP0030 raw-recording custody correction",
+      "repo": "jerelvelarde/baymax-medical-pa"
+    },
+    {
+      "comment_id": 5984320428,
+      "issue": 3,
+      "purpose": "BP0030 offline-first custody update",
+      "repo": "jerelvelarde/baymax-medical-pa"
+    },
+    {
+      "comment_id": 5984320687,
+      "issue": 4,
+      "purpose": "BP0030 media privacy update",
+      "repo": "jerelvelarde/baymax-medical-pa"
+    }
+  ],
+  "issue_states": {
+    "2": "OPEN_PARTIAL",
+    "3": "OPEN_PARTIAL",
+    "4": "OPEN_PARTIAL",
+    "5": "OPEN_PARTIAL",
+    "8": "OPEN_DEFERRED"
+  },
+  "observed_at": "2026-10-04T20:59:32.313232+00:00",
+  "offline_network_isolation": "NOT_TESTED",
+  "physical_iphone_apollo": "OBSERVED",
+  "prescription_purchase": "BLOCKED",
+  "project": "baymax-medical-pa",
+  "project_board": {
+    "direct_read": "BLOCKED_MISSING_READ_PROJECT_SCOPE",
+    "direct_status_update": "BLOCKED_MISSING_PROJECT_SCOPE",
+    "gh_required_scopes": [
+      "read:project",
+      "project"
+    ],
+    "underlying_issue_pr_updates": "PASS",
+    "url": "https://github.com/users/jerelvelarde/projects/3/views/1"
+  },
+  "pull_request": {
+    "draft": true,
+    "head": "integration/iphone-offline-v2",
+    "head_commit": "7d425b42bf920e9225c48bf174c77dfd1ee61f13",
+    "number": 3,
+    "repo": "biobitworks/baymax-medical-pa",
+    "title": "Baymax: BP-0030 physical iPhone Apollo recording custody + offline integration",
+    "url": "https://github.com/biobitworks/baymax-medical-pa/pull/3"
+  },
+  "real_phi": "NONE_OBSERVED",
+  "recording": {
+    "bytes": 9014548,
+    "duration_seconds": 70.719625,
+    "path": "evidence/media/iphone/apollo_local_model_screen_recording_2026-10-04.mov",
+    "sha256": "ef8b2d2b1d90bfd838d4a1e9be4ef3937b15b45b25d474375ea232c1ff1fc12b",
+    "state": "COMMITTED_AND_MERKLE_ADMITTED_BP0030"
+  },
+  "schema": "baymax.project_board_publication_receipt.v1",
+  "secrets_recorded": false
+}

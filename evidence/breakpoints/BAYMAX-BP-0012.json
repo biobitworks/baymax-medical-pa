@@ -1,0 +1,30 @@
+{
+  "base_head": "6b9b0a5a695340ed60c574588817679d21286a2d",
+  "branch": "redteam/bp-0006-model-wallet",
+  "breakpoint_id": "BAYMAX-BP-0012",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 745,
+        "path": "evidence/receipts/neon/ai_gateway_repair_no_temperature.json",
+        "sha256": "de0a733478e2ae3d4bbb58ff887bb7e2309f03235a56dd7f2cf45b58df2d8acf"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 1,
+    "leaf_hashes": [
+      "e8a593c91e31e00989e945713764fa79e90622eb8081391458e7aa306c8c5714"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "e8a593c91e31e00989e945713764fa79e90622eb8081391458e7aa306c8c5714"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "Independent retry of BP-0011 synthetic Gateway request: removed unsupported temperature parameter only; same claude-opus-4-8 synthetic task returned HTTP 200, exact expected marker, vendor request ID present. No medical correctness inferred. Control plane remains BLOCKED_CREDENTIAL; Auth remains JWKS-only validation.",
+  "parent": "BAYMAX-BP-0011",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "NEON_AI_GATEWAY_TEMPERATURE_REPAIR",
+  "state": "PASS",
+  "timestamp_utc": "2026-10-04T19:18:45.756147+00:00"
+}

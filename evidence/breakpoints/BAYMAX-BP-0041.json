@@ -1,0 +1,48 @@
+{
+  "base_head": "d928d28c6d6e2cfbee3b1119aef72bf53c94ab46",
+  "branch": "execution/hipaa-neon-qualification",
+  "breakpoint_id": "BAYMAX-BP-0041",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 2466,
+        "path": "evidence/breakpoints/BAYMAX-BP-0040.json",
+        "sha256": "da79f153e32961b8d9c40b2d8e88abb92bc26201e51f94f2ebe48ac57acc2527"
+      },
+      {
+        "bytes": 1427,
+        "path": "evidence/receipts/github/bp0041_upstream_8ecc_reconciliation.json",
+        "sha256": "868aaf5609351a8b6f74c1e0def6933b94bf780548a1abd035c453a36882b079"
+      },
+      {
+        "bytes": 453,
+        "path": ".gitignore",
+        "sha256": "cef5f320e7c9d370b35f9d83975f47dc9edad874b09b55c09d9594576453563f"
+      },
+      {
+        "bytes": 19909,
+        "path": "README.md",
+        "sha256": "6db6fcfb4fc17e89012983b5a16964738a327a81e7e0d130786ef2922c54d6bd"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 4,
+    "leaf_hashes": [
+      "563f2bab4df48103fe9726ead53a3de85241e5209d8b5349f655a18ded511cbb",
+      "923b41ae04ef85a0fb951da465300d434c606f5bf0cba441be5016042a93767e",
+      "46aac250da9339df3f91d7ead255615aa00425a7d965fe687e53752c9c2aa967",
+      "61a360c2db1b2ac2477737030f1c3e5b0b0e94f12e9b307c2f68544f3666af0c"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "1be02d3e246ae1744e7acc00813e2a5c0e0178e90b71dace56a99f54803149d8"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "Reconcile validated candidate through upstream/main 8eccd7a: Node 110/110 PASS; Python 37/37 PASS; npm build PASS; secret gate PASS. Upstream advanced afterward to 1c0ce5d; live GitHub mergeability check required before merge.",
+  "parent": "BAYMAX-BP-0040",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "UPSTREAM_MAIN_RECONCILIATION",
+  "state": "PASS",
+  "timestamp_utc": "2026-10-04T22:24:50.008133+00:00"
+}

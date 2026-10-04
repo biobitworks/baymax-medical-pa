@@ -1,0 +1,110 @@
+{
+  "apple_health": "DEFERRED_OPTIONAL_ADAPTER_PR20",
+  "base_head": "0330c35c61866a9d4046fb7b2ad1c85190d9bfdf",
+  "claim_ceiling": "Structural validator repair is implemented and locally executed with exact Swift/Python parity, iPhoneOS compilation, source binding, and deterministic rejection of the observed out-of-contract Apollo response. Independent Claude verification is BLOCKED; this does not establish clinical correctness, HIPAA compliance, production PHI readiness, provider authenticity, or full physical Baymax-app offline E2E.",
+  "env_ignored": true,
+  "env_tracked": false,
+  "implementation_lineage": {
+    "branch": "codex/model-admission-parity",
+    "byte_match": "PASS_FOR_IMPLEMENTATION_AND_TEST_FILES",
+    "commit": "d4edcfdeeb27d275f89894f0200a7c1faa630f7c"
+  },
+  "independent_verification": {
+    "not_promoted_to_pass": true,
+    "receipt": "evidence/receipts/parallel/CLAUDE-LANE-MODEL-ADMISSION-REDTEAM-001.json",
+    "state": "BLOCKED_CLAUDE_PROVIDER_ACCOUNT"
+  },
+  "iphoneos_build": {
+    "binary_bytes": 927400,
+    "binary_determinism": "NOT_ESTABLISHED",
+    "binary_sha256": "992ab30a1478e496b4b970895b3f04299aadd1fd3d10674fb2fa8e2b255ce68a",
+    "note": "A prior build of the same candidate in the side lane produced a different binary SHA; build output identity is not claimed deterministic.",
+    "state": "PASS_UNSIGNED_ARM64_IPHONEOS"
+  },
+  "legacy_verifier": {
+    "authoritative_for_current_chain": false,
+    "state": "FAIL_KNOWN_MUTABLE_ARTIFACT_SEMANTICS"
+  },
+  "observed_airplane_response": {
+    "expected_state": "REJECT",
+    "python_state": "REJECT",
+    "raw_summary_observed": "SYNTHETIC DEMO ONLY",
+    "required_summary": "SYNTHETIC_CONTEXT_ONLY",
+    "result": "REJECTED_EXPECTED",
+    "selection_parity": true,
+    "swift_state": "REJECT",
+    "vector_id": "OBSERVED_AIRPLANE_RESPONSE"
+  },
+  "observed_at": "2026-10-04T21:43:47.529031+00:00",
+  "parent_breakpoint": "BAYMAX-BP-0034",
+  "phi_screen": {
+    "real_phi": "NONE_USED",
+    "scope": "bounded synthetic iPhone bundle/catalog/context packet and adversarial model corpora",
+    "state": "PASS_NO_SSN_EMAIL_PATTERNS_IN_SYNTHETIC_MODEL_FIXTURES"
+  },
+  "playwright": "DEFERRED_SEPARATE_UPSTREAM_UI_LANE",
+  "pre_admission_chain": {
+    "paths": [
+      "ios/OfflineTravelDemo/GateCheck.swift",
+      "ios/OfflineTravelDemo/ModelInference.swift",
+      "ios/OfflineTravelDemo/OfflineTravelApp.swift",
+      "src/baymax_travel/model.py",
+      "tests/test_model_contract.py"
+    ],
+    "state": "EXPECTED_FAIL_CURRENT_BYTES_NEWER_THAN_LAST_DESCRIPTOR"
+  },
+  "predecessor_redteam": {
+    "branch": "redteam/lane-golden-path-audit",
+    "commit": "53666f3b587ee9e6b41ceef943ccf3cd80fc749c",
+    "finding": "Residual lenient parsing after v2 closed-catalog repair: 1.0 IDs, trailing comma, BOM plus need Swift/Python parity."
+  },
+  "prescription_purchase": "BLOCKED",
+  "python_tests": {
+    "count": 34,
+    "state": "PASS"
+  },
+  "real_money": "NO",
+  "real_phi": "NONE",
+  "schema": "baymax.primary_validation_receipt.v1",
+  "stage": "VALIDATOR_STRUCTURAL_REPAIR",
+  "state": "PARTIAL",
+  "structural_repair": {
+    "bom": "REJECT",
+    "closed_catalog_only": true,
+    "duplicate_keys": "REJECT",
+    "escaped_duplicate_equivalents": "REJECT",
+    "float_exponent_ids": "REJECT",
+    "malformed_output": "REJECT_ABSTAIN",
+    "medical_action_exact": "NONE",
+    "requires_clinician_exact": true,
+    "state": "IMPLEMENTED_EXECUTED",
+    "trailing_comma": "REJECT",
+    "unicode_nfc_collision": "REJECT",
+    "unknown_keys": "REJECT",
+    "wallet_authority": "NONE"
+  },
+  "swift_gate": {
+    "case_count": 24,
+    "provider_calls": 0,
+    "redteam_bypass_rejected": 21,
+    "source_binding_and_execution_metadata": "PASS",
+    "state": "PASS",
+    "wallet_authority": "NONE"
+  },
+  "swift_python_parity": {
+    "accepted": 7,
+    "corpora_sha256": {
+      "tests/vectors/model_admission_strict_edges_v1.json": "b35f4fcf3a2ceea3a1ddf8a7f7f47f7ca0ca52678dd59473a719821ee80c01e9",
+      "tests/vectors/model_admission_v3.json": "8e10ab3796ca5fd6eb3c0e4818a0ca2fb9dffea1eb07ebf396783dfc31e17618"
+    },
+    "mismatches": 0,
+    "rejected": 129,
+    "state": "PASS",
+    "vector_count": 136
+  },
+  "tracked_secret_scan": {
+    "files": 301,
+    "state": "PASS"
+  },
+  "wallet_mutation": "NONE"
+}

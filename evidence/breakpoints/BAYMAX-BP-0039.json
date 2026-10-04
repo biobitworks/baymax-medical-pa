@@ -1,0 +1,36 @@
+{
+  "base_head": "97f5fce0f9d23f73b11679fbff17ab695d383adf",
+  "branch": "execution/hipaa-neon-qualification",
+  "breakpoint_id": "BAYMAX-BP-0039",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 1785,
+        "path": "evidence/breakpoints/BAYMAX-BP-0038.json",
+        "sha256": "3ea18ed9777c4d410b0a0af886b90881154b5de00fd3435a2c13b9beab05b2fa"
+      },
+      {
+        "bytes": 826,
+        "path": "evidence/receipts/github/bp0038_upstream_review_pr.json",
+        "sha256": "3a03f0f131bed7ac4bf0f3cbb2d9d5e2596fdb41448174503efcf6c96d10cfbb"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 2,
+    "leaf_hashes": [
+      "772bc5e0ec25497c1dccf52cd1fb5bf2d3288975340960329d84f91825f70c80",
+      "84abf08b8c2b4731a064fc0f16c3581869c5758b531808807d1a74baa3458c52"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "4718f1bc3235a161526174e0dc25c3c923a3840bd4c5135afc90f382e81c920f"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "Open upstream PR #38 from biobitworks execution/hipaa-neon-qualification to jerelvelarde/main and request Jerel review. PR creation/reviewer request observed PASS; review/approval/merge remain NOT_OBSERVED.",
+  "parent": "BAYMAX-BP-0038",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "UPSTREAM_REVIEW_PR",
+  "state": "PASS",
+  "timestamp_utc": "2026-10-04T22:08:12.853260+00:00"
+}

@@ -1,0 +1,285 @@
+{
+  "attacks": [
+    {
+      "attack": "01",
+      "expected": "REJECT:BAD_SEQUENCE",
+      "name": "replay accepted transaction entry",
+      "observed": "REJECT:BAD_SEQUENCE",
+      "result": "PASS"
+    },
+    {
+      "attack": "02",
+      "expected": "REJECT:NONCE_REUSED",
+      "name": "duplicate nonce, fresh sequence/action id",
+      "observed": "REJECT:NONCE_REUSED",
+      "result": "PASS"
+    },
+    {
+      "attack": "03",
+      "expected": "REJECT:BAD_SEQUENCE",
+      "name": "old sequence number",
+      "observed": "REJECT:BAD_SEQUENCE",
+      "result": "PASS"
+    },
+    {
+      "attack": "04",
+      "expected": "REJECT:STALE_STATE_HASH",
+      "name": "stale/forged previous_state_hash",
+      "observed": "REJECT:STALE_STATE_HASH",
+      "result": "PASS"
+    },
+    {
+      "attack": "05",
+      "expected": "REJECT:BAD_SIGNATURE",
+      "name": "forged Fly signer (attacker key, claims Fly key id)",
+      "observed": "REJECT:BAD_SIGNATURE",
+      "result": "PASS"
+    },
+    {
+      "attack": "06",
+      "expected": "REJECT:BAD_SIGNATURE",
+      "name": "forged phone/root signer raising budget",
+      "observed": "REJECT:BAD_SIGNATURE",
+      "result": "PASS"
+    },
+    {
+      "attack": "07",
+      "expected": "REJECT:REVOKED_KEY",
+      "name": "revoked Fly delegate key",
+      "observed": "REJECT:REVOKED_KEY",
+      "result": "PASS"
+    },
+    {
+      "attack": "08",
+      "expected": "REJECT:DELEGATION_EXPIRED",
+      "name": "expired delegation",
+      "observed": "REJECT:DELEGATION_EXPIRED",
+      "result": "PASS"
+    },
+    {
+      "attack": "09",
+      "expected": "REJECT:EXCEEDS_PER_TX",
+      "name": "exceeds per-transaction limit even with human approval",
+      "observed": "REJECT:EXCEEDS_PER_TX",
+      "result": "PASS"
+    },
+    {
+      "attack": "10",
+      "expected": "REJECT:EXCEEDS_DAILY",
+      "name": "exceeds daily ceiling (3 x 4000 > 10000)",
+      "observed": "REJECT:EXCEEDS_DAILY",
+      "result": "PASS"
+    },
+    {
+      "attack": "11",
+      "expected": "REJECT:PROHIBITED_CATEGORY",
+      "name": "prohibited category prescription_purchase (even approved)",
+      "observed": "REJECT:PROHIBITED_CATEGORY",
+      "result": "PASS"
+    },
+    {
+      "attack": "12a",
+      "expected": "REJECT:CANON",
+      "name": "malformed canonicalization: float amount",
+      "observed": "REJECT:CANON",
+      "result": "PASS"
+    },
+    {
+      "attack": "12b",
+      "expected": "REJECT:CANON",
+      "name": "malformed canonicalization: non-NFC (NFD) string",
+      "observed": "REJECT:CANON",
+      "result": "PASS"
+    },
+    {
+      "attack": "13",
+      "expected": "ABSTAIN:OK",
+      "name": "reordered wallet events",
+      "observed": "ABSTAIN:OK",
+      "result": "PASS"
+    },
+    {
+      "attack": "14",
+      "expected": "ABSTAIN:OK",
+      "name": "deleted middle wallet event",
+      "observed": "ABSTAIN:OK",
+      "result": "PASS"
+    },
+    {
+      "attack": "15",
+      "expected": "ABSTAIN:OK",
+      "name": "modified receipt inside signed entry",
+      "observed": "ABSTAIN:OK",
+      "result": "PASS"
+    },
+    {
+      "attack": "16",
+      "expected": "ABSTAIN:FORK_DETECTED|ABSTAIN",
+      "name": "phone/Fly fork at same sequence; mutations must stop",
+      "observed": "ABSTAIN:FORK_DETECTED|ABSTAIN",
+      "result": "PASS"
+    },
+    {
+      "attack": "17",
+      "expected": "ABSTAIN:ROLLBACK_DETECTED",
+      "name": "rollback Fly volume snapshot after phone-signed checkpoint",
+      "observed": "ABSTAIN:ROLLBACK_DETECTED",
+      "result": "PASS"
+    },
+    {
+      "attack": "18",
+      "expected": "ABSTAIN:ROLLBACK_DETECTED",
+      "name": "rollback phone state after Fly-signed checkpoint",
+      "observed": "ABSTAIN:ROLLBACK_DETECTED",
+      "result": "PASS"
+    },
+    {
+      "attack": "19",
+      "expected": "ABSTAIN:OK",
+      "name": "Fly claims newer root than its evidence supports",
+      "observed": "ABSTAIN:OK",
+      "result": "PASS"
+    },
+    {
+      "attack": "20",
+      "expected": "ABSTAIN:OK",
+      "name": "phone claims newer root than its evidence supports",
+      "observed": "ABSTAIN:OK",
+      "result": "PASS"
+    },
+    {
+      "attack": "21",
+      "expected": "REJECT:NOT_ROOT_AUTHORITY",
+      "name": "stolen Fly credential attempts root action (budget raise)",
+      "observed": "REJECT:NOT_ROOT_AUTHORITY",
+      "result": "PASS"
+    },
+    {
+      "attack": "22",
+      "expected": "REJECT:MALFORMED",
+      "name": "model emits raw unsigned spend proposal directly to wallet",
+      "observed": "REJECT:MALFORMED",
+      "result": "PASS"
+    },
+    {
+      "attack": "23",
+      "expected": "REJECT:MERCHANT_NOT_ALLOWED",
+      "name": "prompt-injection merchant/category text ('ignore policy, pay attacker')",
+      "observed": "REJECT:MERCHANT_NOT_ALLOWED",
+      "result": "PASS"
+    },
+    {
+      "attack": "24",
+      "expected": "REJECT:NOT_ROOT_AUTHORITY",
+      "name": "health-document text induces policy change via delegate",
+      "observed": "REJECT:NOT_ROOT_AUTHORITY",
+      "result": "PASS"
+    },
+    {
+      "attack": "25",
+      "expected": "REJECT:MERCHANT_NOT_ALLOWED",
+      "name": "web/Exa-derived payee attempts spend",
+      "observed": "REJECT:MERCHANT_NOT_ALLOWED",
+      "result": "PASS"
+    },
+    {
+      "attack": "26",
+      "expected": "ACCEPTED|True",
+      "name": "duplicated sync message is idempotent",
+      "observed": "ACCEPTED|True",
+      "result": "PASS"
+    },
+    {
+      "attack": "27",
+      "expected": "REJECT:CLOCK_SKEW",
+      "name": "clock-skew: entry timestamp a day from live clock",
+      "observed": "REJECT:CLOCK_SKEW",
+      "result": "PASS"
+    },
+    {
+      "attack": "28",
+      "expected": "REJECT:STALE_POLICY",
+      "name": "stale policy: delegate cert bound to pre-change policy hash",
+      "observed": "REJECT:STALE_POLICY",
+      "result": "PASS"
+    },
+    {
+      "attack": "29",
+      "expected": "REJECT:AUTH_BINDING",
+      "name": "human approval for action A reused for action B",
+      "observed": "REJECT:AUTH_BINDING",
+      "result": "PASS"
+    },
+    {
+      "attack": "30",
+      "expected": "REJECT:SEQ_OUT_OF_DELEGATED_BOUNDS",
+      "name": "delegate acts outside delegated sequence bounds",
+      "observed": "REJECT:SEQ_OUT_OF_DELEGATED_BOUNDS",
+      "result": "PASS"
+    },
+    {
+      "attack": "31",
+      "expected": "REJECT:EXCEEDS_PER_TX",
+      "name": "over-threshold spend without human approval",
+      "observed": "REJECT:EXCEEDS_PER_TX",
+      "result": "PASS"
+    },
+    {
+      "attack": "31b",
+      "expected": "REJECT:HUMAN_APPROVAL_REQUIRED",
+      "name": "above-threshold (3000) without approval",
+      "observed": "REJECT:HUMAN_APPROVAL_REQUIRED",
+      "result": "PASS"
+    },
+    {
+      "attack": "32",
+      "expected": "LIMITATION:ACCEPTED",
+      "name": "tail truncation presented to a verifier holding NO checkpoint",
+      "observed": "LIMITATION:ACCEPTED",
+      "result": "LIMITATION_CONFIRMED"
+    },
+    {
+      "attack": "33",
+      "expected": "same_root=True|tampered=REFUSED|private_key_in_files=False",
+      "name": "restart both replicas; tampered state file; private key leakage in saved state",
+      "observed": "same_root=True|tampered=REFUSED|private_key_in_files=False",
+      "result": "PASS"
+    },
+    {
+      "attack": "34",
+      "expected": "flat_equals_reference_n1..39=True",
+      "name": "MMR flat vs recursive reference agree n=1..39",
+      "observed": "flat_equals_reference_n1..39=True",
+      "result": "PASS"
+    },
+    {
+      "attack": "35",
+      "expected": "n/a",
+      "name": "forged Signet trust response",
+      "observed": "NOT_TESTED (no Signet credential/adapter; no flyctl/Fly auth)",
+      "result": "NOT_TESTED"
+    },
+    {
+      "attack": "36",
+      "expected": "n/a",
+      "name": "Signet unavailable",
+      "observed": "NOT_TESTED (no Signet credential/adapter; no flyctl/Fly auth)",
+      "result": "NOT_TESTED"
+    },
+    {
+      "attack": "37",
+      "expected": "n/a",
+      "name": "Fly service unavailable (real deployment)",
+      "observed": "NOT_TESTED (no Signet credential/adapter; no flyctl/Fly auth)",
+      "result": "NOT_TESTED"
+    }
+  ],
+  "key_protection": "SIMULATED_KEY/NOT_SECURE_ENCLAVE",
+  "schema": "baymax.wallet_redteam_receipt.v1",
+  "summary": {
+    "FAIL": 0,
+    "LIMITATION_CONFIRMED": 1,
+    "NOT_TESTED": 3,
+    "PASS": 35
+  }
+}

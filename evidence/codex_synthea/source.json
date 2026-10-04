@@ -1,0 +1,14 @@
+{
+  "documentation": "https://github.com/synthetichealth/synthea.wiki.git",
+  "generated_data_terms": "UNKNOWN_TERMS",
+  "jar_bytes": 201164144,
+  "jar_filename": "synthea-with-dependencies.jar",
+  "jar_sha256": "ed43c20ad40ba5c3bc724503a5af032715fe3c491620b766148e7c2361e6ecc1",
+  "notice_identity": "aefac5c5d632a0cf595688712eff8a45da0bdadc92c07718aef9876f2f346b97",
+  "release": "v4.0.0",
+  "release_digest": "sha256:ed43c20ad40ba5c3bc724503a5af032715fe3c491620b766148e7c2361e6ecc1",
+  "software_license": "Apache-2.0",
+  "tag": "v4.0.0",
+  "tag_commit": "0185c09ea9d10a822c6f5f3ef9bdcbcbe960c813",
+  "url": "https://github.com/synthetichealth/synthea/releases/download/v4.0.0/synthea-with-dependencies.jar"
+}

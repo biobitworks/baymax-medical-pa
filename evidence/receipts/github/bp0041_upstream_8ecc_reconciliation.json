@@ -1,0 +1,41 @@
+{
+  "base_advanced_after_validation": true,
+  "claim_ceiling": "This receipt validates the merge candidate through upstream main 8eccd7a. Upstream later advanced to the recorded latest commit; GitHub mergeability against the live base must be checked before merge.",
+  "conflicts": [
+    ".gitignore",
+    "README.md"
+  ],
+  "latest_upstream_main_observed_after_validation": "1c0ce5d56ad703edcbcf5f75993d447b9cc36ed7",
+  "live_github_mergeability_check_required": true,
+  "merge_tree": "092867caefb69252d840758bcee525428425fbe3",
+  "merged_upstream_main": "8eccd7a7020d66e7f02e06c55f99302155529316",
+  "observed_at": "2026-10-04T22:24:49.595783+00:00",
+  "parent_breakpoint": "BAYMAX-BP-0040",
+  "pre_merge_head": "d928d28c6d6e2cfbee3b1119aef72bf53c94ab46",
+  "resolution": {
+    ".gitignore": "UNION_WITH_BAYMAX_COMPUTER_AND_OPENMUSE_IGNORES",
+    "README.md": "LATEST_8ECC_UPSTREAM_CONTENT_PLUS_BIOBITWORKS_COMPLIANCE_CUSTODY_SECTION"
+  },
+  "schema": "baymax.upstream_main_reconciliation.v1",
+  "signature_state": "AUTHOR_DCO_SIGNOFF_PLANNED_NOT_CRYPTOGRAPHIC",
+  "validation": {
+    "node_test": {
+      "state": "PASS",
+      "tests": 110
+    },
+    "npm_build": {
+      "state": "PASS"
+    },
+    "npm_install_audit": {
+      "high_severity_count": 6,
+      "state": "OBSERVED_WARNING"
+    },
+    "python_unittest": {
+      "state": "PASS",
+      "tests": 37
+    },
+    "secret_gate": {
+      "state": "PASS"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "cause": "The external vendor source checkout was removed/replaced during execution by another process in the shared projects tree.",
+  "claim_ceiling": "Failure custody only; no patient generation or reproducibility claim.",
+  "classification": "FAILED_CONCURRENT_SOURCE_MUTATION",
+  "command": "./run_synthea -s 424242 -p 1 --exporter.fhir.export=true",
+  "java_path": "/opt/homebrew/opt/openjdk@17/bin/java",
+  "java_version": "17.0.20.1",
+  "observed_at": "2026-10-04T19:59:43.753672+00:00",
+  "observed_warning": "version.txt could not be created before source checkout disappeared",
+  "output_state": "NOT_OBSERVED",
+  "population": 1,
+  "real_phi": "NONE",
+  "repair": "Use an isolated persistent source checkout outside /Users/byron/projects and retry from an exact commit.",
+  "schema": "baymax.synthea_generation_failure.v1",
+  "secret_values_recorded": false,
+  "seed": 424242,
+  "source_commit_observed_before_failure": "d9d07a6eef91ee5144293b42ab64224d84d124f8",
+  "source_repo": "https://github.com/synthetichealth/synthea.git",
+  "state": "FAILED",
+  "wiki_commit_observed_before_failure": "3962d91559edf8b401511457b4c54dc76c97bab2"
+}
