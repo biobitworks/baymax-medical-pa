@@ -22,13 +22,15 @@ test('a failing Apple Health lookup falls back to disconnected so tools use the 
   }
 });
 
-test('requests without a browser session do not query Neon', async () => {
-  const status = mock.method(appleHealthStore, 'status', async () => { throw new Error('Must not query'); });
+test('requests without a browser session use the connection paired to the app user', async () => {
+  const connected = { connected: true, lastSyncAt: '2026-10-04T12:00:00Z', daily: [{ date: '2026-10-04', steps: 900, activeMinutes: 12, hydrationMl: null, sleepHours: null }] };
+  const status = mock.method(appleHealthStore, 'status', async () => { throw new Error('Must not query by session'); });
+  const forUser = mock.method(appleHealthStore, 'statusForUser', async () => connected);
   try {
-    assert.deepEqual(await importedHealth(), disconnected);
-    assert.deepEqual(await importedHealth({ requestContext: new Map([[HEALTH_SESSION_KEY, null]]) }), disconnected);
+    assert.deepEqual(await importedHealth(), connected);
+    assert.deepEqual(await importedHealth({ requestContext: new Map([[HEALTH_SESSION_KEY, null]]) }), connected);
     assert.equal(status.mock.callCount(), 0);
-  } finally { status.mock.restore(); }
+  } finally { status.mock.restore(); forUser.mock.restore(); }
 });
 
 test('successful Apple Health lookups still return the connected user readings', async () => {

@@ -44,8 +44,8 @@ export const healthRoutes = [
     handler: async (c) => {
       const preferences = await getFitnessPreferences();
       return c.json({
-        ...await getFitnessOverview(),
-        preferences, source: "demo",
+        ...await getFitnessOverview({ requestContext: c.get('requestContext') }),
+        preferences,
       });
     },
   }),
