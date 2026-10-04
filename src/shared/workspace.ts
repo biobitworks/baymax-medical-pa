@@ -31,6 +31,8 @@ export const conversationSchema = z.object({
 export const workspaceSchema = z.object({
   version: z.literal(1), remember: z.boolean(), ready: z.boolean(),
   name: z.string().max(30), energy: z.enum(['', 'Low', 'Okay', 'Good', 'Great']),
+  activeMinutes: z.number().int().min(0).max(1440).default(0),
+  week: z.array(z.object({ date: z.string().max(30), hydrationMl: z.number().min(0).max(100_000), activeMinutes: z.number().min(0).max(1440), energy: z.enum(['low', 'okay', 'good', 'great']).optional() })).max(30).default([]),
   done: z.array(z.string().max(500)).max(200), water: z.number().int().min(0).max(8),
   reminders: z.boolean(), nudge: z.enum(['Gentle', 'A little persistent', 'Only when I ask']),
   tripReady: z.boolean().default(false), checklist: z.array(z.string().max(500)).max(50).default([]),
@@ -44,7 +46,7 @@ export type CareWorkspace = z.infer<typeof workspaceSchema>;
 export type StoredConversation = CareWorkspace['conversation'];
 export function createWorkspace(): CareWorkspace {
   return {
-    version: 1, remember: false, ready: false, name: 'Alex', energy: '', done: [], water: 3,
+    version: 1, remember: false, ready: false, name: 'Alex', energy: '', activeMinutes: 0, week: [], done: [], water: 3,
     tripReady: false, checklist: [], reminders: true, nudge: 'Gentle', city: 'San Francisco', travelDate: '2026-10-09', date: '2026-10-10', goal: 'Build Personal Agents Hackathon',
     planItems: ['Take a 10-minute walk', 'Make time for a real meal', 'Pack medication documents', 'Set a wind-down reminder', 'Schedule your next routine checkup'].map(label => ({ label, done: false })),
     brief: 'MY HEALTH BRIEF — review and complete before sharing\n\nPatient: [Your name]\nReason for visit: Establishing care while travelling.\nMedications: [Add your prescribed medication and dose.]\nAllergies: Not yet confirmed.\nRelevant history: Not yet confirmed.\nQuestions: What records do you need? How can I arrange follow-up care?',

@@ -48,7 +48,7 @@ npm run agent:dev
 npm run dev
 ```
 
-Open the local URL Vite prints. Vite proxies `/api`, `/travel`, and `/care-state` to Mastra on port 4111. Enable **Remember across visits** during onboarding or in Privacy & preferences to save your care space. A successful save is shown above the page heading.
+Open the local URL Vite prints. Vite proxies `/api`, `/travel`, `/health`, and `/care-state` to Mastra on port 4111. Enable **Remember across visits** during onboarding or in Privacy & preferences to save your care space. A successful save is shown above the page heading.
 
 The ignored `.env` is server-only. `DATABASE_URL` powers the workspace store; `NEON_AI_GATEWAY_TOKEN` and `NEON_AI_GATEWAY_BASE_URL` power the existing `neon/gpt-5-6-luna` agent. Auth and S3 variables are reserved for future login/uploads and are not used by the browser-bound persistence implementation. Saving uses an HttpOnly cookie, so separate browser profiles have separate workspaces. There is no account login or cross-device sync.
 
@@ -74,7 +74,7 @@ npm run preview
 - Prescription order preview with review and confirmation states.
 - Doctor brief editing, recipient validation, email review, and `mailto:` handoff.
 - Daily check-ins, hydration logging, movement tasks, and preferences.
-- Optional Neon persistence for profile, check-ins, hydration, tasks, plans, travel context and generated checklist, brief/email draft, preferences, and conversation including tool results.
+- Optional Neon persistence for profile, check-ins, hydration, movement/weekly overview, tasks, plans, travel context and generated checklist, brief/email draft, preferences, and conversation including tool results.
 - Clear restore/save errors, retry controls, optimistic revisions, and user-controlled deletion.
 - Mobile and desktop layouts, keyboard-accessible dialogs, and reduced-motion support.
 
@@ -92,7 +92,7 @@ The app has live LLM and database connections. Pharmacy fulfilment, payment, ser
 
 ## Fly.io deployment preparation
 
-The included Dockerfile builds the Vite frontend and serves it on port 8080. It is still a frontend-only deployment: run the Mastra backend separately and configure the frontend reverse proxy for `/api`, `/travel`, and `/care-state` before deployment. Set server-side `APP_ORIGIN` to the exact public frontend origin so cookies are Secure and write origins are validated. No deployment or billing action has been performed.
+The included Dockerfile builds the Vite frontend and serves it on port 8080. It is still a frontend-only deployment: run the Mastra backend separately and configure the frontend reverse proxy for `/api`, `/travel`, `/health`, and `/care-state` before deployment. Set server-side `APP_ORIGIN` to the exact public frontend origin so cookies are Secure and write origins are validated. No deployment or billing action has been performed.
 
 ## The idea
 
@@ -139,6 +139,8 @@ Health information deserves deliberate protection. Our goal is a HIPAA-compliant
 **This hackathon project is a prototype with live backend connections. HIPAA compliance has not been verified. Use synthetic data for demos.**
 
 Implemented persistence safeguards: explicit storage consent, server-only credentials, hashed random browser session IDs, HttpOnly/SameSite cookies (Secure on HTTPS), write-origin checks, bounded schema validation, parameterized queries, revision checks, and remote deletion.
+
+The new health tools and `/health` endpoints inherited from main still use shared, synthetic in-memory sample data; the saved browser workspace is separate from that demo store. Restoring a workspace preserves its saved check-in, hydration, and weekly overview instead of replacing them with demo values.
 
 Account authentication, access audit logging, cross-device access, file upload, export of the entire workspace, and compliance review remain future work. Further safeguards include:
 

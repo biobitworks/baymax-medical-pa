@@ -3,7 +3,10 @@ import { registerApiRoute } from "@mastra/core/server";
 import { createStateHandler } from "./persistence/handler";
 import { CareStore } from "./persistence/store";
 import { query } from "./persistence/database";
+import { LibSQLStore } from "@mastra/libsql";
+import { Observability, DefaultExporter, SensitiveDataFilter } from "@mastra/observability";
 import { baymaxAgent } from "./agents/baymax-agent";
+import { healthRoutes } from "./routes/health";
 import { travelRoutes } from "./routes/travel";
 
 const handleCareState = createStateHandler(new CareStore(query));
@@ -11,11 +14,27 @@ const handleCareState = createStateHandler(new CareStore(query));
 export const mastra = new Mastra({
   agents: { baymaxAgent },
   server: {
-    apiRoutes: [...travelRoutes, ...["GET", "PUT", "DELETE"].map(method =>
+    apiRoutes: [...travelRoutes, ...healthRoutes, ...["GET", "PUT", "DELETE"].map(method =>
       registerApiRoute("/care-state", {
         method: method as "GET" | "PUT" | "DELETE",
         handler: c => handleCareState(c.req.raw),
       }),
     )],
   },
+  // `mastra dev` runs from .mastra/output, so ../../ is the project root.
+  // Override with MASTRA_DB_URL if needed.
+  storage: new LibSQLStore({
+    id: "mastra-storage",
+    url: process.env.MASTRA_DB_URL ?? "file:../../mastra.db",
+  }),
+  observability: new Observability({
+    configs: {
+      default: {
+        serviceName: "baymax",
+        // Local only: no data leaves the machine.
+        exporters: [new DefaultExporter()],
+        spanOutputProcessors: [new SensitiveDataFilter()],
+      },
+    },
+  }),
 });

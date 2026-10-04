@@ -96,8 +96,10 @@ test('deleting and recreating never reuses a stale revision', async () => {
 });
 
 test('restores workspaces saved before travel checklist fields were added', () => {
-  const { tripReady, checklist, ...previous } = state();
+  const { tripReady, checklist, activeMinutes, week, ...previous } = state();
   const restored = workspaceSchema.parse(previous);
   assert.equal(restored.tripReady, false);
   assert.deepEqual(restored.checklist, []);
+  assert.equal(restored.activeMinutes, 0);
+  assert.deepEqual(restored.week, []);
 });

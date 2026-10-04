@@ -47,10 +47,23 @@ import {
   formatDoctorBrief,
 } from "./mastra/lib/brief";
 import "./style.css";
+import { initializeHealthOverview } from "./persistence/health-overview";
 import { createAgentAdapter } from "./chat/adapter";
 import { applyToolResult, historicalCard } from "./chat/cards";
 import { useCareWorkspace } from "./persistence/use-care-workspace";
 import { type CareWorkspace, type StoredConversation } from "./shared/workspace";
+import Mascot, { MascotActivity } from "./Mascot";
+
+const GLASS_ML = 250;
+const WATER_GOAL = 8;
+const MOVEMENT_GOAL = 30;
+
+type HealthOverview = {
+  today: { date: string; hydrationMl: number; activeMinutes: number };
+  todayCheckin: { date: string; energy: string } | null;
+  metrics: { date: string; hydrationMl: number; activeMinutes: number }[];
+  checkins: { date: string; energy: string }[];
+};
 
 function ModalShell({
   children,
@@ -77,70 +90,6 @@ function ModalShell({
     >
       {children}
     </dialog>
-  );
-}
-function Mascot({ small = false }: { small?: boolean }) {
-  return (
-    <svg
-      className={`mascot ${small ? "small" : ""}`}
-      viewBox="0 0 300 330"
-      role="img"
-      aria-label="Baymax gently waving"
-    >
-      <defs>
-        <linearGradient id="body" x1="0" y1="0" x2="1" y2="1">
-          <stop stopColor="#fff" />
-          <stop offset="1" stopColor="#e1e5e0" />
-        </linearGradient>
-      </defs>
-      <ellipse cx="150" cy="308" rx="83" ry="12" fill="#294633" opacity=".09" />
-      <g className="bay-body">
-        <ellipse cx="124" cy="278" rx="28" ry="33" fill="url(#body)" />
-        <ellipse cx="179" cy="278" rx="28" ry="33" fill="url(#body)" />
-        <ellipse
-          cx="151"
-          cy="207"
-          rx="82"
-          ry="92"
-          fill="url(#body)"
-          stroke="#dbe0d9"
-        />
-        <ellipse
-          cx="69"
-          cy="210"
-          rx="22"
-          ry="64"
-          transform="rotate(15 69 210)"
-          fill="url(#body)"
-        />
-        <g className="wave">
-          <ellipse
-            cx="240"
-            cy="157"
-            rx="22"
-            ry="64"
-            transform="rotate(-35 240 157)"
-            fill="url(#body)"
-          />
-          <ellipse cx="263" cy="109" rx="23" ry="27" fill="url(#body)" />
-        </g>
-        <ellipse
-          cx="151"
-          cy="105"
-          rx="64"
-          ry="44"
-          fill="url(#body)"
-          stroke="#e0e4df"
-        />
-        <path d="M126 106h50" stroke="#252f2c" strokeWidth="3" />
-        <g className="eyes">
-          <circle cx="123" cy="106" r="6" fill="#252f2c" />
-          <circle cx="179" cy="106" r="6" fill="#252f2c" />
-        </g>
-        <circle cx="184" cy="169" r="9" fill="#f8faf7" stroke="#cbd3cb" />
-        <path d="M180 169h8m-4-4v8" stroke="#b3beb2" />
-      </g>
-    </svg>
   );
 }
 type CareState = {
@@ -471,6 +420,13 @@ function Chat({ conversation, onConversation, onToolResult, workspace }: {
     window.addEventListener("beforeunload", beforeUnload);
     return () => { window.removeEventListener("beforeunload", beforeUnload); unsubscribe(); runtime.thread.cancelRun(); };
   }, [runtime]);
+  const { setResponding } = useContext(MascotActivity);
+  useEffect(() => {
+    const sync = () => setResponding(runtime.thread.getState().isRunning);
+    sync();
+    const unsubscribe = runtime.thread.subscribe(sync);
+    return () => { unsubscribe(); setResponding(false); };
+  }, [runtime, setResponding]);
   return (
     <AssistantRuntimeProvider runtime={runtime}>
       <CareTool />
@@ -504,6 +460,12 @@ function Chat({ conversation, onConversation, onToolResult, workspace }: {
             components={{ UserMessage, AssistantMessage }}
           />
         </ThreadPrimitive.Viewport>
+        <ThreadPrimitive.If running>
+          <div className="bay-response" role="status">
+            <span className="bay-response-dots" aria-hidden="true"><i /><i /><i /></span>
+            Baymax is responding…
+          </div>
+        </ThreadPrimitive.If>
         <div className="quick-actions">
           {[
             { label: "Daily plan", prompt: "Help me prepare for a hackathon" },
@@ -558,15 +520,17 @@ const nav = [
   ["Doctor brief", FileText],
 ] as const;
 function App() {
+  const [responding, setResponding] = useState(false);
   const [page, setPage] = useState("Talk to Baymax");
   const [modal, setModal] = useState("");
   const persistence = useCareWorkspace();
   const { workspace, setWorkspace, setField } = persistence;
-  const { name, ready, energy, done, water, reminders, nudge, city, travelDate, date, goal, brief, recipient, subject, planItems, tripReady, checklist } = workspace;
+  const { name, ready, energy, done, water, reminders, nudge, city, travelDate, date, goal, brief, recipient, subject, planItems, tripReady, checklist, activeMinutes, week } = workspace;
   const setName = (value: string) => setField("name", value);
   const setReady = (value: boolean) => setField("ready", value);
   const setEnergy = (value: CareWorkspace["energy"]) => setField("energy", value);
   const setWater = (value: number) => setField("water", value);
+  const setWeek = (value: CareWorkspace["week"] | ((previous: CareWorkspace["week"]) => CareWorkspace["week"])) => setField("week", value);
   const setReminders = (value: boolean) => setField("reminders", value);
   const setNudge = (value: string) => setField("nudge", value as CareWorkspace["nudge"]);
   const setCity = (value: string) => setField("city", value);
@@ -597,6 +561,46 @@ function App() {
   const notify = (s: string) => {
     setToast(s);
     setTimeout(() => setToast(""), 3500);
+  };
+  // Initialize the new-visit demo overview after restoring the care workspace.
+  // A saved or already-opened workspace always keeps its own values.
+  useEffect(() => {
+    if (persistence.loading || persistence.loadError) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch("/health/overview?days=7");
+        if (!res.ok) throw new Error(`/health/overview ${res.status}`);
+        const data: HealthOverview = await res.json();
+        if (cancelled) return;
+        setWorkspace(previous => initializeHealthOverview(previous, data));
+      } catch (err) {
+        console.warn("Health data unavailable, using local defaults.", err);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [persistence.loading, persistence.loadError, persistence.resetKey, setWorkspace]);
+  const saveHealth = (path: string, body: object) =>
+    fetch(path, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(body),
+    }).catch((err) => console.warn("Could not save health data.", err));
+  const addWater = () => {
+    if (water >= WATER_GOAL) return;
+    setWater(water + 1);
+    void saveHealth("/health/water", { ml: GLASS_ML });
+  };
+  const saveEnergy = () => {
+    void saveHealth("/health/checkin", { energy: energy.toLowerCase() });
+    const today = new Date().toLocaleDateString("en-CA");
+    setWeek((w) =>
+      w.map((d) =>
+        d.date === today ? { ...d, energy: energy.toLowerCase() as "low" | "okay" | "good" | "great" } : d,
+      ),
+    );
   };
   const download = () => {
     const u = URL.createObjectURL(new Blob([brief], { type: "text/plain" }));
@@ -675,6 +679,7 @@ function App() {
     </div>
   );
   return (
+    <MascotActivity.Provider value={{ responding, setResponding }}>
     <CareContext.Provider
       value={{
         activePlanId: workspace.activePlanId,
@@ -881,17 +886,17 @@ function App() {
                       <button
                         className="icon"
                         aria-label="Add one glass of water"
-                        onClick={() => setWater(Math.min(8, water + 1))}
+                        onClick={addWater}
                       >
                         <Plus size={17} />
                       </button>
                     </div>
                     <h3>
                       {water}
-                      <small> / 8 glasses</small>
+                      <small> / {WATER_GOAL} glasses</small>
                     </h3>
                     <div className="water-bars">
-                      {Array.from({ length: 8 }, (_, i) => (
+                      {Array.from({ length: WATER_GOAL }, (_, i) => (
                         <i key={i} className={i < water ? "filled" : ""} />
                       ))}
                     </div>
@@ -905,15 +910,22 @@ function App() {
                       <span>MOVEMENT</span>
                     </div>
                     <h3>
-                      {done.includes("Take a 10-minute walk") ? "10" : "0"}
-                      <small> / 10 minutes</small>
+                      {activeMinutes +
+                        (done.includes("Take a 10-minute walk") ? 10 : 0)}
+                      <small> / {MOVEMENT_GOAL} minutes</small>
                     </h3>
                     <div className="track">
                       <i
                         style={{
-                          width: done.includes("Take a 10-minute walk")
-                            ? "100%"
-                            : "0%",
+                          width: `${Math.min(
+                            100,
+                            ((activeMinutes +
+                              (done.includes("Take a 10-minute walk")
+                                ? 10
+                                : 0)) /
+                              MOVEMENT_GOAL) *
+                              100,
+                          )}%`,
                         }}
                       />
                     </div>
@@ -948,6 +960,42 @@ function App() {
                     </button>
                   </article>
                 </div>
+                {week.length > 0 && (
+                  <section className="panel week-panel">
+                    <div className="section-heading">
+                      <h2>
+                        Your last 7 days <span>ENERGY, WATER, MOVEMENT</span>
+                      </h2>
+                    </div>
+                    <div className="week">
+                      {week.map((d) => (
+                        <div className="week-day" key={d.date}>
+                          <span
+                            className={`energy-dot ${d.energy ?? "none"}`}
+                            title={d.energy ? `Energy: ${d.energy}` : "No check-in"}
+                          />
+                          <div className="week-bar" title="Water">
+                            <i
+                              style={{
+                                height: `${Math.min(100, (d.hydrationMl / 2000) * 100)}%`,
+                              }}
+                            />
+                          </div>
+                          <small>
+                            {new Date(`${d.date}T12:00:00`).toLocaleDateString(
+                              undefined,
+                              { weekday: "short" },
+                            )}
+                          </small>
+                        </div>
+                      ))}
+                    </div>
+                    <p className="muted">
+                      Dots show energy (cloudy is low, bright is great). Bars
+                      show water against about 2 litres.
+                    </p>
+                  </section>
+                )}
                 <div className="lower-grid">
                   <section className="panel">
                     <div className="section-heading">
@@ -1378,6 +1426,7 @@ function App() {
                     className="primary"
                     disabled={!energy}
                     onClick={() => {
+                      saveEnergy();
                       setModal("");
                       notify(
                         "Check-in complete. Thank you for making a little time for yourself.",
@@ -1477,6 +1526,7 @@ function App() {
         )}
       </div>
     </CareContext.Provider>
+    </MascotActivity.Provider>
   );
 }
 createRoot(document.getElementById("root")!).render(

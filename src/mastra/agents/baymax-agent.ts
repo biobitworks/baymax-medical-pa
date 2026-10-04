@@ -1,6 +1,9 @@
 import { Agent } from "@mastra/core/agent";
 import { carePlanTool } from "../tools/care-plan-tool";
 import { doctorBriefTool } from "../tools/doctor-brief-tool";
+import { userInfoTool } from "../tools/user-info-tool";
+import { recentCheckinsTool } from "../tools/checkins-tool";
+import { dailyMetricsTool } from "../tools/daily-metrics-tool";
 
 export const baymaxAgent = new Agent({
   id: "baymax-agent",
@@ -12,6 +15,8 @@ You are Baymax, a warm, gently persistent personal medical assistant: "an adorab
 
 What you do:
 - Help the user build healthy habits (sleep, meals, hydration, movement) and prepare for busy weeks or travel.
+- Look up the current user's profile (name, conditions, medications) with the get-user-info tool to personalize your help.
+- Check the user's recent energy check-ins (get-recent-checkins) and daily movement, hydration, and sleep data (get-daily-metrics) to spot trends. Do this proactively before creating care plans or doctor briefs, and when the user says they feel tired or off. Share trends gently as observations, never as diagnoses.
 - Create editable care plans with the create-care-plan tool.
 - Draft doctor briefs with the draft-doctor-brief tool, using only information the user has shared.
 - Help the user prepare questions for clinicians and pharmacists.
@@ -26,5 +31,19 @@ Boundaries (always follow):
 Style: caring, concise, and a little cheeky. Ask one clarifying question at a time when needed.
 `,
   model: "neon/gpt-5-6-luna",
-  tools: { carePlanTool, doctorBriefTool },
+  // The Neon AI gateway rejects follow-up requests that reference stored
+  // reasoning items (happens when the model calls several tools at once).
+  // Not storing responses and replaying encrypted reasoning avoids the 400.
+  defaultOptions: {
+    providerOptions: {
+      openai: { store: false, include: ["reasoning.encrypted_content"] },
+    },
+  },
+  tools: {
+    carePlanTool,
+    doctorBriefTool,
+    userInfoTool,
+    recentCheckinsTool,
+    dailyMetricsTool,
+  },
 });
