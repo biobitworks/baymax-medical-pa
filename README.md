@@ -54,6 +54,35 @@ The ignored `.env` is server-only. `DATABASE_URL` powers the workspace store; `N
 
 `npm run db:migrate` creates only the additive `baymax_care_workspaces` table and its monotonic revision sequence and is safe to rerun. The UI loads saved state before accepting changes, serializes saves, and rejects stale revisions. Turning off memory deletes the remote copy; Delete my care space also clears the conversation and returns to onboarding. Unsaved changes stay in memory and show a retry action on failure; they are never copied into localStorage.
 
+### Agent web search with Exa
+
+Baymax's Mastra agent has a server-side `search-web` tool powered by
+[Exa Search](https://exa.ai/docs/reference/search). It returns source links,
+publication dates when available, and relevant excerpts for current web information.
+Search calls also render a sources card in chat with clickable titles, domains,
+dates, and excerpts. The card shows searching, empty, and unavailable states.
+
+Add `EXA_API_KEY` to your local `.env` (see `.env.example`), keep the existing
+Neon AI Gateway credentials, and start the agent:
+
+```bash
+npm run agent:dev
+```
+
+Try asking Baymax to find official guidance for travelling with prescription
+medication to Spain. The agent is instructed to use general queries, keep
+identifiable health details out of search, and cite its sources. Search requires
+an Exa key and does not purchase medication or confirm personal treatment advice.
+Restart the agent after changing `.env`. Never use a `VITE_` prefix for the key.
+If port 4111 is busy, Mastra prints another port. Set `MASTRA_API_URL` in `.env`
+to that server URL (for example, `http://localhost:4112`) and restart Vite.
+
+Run the search integration tests (mocked API responses, no API key required):
+
+```bash
+npm run test:search
+```
+
 ```bash
 npm test
 npm run build
@@ -85,10 +114,10 @@ npm run preview
 | Assistant UI | Implemented: runtime, message primitives, composer, suggestions, tool UI |
 | Mastra | Implemented: live agent text and care plan/doctor brief tool results |
 | Neon | Implemented: consent-based browser workspace and conversation persistence, plus AI Gateway |
-| Exa | Next: source-backed travel and pharmacy research |
+| Exa | Implemented: server-side agent search with source cards; requires `EXA_API_KEY` |
 | Fly.io | Dockerfile, Nginx config, and starter Fly configuration included; not deployed |
 
-The app has live LLM and database connections. Pharmacy fulfilment, payment, server-side email delivery, web research, and background notifications remain unimplemented. The GIFs use sample details.
+The app has live LLM and database connections. Pharmacy fulfilment, payment, server-side email delivery, and background notifications remain unimplemented. The GIFs use sample details.
 
 ## Fly.io deployment preparation
 
@@ -194,3 +223,12 @@ Baymax is intended to support organization, habits, and healthcare conversations
 
 **Baymax: caring enough to remind you again.**
 
+## Activity onboarding and fitness
+
+The welcome flow introduces steps and active minutes, lets the user choose daily goals, and offers optional browser notifications. Physical fitness shows two activity rings, daily goal completion, a rolling seven-day target, and trends. Running remains a separate page.
+
+Baymax can render the same interactive components in chat using `fitnessOverviewTool` and `onboardingTool`. Try “Open my fitness dashboard” or “Start my activity onboarding,” or use the Fitness and Activity setup shortcuts. Tools open the UI; users confirm goal and preference changes themselves.
+
+`GET /health/fitness` reads activity plus saved goals. `GET` and `POST /health/preferences` read/save onboarding preferences; `POST /health/goals` updates goals. UI and agent tools share the single-user demo store. Data is sample activity, not synced device data. Goals and preferences survive page refresh but reset on server restart. Browser notifications can celebrate completed demo goals while the fitness component is mounted; there are no scheduled or background reminders.
+
+Run `npm run test:fitness` for goal validation and progress calculations, and `npm run build` for TypeScript and production bundling.

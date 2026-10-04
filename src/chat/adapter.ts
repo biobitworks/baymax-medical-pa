@@ -1,5 +1,6 @@
 import type { ChatModelAdapter, ChatModelRunResult } from '@assistant-ui/react';
 import { planSchema, briefSchema } from '../shared/workspace';
+import { searchCardFromEvent } from '../components/web-search-state';
 type ToolCard = Extract<NonNullable<ChatModelRunResult['content']>[number], { type: 'tool-call' }>;
 type AgentEvent = { type?: string; payload?: Record<string, unknown> };
 export async function* readEvents(response: Response): AsyncGenerator<AgentEvent> {
@@ -55,10 +56,13 @@ export function createAgentAdapter(options: {
       let finished = false;
       const cards: ToolCard[] = [];
       const healthCards = new Map<string, ToolCard>();
-      const content = () => [...(text ? [{ type: 'text' as const, text }] : []), ...cards, ...healthCards.values()];
+      const content = () => [...(text ? [{ type: 'text' as const, text }] : []), ...cards, ...healthCards.values(), ...searchCards.values()];
+      const searchCards = new Map<string, ToolCard>();
       const seen = new Set<string>();
       for await (const event of readEvents(response)) {
         if (abortSignal.aborted) return;
+        const searchCard = searchCardFromEvent(event);
+        if (searchCard) searchCards.set(searchCard.toolCallId, searchCard as ToolCard);
         if (event.type === 'error') throw new Error('The response was interrupted. Please try again.');
         if (event.type === 'finish') finished = true;
         if (event.type === 'text-delta') text += String(event.payload?.text ?? '');
@@ -84,6 +88,11 @@ export function createAgentAdapter(options: {
       }
       if (abortSignal.aborted) return;
       if (!finished) throw new Error('The response was interrupted. Please try again.');
+      // A finished stream must not leave a permanent search spinner.
+      for (const [id, card] of searchCards) {
+        if ((card.args as { state?: string }).state === 'loading') searchCards.set(id, { ...card, args: { state: 'error' }, argsText: JSON.stringify({ state: 'error' }) });
+      }
+      if (searchCards.size) yield { content: content() };
       // Travel and purchase remain previews until dedicated agent tools exist.
       const query = history.filter(message => message.role === 'user').at(-1)?.content.toLowerCase() ?? '';
       if (!cards.length) {

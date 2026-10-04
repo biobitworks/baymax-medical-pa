@@ -61,7 +61,11 @@ import { useCareWorkspace } from "./persistence/use-care-workspace";
 import { type CareWorkspace, type StoredConversation } from "./shared/workspace";
 import Mascot, { MascotActivity } from "./Mascot";
 import { PrescriptionShoppingCard } from "./components/PrescriptionShoppingCard";
+import { WebSearchCard } from "./components/WebSearchCard";
+import { searchCardFromEvent, type SearchCardPart, type WebSearchCardArgs } from "./components/web-search-state";
 import "./components/prescription-shopping.css";
+import { ActivityOnboarding, FitnessDashboard, FITNESS_CHANGED, fitnessRequest, type SavedPreferences } from "./components/Fitness";
+import type { FitnessOverview } from "./mastra/lib/fitness";
 
 // Triggers the agent to read all of the user's health data and answer with a
 // week-in-review, which also renders the water, movement, sleep, energy and
@@ -108,6 +112,8 @@ type RunSummary = {
 type MetricKey = "hydration" | "movement" | "sleep";
 type HealthCardArgs =
   | LabTrendsArgs
+  | { metric: "fitness"; overview: FitnessOverview }
+  | { metric: "onboarding"; preferences: SavedPreferences }
   | {
       metric: MetricKey;
       /** Newest first, as returned by get-daily-metrics */
@@ -148,6 +154,12 @@ const healthCardPart = (args: HealthCardArgs): AgentToolPart => ({
 });
 function healthCardsFromTool(toolName: string, result: any): HealthCardArgs[] {
   if (!result || typeof result !== "object") return [];
+  if (toolName === "fitnessOverviewTool" && Array.isArray(result.daily)) {
+    return [{ metric: "fitness", overview: result }];
+  }
+  if (toolName === "onboardingTool" && result.preferences) {
+    return [{ metric: "onboarding", preferences: result.preferences }];
+  }
   if (toolName === "dailyMetricsTool" && Array.isArray(result.daily)) {
     const { daily, summary } = result;
     return (["hydration", "movement", "sleep"] as const).map((metric) => ({
@@ -833,6 +845,10 @@ const HealthTool = makeAssistantToolUI<HealthCardArgs, { ready: boolean }>({
   render: ({ args }) =>
     args.metric === "labs" ? (
       <LabTrendsCard {...args} />
+    ) : args.metric === "fitness" ? (
+      <FitnessDashboard initialData={args.overview} compact />
+    ) : args.metric === "onboarding" ? (
+      <ActivityOnboarding initialPreferences={args.preferences} />
     ) : args.metric === "energy" ? (
       <EnergyCard {...args} />
     ) : args.metric === "running" ? (
@@ -840,6 +856,10 @@ const HealthTool = makeAssistantToolUI<HealthCardArgs, { ready: boolean }>({
     ) : (
       <MetricCard {...args} />
     ),
+});
+const WebSearchTool = makeAssistantToolUI<WebSearchCardArgs, { ready: boolean }>({
+  toolName: "web_search",
+  render: ({ args }) => <WebSearchCard args={args} />,
 });
 function renderInline(text: string): React.ReactNode[] {
   const out: React.ReactNode[] = [];
@@ -996,6 +1016,7 @@ function Chat({ conversationId, conversation, onConversation, onToolResult, work
     <AssistantRuntimeProvider runtime={runtime}>
       <CareTool />
       <HealthTool />
+      <WebSearchTool />
       <ThreadPrimitive.Root className="chat">
         <ThreadPrimitive.Viewport className="transcript">
           {!showShopping && <ThreadPrimitive.Empty>
@@ -1037,6 +1058,8 @@ function Chat({ conversationId, conversation, onConversation, onToolResult, work
           <button type="button" onClick={() => setShowShopping(value => !value)} aria-expanded={showShopping}>{showShopping ? "Hide shopping demo" : "Shopping demo"}</button>
           {[
             { label: "Weekly summary", prompt: WEEKLY_SUMMARY_PROMPT },
+            { label: "Fitness", prompt: "Open my fitness dashboard" },
+            { label: "Activity setup", prompt: "Start my activity onboarding" },
             {
               label: "Prescription",
               prompt: "I need a diabetes medication refill while travelling",
@@ -1171,6 +1194,7 @@ const nav = [
   ["Today", LayoutDashboard],
   ["Talk to Baymax", MessageCircle],
   ["Your plan", Calendar],
+  ["Physical fitness", Footprints],
   ["Running", Activity],
   ["Travel care", Plane],
   ["Doctor brief", FileText],
@@ -1179,6 +1203,8 @@ function App() {
   const [responding, setResponding] = useState(false);
   const [page, setPage] = useState("Talk to Baymax");
   const [modal, setModal] = useState("");
+  const [preferencesLoading, setPreferencesLoading] = useState(true);
+  const [fitnessPreferences, setFitnessPreferences] = useState<SavedPreferences>();
   const persistence = useCareWorkspace();
   const { workspace, setWorkspace, setField } = persistence;
   const { name, ready, energy, done, water, reminders, nudge, city, travelDate, date, goal, brief, recipient, subject, planItems, tripReady, checklist, activeMinutes, week } = workspace;
@@ -1219,6 +1245,20 @@ function App() {
   };
   // Initialize the new-visit demo overview after restoring the care workspace.
   // A saved or already-opened workspace always keeps its own values.
+  useEffect(() => {
+    let active = true;
+    const apply = (preferences: SavedPreferences) => {
+      if (!active) return;
+      setFitnessPreferences(preferences);
+      if (preferences.onboarded) { setName(preferences.name); setReady(true); }
+    };
+    const onChange = (event: Event) => apply((event as CustomEvent<SavedPreferences>).detail);
+    window.addEventListener(FITNESS_CHANGED, onChange);
+    void fitnessRequest<SavedPreferences>("preferences").then(apply).catch(() => {}).finally(() => { if (active) setPreferencesLoading(false); });
+    return () => { active = false; window.removeEventListener(FITNESS_CHANGED, onChange); };
+  }, []);
+  // Load today's numbers and the last week from the Mastra server. The agent
+  // tools read the same data, so the app and Baymax always agree.
   useEffect(() => {
     if (persistence.loading || persistence.loadError) return;
     let cancelled = false;
@@ -1457,6 +1497,8 @@ function App() {
                       ? "Let’s talk."
                       : page === "Your plan"
                         ? "Make space for yourself."
+                        : page === "Physical fitness"
+                          ? "A little movement. Every day."
                         : page === "Running"
                           ? "One foot, then the other."
                         : page === "Travel care"
@@ -1472,6 +1514,8 @@ function App() {
                       ? "No judgment. Just a companion in your corner."
                       : page === "Your plan"
                         ? "Small, sustainable steps for the days ahead."
+                        : page === "Physical fitness"
+                          ? "Find your rhythm, set your goals, and watch the little things add up."
                         : page === "Running"
                           ? "Every mile is yours. Go at your own pace."
                         : page === "Travel care"
@@ -1763,6 +1807,7 @@ function App() {
                 </section>
               </div>
             )}
+            {page === "Physical fitness" && <FitnessDashboard />}
             {page === "Running" && <RunningSection />}
             {page === "Travel care" && (
               <>
@@ -1995,7 +2040,7 @@ function App() {
             </footer>
           </div>
           <nav className="bottom-nav" aria-label="Main navigation">
-            {[nav[1], nav[0], nav[2], nav[3], nav[4]].map(([item, I]) => (
+            {[nav[1], nav[0], nav[2], nav[3], nav[5]].map(([item, I]) => (
               <button
                 key={item}
                 aria-label={item}
@@ -2015,44 +2060,11 @@ function App() {
             onClick={() => setMobile(false)}
           />
         )}{" "}
-        {!ready && (
+        {!ready && !preferencesLoading && (
           <ModalShell welcome>
-            <section className="modal welcome">
-              <Mascot small />
-              <span className="eyebrow">MEET YOUR CARE COMPANION</span>
-              <h2>
-                A little adorable.
-                <br />A lot of love.
-              </h2>
-              <p>
-                I’m Baymax. I’ll help you make room for your health, even when
-                life gets busy.
-              </p>
-              <label>
-                What should I call you?
-                <input
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  maxLength={30}
-                />
-              </label>
-              <label className="consent">
-                <input type="checkbox" checked={workspace.remember} onChange={e => setField("remember", e.target.checked)} />
-                Remember my care space across visits in this browser.
-              </label>
-              <p className="fine">
-                Your space, your pace. You can delete saved information in Privacy & preferences.
-              </p>
-              <button
-                className="primary"
-                onClick={() => {
-                  setName(name.trim() || "Jordan");
-                  setReady(true);
-                }}
-              >
-                Let’s take care of you <ArrowUpRight size={16} />
-              </button>
-            </section>
+            <ActivityOnboarding initialName={name} initialPreferences={fitnessPreferences} onCancel={() => { setReady(true); go("Physical fitness"); }} onComplete={(preferences) => {
+              setName(preferences.name); setReady(true); go("Physical fitness");
+            }} />
           </ModalShell>
         )}
         {modal && (
@@ -2149,8 +2161,16 @@ function App() {
                   <button
                     className="primary"
                     onClick={() => {
-                      setName(name.trim() || "Jordan");
-                      setModal("");
+                      const displayName = name.trim() || "Alex";
+                      void (async () => {
+                        try {
+                          const current = fitnessPreferences ?? await fitnessRequest<SavedPreferences>("preferences");
+                          const saved = await fitnessRequest<SavedPreferences>("preferences", { name: displayName, goals: current.goals, notifications: current.notifications });
+                          window.dispatchEvent(new CustomEvent(FITNESS_CHANGED, { detail: saved }));
+                          setName(saved.name);
+                          setModal("");
+                        } catch { notify("Your name didn’t save. Please try again."); }
+                      })();
                     }}
                   >
                     Save name

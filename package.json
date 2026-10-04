@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
+    "test:search": "node --experimental-strip-types --test tests/exa-search.test.ts tests/web-search-ui.test.ts",
     "dev": "vite --host 0.0.0.0",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview --host 0.0.0.0",
@@ -13,7 +14,9 @@
     "db:seed": "node --env-file=.env --env-file-if-exists=.env.local --import tsx scripts/seed.ts",
     "agent:build": "mastra build",
     "agent:start": "node --env-file=.env --env-file-if-exists=.env.local .mastra/output/index.mjs",
-    "test:live": "node --import tsx scripts/smoke.ts"
+    "test:live": "node --import tsx scripts/smoke.ts",
+    "test:search": "node --experimental-strip-types --test tests/exa-search.test.ts tests/web-search-ui.test.ts",
+    "test:fitness": "node --experimental-strip-types --test tests/fitness.test.ts"
   },
   "dependencies": {
     "@assistant-ui/react": "0.11.54",

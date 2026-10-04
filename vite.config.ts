@@ -1,11 +1,18 @@
-import { defineConfig } from "vite";
-const proxy = { "/api": "http://localhost:4111", "/care-state": "http://localhost:4111", "/travel": "http://localhost:4111", "/health": "http://localhost:4111", "/records": "http://localhost:4111", "/conversations": "http://localhost:4111", "/demo": "http://localhost:4111" };
-export default defineConfig({
-  preview: { proxy },
-  server: {
-    host: "0.0.0.0",
-    watch: { usePolling: true },
-    // Mastra dev server (npm run agent:dev)
-    proxy,
-  },
+import { defineConfig, loadEnv } from "vite";
+
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), "MASTRA_");
+  const agentUrl = env.MASTRA_API_URL || "http://localhost:4111";
+  const proxy = Object.fromEntries(
+    ["/api", "/care-state", "/travel", "/health", "/records", "/conversations", "/demo"].map((p) => [p, agentUrl]),
+  );
+  return {
+    preview: { proxy },
+    server: {
+      host: "0.0.0.0",
+      watch: { usePolling: true },
+      // Mastra dev server (npm run agent:dev)
+      proxy,
+    },
+  };
 });
