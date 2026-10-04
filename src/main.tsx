@@ -14,9 +14,12 @@ import {
   ThreadPrimitive,
   ComposerPrimitive,
   MessagePrimitive,
+  AttachmentPrimitive,
+  type AttachmentAdapter,
   type ExportedMessageRepository,
   makeAssistantToolUI,
 } from "@assistant-ui/react";
+import { LabTrendsCard, type LabTrendsArgs } from "./components/LabTrendsCard";
 import {
   ArrowUp,
   ArrowUpRight,
@@ -49,7 +52,7 @@ import {
 } from "./mastra/lib/brief";
 import "./style.css";
 import { initializeHealthOverview } from "./persistence/health-overview";
-import { createAgentAdapter } from "./chat/adapter";
+import { createAgentAdapter, CONVERSATION_ID } from "./chat/adapter";
 import { applyToolResult, historicalCard } from "./chat/cards";
 import { useCareWorkspace } from "./persistence/use-care-workspace";
 import { type CareWorkspace, type StoredConversation } from "./shared/workspace";
@@ -101,6 +104,7 @@ type RunSummary = {
 };
 type MetricKey = "hydration" | "movement" | "sleep";
 type HealthCardArgs =
+  | LabTrendsArgs
   | {
       metric: MetricKey;
       /** Newest first, as returned by get-daily-metrics */
@@ -137,7 +141,7 @@ const healthCardPart = (args: HealthCardArgs): AgentToolPart => ({
   args,
   argsText: JSON.stringify(args.metric),
   result: { ready: true },
-  metric: args.metric,
+  metric: args.metric === "labs" ? `labs:${args.title}` : args.metric,
 });
 function healthCardsFromTool(toolName: string, result: any): HealthCardArgs[] {
   if (!result || typeof result !== "object") return [];
@@ -156,6 +160,16 @@ function healthCardsFromTool(toolName: string, result: any): HealthCardArgs[] {
   if (toolName === "recentCheckinsTool" && Array.isArray(result.checkins)) {
     return [
       { metric: "energy", checkins: result.checkins, summary: result.summary },
+    ];
+  }
+  if (toolName === "labTrendsTool" && Array.isArray(result.series)) {
+    return [
+      {
+        metric: "labs",
+        title: result.title ?? "Lab trends",
+        series: result.series,
+        unmatched: result.unmatched,
+      },
     ];
   }
   return [];
@@ -577,6 +591,53 @@ function ModalShell({
     </dialog>
   );
 }
+// Identifies this chat session so uploaded files can be pulled in by the
+// agent's records tools (sent as request context).
+const TEXT_FILE_ACCEPT = ".txt,.md,.csv,.tsv,.json,.xml,.log,text/*,application/json";
+// Uploads go to the server as conversation artifacts; the agent reads them
+// with list-medical-records / read-medical-record rather than inline text.
+const attachmentAdapter: AttachmentAdapter = {
+  accept: TEXT_FILE_ACCEPT,
+  async add({ file }) {
+    return {
+      id: crypto.randomUUID(),
+      type: "document",
+      name: file.name,
+      contentType: file.type || "text/plain",
+      file,
+      status: { type: "requires-action", reason: "composer-send" },
+    };
+  },
+  async send(attachment) {
+    const res = await fetch("/records/upload", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        conversationId: CONVERSATION_ID,
+        name: attachment.name,
+        content: await attachment.file.text(),
+      }),
+    });
+    const body = (await res.json().catch(() => ({}))) as {
+      record?: { id: string };
+      error?: string;
+    };
+    if (!res.ok || !body.record)
+      throw new Error(body.error ?? `Upload failed (${res.status})`);
+    return {
+      ...attachment,
+      id: body.record.id,
+      status: { type: "complete" },
+      content: [
+        {
+          type: "text",
+          text: `[Attached record "${attachment.name}", id ${body.record.id}]`,
+        },
+      ],
+    };
+  },
+  async remove() {},
+};
 type CareState = {
   activePlanId: string | null;
   activeBriefId: string | null;
@@ -769,7 +830,9 @@ const CareTool = makeAssistantToolUI<
 const HealthTool = makeAssistantToolUI<HealthCardArgs, { ready: boolean }>({
   toolName: "health_card",
   render: ({ args }) =>
-    args.metric === "energy" ? (
+    args.metric === "labs" ? (
+      <LabTrendsCard {...args} />
+    ) : args.metric === "energy" ? (
       <EnergyCard {...args} />
     ) : args.metric === "running" ? (
       <RunCard {...args} />
@@ -835,9 +898,31 @@ function MarkdownText({ text }: { text: string }) {
   flushList();
   return <div className="md">{blocks}</div>;
 }
+function ComposerAttachment() {
+  return (
+    <AttachmentPrimitive.Root className="attachment-chip">
+      <FileText size={14} />
+      <AttachmentPrimitive.Name />
+      <AttachmentPrimitive.Remove aria-label="Remove attachment">
+        <X size={13} />
+      </AttachmentPrimitive.Remove>
+    </AttachmentPrimitive.Root>
+  );
+}
+function MessageAttachment() {
+  return (
+    <AttachmentPrimitive.Root className="attachment-chip">
+      <FileText size={14} />
+      <AttachmentPrimitive.Name />
+    </AttachmentPrimitive.Root>
+  );
+}
 function UserMessage() {
   return (
     <MessagePrimitive.Root className="message user">
+      <MessagePrimitive.Attachments
+        components={{ Attachment: MessageAttachment }}
+      />
       <MessagePrimitive.Content />
     </MessagePrimitive.Root>
   );
@@ -872,7 +957,7 @@ function Chat({ conversation, onConversation, onToolResult, workspace }: {
     },
   }), []);
   const [showShopping, setShowShopping] = useState(false);
-  const runtime = useLocalRuntime(adapter);
+  const runtime = useLocalRuntime(adapter, { adapters: { attachments: attachmentAdapter } });
   const initialConversation = useRef(conversation);
   const restored = useRef(false);
   const lastExport = useRef(JSON.stringify(conversation));
@@ -968,6 +1053,16 @@ function Chat({ conversation, onConversation, onToolResult, workspace }: {
           ))}
         </div>
         <ComposerPrimitive.Root className="composer">
+          <ComposerPrimitive.Attachments
+            components={{ Attachment: ComposerAttachment }}
+          />
+          <ComposerPrimitive.AddAttachment
+            className="attach"
+            aria-label="Attach a medical record"
+            title="Attach a text file (txt, md, csv, json)"
+          >
+            <Plus size={19} />
+          </ComposerPrimitive.AddAttachment>
           <ComposerPrimitive.Input
             placeholder="Tell Baymax what you need…"
             aria-label="Message Baymax"

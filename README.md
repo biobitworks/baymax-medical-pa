@@ -12,7 +12,7 @@ A conversation-first care companion built with **Assistant UI**, React, TypeScri
 
 ### Prepare for a hackathon
 
-Plan your date, check off small wins, and complete a daily energy check-in without leaving the conversation.
+Review your preparation plan, check off a small win, and complete a daily energy check-in.
 
 ![Care plan and check-in walkthrough](docs/media/care-plan.gif)
 
@@ -20,19 +20,17 @@ Plan your date, check off small wins, and complete a daily energy check-in witho
 
 Open **Shopping demo** in the chat quick actions to try a sample prescription cart. Choose between two demo pharmacies, adjust the pack count, review the total, and confirm a simulated order. Pharmacy names, prices, availability, and medication details are illustrative. No prescription is verified, no payment is collected, and no order is sent.
 
-A diabetes medication refill **order preview** with a visible workflow, professional verification requirements, and review controls. No medication is purchased or prescribed by this frontend.
-
 ![Prescription order preview walkthrough](docs/media/prescription-preview.gif)
 
 ### Email a doctor brief
 
-Edit the brief in chat, enter a recipient, and review the email before opening a draft in your email app. The user sends the email there; server-side delivery is not implemented.
+Edit a fictional health brief, enter a sample recipient, and review the email draft. This walkthrough stops at the approved preview; opening the email app and sending remain user actions.
 
 ![Doctor brief email walkthrough](docs/media/doctor-email.gif)
 
 ### Our 2D companion
 
-SVG animation with gentle breathing, waving, and blinking. Respects reduced-motion preferences.
+An authored sprite companion with greeting, idle breathing and blinking, and thinking animations. The preview shows the artwork enlarged and at its actual header size. The app respects reduced-motion preferences.
 
 ![Animated Baymax companion](docs/media/baymax-animation.gif)
 

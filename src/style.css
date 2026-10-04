@@ -1931,3 +1931,45 @@ header > .icon {
 .mascot.sprite-mascot { height: auto; }
 .agent-header .sprite-mascot { height: 78px; }
 @media (max-width: 760px) { .agent-header .sprite-mascot { height: 70px; } }
+
+.composer {
+  flex-wrap: wrap;
+}
+.composer > .aui-composer-attachments,
+.composer > div:has(> .attachment-chip) {
+  flex-basis: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0 0 6px;
+}
+.attach {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #3a5130;
+  flex-shrink: 0;
+  align-self: center;
+  margin-left: -8px;
+}
+.composer textarea {
+  flex: 1;
+  min-width: 0;
+}
+.attachment-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  background: #e0e8d5;
+  color: #3a5130;
+  border-radius: 14px;
+  padding: 4px 10px;
+  margin-bottom: 6px;
+}
+.attachment-chip button {
+  display: grid;
+  place-items: center;
+}
