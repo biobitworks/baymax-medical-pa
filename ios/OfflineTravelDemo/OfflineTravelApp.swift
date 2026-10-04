@@ -31,11 +31,13 @@ struct TravelView: View {
     @State private var catalog: ApolloCatalog?
     @State private var wallet: WalletSnapshot?
     @State private var packet = ""
-    @State private var observedSubstrate = "Liquid Apollo"
+    @State private var observedSubstrate = "UNKNOWN"
     @State private var observedModel = ""
     @State private var apolloVersion = ""
     @State private var response = ""
     @State private var offlineUserAttested = false
+    @State private var modelValidation = "NOT_TESTED"
+    @State private var providerObserved = "UNKNOWN"
     @State private var inference: ModelInferenceFCO?
     @State private var status = "Ready — synthetic demo only"
 
@@ -74,13 +76,13 @@ struct TravelView: View {
                         Label("SYNTHETIC DATA", systemImage: "testtube.2")
                         Text("Travel dates: UNKNOWN · destination Bali, Indonesia")
                         if let legacy {
-                            Text("Medication context: (legacy.medication_context.count) synthetic records")
+                            Text("Medication context: \(legacy.medication_context.count) synthetic records")
                             ForEach(Array(legacy.medication_context.prefix(4).enumerated()), id: \.offset) { index, item in
-                                Text("Record (index + 1): (describeMedication(item))").font(.caption)
+                                Text("Record \(index + 1): \(describeMedication(item))").font(.caption)
                             }
                         }
-                        Text("Medical correctness: (value.correctness_state)")
-                        Text("Source references: (value.resource_references.count) bounded · (value.omitted_reference_count) omitted by the bounded phone projection")
+                        Text("Medical correctness: \(value.correctness_state)")
+                        Text("Source references: \(value.resource_references.count) bounded · \(value.omitted_reference_count) omitted by the bounded phone projection")
                         ForEach(value.unknown_states, id: \.self) {
                             Text("UNKNOWN: " + $0).foregroundStyle(.orange)
                         }
@@ -91,7 +93,7 @@ struct TravelView: View {
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(entry.label)
                                 Text("SYNTHETIC_FIXTURE · NOT_LIVE_DIRECTORY").font(.caption.bold()).foregroundStyle(.orange)
-                                Text("Availability (entry.availability) · phone (entry.phone)").font(.caption)
+                                Text("Availability \(entry.availability) · phone \(entry.phone)").font(.caption)
                                 Text("Synthetic map point: -8.65, 115.22 · accuracy UNKNOWN · navigation disabled").font(.caption)
                                 Text("Call " + (entry.call_enabled ? "enabled" : "disabled") + " · purchase " + (entry.purchase_enabled ? "enabled" : "disabled")).font(.caption)
                             }
@@ -101,16 +103,24 @@ struct TravelView: View {
                     if let wallet {
                         Section("Synthetic wallet snapshot") {
                             Text(wallet.wallet_type)
-                            Text("State: (wallet.state)")
-                            Text("Balance: (wallet.synthetic_balance) (wallet.currency)")
+                            Text("State: \(wallet.state)")
+                            Text("Balance: \(wallet.synthetic_balance) \(wallet.currency)")
                             Text("REAL_MONEY=" + (wallet.real_money ? "YES" : "NO"))
-                            Text("PRESCRIPTION_PURCHASE=(wallet.prescription_purchase)")
-                            Text("Phone key: (wallet.phone_key_state)")
+                            Text("PRESCRIPTION_PURCHASE=\(wallet.prescription_purchase)")
+                            Text("Phone key: \(wallet.phone_key_state)")
                             Text(wallet.claim_boundary).font(.caption).foregroundStyle(.secondary)
                         }
                     }
 
-                    Section("Local-model fallback") {
+                    Section("Local model") {
+                        Text("Execution: " + (response.isEmpty ? "NOT OBSERVED" : "USER REPORTED · not independently observed"))
+                        Text("Validation: " + modelValidation)
+                        Text("Source: local · Medical authority: NONE")
+                        Text(online ? "ONLINE" : "OFFLINE")
+                        Text("LOCAL CONTEXT AVAILABLE · LOCAL POLICY AVAILABLE")
+                        Text("LOCAL MODEL: manual runtime availability UNKNOWN")
+                        Text("LIVE STOCK UNKNOWN · LIVE HOURS UNKNOWN")
+                        Text("CLOUD SYNC DEFERRED · PURCHASE BLOCKED")
                         Text(inference == nil
                              ? "NOT_EXECUTED · deterministic no-model experience remains available"
                              : "MODEL_INFERRED · correctness UNKNOWN · no medical/wallet authority")
@@ -120,10 +130,12 @@ struct TravelView: View {
                             .foregroundStyle(.orange)
 
                         Picker("Reported substrate", selection: $observedSubstrate) {
+                            Text("UNKNOWN").tag("UNKNOWN")
                             Text("Liquid Apollo").tag("Liquid Apollo")
                             Text("LEAP local").tag("LEAP local")
                             Text("Other local runtime").tag("Other local runtime")
                         }
+                        TextField("Human-observed provider (UNKNOWN if not observed)", text: $providerObserved)
                         TextField("Human-observed model label", text: $observedModel)
                         TextField("Human-observed Apollo/runtime version", text: $apolloVersion)
                         Toggle("I observed inference while the model app was offline/airplane mode", isOn: $offlineUserAttested)
@@ -131,9 +143,15 @@ struct TravelView: View {
                             .font(.caption)
                             .foregroundStyle(.secondary)
 
-                        TextEditor(text: $response)
-                            .frame(minHeight: 100)
-                            .accessibilityLabel("Paste local model JSON response")
+                        DisclosureGroup("Paste local model JSON response") {
+                            TextEditor(text: $response)
+                                .frame(minHeight: 100)
+                                .accessibilityLabel("Paste local model JSON response")
+                                .onChange(of: response) { _, _ in
+                                    inference = nil
+                                    modelValidation = "NOT_TESTED"
+                                }
+                        }
                         Button("Validate bounded model selection") { validateResponse() }
 
                         if let inference, let catalog {
@@ -148,9 +166,9 @@ struct TravelView: View {
                             ForEach(display.unknown, id: \.self) { Text("UNKNOWN: " + $0).foregroundStyle(.orange) }
                             ForEach(display.recommendedQuestions, id: \.self) { Text("Question: " + $0) }
                             Text("medical_action=NONE · clinician review required").font(.caption.bold())
-                            Text("Model identity: (inference.model_identity_state)")
-                            Text("Network evidence: (inference.network_state) / (inference.network_observation_state)")
-                            Text("Destination packet SHA: (inference.destination_packet_sha256)")
+                            Text("Model identity: \(inference.model_identity_state)")
+                            Text("Network evidence: \(inference.network_state) / \(inference.network_observation_state)")
+                            Text("Destination packet SHA: \(inference.destination_packet_sha256)")
                                 .font(.caption2)
                         }
                     }
@@ -197,7 +215,7 @@ struct TravelView: View {
     private func loadContext() {
         let decision = ComplianceGate.evaluate(.readContext, online: online, consent: consent)
         guard decision.state == "LOCAL_ONLY" else {
-            status = "(decision.state): (decision.reason)"
+            status = "\(decision.state): \(decision.reason)"
             return
         }
         do {
@@ -272,12 +290,15 @@ struct TravelView: View {
                 apolloVersionReported: apolloVersion,
                 offlineUserAttested: offlineUserAttested,
                 iosVersionObserved: UIDevice.current.systemVersion,
-                deviceClassObserved: UIDevice.current.model
+                deviceClassObserved: UIDevice.current.model,
+                providerObserved: providerObserved
             )
+            modelValidation = "ACCEPTED"
             status = "MODEL_INFERRED: bounded ID selection accepted · medical authority NONE · correctness UNKNOWN"
         } catch {
             inference = nil
-            status = "REJECTED: output was not an allowed bounded catalog selection"
+            modelValidation = "REJECT / ABSTAIN"
+            status = "Local model response was not admitted. Your saved context is unchanged."
         }
     }
 
@@ -285,7 +306,7 @@ struct TravelView: View {
         let decision = ComplianceGate.guardedRequest(action, online: online, consent: consent) {
             // No live provider adapter is admitted in this demo.
         }
-        status = "(decision.state): (decision.reason)"
+        status = "\(decision.state): \(decision.reason)"
     }
 
     private func clearSession(reason: String) {
@@ -294,6 +315,8 @@ struct TravelView: View {
         catalog = nil
         wallet = nil
         inference = nil
+        modelValidation = "NOT_TESTED"
+        providerObserved = "UNKNOWN"
         response = ""
         packet = ""
         observedModel = ""

@@ -1,0 +1,132 @@
+{
+  "base_head": "0330c35c61866a9d4046fb7b2ad1c85190d9bfdf",
+  "branch": "integration/iphone-offline-v2",
+  "breakpoint_id": "BAYMAX-BP-0035",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 2342,
+        "path": "evidence/breakpoints/BAYMAX-BP-0034.json",
+        "sha256": "800cb188a2af4760ed6265ecced331c6fdfda8a21dfb6ba2a8eb54fb33eb736c"
+      },
+      {
+        "bytes": 3038,
+        "path": "docs/implementation/MODEL_ADMISSION.md",
+        "sha256": "5f6173829c1aeb6eef16c4f4fe0b2794735b4ba4dd37ecf2f4d24c58b47f8ea7"
+      },
+      {
+        "bytes": 7874,
+        "path": "ios/OfflineTravelDemo/GateCheck.swift",
+        "sha256": "e3f22e5e9855292b3e0e54f51bc999ae1fbb3ecf58c7fd086fd3d351cae5766d"
+      },
+      {
+        "bytes": 12932,
+        "path": "ios/OfflineTravelDemo/ModelInference.swift",
+        "sha256": "0b364f57b2268e8023a97e4411647e9fe9b9cdc0554e4ff39490dbc61f26b6f5"
+      },
+      {
+        "bytes": 17363,
+        "path": "ios/OfflineTravelDemo/OfflineTravelApp.swift",
+        "sha256": "9823d315eefd28577c77bc11ea08299d2be4347b644ff50346943c2b73cd16e0"
+      },
+      {
+        "bytes": 9614,
+        "path": "src/baymax_travel/model.py",
+        "sha256": "3cde9c7455ab0970195a352fd7f8b2e5fc9ea2d1e06b6cac90ae26ec4dd751cf"
+      },
+      {
+        "bytes": 3622,
+        "path": "scripts/check_model_parity.py",
+        "sha256": "6ad9a2313b96313d277e15409a1831a7ee4a62b0131f8700d937a6f3cee3ce04"
+      },
+      {
+        "bytes": 1512,
+        "path": "tests/ModelParity.swift",
+        "sha256": "9c9018a7c33bd1c333210fcbb0703953c4c910f642a4fa8e18e0839401a6872f"
+      },
+      {
+        "bytes": 9220,
+        "path": "tests/test_model_contract.py",
+        "sha256": "7f58a83130f087029e6e6e42a47a233f93f1b100a09653638a5ca32afa8126a6"
+      },
+      {
+        "bytes": 102230,
+        "path": "tests/vectors/model_admission_v3.json",
+        "sha256": "8e10ab3796ca5fd6eb3c0e4818a0ca2fb9dffea1eb07ebf396783dfc31e17618"
+      },
+      {
+        "bytes": 28546,
+        "path": "tests/vectors/model_admission_strict_edges_v1.json",
+        "sha256": "b35f4fcf3a2ceea3a1ddf8a7f7f47f7ca0ca52678dd59473a719821ee80c01e9"
+      },
+      {
+        "bytes": 417,
+        "path": "evidence/receipts/codex/model_parity_initial_failure.json",
+        "sha256": "9a91d78b21e7e2b7788ef7737c15ab5124d4938fe82d701c8274b15aed4c3d71"
+      },
+      {
+        "bytes": 12859,
+        "path": "evidence/receipts/codex/model_parity_v3.json",
+        "sha256": "0edd79867531dc7a067483edaabac2f5fbca01d0bb90d4d867f8b7d7def7f6e2"
+      },
+      {
+        "bytes": 25202,
+        "path": "evidence/receipts/codex/model_parity_strict_v4.json",
+        "sha256": "3e57fcaa9e685395661c8bc05a1c1cec82e409f1a6e9ecb8e3bfe020128a0deb"
+      },
+      {
+        "bytes": 4502,
+        "path": "evidence/receipts/parallel/CODEX-LANE-MODEL-ADMISSION-STRICT-001.json",
+        "sha256": "cdef1b021175700190b96640d0cb8de733386325770813b4f33d3466900cb7a7"
+      },
+      {
+        "bytes": 912,
+        "path": "evidence/receipts/parallel/CLAUDE-LANE-MODEL-ADMISSION-REDTEAM-001.json",
+        "sha256": "2dc7531893a87a8fb32bcea10c1b238287d7c7f42b869cb21f5ed2649377dd12"
+      },
+      {
+        "bytes": 1754,
+        "path": "evidence/lineage/model_admission_lineages.json",
+        "sha256": "61e07a024a1ddee57dc04e6393b9f754a87d16a989db51d328a07c3f45472cd9"
+      },
+      {
+        "bytes": 4310,
+        "path": "evidence/receipts/verification/model_admission_primary_gates_bp0035.json",
+        "sha256": "ffce854834c93ab1f3618a616c39c72a6761c0a7226401975fb68a5298ac3c37"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 18,
+    "leaf_hashes": [
+      "e7b4c5892438f38d01b46f4cdbd6d3de0d26e4ae9614e8c274dca5cd63fb543e",
+      "a9bc6649aea47efc893514839ff392e7fccdff49fb047ec77dc5e49ff5e1a1bd",
+      "0a085eb2fd292e494ea0513d3972461a2165241a5df91265e7eb59331559e396",
+      "0e3f3da2b5f4b2f0c466d1c00ef01b9d9607b2474eda63140541e1bc804cf72f",
+      "7e4361169ee10db48753f9843d746f8ea1590d3922ace3f11796d03cb6e01dbb",
+      "daa4c611ef2c5b4a5bbb1dee2a69454e4dd5da632e6cee7025c1fc1a8f7a4511",
+      "fbfd601a10ddfce4bf30805c01bddacc883633dbdb55d56666bf010a02397062",
+      "a035d3a9fc84a7879c0cfa9fc2b1da3ea38791c65ea0566d677a1c6054415e9c",
+      "9f3c49aba44d9c0257e87b39e2ca6282ec20b2b8aece57e3ee0a02270425f980",
+      "505c46eec9a69a51ac9d408a291213051072eda6d30f991a48158e28e308aa09",
+      "cff36bbeb8aec70a684f4eea04ac2860b76dfee94f6db5a0d587410b610c98d5",
+      "b96af166fa31be0be87a89b8b13c3dd26a1e640ab365a255489a09cd58abd421",
+      "a057ce7947c30a2082c79cfe88063205f512c147cf126ea79e1a6a8f7c47a229",
+      "a19e61dc39266962f0fd87abac35dfa0088f2be022c9ccc510c261559f650ba7",
+      "a83117fb56d6b18ff4609cfaa723a44ab90406d2e6529427767d2a358d1078b2",
+      "1a26ea6177881c12bd54af97aeeb7a61d0032e9941dc2639d17cadae8ce09e8a",
+      "4e631d8a4403a49161304ffa7fa4071681d8f7dbfdb28e4650f5fb67f6be671e",
+      "8faf4c768e92c15c2066f083ea25e07ea335da975141c82e311fff76d0c8249a"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "a567d09157dfe7b56b85915e4c0f4a1f261d52aa3418cf52b2b370db14784006"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "Integrate exact Codex structural model-admission candidate and execute 34 Python tests, 136-vector exact Swift/Python parity, Swift source/identity/wallet gate, secret/PHI screens, and unsigned iPhoneOS build. Observed Airplane Mode Apollo response remains REJECTED_EXPECTED. Independent Claude re-verification is BLOCKED_PROVIDER_ACCOUNT and is not promoted to PASS.",
+  "parent": "BAYMAX-BP-0034",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "VALIDATOR_STRUCTURAL_REPAIR",
+  "state": "PARTIAL",
+  "timestamp_utc": "2026-10-04T21:43:47.623234+00:00"
+}

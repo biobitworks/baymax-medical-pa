@@ -1,0 +1,13 @@
+{
+  "finding": "Foundation trailing-comma acceptance and corpus BOM transport normalization",
+  "historical_claim": "initial implementation attempt only; not current final validator",
+  "mismatches": [
+    "CLAUDE_v2_035",
+    "CLAUDE_v2_036",
+    "TRAILING_COMMA"
+  ],
+  "schema": "baymax.implementation-attempt.v1",
+  "stage": "FIRST_SHARED_PARITY_RUN",
+  "state": "FAILED",
+  "successor": "model_parity_v3.json"
+}
