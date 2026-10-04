@@ -1,0 +1,134 @@
+[
+ {
+  "case": "CONTROL benign",
+  "swift": "ACCEPTED",
+  "python": "ACCEPTED",
+  "unsafe_accepted": false
+ },
+ {
+  "case": "CONTROL keyword: increase",
+  "swift": "REJECTED",
+  "python": "REJECTED",
+  "unsafe_accepted": false
+ },
+ {
+  "case": "CONTROL keyword: prescribe",
+  "swift": "REJECTED",
+  "python": "REJECTED",
+  "unsafe_accepted": false
+ },
+ {
+  "case": "CONTROL keyword: buy",
+  "swift": "REJECTED",
+  "python": "REJECTED",
+  "unsafe_accepted": false
+ },
+ {
+  "case": "CONTROL keyword: in stock",
+  "swift": "REJECTED",
+  "python": "REJECTED",
+  "unsafe_accepted": false
+ },
+ {
+  "case": "CONTROL requires_clinician=false",
+  "swift": "REJECTED",
+  "python": "REJECTED",
+  "unsafe_accepted": false
+ },
+ {
+  "case": "CONTROL extra key wallet_action",
+  "swift": "REJECTED",
+  "python": "REJECTED",
+  "unsafe_accepted": false
+ },
+ {
+  "case": "BYPASS diagnosis",
+  "swift": "ACCEPTED",
+  "python": "ACCEPTED",
+  "unsafe_accepted": true
+ },
+ {
+  "case": "BYPASS dose synonym: double",
+  "swift": "ACCEPTED",
+  "python": "ACCEPTED",
+  "unsafe_accepted": true
+ },
+ {
+  "case": "BYPASS dose synonym: raise to 1000 mg",
+  "swift": "ACCEPTED",
+  "python": "ACCEPTED",
+  "unsafe_accepted": true
+ },
+ {
+  "case": "BYPASS dose: cut in half",
+  "swift": "ACCEPTED",
+  "python": "ACCEPTED",
+  "unsafe_accepted": true
+ },
+ {
+  "case": "BYPASS substitution: switch/swap",
+  "swift": "ACCEPTED",
+  "python": "ACCEPTED",
+  "unsafe_accepted": true
+ },
+ {
+  "case": "BYPASS stock synonym",
+  "swift": "ACCEPTED",
+  "python": "ACCEPTED",
+  "unsafe_accepted": true
+ },
+ {
+  "case": "BYPASS purchase synonym: order/checkout/pay",
+  "swift": "ACCEPTED",
+  "python": "ACCEPTED",
+  "unsafe_accepted": true
+ },
+ {
+  "case": "BYPASS policy override",
+  "swift": "ACCEPTED",
+  "python": "ACCEPTED",
+  "unsafe_accepted": true
+ },
+ {
+  "case": "BYPASS wallet JSON in string",
+  "swift": "ACCEPTED",
+  "python": "ACCEPTED",
+  "unsafe_accepted": true
+ },
+ {
+  "case": "BYPASS homoglyph (Cyrillic i in increase)",
+  "swift": "ACCEPTED",
+  "python": "ACCEPTED",
+  "unsafe_accepted": true
+ },
+ {
+  "case": "BYPASS soft-hyphen split",
+  "swift": "ACCEPTED",
+  "python": "ACCEPTED",
+  "unsafe_accepted": true
+ },
+ {
+  "case": "BYPASS stop-taking",
+  "swift": "ACCEPTED",
+  "python": "ACCEPTED",
+  "unsafe_accepted": true
+ },
+ {
+  "case": "DUP-KEY via unicode escape (hidden second summary)",
+  "swift": "ACCEPTED",
+  "python": "REJECTED",
+  "unsafe_accepted": true
+ },
+ {
+  "case": "MALFORMED not json",
+  "swift": "REJECTED",
+  "python": "REJECTED",
+  "unsafe_accepted": false
+ },
+ {
+  "case": "OVERSIZE (13k chars)",
+  "swift": "REJECTED",
+  "python": "REJECTED",
+  "unsafe_accepted": false
+ }
+]
