@@ -40,10 +40,19 @@ Requires Node.js 22+.
 
 ```bash
 npm ci
+cp .env.example .env
+# Fill in DATABASE_URL and Neon AI Gateway values in .env.
+npm run db:migrate
+npm run agent:dev
+# In a second terminal:
 npm run dev
 ```
 
-Open the local URL Vite prints.
+Open the local URL Vite prints. Vite proxies `/api`, `/travel`, `/health`, and `/care-state` to Mastra on port 4111. Enable **Remember across visits** during onboarding or in Privacy & preferences to save your care space. A successful save is shown above the page heading.
+
+The ignored `.env` is server-only. `DATABASE_URL` powers the workspace store; `NEON_AI_GATEWAY_TOKEN` and `NEON_AI_GATEWAY_BASE_URL` power the existing `neon/gpt-5-6-luna` agent. Auth and S3 variables are reserved for future login/uploads and are not used by the browser-bound persistence implementation. Saving uses an HttpOnly cookie, so separate browser profiles have separate workspaces. There is no account login or cross-device sync.
+
+`npm run db:migrate` creates only the additive `baymax_care_workspaces` table and its monotonic revision sequence and is safe to rerun. The UI loads saved state before accepting changes, serializes saves, and rejects stale revisions. Turning off memory deletes the remote copy; Delete my care space also clears the conversation and returns to onboarding. Unsaved changes stay in memory and show a retry action on failure; they are never copied into localStorage.
 
 ### Agent web search with Exa
 
@@ -75,19 +84,27 @@ npm run test:search
 ```
 
 ```bash
+npm test
 npm run build
+# Stop agent:dev before building its production output.
+npm run agent:build
+# Set APP_ORIGIN in .env to the exact preview URL, e.g. http://localhost:4173.
+npm run agent:start
+# In a second terminal:
 npm run preview
 ```
 
 ## Implemented frontend
 
-- Conversation-first Assistant UI runtime with streamed fixture responses.
+- Conversation-first Assistant UI runtime streaming live Mastra responses through Neon AI Gateway.
 - Generative UI rendered through `makeAssistantToolUI` and tool-call message parts.
+- Agent-generated care plan and doctor brief contents populate editable cards and their corresponding pages.
 - Editable inline care plans and travel checklists.
 - Prescription order preview with review and confirmation states.
 - Doctor brief editing, recipient validation, email review, and `mailto:` handoff.
 - Daily check-ins, hydration logging, movement tasks, and preferences.
-- Session-only state; navigation preserves the conversation, refresh clears it.
+- Optional Neon persistence for profile, check-ins, hydration, movement/weekly overview, tasks, plans, travel context and generated checklist, brief/email draft, preferences, and conversation including tool results.
+- Clear restore/save errors, retry controls, optimistic revisions, and user-controlled deletion.
 - Mobile and desktop layouts, keyboard-accessible dialogs, and reduced-motion support.
 
 ## Sponsor integration status
@@ -95,16 +112,16 @@ npm run preview
 | Sponsor | Status |
 | --- | --- |
 | Assistant UI | Implemented: runtime, message primitives, composer, suggestions, tool UI |
-| Mastra | Implemented: server-side Baymax agent; frontend falls back to fixture responses when unreachable |
-| Neon | Next: consent-based profile and agent memory |
-| Exa | Implemented: server-side agent search with source URLs and excerpts; requires `EXA_API_KEY` |
+| Mastra | Implemented: live agent text and care plan/doctor brief tool results |
+| Neon | Implemented: consent-based browser workspace and conversation persistence, plus AI Gateway |
+| Exa | Implemented: server-side search and source cards; requires `EXA_API_KEY` |
 | Fly.io | Dockerfile, Nginx config, and starter Fly configuration included; not deployed |
 
-The frontend connects to the local Mastra agent for live LLM responses and Exa search when server credentials are configured. Pharmacy fulfilment, payment, email delivery, persistent user data, and background notifications remain unconnected. The GIFs use sample details.
+The app has live LLM and database connections. Pharmacy fulfilment, payment, server-side email delivery and background notifications remain unimplemented. The GIFs use sample details.
 
 ## Fly.io deployment preparation
 
-The included Dockerfile builds the Vite frontend and serves it on port 8080. Choose an available app name in `fly.toml`, then use your Fly account to create and deploy the app. No deployment or billing action has been performed.
+The included Dockerfile builds the Vite frontend and serves it on port 8080. It is still a frontend-only deployment: run the Mastra backend separately and configure the frontend reverse proxy for `/api`, `/travel`, `/health`, and `/care-state` before deployment. Set server-side `APP_ORIGIN` to the exact public frontend origin so cookies are Secure and write origins are validated. No deployment or billing action has been performed.
 
 ## The idea
 
@@ -148,9 +165,13 @@ Review it, edit it, and share it with your new doctor so you do not have to star
 
 Health information deserves deliberate protection. Our goal is a HIPAA-compliant, privacy-first product.
 
-**This hackathon project is a frontend prototype. HIPAA compliance has not been verified, and no completed security controls are claimed. Use synthetic data for demos.**
+**This hackathon project is a prototype with live backend connections. HIPAA compliance has not been verified. Use synthetic data for demos.**
 
-Planned safeguards include:
+Implemented persistence safeguards: explicit storage consent, server-only credentials, hashed random browser session IDs, HttpOnly/SameSite cookies (Secure on HTTPS), write-origin checks, bounded schema validation, parameterized queries, revision checks, and remote deletion.
+
+The new health tools and `/health` endpoints inherited from main still use shared, synthetic in-memory sample data; the saved browser workspace is separate from that demo store. Restoring a workspace preserves its saved check-in, hydration, and weekly overview instead of replacing them with demo values.
+
+Account authentication, access audit logging, cross-device access, file upload, export of the entire workspace, and compliance review remain future work. Further safeguards include:
 
 - Explicit consent for storing health information and sharing it with external services.
 - Data minimization and user-controlled memory.
@@ -162,7 +183,7 @@ Planned safeguards include:
 
 ## Sponsors and stack we aim to use
 
-Assistant UI is implemented. The remaining integrations are planned; see the integration status above. These are not claims of confirmed partnerships.
+Assistant UI, Mastra, and Neon are connected. See the integration status above for remaining work. These are not claims of confirmed partnerships.
 
 | Technology | Planned role |
 | --- | --- |
@@ -175,12 +196,12 @@ Assistant UI is implemented. The remaining integrations are planned; see the int
 ## Planned hackathon MVP
 
 - [ ] Conversational onboarding with a synthetic health profile.
-- [ ] User-controlled agent memory.
+- [x] User-controlled browser workspace and conversation memory.
 - [ ] Daily lifestyle check-ins and configurable reminders.
 - [ ] A hackathon preparation routine.
 - [ ] A travel medication support workflow with source links.
-- [ ] A doctor-ready health brief with review before sharing.
-- [ ] Privacy controls and a documented data flow.
+- [x] A doctor-ready health brief with review before sharing.
+- [x] Storage consent, deletion controls, and a documented persistence data flow.
 
 ## Demo story
 
@@ -190,7 +211,9 @@ Baymax turns that request into a preparation routine, daily check-ins, a medicat
 
 ## Project status
 
-**Frontend implemented.** Interactive UI flows and animated walkthroughs are ready for the hackathon. Sponsor backend integrations, real prescription fulfilment, email delivery, deployment, and compliance verification remain to be built.
+**UI, agent, and Neon persistence connected.** Interactive care cards now use live tool results, and consenting users can restore their care space across refreshes. Live Neon save/restore/delete and a structured agent plan response have been verified. Real prescription fulfilment, server-side email delivery, account login, web research, deployment, and compliance verification remain to be built.
+
+Validation: `npm test` covers SQL persistence with PGlite, consent, session isolation, invalid requests, conflicts, deletion/retry behavior, stream framing, and component restore/reset flows. `SMOKE_BASE_URL=http://127.0.0.1:5173 npm run test:live` exercises a disposable synthetic workspace and a live agent plan against running servers, then deletes its test document. This live check uses the configured gateway and database; it is not part of the offline test suite.
 
 ## Medical boundaries
 

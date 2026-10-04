@@ -3,8 +3,7 @@ import { z } from "zod";
 import { getRecentRuns, summarizeRuns } from "../lib/health-data";
 
 /**
- * Reads the user's recent runs (distance and time). Hardcoded sample data for
- * now.
+ * Reads the user's recent runs (distance and time). Stored in Postgres per user.
  */
 export const recentRunsTool = createTool({
   id: "get-recent-runs",
@@ -41,7 +40,7 @@ export const recentRunsTool = createTool({
     }),
   }),
   execute: async ({ count }) => {
-    const runs = getRecentRuns(count);
+    const runs = await getRecentRuns(count);
     return { runs, summary: summarizeRuns(runs) };
   },
 });

@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { useEffect, useId, useRef, useState } from 'react';
 import { Activity, ArrowRight, Bell, Check, ChevronLeft, Footprints, Heart, Settings2, Sparkles, X } from 'lucide-react';
 import type { ActivityGoals, FitnessOverview, FitnessPreferences } from '../mastra/lib/fitness';
@@ -34,12 +35,12 @@ function GoalOptions({ value, onChange }: { value: ActivityGoals | null; onChang
   </div>;
 }
 
-export function ActivityOnboarding({ initialName = 'Alex', initialPreferences, onComplete, onCancel }: {
-  initialName?: string; initialPreferences?: SavedPreferences;
+export function ActivityOnboarding({ initialName, initialPreferences, memoryControl, onComplete, onCancel }: {
+  initialName?: string; initialPreferences?: SavedPreferences; memoryControl?: ReactNode;
   onComplete?: (preferences: SavedPreferences) => void; onCancel?: () => void;
 }) {
   const [step, setStep] = useState(0);
-  const [name, setName] = useState(initialPreferences?.name ?? initialName);
+  const [name, setName] = useState(initialName ?? initialPreferences?.name ?? "Jordan");
   const [goals, setGoals] = useState<ActivityGoals | null>(initialPreferences?.goals ?? null);
   const [busy, setBusy] = useState(false);
   const [finished, setFinished] = useState(false);
@@ -71,7 +72,7 @@ export function ActivityOnboarding({ initialName = 'Alex', initialPreferences, o
     <div className="fitness-step-track" aria-label={`Step ${step + 1} of 4`}>{['Welcome', 'Movement', 'Goals', 'Reminders'].map((label, i) => <span key={label} className={i <= step ? 'active' : ''}><i />{label}</span>)}</div>
     <span className={`fitness-illustration step-${step}`}>{step === 0 ? <Heart size={42} /> : step === 1 ? <Activity size={42} /> : step === 2 ? <Footprints size={42} /> : <Bell size={42} />}</span>
     <h2 ref={titleRef} tabIndex={-1}>{['A little movement. A lot of care.', 'Every bit of movement counts.', 'Choose your daily goals.', 'A little encouragement.'][step]}</h2>
-    {step === 0 && <><p>I’m Baymax. Let’s make a little room for your health, starting with goals that fit your day.</p><label>What should I call you?<input value={name} onChange={e => setName(e.target.value)} maxLength={30} autoComplete="given-name" /></label><p className="fine">You choose what to share. These preferences stay in the demo server session.</p></>}
+    {step === 0 && <><p>I’m Baymax. Let’s make a little room for your health, starting with goals that fit your day.</p><label>What should I call you?<input value={name} onChange={e => setName(e.target.value)} maxLength={30} autoComplete="given-name" /></label>{memoryControl}<p className="fine">You choose what to share. These preferences stay in the demo server session.</p></>}
     {step === 1 && <><p>Steps track time on your feet. Active minutes track the movement time recorded in your activity log.</p><div className="fitness-explain"><span><Footprints size={23} /><b>Steps</b><small>Little trips add up.</small></span><span><Activity size={23} /><b>Active minutes</b><small>Make time to move.</small></span></div><p className="fine">Your dashboard currently uses sample activity. Device tracking isn’t connected yet.</p></>}
     {step === 2 && <><p>Pick a starting point. You can change it whenever you like.</p><GoalOptions value={goals} onChange={setGoals} /><p className="fine">These are optional activity goals, not a personalized exercise prescription.</p></>}
     {step === 3 && <><p>Choose whether this browser can show goal celebrations while Baymax is open.</p><div className="fitness-notification-preview"><span><Heart size={23} /></span><div><b>Baymax · a little celebration</b><p>You made room for movement today. Nice work.</p></div></div><p className="fine">You can say no. Browser permission is optional; background reminders aren’t supported.</p></>}

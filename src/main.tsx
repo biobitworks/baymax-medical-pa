@@ -1,5 +1,7 @@
 import React, {
   useState,
+  useMemo,
+  useCallback,
   useEffect,
   useRef,
   createContext,
@@ -12,9 +14,12 @@ import {
   ThreadPrimitive,
   ComposerPrimitive,
   MessagePrimitive,
-  type ChatModelAdapter,
+  AttachmentPrimitive,
+  type AttachmentAdapter,
+  type ExportedMessageRepository,
   makeAssistantToolUI,
 } from "@assistant-ui/react";
+import { LabTrendsCard, type LabTrendsArgs } from "./components/LabTrendsCard";
 import {
   ArrowUp,
   ArrowUpRight,
@@ -40,16 +45,24 @@ import {
   Sparkles,
   Menu,
   Mail,
+  Trash2,
+  History,
 } from "lucide-react";
 import {
   DEFAULT_TRAVEL_CHECKLIST,
   formatDoctorBrief,
 } from "./mastra/lib/brief";
 import "./style.css";
+import { initializeHealthOverview } from "./persistence/health-overview";
+import { createAgentAdapter } from "./chat/adapter";
+import { conversationsApi, relativeTime, EMPTY_CONVERSATION, type ConversationSummary } from "./chat/conversations-client";
+import { applyToolResult, historicalCard } from "./chat/cards";
+import { useCareWorkspace } from "./persistence/use-care-workspace";
+import { type CareWorkspace, type StoredConversation } from "./shared/workspace";
 import Mascot, { MascotActivity } from "./Mascot";
 import { PrescriptionShoppingCard } from "./components/PrescriptionShoppingCard";
 import { WebSearchCard } from "./components/WebSearchCard";
-import { searchCardFromEvent, type SearchCardPart, type WebSearchCardArgs } from "./components/web-search-state";
+import { type WebSearchCardArgs } from "./components/web-search-state";
 import "./components/prescription-shopping.css";
 import { ActivityOnboarding, FitnessDashboard, FITNESS_CHANGED, fitnessRequest, type SavedPreferences } from "./components/Fitness";
 import type { FitnessOverview } from "./mastra/lib/fitness";
@@ -57,18 +70,12 @@ import type { FitnessOverview } from "./mastra/lib/fitness";
 // Triggers the agent to read all of the user's health data and answer with a
 // week-in-review, which also renders the water, movement, sleep, energy and
 // running cards.
+const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 const WEEKLY_SUMMARY_PROMPT = "Give me a summary of my last week";
 const GLASS_ML = 250;
 const WATER_GOAL = 8;
 const MOVEMENT_GOAL = 30;
-const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
-type WeekDay = {
-  date: string;
-  hydrationMl: number;
-  activeMinutes: number;
-  energy?: string;
-};
 type HealthOverview = {
   today: { date: string; hydrationMl: number; activeMinutes: number };
   todayCheckin: { date: string; energy: string } | null;
@@ -106,6 +113,7 @@ type MetricKey = "hydration" | "movement" | "sleep";
 type HealthCardArgs =
   | { metric: "fitness"; overview: FitnessOverview }
   | { metric: "onboarding"; preferences: SavedPreferences }
+  | LabTrendsArgs
   | {
       metric: MetricKey;
       /** Newest first, as returned by get-daily-metrics */
@@ -142,7 +150,7 @@ const healthCardPart = (args: HealthCardArgs): AgentToolPart => ({
   args,
   argsText: JSON.stringify(args.metric),
   result: { ready: true },
-  metric: args.metric,
+  metric: args.metric === "labs" ? `labs:${args.title}` : args.metric,
 });
 function healthCardsFromTool(toolName: string, result: any): HealthCardArgs[] {
   if (!result || typeof result !== "object") return [];
@@ -167,6 +175,16 @@ function healthCardsFromTool(toolName: string, result: any): HealthCardArgs[] {
   if (toolName === "recentCheckinsTool" && Array.isArray(result.checkins)) {
     return [
       { metric: "energy", checkins: result.checkins, summary: result.summary },
+    ];
+  }
+  if (toolName === "labTrendsTool" && Array.isArray(result.series)) {
+    return [
+      {
+        metric: "labs",
+        title: result.title ?? "Lab trends",
+        series: result.series,
+        unmatched: result.unmatched,
+      },
     ];
   }
   return [];
@@ -588,213 +606,56 @@ function ModalShell({
     </dialog>
   );
 }
-// Mastra-backed adapter: streams text from the Baymax agent (proxied to the
-// Mastra server by Vite at /api). Agent tool calls decide which care card to
-// show; prescription and travel have no agent tool yet, so keywords pick them.
-// Falls back to the fixture adapter if the agent server is unreachable.
-const AGENT_STREAM_URL = "/api/agents/baymaxAgent/stream";
-const TOOL_TO_CARD: Record<string, string> = {
-  carePlanTool: "plan",
-  doctorBriefTool: "brief",
-};
-const adapter: ChatModelAdapter = {
-  async *run(options) {
-    const { messages, abortSignal } = options;
-    const history = messages
-      .map((m) => ({
-        role: m.role,
-        content: m.content
-          .filter((p) => p.type === "text")
-          .map((p) => (p as { text: string }).text)
-          .join(" "),
-      }))
-      .filter(
-        (m) => (m.role === "user" || m.role === "assistant") && m.content,
-      );
-    const lastUser =
-      history
-        .filter((m) => m.role === "user")
-        .at(-1)
-        ?.content.toLowerCase() || "";
-    let res: Response;
-    try {
-      res = await fetch(AGENT_STREAM_URL, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ messages: history }),
-        signal: abortSignal,
-      });
-      if (!res.ok || !res.body) throw new Error(`agent ${res.status}`);
-    } catch (err) {
-      if (abortSignal.aborted) return;
-      console.warn("Agent unavailable, using fixture responses.", err);
-      yield* fixtureAdapter.run(options) as AsyncGenerator<never>;
-      return;
-    }
-
-    let text = "";
-    let cardKind: string | undefined;
-    // One card per metric; a later tool result replaces an earlier one.
-    const healthCards = new Map<string, AgentToolPart>();
-    const searchCards = new Map<string, SearchCardPart>();
-    const messageContent = () => [
-      { type: "text" as const, text }, ...healthCards.values(), ...searchCards.values(),
-    ];
-    const reader = res.body.getReader();
-    const decoder = new TextDecoder();
-    let buffer = "";
-    while (true) {
-      let next: ReadableStreamReadResult<Uint8Array>;
-      try {
-        next = await reader.read();
-      } catch {
-        if (abortSignal.aborted) return;
-        break;
-      }
-      const { done, value } = next;
-      if (done) break;
-      buffer += decoder.decode(value, { stream: true });
-      const events = buffer.split("\n\n");
-      buffer = events.pop() ?? "";
-      for (const event of events) {
-        const line = event.split("\n").find((l) => l.startsWith("data: "));
-        if (!line) continue;
-        let chunk: { type?: string; payload?: Record<string, unknown> };
-        try {
-          chunk = JSON.parse(line.slice(6));
-        } catch {
-          continue;
-        }
-        const searchCard = searchCardFromEvent(chunk);
-        if (searchCard) {
-          searchCards.set(searchCard.toolCallId, searchCard);
-          yield { content: messageContent() };
-        }
-        if (chunk.type === "text-delta") {
-          text += String(chunk.payload?.text ?? "");
-          yield { content: messageContent() };
-        } else if (chunk.type === "tool-call") {
-          cardKind = TOOL_TO_CARD[String(chunk.payload?.toolName)] ?? cardKind;
-        } else if (chunk.type === "tool-result") {
-          const cards = healthCardsFromTool(
-            String(chunk.payload?.toolName),
-            chunk.payload?.result,
-          );
-          for (const card of cards)
-            healthCards.set(card.metric, healthCardPart(card));
-          if (cards.length)
-            yield { content: messageContent() };
-        }
-      }
-    }
-    if (abortSignal.aborted) return;
-    // A stream ending without a tool result must not leave a permanent spinner.
-    for (const [id, card] of searchCards) {
-      if (card.args.state === "loading") {
-        const args: WebSearchCardArgs = { state: "error" };
-        searchCards.set(id, { ...card, args, argsText: JSON.stringify(args) });
-      }
-    }
-
-    const keywordKind =
-      lastUser.includes("diabet") ||
-      lastUser.includes("refill") ||
-      lastUser.includes("buy")
-        ? "purchase"
-        : lastUser.includes("travel") || lastUser.includes("prescription")
-          ? "travel"
-          : undefined;
-    const kind = cardKind ?? keywordKind;
-    if (!kind) {
-      if (healthCards.size || searchCards.size)
-        yield { content: messageContent() };
-      return;
-    }
-    const diabetes = lastUser.includes("diabet");
-    yield {
+const TEXT_FILE_ACCEPT = ".txt,.md,.csv,.tsv,.json,.xml,.log,text/*,application/json";
+// Uploads go to the server as conversation artifacts; the agent reads them
+// with list-medical-records / read-medical-record rather than inline text.
+const createAttachmentAdapter = (conversationId: string): AttachmentAdapter => ({
+  accept: TEXT_FILE_ACCEPT,
+  async add({ file }) {
+    return {
+      id: crypto.randomUUID(),
+      type: "document",
+      name: file.name,
+      contentType: file.type || "text/plain",
+      file,
+      status: { type: "requires-action", reason: "composer-send" },
+    };
+  },
+  async send(attachment) {
+    const res = await fetch("/records/upload", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        conversationId,
+        name: attachment.name,
+        content: await attachment.file.text(),
+      }),
+    });
+    const body = (await res.json().catch(() => ({}))) as {
+      record?: { id: string };
+      error?: string;
+    };
+    if (!res.ok || !body.record)
+      throw new Error(body.error ?? `Upload failed (${res.status})`);
+    return {
+      ...attachment,
+      id: body.record.id,
+      status: { type: "complete" },
       content: [
-        ...messageContent(),
         {
-          type: "tool-call",
-          toolCallId: crypto.randomUUID(),
-          toolName: "care_action",
-          args: { kind, diabetes },
-          argsText: JSON.stringify({ kind, diabetes }),
-          result: { ready: true },
+          type: "text",
+          text: `[Attached record "${attachment.name}", id ${body.record.id}]`,
         },
       ],
     };
   },
-};
-// UI-first fixture adapter, kept as an offline fallback.
-const fixtureAdapter: ChatModelAdapter = {
-  async *run({ messages, abortSignal }) {
-    const query =
-      messages
-        .at(-1)
-        ?.content.filter((p) => p.type === "text")
-        .map((p) => p.text)
-        .join(" ")
-        .toLowerCase() || "";
-    if (/fitness|activity goals|onboarding|set up activity/.test(query)) {
-      const setup = /onboarding|set up|get started/.test(query);
-      try {
-        const args: HealthCardArgs = setup
-          ? { metric: "onboarding", preferences: await fitnessRequest<SavedPreferences>("preferences") }
-          : { metric: "fitness", overview: await fitnessRequest<FitnessOverview>("fitness") };
-        if (!abortSignal.aborted) yield { content: [{ type: "text", text: "Here’s your activity space. Choose the goals that fit your day." }, healthCardPart(args)] };
-      } catch {
-        if (!abortSignal.aborted) yield { content: [{ type: "text", text: "I can’t reach your activity data right now. Try the Physical fitness page when Baymax is connected." }] };
-      }
-      return;
-    }
-    const diabetes = query.includes("diabet");
-    const kind =
-      query.includes("doctor") || query.includes("brief")
-        ? "brief"
-        : diabetes || query.includes("buy") || query.includes("refill")
-          ? "purchase"
-          : query.includes("travel") ||
-              query.includes("prescription") ||
-              query.includes("medication")
-            ? "travel"
-            : query.includes("hackathon") || query.includes("plan")
-              ? "plan"
-              : "checkin";
-    const responses = {
-      purchase: `I’ve prepared a refill order preview for your prescribed ${diabetes ? "diabetes " : ""}medication. Review the steps below before anything is purchased.`,
-      brief:
-        "Let’s bring your context to your next doctor. Review and edit the brief below, then prepare an email. Nothing is shared automatically.",
-      travel:
-        "Let’s get your care ready for the trip. Bring your existing prescription and medication documents, and confirm refill requirements with a local clinician or pharmacist.",
-      plan: "Let’s make room for you in the build schedule. Choose your date and check off a small win. Meals, movement, and a wind-down break belong on the plan, too.",
-      checkin: query.includes("sleep")
-        ? "A busy brain deserves a softer landing. Let’s check in on your energy and make space for a wind-down break."
-        : "I’m here. A small step counts. Let’s check in with your energy and take one thing at a time.",
-    };
-    const text = responses[kind];
-    for (let i = 0; i < text.length; i += 18) {
-      await new Promise((resolve) => setTimeout(resolve, 35));
-      if (abortSignal.aborted) return;
-      yield { content: [{ type: "text", text: text.slice(0, i + 18) }] };
-    }
-    if (abortSignal.aborted) return;
-    yield {
-      content: [
-        { type: "text", text },
-        {
-          type: "tool-call",
-          toolCallId: crypto.randomUUID(),
-          toolName: "care_action",
-          args: { kind, diabetes },
-          argsText: JSON.stringify({ kind, diabetes }),
-          result: { ready: true },
-        },
-      ],
-    };
-  },
-};
+  async remove() {},
+});
 type CareState = {
+  activePlanId: string | null;
+  activeBriefId: string | null;
+  activateCard: (kind: "plan" | "brief", result: unknown, toolCallId: string) => void;
+  planItems: CareWorkspace["planItems"];
   done: string[];
   toggle: (s: string) => void;
   date: string;
@@ -818,11 +679,23 @@ const CareContext = createContext<CareState | null>(null);
 function CareCard({
   kind,
   diabetes = false,
+  toolCallId,
+  result,
 }: {
   kind: string;
   diabetes?: boolean;
+  toolCallId: string;
+  result: unknown;
 }) {
   const c = useContext(CareContext)!;
+  const snapshot = historicalCard(c, kind, toolCallId, result);
+  if (snapshot) return (
+    <div className="agent-card">
+      <div className="agent-card-top"><span className="agent-symbol">✦</span><span>{snapshot.kind === "plan" ? "EARLIER PLAN" : "EARLIER DOCTOR BRIEF"}</span></div>
+      {snapshot.kind === "plan" ? <><h3>{snapshot.data.title}</h3>{snapshot.data.items.map((item, index) => <p key={index}>{item.done ? "✓ " : "○ "}{item.label}{item.when ? ` · ${item.when}` : ""}</p>)}</> : <textarea className="chat-brief" aria-label="Earlier doctor brief" readOnly value={snapshot.data.brief} />}
+      <button className="outline" onClick={() => c.activateCard(snapshot.kind, snapshot.data, toolCallId)}>Use this {snapshot.kind === "plan" ? "plan" : "brief"}</button>
+    </div>
+  );
   return (
     <div className="agent-card">
       <div className="agent-card-top">
@@ -847,7 +720,7 @@ function CareCard({
         <PrescriptionShoppingCard />
       ) : kind === "plan" ? (
         <>
-          <h3>Build something great. Feel good doing it.</h3>
+          <h3>{c.goal}</h3>
           <div className="inline-fields">
             <label>
               Event
@@ -865,16 +738,12 @@ function CareCard({
               />
             </label>
           </div>
-          {[
-            "Take a 10-minute walk",
-            "Make time for a real meal",
-            "Set a wind-down reminder",
-          ].map((t) => (
+          {c.planItems.map(({ label: t, when }) => (
             <button className="task" onClick={() => c.toggle(t)} key={t}>
               <span className={`check ${c.done.includes(t) ? "checked" : ""}`}>
                 {c.done.includes(t) && <Check size={13} />}
               </span>
-              <b>{t}</b>
+              <span><b>{t}</b>{when && <small>{when}</small>}</span>
             </button>
           ))}
           <button className="text-btn" onClick={c.checkin}>
@@ -966,10 +835,10 @@ function CareCard({
 }
 const CareTool = makeAssistantToolUI<
   { kind: string; diabetes?: boolean },
-  { ready: boolean }
+  unknown
 >({
   toolName: "care_action",
-  render: ({ args }) => <CareCard kind={args.kind} diabetes={args.diabetes} />,
+  render: ({ args, result, toolCallId }) => <CareCard kind={args.kind} diabetes={args.diabetes} result={result} toolCallId={toolCallId} />,
 });
 const HealthTool = makeAssistantToolUI<HealthCardArgs, { ready: boolean }>({
   toolName: "health_card",
@@ -978,6 +847,8 @@ const HealthTool = makeAssistantToolUI<HealthCardArgs, { ready: boolean }>({
       <FitnessDashboard initialData={args.overview} compact />
     ) : args.metric === "onboarding" ? (
       <ActivityOnboarding initialPreferences={args.preferences} />
+    ) : args.metric === "labs" ? (
+      <LabTrendsCard {...args} />
     ) : args.metric === "energy" ? (
       <EnergyCard {...args} />
     ) : args.metric === "running" ? (
@@ -1048,9 +919,31 @@ function MarkdownText({ text }: { text: string }) {
   flushList();
   return <div className="md">{blocks}</div>;
 }
+function ComposerAttachment() {
+  return (
+    <AttachmentPrimitive.Root className="attachment-chip">
+      <FileText size={14} />
+      <AttachmentPrimitive.Name />
+      <AttachmentPrimitive.Remove aria-label="Remove attachment">
+        <X size={13} />
+      </AttachmentPrimitive.Remove>
+    </AttachmentPrimitive.Root>
+  );
+}
+function MessageAttachment() {
+  return (
+    <AttachmentPrimitive.Root className="attachment-chip">
+      <FileText size={14} />
+      <AttachmentPrimitive.Name />
+    </AttachmentPrimitive.Root>
+  );
+}
 function UserMessage() {
   return (
     <MessagePrimitive.Root className="message user">
+      <MessagePrimitive.Attachments
+        components={{ Attachment: MessageAttachment }}
+      />
       <MessagePrimitive.Content />
     </MessagePrimitive.Root>
   );
@@ -1062,12 +955,56 @@ function AssistantMessage() {
       <MessagePrimitive.Content
         components={{ Text: ({ text }: { text: string }) => <MarkdownText text={text} /> }}
       />
+      <MessagePrimitive.Error>
+        <p role="alert" className="notice">Baymax couldn’t complete that response. Please try sending your message again.</p>
+      </MessagePrimitive.Error>
     </MessagePrimitive.Root>
   );
 }
-function Chat() {
+function Chat({ conversationId, conversation, onConversation, onToolResult, workspace }: {
+  conversationId: string;
+  conversation: StoredConversation;
+  onConversation: (conversationId: string, conversation: StoredConversation) => void;
+  onToolResult: (kind: "plan" | "brief", result: unknown, toolCallId: string) => void;
+  workspace: CareWorkspace;
+}) {
+  const current = useRef({ workspace, onToolResult, onConversation });
+  current.current = { workspace, onToolResult, onConversation };
+  const adapter = useMemo(() => createAgentAdapter({
+    getConversationId: () => conversationId,
+    onToolResult: (kind, result, id) => current.current.onToolResult(kind, result, id),
+    getToolCards: (tool, result, id) => healthCardsFromTool(tool, result).map(args => ({ ...healthCardPart(args), toolCallId: `${id}-${args.metric}` })),
+    getContext: () => {
+      const w = current.current.workspace;
+      return { name: w.name, goal: w.goal, date: w.date, planItems: w.planItems, city: w.city, travelDate: w.travelDate, brief: w.brief, energy: w.energy };
+    },
+  }), [conversationId]);
+  const attachmentAdapter = useMemo(() => createAttachmentAdapter(conversationId), [conversationId]);
   const [showShopping, setShowShopping] = useState(false);
-  const runtime = useLocalRuntime(adapter);
+  const runtime = useLocalRuntime(adapter, { adapters: { attachments: attachmentAdapter } });
+  const initialConversation = useRef(conversation);
+  const restored = useRef(false);
+  const lastExport = useRef(JSON.stringify(conversation));
+  useEffect(() => {
+    if (!restored.current) {
+      restored.current = true;
+      const repository = initialConversation.current;
+      runtime.thread.import({ ...repository, messages: repository.messages.map(item => ({ ...item, message: { ...item.message, createdAt: new Date(item.message.createdAt) } })) } as unknown as ExportedMessageRepository);
+    }
+    const unsubscribe = runtime.thread.subscribe(() => {
+      if (runtime.thread.getState().isRunning) return;
+      const serialized = JSON.stringify(runtime.thread.export());
+      if (serialized !== lastExport.current) {
+        lastExport.current = serialized;
+        current.current.onConversation(conversationId, JSON.parse(serialized));
+      }
+    });
+    const beforeUnload = (event: BeforeUnloadEvent) => {
+      if (runtime.thread.getState().isRunning && current.current.workspace.remember) { event.preventDefault(); event.returnValue = ""; }
+    };
+    window.addEventListener("beforeunload", beforeUnload);
+    return () => { window.removeEventListener("beforeunload", beforeUnload); unsubscribe(); runtime.thread.cancelRun(); };
+  }, [runtime, conversationId]);
   const { setResponding } = useContext(MascotActivity);
   useEffect(() => {
     const sync = () => setResponding(runtime.thread.getState().isRunning);
@@ -1143,6 +1080,16 @@ function Chat() {
           ))}
         </div>
         <ComposerPrimitive.Root className="composer">
+          <ComposerPrimitive.Attachments
+            components={{ Attachment: ComposerAttachment }}
+          />
+          <ComposerPrimitive.AddAttachment
+            className="attach"
+            aria-label="Attach a medical record"
+            title="Attach a text file (txt, md, csv, json)"
+          >
+            <Plus size={19} />
+          </ComposerPrimitive.AddAttachment>
           <ComposerPrimitive.Input
             placeholder="Tell Baymax what you need…"
             aria-label="Message Baymax"
@@ -1166,6 +1113,83 @@ function Chat() {
     </AssistantRuntimeProvider>
   );
 }
+function ChatHub({ workspace, onToolResult }: {
+  workspace: CareWorkspace;
+  onToolResult: (kind: "plan" | "brief", result: unknown, toolCallId: string) => void;
+}) {
+  const [chats, setChats] = useState<ConversationSummary[]>([]);
+  const [activeId, setActiveId] = useState<string>(() => crypto.randomUUID());
+  const [initial, setInitial] = useState<StoredConversation | null>(EMPTY_CONVERSATION);
+  const [open, setOpen] = useState(false);
+  const [error, setError] = useState("");
+  const latest = useRef(activeId);
+  latest.current = activeId;
+  const refresh = useCallback(async () => {
+    try { setChats(await conversationsApi.list()); setError(""); }
+    catch { setError("Your previous chats are unavailable right now."); }
+  }, []);
+  useEffect(() => { void refresh(); }, [refresh]);
+  const openChat = async (id: string) => {
+    setOpen(false);
+    if (id === latest.current) return;
+    setInitial(null);
+    setActiveId(id);
+    try {
+      const loaded = await conversationsApi.load(id);
+      if (latest.current === id) setInitial(loaded);
+    } catch {
+      if (latest.current === id) { setError("That chat could not be opened."); setInitial(EMPTY_CONVERSATION); }
+    }
+  };
+  const newChat = () => {
+    setOpen(false);
+    setActiveId(crypto.randomUUID());
+    setInitial(EMPTY_CONVERSATION);
+  };
+  const remove = async (id: string) => {
+    try {
+      await conversationsApi.remove(id);
+      if (id === latest.current) newChat();
+      await refresh();
+    } catch { setError("That chat could not be deleted."); }
+  };
+  const save = useCallback(async (id: string, conversation: StoredConversation) => {
+    if (!conversation.messages.length) return;
+    try { await conversationsApi.save(id, conversation); await refresh(); }
+    catch { setError("Your last message could not be saved to your chat history."); }
+  }, [refresh]);
+  return (
+    <div className="chat-hub">
+      <div className="chat-hub-bar">
+        <button className="text-btn" aria-expanded={open} aria-controls="chat-history" onClick={() => setOpen(value => !value)}>
+          <History size={15} /> Chats
+        </button>
+        <button className="text-btn" onClick={newChat}><Plus size={15} /> New chat</button>
+      </div>
+      {error && <p role="alert" className="notice chat-hub-error">{error}</p>}
+      {open && (
+        <aside id="chat-history" className="chat-history" aria-label="Previous chats">
+          {chats.length === 0 ? <p className="muted">No saved chats yet.</p> : (
+            <ul>
+              {chats.map(chat => (
+                <li key={chat.id} className={chat.id === activeId ? "active" : ""}>
+                  <button className="chat-history-item" onClick={() => void openChat(chat.id)} title={chat.title}>
+                    <span>{chat.title}</span>
+                    <time dateTime={chat.updatedAt}>{relativeTime(chat.updatedAt)}</time>
+                  </button>
+                  <button className="chat-history-delete" aria-label={`Delete chat: ${chat.title}`} onClick={() => void remove(chat.id)}>
+                    <Trash2 size={14} />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </aside>
+      )}
+      {initial && <Chat key={activeId} conversationId={activeId} conversation={initial} workspace={workspace} onConversation={save} onToolResult={onToolResult} />}
+    </div>
+  );
+}
 const nav = [
   ["Today", LayoutDashboard],
   ["Talk to Baymax", MessageCircle],
@@ -1179,35 +1203,42 @@ function App() {
   const [responding, setResponding] = useState(false);
   const [page, setPage] = useState("Talk to Baymax");
   const [modal, setModal] = useState("");
-  const [name, setName] = useState("Alex");
-  const [ready, setReady] = useState(false);
+  const persistence = useCareWorkspace();
+  const { workspace, setWorkspace, setField } = persistence;
+  const { name, ready, energy, done, water, reminders, nudge, city, travelDate, date, goal, brief, recipient, subject, planItems, tripReady, checklist, activeMinutes, week } = workspace;
+  const setName = (value: string) => setField("name", value);
+  const setReady = (value: boolean) => setField("ready", value);
+  const setEnergy = (value: CareWorkspace["energy"]) => setField("energy", value);
+  const setWater = (value: number) => setField("water", value);
+  const setWeek = (value: CareWorkspace["week"] | ((previous: CareWorkspace["week"]) => CareWorkspace["week"])) => setField("week", value);
+  const setReminders = (value: boolean) => setField("reminders", value);
+  const setNudge = (value: string) => setField("nudge", value as CareWorkspace["nudge"]);
+  const setCity = (value: string) => setField("city", value);
+  const setTravelDate = (value: string) => setField("travelDate", value);
+  const setDate = (value: string) => setField("date", value);
+  const setGoal = (value: string) => setField("goal", value);
+  const setBrief = (value: string) => setField("brief", value);
+  const setRecipient = (value: string) => setField("recipient", value);
+  const setSubject = (value: string) => setField("subject", value);
+  const onToolResult = useCallback((kind: "plan" | "brief", result: unknown, toolCallId: string) => {
+    setWorkspace(previous => applyToolResult(previous, kind, result, toolCallId));
+  }, [setWorkspace]);
   const [preferencesLoading, setPreferencesLoading] = useState(true);
   const [fitnessPreferences, setFitnessPreferences] = useState<SavedPreferences>();
-  const [energy, setEnergy] = useState("");
-  const [done, setDone] = useState<string[]>([]);
-  const [water, setWater] = useState(3);
-  const [activeMinutes, setActiveMinutes] = useState(0);
-  const [week, setWeek] = useState<WeekDay[]>([]);
-  const [reminders, setReminders] = useState(true);
-  const [nudge, setNudge] = useState("Gentle");
-  const [city, setCity] = useState("San Francisco");
-  const [travelDate, setTravelDate] = useState("2026-10-09");
-  const [date, setDate] = useState("2026-10-10");
-  const [goal, setGoal] = useState("Build Personal Agents Hackathon");
-  const [brief, setBrief] = useState(
-    "MY HEALTH BRIEF — review and complete before sharing\n\nPatient: [Your name]\nReason for visit: Establishing care while travelling.\nMedications: [Add your prescribed medication and dose.]\nAllergies: Not yet confirmed.\nRelevant history: Not yet confirmed.\nQuestions: What records do you need? How can I arrange follow-up care?",
-  );
-  const [recipient, setRecipient] = useState("");
-  const [subject, setSubject] = useState("My health brief for our appointment");
   const [emailConsent, setEmailConsent] = useState(false);
   const [toast, setToast] = useState("");
-  const [tripReady, setTripReady] = useState(false);
-  const [checklist, setChecklist] = useState<string[]>([]);
+  const setTripReady = (value: boolean) => setField("tripReady", value);
+  const setChecklist = (value: string[]) => setField("checklist", value);
   const [checklistLoading, setChecklistLoading] = useState(false);
   const [briefLoading, setBriefLoading] = useState(false);
   const [mobile, setMobile] = useState(false);
-  const toggle = (s: string) =>
-    setDone((d) => (d.includes(s) ? d.filter((x) => x !== s) : [...d, s]));
+  const toggle = (label: string) => setWorkspace(previous => {
+    const checked = !previous.done.includes(label);
+    return { ...previous,
+      done: checked ? [...previous.done, label] : previous.done.filter(item => item !== label),
+      planItems: previous.planItems.map(item => item.label === label ? { ...item, done: checked } : item),
+    };
+  });
   const notify = (s: string) => {
     setToast(s);
     setTimeout(() => setToast(""), 3500);
@@ -1216,18 +1247,22 @@ function App() {
     let active = true;
     const apply = (preferences: SavedPreferences) => {
       if (!active) return;
-      setName(preferences.name);
       setFitnessPreferences(preferences);
-      if (preferences.onboarded) setReady(true);
     };
-    const onChange = (event: Event) => apply((event as CustomEvent<SavedPreferences>).detail);
+    const onChange = (event: Event) => {
+      const preferences = (event as CustomEvent<SavedPreferences>).detail;
+      apply(preferences); setName(preferences.name);
+    };
     window.addEventListener(FITNESS_CHANGED, onChange);
     void fitnessRequest<SavedPreferences>("preferences").then(apply).catch(() => {}).finally(() => { if (active) setPreferencesLoading(false); });
     return () => { active = false; window.removeEventListener(FITNESS_CHANGED, onChange); };
   }, []);
   // Load today's numbers and the last week from the Mastra server. The agent
   // tools read the same data, so the app and Baymax always agree.
+  // Initialize the new-visit demo overview after restoring the care workspace.
+  // A saved or already-opened workspace always keeps its own values.
   useEffect(() => {
+    if (persistence.loading || persistence.loadError) return;
     let cancelled = false;
     (async () => {
       try {
@@ -1235,22 +1270,7 @@ function App() {
         if (!res.ok) throw new Error(`/health/overview ${res.status}`);
         const data: HealthOverview = await res.json();
         if (cancelled) return;
-        setWater(
-          Math.min(WATER_GOAL, Math.round(data.today.hydrationMl / GLASS_ML)),
-        );
-        setActiveMinutes(data.today.activeMinutes);
-        if (data.todayCheckin) setEnergy(capitalize(data.todayCheckin.energy));
-        const checkinByDate = new Map(
-          data.checkins.map((c) => [c.date, c.energy]),
-        );
-        setWeek(
-          [...data.metrics].reverse().map((m) => ({
-            date: m.date,
-            hydrationMl: m.hydrationMl,
-            activeMinutes: m.activeMinutes,
-            energy: checkinByDate.get(m.date),
-          })),
-        );
+        setWorkspace(previous => initializeHealthOverview(previous, data));
       } catch (err) {
         console.warn("Health data unavailable, using local defaults.", err);
       }
@@ -1258,7 +1278,7 @@ function App() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [persistence.loading, persistence.loadError, persistence.resetKey, setWorkspace]);
   const saveHealth = (path: string, body: object) =>
     fetch(path, {
       method: "POST",
@@ -1275,7 +1295,7 @@ function App() {
     const today = new Date().toLocaleDateString("en-CA");
     setWeek((w) =>
       w.map((d) =>
-        d.date === today ? { ...d, energy: energy.toLowerCase() } : d,
+        d.date === today ? { ...d, energy: energy.toLowerCase() as "low" | "okay" | "good" | "great" } : d,
       ),
     );
   };
@@ -1348,10 +1368,21 @@ function App() {
     setPage(s);
     setMobile(false);
   };
+  if (persistence.loading || persistence.loadError) return (
+    <div className="app-loading" role="status">
+      <Mascot small />
+      <h2>{persistence.loading ? "Opening your care space…" : "We couldn’t open your saved care space."}</h2>
+      {persistence.loadError && !persistence.loading && <><p>Your saved information will be kept until we can restore it.</p><button className="primary" onClick={() => void persistence.retry()}>Try again</button></>}
+    </div>
+  );
   return (
     <MascotActivity.Provider value={{ responding, setResponding }}>
     <CareContext.Provider
       value={{
+        activePlanId: workspace.activePlanId,
+        activeBriefId: workspace.activeBriefId,
+        activateCard: onToolResult,
+        planItems,
         done,
         toggle,
         date,
@@ -1454,6 +1485,10 @@ function App() {
             </button>
           </header>
           <div className="content">
+            <div className="persistence-status" role="status">
+              <ShieldCheck size={14} /><span>{persistence.status}</span>
+              {persistence.error && <><span role="alert">{persistence.error}</span><button className="text-btn" disabled={persistence.busy} onClick={async () => { if (await persistence.retry()) { setModal(""); setPage("Talk to Baymax"); } }}>Try again</button></>}
+            </div>
             <div className="page-heading">
               <div>
                 <p className="eyebrow">A LITTLE CARE GOES A LONG WAY</p>
@@ -1724,7 +1759,7 @@ function App() {
               hidden={page !== "Talk to Baymax"}
               className="panel chat-panel"
             >
-              <Chat />
+              <ChatHub key={persistence.resetKey} workspace={workspace} onToolResult={onToolResult} />
             </section>
             {page === "Your plan" && (
               <div className="two-col">
@@ -1755,20 +1790,14 @@ function App() {
                 </section>
                 <section className="panel">
                   <h2>Your daily preparation</h2>
-                  {[
-                    "Take a 10-minute walk",
-                    "Make time for a real meal",
-                    "Pack medication documents",
-                    "Set a wind-down reminder",
-                    "Schedule your next routine checkup",
-                  ].map((s) => (
+                  {planItems.map(({ label: s, when }) => (
                     <button className="task" key={s} onClick={() => toggle(s)}>
                       <span
                         className={`check ${done.includes(s) ? "checked" : ""}`}
                       >
                         {done.includes(s) && <Check size={13} />}
                       </span>
-                      <b>{s}</b>
+                      <span><b>{s}</b>{when && <small>{when}</small>}</span>
                     </button>
                   ))}
                   <button
@@ -1974,18 +2003,21 @@ function App() {
                     </select>
                   </label>
                   <p className="notice">
-                    Preference saved for this session:{" "}
-                    {reminders ? nudge : "Nudges off"}. Your preferences apply
-                    while you’re here.
+                    Your preference: {reminders ? nudge : "Nudges off"}.
+                    {workspace.remember ? " Remembered for your next visit." : " Applies while you’re here."}
                   </p>
                 </section>
                 <section className="panel">
                   <ShieldCheck className="green-text" size={30} />
                   <h2>Privacy comes first.</h2>
+                  <label className="consent">
+                    <input type="checkbox" checked={workspace.remember} disabled={persistence.busy} onChange={e => void persistence.changeMemory(e.target.checked)} />
+                    Remember across visits
+                  </label>
                   <p>
-                    Activity goals and onboarding preferences stay in the demo
-                    server session and reset when the server restarts.
-                    Conversations and other page preferences reset on refresh.
+                    Save your profile, care plans, and preferences for your next visit in this browser. Your chat history and health data are saved to your account.
+                    Turning this off deletes the saved copy and keeps your current care space for this visit.
+                    Activity goals currently use the demo server session and reset when it restarts.
                   </p>
                   <p className="fine">
                     Choose what you share. Review any brief before opening it in
@@ -1998,7 +2030,7 @@ function App() {
                     }}
                   >
                     <RotateCcw size={15} />
-                    Reset my session
+                    Delete my care space
                   </button>
                 </section>
               </div>
@@ -2033,7 +2065,7 @@ function App() {
         )}{" "}
         {!ready && !preferencesLoading && (
           <ModalShell welcome>
-            <ActivityOnboarding initialName={name} initialPreferences={fitnessPreferences} onCancel={() => { setReady(true); go("Physical fitness"); }} onComplete={(preferences) => {
+            <ActivityOnboarding initialName={name} memoryControl={<label className="consent"><input type="checkbox" checked={workspace.remember} onChange={e => setField("remember", e.target.checked)} />Remember my care space across visits in this browser.</label>} initialPreferences={fitnessPreferences} onCancel={() => { setReady(true); go("Physical fitness"); }} onComplete={(preferences) => {
               setName(preferences.name); setReady(true); go("Physical fitness");
             }} />
           </ModalShell>
@@ -2057,7 +2089,7 @@ function App() {
                     {["Low", "Okay", "Good", "Great"].map((s, i) => (
                       <button
                         className={energy === s ? "selected" : ""}
-                        onClick={() => setEnergy(s)}
+                        onClick={() => setEnergy(s as CareWorkspace["energy"])}
                         key={s}
                       >
                         <span>{["☁", "◒", "☀", "✦"][i]}</span>
@@ -2132,7 +2164,7 @@ function App() {
                   <button
                     className="primary"
                     onClick={() => {
-                      const displayName = name.trim() || "Alex";
+                      const displayName = name.trim() || "Jordan";
                       void (async () => {
                         try {
                           const current = fitnessPreferences ?? await fitnessRequest<SavedPreferences>("preferences");
@@ -2150,15 +2182,20 @@ function App() {
                 <>
                   <h2>Start fresh?</h2>
                   <p>
-                    This refreshes the app and clears the conversation and local
-                    tasks. Activity data and saved goals stay in the demo server
-                    session. Your downloaded brief stays on your device.
+                    This clears your saved profile, care plans, preferences, and brief, and restores the sample chats, check-ins, and health history.
+                    Your downloaded brief stays on your device.
+                    Demo activity goals remain until the server restarts.
                   </p>
+                  {persistence.error && <p role="alert" className="notice">{persistence.error}</p>}
                   <button
                     className="primary"
-                    onClick={() => window.location.reload()}
+                    disabled={persistence.busy}
+                    onClick={async () => {
+                      try { await conversationsApi.resetDemo(); } catch { setToast("Could not restore the sample data. Please try again."); return; }
+                      if (await persistence.reset()) { setModal(""); setPage("Talk to Baymax"); }
+                    }}
                   >
-                    Reset session
+                    {persistence.busy ? "Deleting…" : "Delete and start fresh"}
                   </button>
                 </>
               )}

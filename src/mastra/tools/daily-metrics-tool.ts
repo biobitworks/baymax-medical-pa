@@ -3,8 +3,7 @@ import { z } from "zod";
 import { getRecentMetrics, summarizeMetrics } from "../lib/health-data";
 
 /**
- * Reads the user's daily movement, hydration, and sleep data. Hardcoded sample
- * data for now.
+ * Reads the user's daily movement, hydration, and sleep data. Stored in Postgres per user.
  */
 export const dailyMetricsTool = createTool({
   id: "get-daily-metrics",
@@ -53,7 +52,7 @@ export const dailyMetricsTool = createTool({
     }),
   }),
   execute: async ({ days }) => {
-    const daily = getRecentMetrics(days);
+    const daily = await getRecentMetrics(days);
     return { daily, summary: summarizeMetrics(daily) };
   },
 });

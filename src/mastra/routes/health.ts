@@ -1,3 +1,4 @@
+import { getFitnessOverview } from "../lib/fitness-data";
 import { registerApiRoute } from "@mastra/core/server";
 import { z } from "zod";
 import {
@@ -6,6 +7,7 @@ import {
   getRecentCheckins,
   getRecentMetrics,
   getRecentRuns,
+  getToday,
   saveCheckin,
   saveRun,
   summarizeCheckins,
@@ -13,7 +15,7 @@ import {
   summarizeRuns,
 } from "../lib/health-data";
 
-import { buildFitnessOverview, getFitnessPreferences, goalsSchema, preferencesSchema, saveActivityGoals, saveFitnessPreferences } from "../lib/fitness";
+import { getFitnessPreferences, goalsSchema, preferencesSchema, saveActivityGoals, saveFitnessPreferences } from "../lib/fitness";
 
 const checkinBody = z.object({
   energy: z.enum(ENERGY_LEVELS),
@@ -38,7 +40,7 @@ export const healthRoutes = [
   registerApiRoute("/health/fitness", {
     method: "GET",
     handler: async (c) => c.json({
-      ...buildFitnessOverview(getRecentMetrics(7), getFitnessPreferences().goals),
+      ...await getFitnessOverview(),
       preferences: getFitnessPreferences(), source: "demo",
     }),
   }),
@@ -66,11 +68,14 @@ export const healthRoutes = [
     method: "GET",
     handler: async (c) => {
       const days = Math.min(30, Math.max(1, Number(c.req.query("days")) || 7));
-      const metrics = getRecentMetrics(days);
-      const checkins = getRecentCheckins(days);
+      const [metrics, checkins, today] = await Promise.all([
+        getRecentMetrics(days),
+        getRecentCheckins(days),
+        getToday(),
+      ]);
       return c.json({
-        today: metrics[0],
-        todayCheckin: checkins[0]?.date === metrics[0].date ? checkins[0] : null,
+        today,
+        todayCheckin: checkins[0]?.date === today.date ? checkins[0] : null,
         metrics,
         checkins,
         metricsSummary: summarizeMetrics(metrics),
@@ -84,7 +89,7 @@ export const healthRoutes = [
     handler: async (c) => {
       const parsed = checkinBody.safeParse(await c.req.json().catch(() => ({})));
       if (!parsed.success) return c.json({ error: "Invalid check-in" }, 400);
-      return c.json({ checkin: saveCheckin(parsed.data.energy, parsed.data.note) });
+      return c.json({ checkin: await saveCheckin(parsed.data.energy, parsed.data.note) });
     },
   }),
 
@@ -93,7 +98,7 @@ export const healthRoutes = [
     handler: async (c) => {
       const parsed = waterBody.safeParse(await c.req.json().catch(() => ({})));
       if (!parsed.success) return c.json({ error: "Invalid amount" }, 400);
-      return c.json({ today: addHydration(parsed.data.ml) });
+      return c.json({ today: await addHydration(parsed.data.ml) });
     },
   }),
 
@@ -101,7 +106,7 @@ export const healthRoutes = [
     method: "GET",
     handler: async (c) => {
       const count = Math.min(30, Math.max(1, Number(c.req.query("count")) || 10));
-      const runs = getRecentRuns(count);
+      const runs = await getRecentRuns(count);
       return c.json({ runs, summary: summarizeRuns(runs) });
     },
   }),
@@ -112,7 +117,7 @@ export const healthRoutes = [
       const parsed = runBody.safeParse(await c.req.json().catch(() => ({})));
       if (!parsed.success) return c.json({ error: "Invalid run" }, 400);
       const { distanceMi, durationMin, note } = parsed.data;
-      return c.json({ run: saveRun(distanceMi, durationMin, note) });
+      return c.json({ run: await saveRun(distanceMi, durationMin, note) });
     },
   }),
 ];

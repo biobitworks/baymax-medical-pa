@@ -15,7 +15,7 @@ export type MovementDay = { date: string; steps: number; activeMinutes: number }
 
 // Same single-user, in-memory demo store as health-data. Resets on server restart.
 let preferences: FitnessPreferences = {
-  name: 'Alex', goals: { steps: 5000, activeMinutes: 20 }, notifications: 'off',
+  name: 'Jordan', goals: { steps: 5000, activeMinutes: 20 }, notifications: 'off',
 };
 let onboarded = false;
 export const getFitnessPreferences = () => ({ ...preferences, goals: { ...preferences.goals }, onboarded });

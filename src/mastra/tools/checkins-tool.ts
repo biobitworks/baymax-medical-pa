@@ -8,7 +8,7 @@ import {
 
 /**
  * Reads the user's daily "How's your energy?" check-ins (Low / Okay / Good /
- * Great). Hardcoded sample data for now.
+ * Great). Stored in Postgres per user.
  */
 export const recentCheckinsTool = createTool({
   id: "get-recent-checkins",
@@ -40,7 +40,7 @@ export const recentCheckinsTool = createTool({
     }),
   }),
   execute: async ({ count }) => {
-    const checkins = getRecentCheckins(count);
+    const checkins = await getRecentCheckins(count);
     return { checkins, summary: summarizeCheckins(checkins) };
   },
 });
