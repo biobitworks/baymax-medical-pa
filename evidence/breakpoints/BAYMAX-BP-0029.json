@@ -1,0 +1,36 @@
+{
+  "base_head": "e05ad75f0c5e1d307bbadb3b8c697d8f7a1afe49",
+  "branch": "integration/iphone-offline-v2",
+  "breakpoint_id": "BAYMAX-BP-0029",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 2704,
+        "path": "evidence/breakpoints/BAYMAX-BP-0028.json",
+        "sha256": "efefc4607f8062ff5ec83df470888cbf215a3e4a9229b55ca7511804d000e2d0"
+      },
+      {
+        "bytes": 1541,
+        "path": "evidence/receipts/github/bp0028_local_model_publication.json",
+        "sha256": "490d6f8cc98abe9778dc5b3356f47d46df9e91aa323cfa6ce528c7ae050933e0"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 2,
+    "leaf_hashes": [
+      "98d7ababd15c8fdc8560201b5a03088deac7195c0e100f8be2f5a3bf9d4362fe",
+      "a5a77a584775a5c4ee9790beecbb480c4a9a8c48a38b21c496841bfef5f42681"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "e128e6efc051da60c5caa466252ab047ffb5677573f608dd389b1267bbb565e3"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "Published the narrow BP-0028 physical-iPhone Apollo local-model observation to upstream issue #3 and the implementation/progress PRs. Issue #3 remains OPEN/PARTIAL because offline network isolation is NOT_TESTED.",
+  "parent": "BAYMAX-BP-0028",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "LOCAL_MODEL_TEST_GITHUB_PUBLICATION",
+  "state": "PASS",
+  "timestamp_utc": "2026-10-04T20:51:52.365427+00:00"
+}
