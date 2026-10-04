@@ -1,6 +1,6 @@
-# Baymax — Medical Personal Agent
+# BayMax - Medical Personal Agent
 
-> **An annoying medical PA that you love.**
+> **An adorable Medical Personal Agent that cares for you, designed to be secure and compliant.**
 
 **Build Personal Agents Hackathon Project Submission**
 
@@ -93,17 +93,21 @@ Baymax is the caring, persistent companion that checks in on your habits, helps 
 
 ## Use cases
 
-### 1. Buying prescription medication while travelling
+- **Proactive care:** support for exercise and diet through achievable goals, meal planning, and gentle reminders.
+- **Prescription meds ordering:** identify where to buy prescribed medication and help order it for you. Research and ordering are planned capabilities; the current prototype provides an order preview.
+- **Medical brief for new doctors when travelling:** prepare a concise health summary to review and share with a new doctor.
+
+### 1. Proactive care: exercise and diet
+
+BayMax helps you build everyday exercise and diet habits with achievable movement goals, meal planning, activity check-ins, and gentle accountability. Reminders should be adjustable, snoozable, and easy to turn off.
+
+For a busy week or hackathon, it can help you plan a routine around sleep, meals, hydration, movement, and your existing medication schedule.
+
+### 2. Prescription meds ordering
 
 Travelling and running low on your prescribed medication? Baymax helps you prepare a medication summary, research local prescription requirements and pharmacy options, and identify questions to ask a licensed clinician or pharmacist.
 
 It supports the process; it does not issue prescriptions, authorize purchases, or recommend medication substitutions.
-
-### 2. Preparing for a hackathon—with everyday reminders
-
-Tell Baymax when your hackathon starts. It helps you create a preparation routine and checks in every day about sleep, meals, hydration, movement, and any existing medication schedule.
-
-A little annoying. Very caring. Reminders should be adjustable, snoozable, and easy to turn off.
 
 ### 3. Briefing a new doctor while travelling
 
