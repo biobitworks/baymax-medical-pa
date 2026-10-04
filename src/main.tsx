@@ -997,8 +997,23 @@ function Chat({ conversationId, conversation, onConversation, onToolResult, work
     },
   }), [conversationId]);
   const attachmentAdapter = useMemo(() => createAttachmentAdapter(conversationId), [conversationId]);
-  const [showShopping, setShowShopping] = useState(false);
   const runtime = useLocalRuntime(adapter, { adapters: { attachments: attachmentAdapter } });
+  const openMedicineShopping = () => {
+    if (runtime.thread.getState().isRunning) return;
+    runtime.thread.append({
+      role: "user",
+      content: [{ type: "text", text: "Show me the medicine shopping preview." }],
+      startRun: false,
+    });
+    runtime.thread.append({
+      role: "assistant",
+      content: [
+        { type: "text", text: "Here are sample pharmacy options for an existing prescription refill. Choose an option below and review your cart. These are fictional prices and packaging; no medication will be purchased." },
+        { type: "tool-call", toolCallId: crypto.randomUUID(), toolName: "care_action", args: { kind: "purchase" }, argsText: JSON.stringify({ kind: "purchase" }), result: { ready: true } },
+      ],
+      startRun: false,
+    });
+  };
   const initialConversation = useRef(conversation);
   const restored = useRef(false);
   const lastExport = useRef(JSON.stringify(conversation));
@@ -1036,7 +1051,7 @@ function Chat({ conversationId, conversation, onConversation, onToolResult, work
       <WebSearchTool />
       <ThreadPrimitive.Root className="chat">
         <ThreadPrimitive.Viewport className="transcript">
-          {!showShopping && <ThreadPrimitive.Empty>
+          <ThreadPrimitive.Empty>
             <div className="chat-welcome">
               <Mascot small />
               <h2>Hello. I am Baymax.</h2>
@@ -1059,11 +1074,10 @@ function Chat({ conversationId, conversation, onConversation, onToolResult, work
                 ))}
               </div>
             </div>
-          </ThreadPrimitive.Empty>}
+          </ThreadPrimitive.Empty>
           <ThreadPrimitive.Messages
             components={{ UserMessage, AssistantMessage }}
           />
-          {showShopping && <PrescriptionShoppingCard />}
         </ThreadPrimitive.Viewport>
         <ThreadPrimitive.If running>
           <div className="bay-response" role="status">
@@ -1072,7 +1086,7 @@ function Chat({ conversationId, conversation, onConversation, onToolResult, work
           </div>
         </ThreadPrimitive.If>
         <div className="quick-actions">
-          <button type="button" onClick={() => setShowShopping(value => !value)} aria-expanded={showShopping}>{showShopping ? "Hide shopping demo" : "Shopping demo"}</button>
+          <button type="button" onClick={openMedicineShopping}>Browse medicines</button>
           {[
             { label: "Weekly summary", prompt: WEEKLY_SUMMARY_PROMPT },
             { label: "Fitness", prompt: "Open my fitness dashboard" },
