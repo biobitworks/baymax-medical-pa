@@ -1,0 +1,146 @@
+[
+  {
+    "id": "welcome",
+    "title": "Your goals. Your care.",
+    "subtitle": "Choose goals, add medical records, and review your details.",
+    "durationInFrames": 370,
+    "captions": [
+      {
+        "at": 0,
+        "text": "Choose your goals."
+      },
+      {
+        "at": 3.3333333333333335,
+        "text": "Add medical records."
+      },
+      {
+        "at": 6.666666666666667,
+        "text": "Review your details."
+      },
+      {
+        "at": 10,
+        "text": "Ready for you."
+      }
+    ]
+  },
+  {
+    "id": "care",
+    "title": "Feel better.",
+    "subtitle": "Turn a busy week into a few achievable steps.",
+    "durationInFrames": 381,
+    "captions": [
+      {
+        "at": 0.0,
+        "text": "Make a plan."
+      },
+      {
+        "at": 2.147,
+        "text": "Small steps."
+      },
+      {
+        "at": 4.156,
+        "text": "Little wins."
+      },
+      {
+        "at": 6.322,
+        "text": "How are you?"
+      },
+      {
+        "at": 8.669,
+        "text": "Check-in saved."
+      },
+      {
+        "at": 11.094,
+        "text": "See your progress."
+      }
+    ]
+  },
+  {
+    "id": "reminders",
+    "title": "A little nudge.",
+    "subtitle": "Medical reminders, on your terms.",
+    "durationInFrames": 240,
+    "captions": [
+      {
+        "at": 0,
+        "text": "A little nudge."
+      }
+    ]
+  },
+  {
+    "id": "travel",
+    "title": "Travel ready.",
+    "subtitle": "Prepare before you leave. Carry your context with you.",
+    "durationInFrames": 282,
+    "captions": [
+      {
+        "at": 0.0,
+        "text": "Where next?"
+      },
+      {
+        "at": 2.422,
+        "text": "Get ready."
+      },
+      {
+        "at": 5.376,
+        "text": "Packed."
+      },
+      {
+        "at": 7.375,
+        "text": "Bring your context."
+      }
+    ]
+  },
+  {
+    "id": "prescription",
+    "title": "Refills, simplified.",
+    "subtitle": "Choose. Adjust. Review. Confirm a simulated order.",
+    "durationInFrames": 321,
+    "captions": [
+      {
+        "at": 0.0,
+        "text": "Explore options."
+      },
+      {
+        "at": 1.984,
+        "text": "Make your choice."
+      },
+      {
+        "at": 4.747,
+        "text": "Review."
+      },
+      {
+        "at": 6.883,
+        "text": "Confirm demo."
+      },
+      {
+        "at": 8.194,
+        "text": "All set."
+      }
+    ]
+  },
+  {
+    "id": "brief",
+    "title": "Share your story.",
+    "subtitle": "Edit your brief. Review the recipient. Choose when to share.",
+    "durationInFrames": 319,
+    "captions": [
+      {
+        "at": 0.0,
+        "text": "Your health brief."
+      },
+      {
+        "at": 3.755,
+        "text": "Choose your doctor."
+      },
+      {
+        "at": 5.158,
+        "text": "Review together."
+      },
+      {
+        "at": 7.432,
+        "text": "Ready to share."
+      }
+    ]
+  }
+]
