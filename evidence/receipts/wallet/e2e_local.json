@@ -1,0 +1,38 @@
+{
+ "persistent_wallet_demo": "PARTIAL (not PASS: no Fly, no phone, no health FCO, no map)",
+ "schema": "baymax.e2e_local_receipt.v1",
+ "steps": {
+  "01_synthetic_health_context_loaded": "NOT_IMPLEMENTED",
+  "02_local_liquid_executed": {
+   "authority": "NONE (untrusted)",
+   "executed": true,
+   "model": "LFM2.5-350M Q4_K_M",
+   "output_parsed": true,
+   "response_sha256": "aead88603b24951f40e0392e4ea4e68b2fe14754816b05c5f5946be2c85966bb",
+   "wall_s": 2.651
+  },
+  "03_wallet_delegation_phone_root_fly_delegate": true,
+  "05_public_location_evidence": "NOT_TESTED",
+  "06_policy_classification": "NEEDS_HUMAN_APPROVAL",
+  "07_without_approval_rejected": "REJECT:HUMAN_APPROVAL_REQUIRED",
+  "08_fly_delegated_identity_on_Fly": "BLOCKED_HUMAN_FLY_AUTH (in-process only)",
+  "09_phone_root_authority": "SIMULATED_KEY/NOT_SECURE_ENCLAVE; no iPhone",
+  "10_11_12_approved_signed_synthetic_tx": {
+   "balance": 97000,
+   "receipt": "RCPT-ACT-3"
+  },
+  "14_receipt_is_FCO_evidence": "NOT_IMPLEMENTED (receipt lives in ledger entry; no FCO graph object yet)",
+  "16_18_both_verified_same_state": true,
+  "17_independent_replay_matches_root": true,
+  "19_both_persist_same_state": true,
+  "20_replay_rejected": "REJECT:BAD_SEQUENCE",
+  "21_22_23_restart_recover_same_state": true,
+  "24_no_private_key_or_PHI_in_files": "see scripts/secret_gate.py + wallet attack 33",
+  "25_final_custody_verifier": "run separately: scripts/verify_chain.py",
+  "wallet_head": {
+   "leaf_count": 3,
+   "root": "cc3c5172ef1c1c810fd202d2ddb7a94d6c4fc31ed56c55e9f596eab66069bf40",
+   "root_label": "COMPUTED (two internal impls agree; independent replay agrees); NOT externally verified"
+  }
+ }
+}
