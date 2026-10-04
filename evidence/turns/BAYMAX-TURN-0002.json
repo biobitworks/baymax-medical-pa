@@ -1,0 +1,18 @@
+{
+  "schema": "baymax.turn_input.v1",
+  "id": "BAYMAX-TURN-0002",
+  "source": "user_chat",
+  "captured_at_date": "2026-10-04",
+  "request": [
+    "Commit and push the current Baymax custody work through the Biobitworks branch.",
+    "Preserve a Merkle-tree breakpoint with a calculated root as cryptographic chain-of-custody evidence.",
+    "Verify and report that the pushed remote commit matches the local commit.",
+    "Use an existing signing identity on magicPRO if available.",
+    "Provide a short WhatsApp handoff message teammates can give their coding agents."
+  ],
+  "redactions": [
+    "No credentials, API-key values, device identifiers, private health data, or secret-bearing environment values are included."
+  ],
+  "canonical_chat_bytes_available": false,
+  "claim": "Sanitized semantic turn capture; not a byte-exact transcript."
+}
