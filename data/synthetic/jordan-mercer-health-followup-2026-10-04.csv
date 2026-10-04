@@ -1,0 +1,55 @@
+patient_id,measurement_date,panel,biomarker,value,unit,reference_low,reference_high,flag,notes
+SYN-JM-742,2026-10-04,Advanced lipid assessment,ApoB,91,mg/dL,0,89,above_range,
+SYN-JM-742,2026-10-04,Advanced lipid assessment,Lp(a),28,nmol/L,0,74,in_range,
+SYN-JM-742,2026-10-04,Lipid panel,Cholesterol Total,196,mg/dL,0,199,in_range,
+SYN-JM-742,2026-10-04,Lipid panel,LDL-Cholesterol (calculated),117,mg/dL,0,99,above_range,Calculated using the Friedewald equation.
+SYN-JM-742,2026-10-04,Lipid panel,Non-HDL Cholesterol (calculated),144,mg/dL,0,129,above_range,Calculated as total cholesterol minus HDL cholesterol.
+SYN-JM-742,2026-10-04,Lipid panel,Cholesterol/HDL Ratio (calculated),3.8,ratio,0,4.9,in_range,Calculated as total cholesterol divided by HDL cholesterol.
+SYN-JM-742,2026-10-04,Lipid panel,HDL Cholesterol,52,mg/dL,40,999,in_range,
+SYN-JM-742,2026-10-04,Lipid panel,LDL/HDL Ratio (calculated),2.3,ratio,0,4.9,in_range,Calculated as LDL cholesterol divided by HDL cholesterol.
+SYN-JM-742,2026-10-04,Lipid panel,Triglycerides,135,mg/dL,0,149,in_range,
+SYN-JM-742,2026-10-04,CBC with differential,Absolute Basophils,34,cells/mcL,0,200,in_range,
+SYN-JM-742,2026-10-04,CBC with differential,Absolute Eosinophils,171,cells/mcL,15,500,in_range,
+SYN-JM-742,2026-10-04,CBC with differential,Absolute Lymphocytes,1881,cells/mcL,850,3900,in_range,
+SYN-JM-742,2026-10-04,CBC with differential,Absolute Monocytes,399,cells/mcL,200,950,in_range,
+SYN-JM-742,2026-10-04,CBC with differential,Absolute Neutrophils,3215,cells/mcL,1500,7800,in_range,
+SYN-JM-742,2026-10-04,CBC with differential,Basophils,0.6,%,0,2,in_range,
+SYN-JM-742,2026-10-04,CBC with differential,Eosinophils,3,%,0,8,in_range,
+SYN-JM-742,2026-10-04,CBC with differential,Hematocrit,44,%,38.5,50,in_range,
+SYN-JM-742,2026-10-04,CBC with differential,Hemoglobin,14.8,g/dL,13.2,17.1,in_range,
+SYN-JM-742,2026-10-04,CBC with differential,Lymphocytes,33,%,15,49,in_range,
+SYN-JM-742,2026-10-04,CBC with differential,Mean Corpuscular Hemoglobin (MCH),30.2,pg,27,33,in_range,
+SYN-JM-742,2026-10-04,CBC with differential,Mean Corpuscular Hemoglobin Concentration (MCHC),33.6,g/dL,32,36,in_range,
+SYN-JM-742,2026-10-04,CBC with differential,Mean Corpuscular Volume (MCV),89.8,fL,80,100,in_range,
+SYN-JM-742,2026-10-04,CBC with differential,Mean Platelet Volume (MPV),10.2,fL,7.5,12.5,in_range,
+SYN-JM-742,2026-10-04,CBC with differential,Monocytes,7,%,0,13,in_range,
+SYN-JM-742,2026-10-04,CBC with differential,Neutrophils,56.4,%,38,80,in_range,
+SYN-JM-742,2026-10-04,CBC with differential,Platelet Count,262,K/mcL,140,400,in_range,
+SYN-JM-742,2026-10-04,CBC with differential,Red Blood Cell Count (RBC),4.9,M/mcL,4.2,5.8,in_range,
+SYN-JM-742,2026-10-04,CBC with differential,Red Cell Distribution Width (RDW),12.8,%,11,15,in_range,
+SYN-JM-742,2026-10-04,CBC with differential,White Blood Cell Count (WBC),5.7,K/mcL,3.8,10.8,in_range,
+SYN-JM-742,2026-10-04,Comprehensive metabolic panel,Alanine aminotransferase (ALT),24,U/L,9,46,in_range,
+SYN-JM-742,2026-10-04,Comprehensive metabolic panel,Albumin,4.5,g/dL,3.6,5.1,in_range,
+SYN-JM-742,2026-10-04,Comprehensive metabolic panel,Albumin/Globulin Ratio (calculated),1.7,ratio,1,2.5,in_range,Calculated as albumin divided by globulin.
+SYN-JM-742,2026-10-04,Comprehensive metabolic panel,Alkaline phosphatase (ALP),81,U/L,36,130,in_range,
+SYN-JM-742,2026-10-04,Comprehensive metabolic panel,Aspartate aminotransferase (AST),22,U/L,10,40,in_range,
+SYN-JM-742,2026-10-04,Comprehensive metabolic panel,Blood urea nitrogen,15,mg/dL,7,25,in_range,
+SYN-JM-742,2026-10-04,Comprehensive metabolic panel,BUN/Creatinine Ratio,15.96,ratio,6,22,in_range,Calculated as blood urea nitrogen divided by creatinine.
+SYN-JM-742,2026-10-04,Comprehensive metabolic panel,Calcium,9.4,mg/dL,8.6,10.3,in_range,
+SYN-JM-742,2026-10-04,Comprehensive metabolic panel,Carbon dioxide,26,mmol/L,20,32,in_range,
+SYN-JM-742,2026-10-04,Comprehensive metabolic panel,Chloride,103,mmol/L,98,110,in_range,
+SYN-JM-742,2026-10-04,Comprehensive metabolic panel,Creatinine,0.94,mg/dL,0.6,1.29,in_range,
+SYN-JM-742,2026-10-04,Comprehensive metabolic panel,Estimated Glomerular Filtration Rate (eGFR),104,mL/min/1.73 m2,60,250,in_range,CKD-EPI 2021 creatinine equation.
+SYN-JM-742,2026-10-04,Comprehensive metabolic panel,Globulin (calculated),2.7,g/dL,1.9,3.7,in_range,Calculated as total protein minus albumin.
+SYN-JM-742,2026-10-04,Comprehensive metabolic panel,Potassium,4.3,mmol/L,3.5,5.3,in_range,
+SYN-JM-742,2026-10-04,Comprehensive metabolic panel,Sodium,140,mmol/L,135,146,in_range,
+SYN-JM-742,2026-10-04,Comprehensive metabolic panel,Total Bilirubin,0.6,mg/dL,0.2,1.2,in_range,
+SYN-JM-742,2026-10-04,Comprehensive metabolic panel,Total protein,7.2,g/dL,6.1,8.1,in_range,
+SYN-JM-742,2026-10-04,Glycemic monitoring,Glucose,126,mg/dL,65,99,above_range,Fasting plasma glucose.
+SYN-JM-742,2026-10-04,Glycemic monitoring,HbA1c,6.5,%,0,5.6,above_range,Three-month follow-up HbA1c.
+SYN-JM-742,2026-10-04,Glycemic monitoring,Insulin,10.2,uIU/mL,0,18.4,in_range,Fasting serum insulin.
+SYN-JM-742,2026-10-04,Inflammatory marker,hsCRP,0.8,mg/L,0,3,in_range,
+SYN-JM-742,2026-10-04,Nutrient assessment,"Vitamin D, 25-Hydroxy",33.8,ng/mL,20,100,in_range,First recorded result. Serum 25-hydroxyvitamin D.
+SYN-JM-742,2026-10-04,Nutrient assessment,Vitamin B12,418,pg/mL,232,1245,in_range,First recorded result. Serum vitamin B12.
+SYN-JM-742,2026-10-04,Thyroid function,Thyroid-stimulating Hormone (TSH),2.14,uIU/mL,0.45,4.5,in_range,First recorded result. Serum TSH.
+SYN-JM-742,2026-10-04,Urine kidney screening,Urine Albumin/Creatinine Ratio (UACR),14.8,mg/g creatinine,0,29,in_range,First recorded result. Random spot urine sample.
