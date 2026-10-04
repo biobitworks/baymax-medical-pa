@@ -12,7 +12,7 @@ class T(unittest.TestCase):
             self.assertEqual(k.root(), m["root"]); self.assertEqual(mmr.root_reference(ds), m["root"])
     def test_attacks(self):
         out = os.path.join(tempfile.mkdtemp(), "r.json"); sys.argv = ["x", out]
-        with self.assertRaises(SystemExit) as c: WA.WA_main = WA.main(); 
+        with self.assertRaises(SystemExit) as c: WA.main()
         self.assertEqual(c.exception.code, 0)
     def test_model_proposal_is_classification_only(self):
         w = WA.W(); s0 = json.dumps(w.st, sort_keys=True)
