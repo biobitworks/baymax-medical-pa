@@ -1,0 +1,37 @@
+{
+  "apollo_inference": "NOT_TESTED",
+  "claim_ceiling": "SDK compilation and local gate tests; no physical device/model execution or medical correctness claim",
+  "clinical_safety_validation": "NOT_TESTED_SCHEMA_GATE_ONLY",
+  "direct_provider_identifiers_in_directory": "NONE",
+  "native_leap": "DEFERRED_NOT_IMPLEMENTED",
+  "network_dependency": "NONE_FOR_BUNDLED_DATA_OR_CONTRACT_TESTS",
+  "physical_device_execution": "NOT_TESTED",
+  "prior_skipped_fixture_tests": {
+    "breakpoint": "BAYMAX-BP-0023",
+    "count": 4,
+    "state": "PRESERVED_SUCCESSOR_PATH_REPAIR_26_TESTS_PASS"
+  },
+  "python_test_log_sha256": "7e26ea20e9a7b60a83a1bdbe8d79911624a2e8fc3b172eb9ece8e06a68dcfbfc",
+  "python_tests": "PASS_26_NO_SKIPS",
+  "schema": "baymax.iphone_preparation_tests.v1",
+  "simulator_sdk_compile": "PASS",
+  "swift_app_build_log_sha256": "325188d56bb12f9aa726be5e196f9e8d955bd13385b63ad67d3642472e4567f9",
+  "swift_bundle_decode": "PASS_BP21_AND_BOUNDED_FCO",
+  "swift_output_validation": "PASS",
+  "swift_python_policy_parity": "PASS_24_CASES",
+  "unauthorized_provider_calls": 0,
+  "unknown_preservation": "PASS",
+  "wallet_mutation_test": "PASS_CLASSIFICATION_REJECTS_MODEL_FCO_AND_PRESCRIPTION_PURCHASE_STATE_UNCHANGED",
+  "xcode_destination_attempts": [
+    {
+      "log_sha256": "e80eaddfdd2b0e24acbd29d5068274b4d615854ecf2c0d94cf970471f797ae37",
+      "reason": "No simulator runtime/destination installed",
+      "state": "FAILED"
+    },
+    {
+      "log_sha256": "5f84fa74ca195674b5186a1718f25b644d9a93fdf16b58b1d6a13cbadafbc764",
+      "reason": "iOS 26.1 platform not installed; SDK exists; device unavailable",
+      "state": "FAILED"
+    }
+  ]
+}

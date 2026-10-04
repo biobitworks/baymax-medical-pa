@@ -12,7 +12,7 @@ from baymax_evidence.dataset import DatasetSourceFCO
 from baymax_evidence.fhir import transform_fhir_bundle
 from baymax_evidence.public_sources import PUBLIC_SOURCES
 
-FIXTURE = ROOT / "fixtures/synthea/brock407_fhir_r4.json"
+FIXTURE = Path.home() / ".local/share/baymax-synthetic-structure/brock407_fhir_r4.json"
 FIXTURE_SHA = "93e322ae61082775f578b8833c343551939206bba8838af65e296994f2eb5504"
 
 
