@@ -1,0 +1,164 @@
+{
+  "breakpoint": "BAYMAX-BP-0042",
+  "claim_ceiling": "Coverage audit of the requested verifier prompt against executed/admitted evidence. It does not establish HIPAA compliance and does not alter BP-0042.",
+  "merkle_admission": "NOT_INCLUDED_IN_BP_0042",
+  "overall": "PROMPT_REVIEW_COMPLETE_FAIL_CLOSED",
+  "post_admission_audit": true,
+  "prompt_sections": [
+    {
+      "evidence": {
+        "branch": "redteam/neon-hipaa-current",
+        "qualification_commit": "a85d2052e21e1e0a2e859328a607aab3812f8d6a",
+        "repo": "/Users/byron/projects/active/baymax-redteam-neon-hipaa",
+        "upstream_main": "9ae033b41645bed3bc223ba4680ed9f632dac724"
+      },
+      "review_state": "PASS",
+      "section": "1_RECOVER_LIVE_STATE"
+    },
+    {
+      "evidence": {
+        "BRANCH_MATCH": "PASS",
+        "ENDPOINT_MATCH": "PASS",
+        "PROJECT_MATCH": "PASS",
+        "REGION_MATCH": "PASS"
+      },
+      "review_state": "PASS",
+      "section": "2_PROJECT_DATABASE_IDENTITY"
+    },
+    {
+      "evidence": {
+        "ACCOUNT_ELIGIBILITY": "UNKNOWN",
+        "BAA_SCOPE_STATE": "UNKNOWN",
+        "BAA_STATE": "BLOCKED_HUMAN_VERIFICATION",
+        "HIPAA_FEATURE_ENABLED": "FAIL_FALSE",
+        "HIPAA_FEATURE_PRESENT": "PASS"
+      },
+      "review_state": "FAIL_CLOSED",
+      "section": "3_HIPAA_SETTINGS_BAA"
+    },
+    {
+      "evidence": {
+        "BYPASSRLS": true,
+        "CREATEDB": true,
+        "CREATEROLE": true,
+        "LOGIN": true,
+        "RBAC": "FAIL",
+        "REPLICATION": true,
+        "RLS_EFFECTIVE": "NO",
+        "SUPERUSER": false
+      },
+      "review_state": "FAIL",
+      "section": "4_DATABASE_ROLE_LEAST_PRIVILEGE"
+    },
+    {
+      "evidence": {
+        "CIPHER": "TLS_AES_256_GCM_SHA384",
+        "TLS_ENCRYPTED": "PASS",
+        "TLS_PEER_IDENTITY": "PASS_VERIFY_FULL_CERT_HOSTNAME",
+        "TLS_VERSION": "TLSv1.3"
+      },
+      "review_state": "PASS",
+      "section": "5_TLS_SERVER_IDENTITY"
+    },
+    {
+      "evidence": {
+        "CANARY_IN_ROW": "YES",
+        "CONTROLLED_CRUD": "PASS_UNDER_OVERPRIVILEGED_ROLE"
+      },
+      "review_state": "PASS_CRUD_ONLY",
+      "section": "6_CONTROLLED_PHI_SHAPED_CANARY"
+    },
+    {
+      "evidence": {
+        "APPLICATION_LOGS": "NOT_TESTED_STANDALONE_PROBE",
+        "CANARY_IN_SQL_TEXT": "YES_FAIL",
+        "CANARY_LOGS": "NO_IN_QUERIED_NEON_PG_ENDPOINT_WINDOW",
+        "CANARY_PG_STAT_ACTIVITY": "YES_FAIL",
+        "CANARY_TRACES": "UNKNOWN_NOT_SEPARATELY_INSPECTED"
+      },
+      "review_state": "FAIL",
+      "section": "7_PG_STAT_ACTIVITY_LEAK_TEST"
+    },
+    {
+      "evidence": {
+        "APPLICATION_PAYLOAD_ENCRYPTION": "NOT_IMPLEMENTED_OBSERVED_TRACKED_STORAGE_PATH",
+        "DEVICE_FILE_PROTECTION": "NOT_IMPLEMENTED_OBSERVED_TRACKED_APP_PATH",
+        "KEYCHAIN": "NOT_IMPLEMENTED_OBSERVED_TRACKED_APP_PATH",
+        "KEY_DELETION": "NOT_IMPLEMENTED_OBSERVED_TRACKED_APP_PATH",
+        "KEY_ROTATION": "NOT_IMPLEMENTED_OBSERVED_TRACKED_APP_PATH",
+        "NEON_AT_REST": "PARTIAL_VENDOR_DOCUMENTED_ACCOUNT_SPECIFIC_NOT_VERIFIED",
+        "SECURE_ENCLAVE": "NOT_IMPLEMENTED_OBSERVED_TRACKED_APP_PATH"
+      },
+      "review_state": "FAIL",
+      "section": "8_APPLICATION_LEVEL_ENCRYPTION"
+    },
+    {
+      "evidence": {
+        "AI_DISCLOSURE_GATE": "PASS_FAIL_CLOSED",
+        "MINIMUM_NECESSARY": "PASS"
+      },
+      "review_state": "PASS",
+      "section": "9_MINIMUM_NECESSARY_DISCLOSURE"
+    },
+    {
+      "evidence": {
+        "BACKUP_DELETE": "UNKNOWN",
+        "LOGICAL_DELETE": "PASS_ACTIVE_ROW_AND_SCHEMA",
+        "NEON_DELETION": "PASS_LOGICAL_PARTIAL_OVERALL",
+        "PITR_DELETE": "UNKNOWN_NOT_EXECUTED",
+        "RETENTION": "PARTIAL_HISTORY_RETENTION_86400_SECONDS_PROVIDER_RETENTION_UNKNOWN"
+      },
+      "review_state": "PARTIAL",
+      "section": "10_DELETE_RETENTION"
+    },
+    {
+      "evidence": {
+        "count": 6
+      },
+      "review_state": "PASS_PRESENT",
+      "section": "11_COMPENSATORY_CONTROL_MATRIX"
+    },
+    {
+      "evidence": {
+        "edges": 15,
+        "nodes": 11
+      },
+      "review_state": "PASS_PRESENT",
+      "section": "12_FCO_FCG_RECEIPT"
+    },
+    {
+      "evidence": {
+        "audit_receipt_merkle_admission": "NOT_INCLUDED_POST_ADMISSION_AUDIT",
+        "chain_head": "dc76f4fb85418c875c7be0cea09913ed56942ba9a939a2dab5e8f103e1739864",
+        "chain_verify": "PASS_CONSISTENCY_ONLY",
+        "merkle_root": "1f13c7f253d8c28c5bae195f87b7625df5ebbf27d2758d09d77612b5031f4e5c",
+        "mmr_state": "NOT_COMPUTED",
+        "new_breakpoint": "BAYMAX-BP-0042",
+        "parent_breakpoint": "BAYMAX-BP-0041"
+      },
+      "review_state": "PASS_OBSERVED",
+      "section": "13_MERKLE_BREAKPOINT"
+    },
+    {
+      "evidence": {
+        "BAYMAX_RUNTIME_TARGET_BINDING": "FAIL",
+        "HIPAA_COMPLIANCE": "NOT_VERIFIED",
+        "HIPAA_READY_TEMPLATE": "PARTIAL_FAIL_CLOSED",
+        "REAL_PHI": "BLOCKED"
+      },
+      "review_state": "PASS_PRESENT",
+      "section": "14_REQUIRED_VERDICT"
+    },
+    {
+      "evidence": {
+        "claim_ceiling": "This exact Baymax Neon project/branch was identity-matched and passed verify-full TLS peer verification, controlled CRUD, minimum-necessary routing, and the queried provider-log canary check. It did not pass overall deployment qualification for real PHI because project HIPAA mode is disabled, BAA/account scope is unverified, the only observed database role is overprivileged and bypasses RLS, the controlled parameter value is exposed in pg_stat_activity, application payload encryption/key custody is not implemented in the tracked storage path, backup/PITR/provider retention purge is not verified, and the current Baymax runtime DATABASE_URL points to a different Neon endpoint. HIPAA_COMPLIANCE=NOT_VERIFIED; REAL_PHI=BLOCKED."
+      },
+      "review_state": "PASS_CONSTRAINED",
+      "section": "15_CLAIM_CEILING"
+    }
+  ],
+  "qualification_commit": "a85d2052e21e1e0a2e859328a607aab3812f8d6a",
+  "real_phi": "BLOCKED",
+  "reviewed_at": "2026-10-04T23:04:27.249313+00:00",
+  "schema": "baymax.neon_prompt_coverage_review.v1"
+}
