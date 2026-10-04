@@ -31,13 +31,19 @@ try {
   assert.equal((await handle(req('status'))).status,401);
   const unlock = await handle(req('session','POST',undefined,key)); assert.equal(unlock.status,200);
   capability = (await unlock.json()).capability;
+  assert.equal((await handle(req('actions','POST',{action:'start'}))).status,409);
+  assert.equal((await handle(req('control','POST',{owner:'user'}))).status,200);
   await action({action:'start'});
+  assert.equal((await handle(req('control','POST',{owner:'baymax'}))).status,200);
   const context = new RequestContext([['computerCapability',capability]]);
   assert.ok(computerTool.execute);
   const result = await computerTool.execute({action:'command',command:'printf "care notes" > note.txt; cat note.txt',cwd:'/workspace',operationId:'write-note'}, {requestContext:context});
   assert.equal(result.ok,true);
   assert.equal((result.data as {stdout:string}).stdout,'care notes');
   const note = await action({action:'read',path:'/workspace/note.txt'}); assert.equal(note.text,'care notes');
+  await handle(req('control','POST',{owner:'user'}));
+  const blocked = await computerTool.execute({action:'command',command:'printf should-not-run',cwd:'/workspace',operationId:'blocked'}, {requestContext:context});
+  assert.equal(blocked.ok,false); assert.match(blocked.error ?? '',/user has control/);
   await action({action:'browse',url:'https://example.com'});
   const page = await action({action:'browser-read'}); assert.match(page.title,/Example Domain/);
   const screenshot = await computerTool.execute({action:'browser-screenshot'}, {requestContext:context});
@@ -53,7 +59,7 @@ try {
   await handle(req('session','DELETE'));
   assert.equal((await handle(req('status'))).status,401);
   const rejected = await computerTool.execute({action:'status'}, {requestContext:context}); assert.equal(rejected.ok,false);
-  console.log('Real Computer API + Mastra tool smoke passed: unlock, command, file, public browse, screenshot/image conversion, input, lock/revocation.');
+  console.log('Real Computer API + Mastra tool smoke passed: unlock, command, file, public browse, screenshot/image conversion, input, control handoff, lock/revocation.');
 } finally {
   await service.browser.close().catch(()=>{});
   await service.terminal.stop().catch(()=>{});

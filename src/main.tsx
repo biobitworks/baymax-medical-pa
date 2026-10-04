@@ -55,7 +55,9 @@ import {
   DEFAULT_TRAVEL_CHECKLIST,
   formatDoctorBrief,
 } from "./mastra/lib/brief";
+import { TravelAdvisories, type TravelResearch } from "./components/TravelAdvisories";
 import "./style.css";
+import "./components/computer-workspace.css";
 import { PwaControls } from "./pwa/PwaControls";
 import { initializeHealthOverview } from "./persistence/health-overview";
 import { createAgentAdapter } from "./chat/adapter";
@@ -1259,6 +1261,7 @@ function App() {
   const setChecklist = (value: string[]) => setField("checklist", value);
   const [checklistLoading, setChecklistLoading] = useState(false);
   const [briefLoading, setBriefLoading] = useState(false);
+  const [research, setResearch] = useState<TravelResearch | null>(null);
   const [mobile, setMobile] = useState(false);
   const toggle = (label: string) => setWorkspace(previous => {
     const checked = !previous.done.includes(label);
@@ -1357,6 +1360,7 @@ function App() {
         departureDate: travelDate,
       });
       setChecklist(data.items);
+      setResearch({ destination, advisories: data.advisories ?? [], cityDetails: [], error: data.advisoriesError });
     } catch (err) {
       console.warn("Agent unavailable, using default checklist.", err);
       setChecklist(DEFAULT_TRAVEL_CHECKLIST);
@@ -1368,6 +1372,7 @@ function App() {
     const destination = city.trim();
     go("Doctor brief");
     setBriefLoading(true);
+    setResearch(null);
     try {
       const data = await postTravel("/travel/brief", {
         destination,
@@ -1375,6 +1380,7 @@ function App() {
         checklist,
       });
       setBrief(data.brief);
+      setResearch({ destination, advisories: data.advisories ?? [], cityDetails: data.cityDetails ?? [], error: data.advisoriesError });
     } catch (err) {
       console.warn("Agent unavailable, using template brief.", err);
       setBrief(
@@ -1390,12 +1396,13 @@ function App() {
       setBriefLoading(false);
     }
   };
+  const [computerMobileView, setComputerMobileView] = useState<"Computer" | "Chat">("Computer");
   const go = (s: string) => {
     setPage(s);
     setMobile(false);
   };
   useEffect(() => {
-    const open = () => { setPage("Computer"); setMobile(false); };
+    const open = () => { setPage("Computer"); setMobile(false); setComputerMobileView("Computer"); };
     window.addEventListener('baymax-open-computer', open);
     return () => window.removeEventListener('baymax-open-computer', open);
   }, []);
@@ -1437,7 +1444,7 @@ function App() {
         checkin: () => setModal("checkin"),
       }}
     >
-      <div className={`app ${page === "Talk to Baymax" ? "chat-first" : ""}`}>
+      <div className={`app ${page === "Talk to Baymax" ? "chat-first" : ""} ${page === "Computer" ? "computer-workspace" : ""}`}>
         <aside className={mobile ? "sidebar open" : "sidebar"}>
           <a
             className="brand"
@@ -1457,6 +1464,8 @@ function App() {
             {nav.map(([s, I]) => (
               <button
                 key={s}
+                aria-label={s}
+                title={s}
                 className={page === s ? "nav active" : "nav"}
                 onClick={() => go(s)}
               >
@@ -1786,12 +1795,13 @@ function App() {
                 </div>
               </>
             )}
-            <section
-              hidden={page !== "Talk to Baymax"}
-              className="panel chat-panel"
-            >
+            <div className={`conversation-workspace ${page === "Computer" ? `is-computer mobile-${computerMobileView.toLowerCase()}` : ""}`} hidden={page !== "Talk to Baymax" && page !== "Computer"}>
+              {page === "Computer" && <div className="workspace-mobile-switch" role="group" aria-label="Workspace view">{(["Chat", "Computer"] as const).map(view => <button key={view} aria-pressed={computerMobileView === view} onClick={() => setComputerMobileView(view)}>{view}</button>)}</div>}
+            <section className="panel chat-panel" aria-label="Chat with Baymax">
               <ChatHub key={persistence.resetKey} workspace={workspace} onToolResult={onToolResult} />
             </section>
+              {page === "Computer" && <div className="workspace-computer-pane"><Computer /></div>}
+            </div>
             {page === "Your plan" && (
               <div className="two-col">
                 <section className="panel">
@@ -1840,7 +1850,6 @@ function App() {
                 </section>
               </div>
             )}
-            {page === "Computer" && <Computer />}
             {page === "Physical fitness" && <FitnessDashboard />}
             {page === "Running" && <RunningSection />}
             {page === "Travel care" && (
@@ -1879,6 +1888,7 @@ function App() {
                     >
                       Prepare checklist <ArrowUpRight size={16} />
                     </button>
+                    {tripReady && <TravelAdvisories research={research} loading={checklistLoading} />}
                   </section>
                   <section
                     className={`panel slide-panel ${tripReady ? "revealed" : ""}`}
@@ -1930,6 +1940,7 @@ function App() {
             {page === "Doctor brief" && (
               <div className="two-col">
                 <section className="panel brief-panel">
+                  <TravelAdvisories research={research} loading={briefLoading} />
                   <span className="eyebrow">REVIEW BEFORE YOU SHARE</span>
                   <h2>A brief for your next doctor.</h2>
                   <label>

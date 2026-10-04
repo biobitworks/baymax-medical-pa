@@ -44,7 +44,7 @@ export async function unlockComputer(accessKey: string) {
 }
 
 export async function computerRequest<T>(path: string, body?: unknown, method = body === undefined ? 'GET' : 'POST'): Promise<T> {
-  if (!/^\/computer\/(?:status|actions|screenshot)$/.test(path) && !(path === '/computer/session' && method === 'DELETE')) throw new ComputerError('Invalid computer endpoint.', 400);
+  if (!/^\/computer\/(?:status|actions|screenshot|control)$/.test(path) && !(path === '/computer/session' && method === 'DELETE')) throw new ComputerError('Invalid computer endpoint.', 400);
   const token = getComputerCapability();
   if (!token) throw new ComputerError('Computer access expired. Unlock it again.', 401);
   const response = await fetch(path, {

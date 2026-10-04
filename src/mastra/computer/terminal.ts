@@ -67,8 +67,8 @@ export class TerminalComputer {
     catch (error) { return { state: 'unavailable', error: error instanceof Error ? error.message : 'Docker inspection failed' }; }
   }
   status() { return this.exclusive(() => this.state()); }
-  start() { return this.exclusive(async () => { await this.recover(); await this.backend.start('baymax'); return this.state(); }); }
-  stop() { return this.exclusive(async () => { await this.backend.stop('baymax'); await this.recover(); return this.state(); }); }
+  start(signal?:AbortSignal) { return this.exclusive(async () => { if (signal?.aborted) throw new Error('Computer start interrupted before execution'); await this.recover(); if (signal?.aborted) throw new Error('Computer start interrupted before execution'); await this.backend.start('baymax'); return this.state(); }); }
+  stop(signal?:AbortSignal) { return this.exclusive(async () => { if (signal?.aborted) throw new Error('Computer stop interrupted before execution'); await this.backend.stop('baymax'); await this.recover(); return this.state(); }); }
   receipts() { return this.exclusive(async () => (await this.recover()).sort((a,b) => b.createdAt.localeCompare(a.createdAt))); }
   execute(input: { command: string; cwd?: string; operationId: string }, signal?: AbortSignal): Promise<CommandReceipt> {
     this.enabled();
@@ -113,14 +113,16 @@ export class TerminalComputer {
     await stop();
     await unlink(marker);
   }
-  file(operation: 'list' | 'read' | 'write' | 'mkdir', path: string, text?: string): Promise<any> {
+  file(operation: 'list' | 'read' | 'write' | 'mkdir', path: string, text?: string, signal?:AbortSignal): Promise<any> {
     this.enabled();
     const normalized = workspacePath(path);
     if (!['list', 'read', 'write', 'mkdir'].includes(operation)) throw new Error('Unsupported file operation');
     if (operation === 'write' && (typeof text !== 'string' || Buffer.byteLength(text) > 256 * 1024)) throw new Error('Text files must be 256 KB or smaller');
     return this.exclusive(async () => {
+      if (signal?.aborted) throw new Error('File operation interrupted before execution');
       await this.recover();
       const session = await this.backend.running('baymax');
+      if (signal?.aborted) throw new Error('File operation interrupted before execution');
       let result: DockerResult;
       try { result = await session.file(JSON.stringify({ operation, path: normalized, text }), 8, 2 * 1024 * 1024); }
       catch { await this.quarantineFile(session.stop); throw new Error('File operation outcome unknown; sandbox stopped'); }

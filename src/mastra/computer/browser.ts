@@ -39,7 +39,7 @@ export class BrowserComputer {
       /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(this.sessionId);
   }
 
-  private async request(path: string, body?: Record<string, unknown>, binary = false, signal?: AbortSignal): Promise<unknown> {
+  private async request(path: string, body?: Record<string, unknown>, binary = false, signal?: AbortSignal, generation?: number): Promise<unknown> {
     if (!this.configured) throw new Error("Browser computer is not configured.");
     if (signal?.aborted) throw new Error("The browser operation was cancelled before dispatch.");
     const controller = new AbortController();
@@ -53,7 +53,7 @@ export class BrowserComputer {
       if (controller.signal.aborted) throw new Error("cancelled");
       const response = await this.fetcher(`${this.workerUrl}${path}`, {
         method: body === undefined ? "GET" : "POST",
-        headers: { Authorization: `Bearer ${this.workerToken}`, ...(body === undefined ? {} : { "Content-Type": "application/json" }) },
+        headers: { ...(generation === undefined ? {} : { "X-Browser-Mutation-Generation": String(generation) }), Authorization: `Bearer ${this.workerToken}`, ...(body === undefined ? {} : { "Content-Type": "application/json" }) },
         ...(body === undefined ? {} : { body: JSON.stringify(body) }),
         signal: controller.signal,
         redirect: "error",
@@ -97,18 +97,26 @@ export class BrowserComputer {
     }
   }
 
+  private async mutationGeneration(signal?: AbortSignal): Promise<number> {
+    const result = await this.request(`/sessions/${this.sessionId}/generation`, undefined, false, signal) as Record<string, unknown>;
+    if (!result || result.id !== this.sessionId || !Number.isSafeInteger(result.generation) || Number(result.generation) < 0)
+      throw new Error("The browser worker returned an invalid mutation generation.");
+    return Number(result.generation);
+  }
+
   async navigate(value: string, signal?: AbortSignal): Promise<BrowserSession> {
     let url: URL;
     try { url = new URL(value); } catch { throw new Error(errors.BLOCKED_URL); }
     if (value.length > 8192 || !["http:", "https:"].includes(url.protocol) || url.username || url.password ||
       (url.port && url.port !== "80" && url.port !== "443")) throw new Error(errors.BLOCKED_URL);
+    const generation = await this.mutationGeneration(signal);
     const status = await this.status(signal);
     if (signal?.aborted) throw new Error("The browser operation was cancelled before navigation.");
     if (!status.configured) throw new Error("Browser computer is not configured.");
     if (status.error) throw new Error(status.error);
     const result = status.session?.status === "active"
-      ? await this.request(`/sessions/${this.sessionId}/navigate`, { url: value }, false, signal)
-      : await this.request("/sessions", { id: this.sessionId, url: value }, false, signal);
+      ? await this.request(`/sessions/${this.sessionId}/navigate`, { url: value }, false, signal, generation)
+      : await this.request("/sessions", { id: this.sessionId, url: value }, false, signal, generation);
     return this.session(result);
   }
 
@@ -120,15 +128,30 @@ export class BrowserComputer {
   }
 
   async input(input: Record<string, unknown>, signal?: AbortSignal): Promise<BrowserSession> {
+    const generation = await this.mutationGeneration(signal);
     const workerInput = input.type === "type" ? { ...input, type: "text" } : input;
-    return this.session(await this.request(`/sessions/${this.sessionId}/input`, workerInput, false, signal));
+    return this.session(await this.request(`/sessions/${this.sessionId}/input`, workerInput, false, signal, generation));
   }
 
   async screenshot(signal?: AbortSignal): Promise<Uint8Array> {
     return await this.request(`/sessions/${this.sessionId}/screenshot`, undefined, true, signal) as Uint8Array;
   }
 
+  /** Wait for the worker's actual mutation queue before transferring control. */
+  async settle(): Promise<void> {
+    if (!this.configured) return;
+    try {
+      const result = await this.request(`/sessions/${this.sessionId}/settle`, {}) as Record<string, unknown>;
+      if (!result || result.id !== this.sessionId || result.settled !== true ||
+        !Number.isSafeInteger(result.generation) || Number(result.generation) < 1)
+        throw new Error("invalid acknowledgement");
+    } catch {
+      throw new Error("Browser control handoff could not be confirmed. Retry taking control before using the browser.");
+    }
+  }
+
   async close(signal?: AbortSignal): Promise<BrowserSession> {
-    return this.session(await this.request(`/sessions/${this.sessionId}/close`, {}, false, signal));
+    const generation = await this.mutationGeneration(signal);
+    return this.session(await this.request(`/sessions/${this.sessionId}/close`, {}, false, signal, generation));
   }
 }

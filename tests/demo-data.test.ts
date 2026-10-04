@@ -23,6 +23,8 @@ test('seeds Jordan Mercer with profile, records, labs, habits, and sample chats'
   const [user] = await q('SELECT name, external_id FROM users WHERE id = $1', [DEMO_USER_ID]);
   assert.deepEqual(user, { name: 'Jordan Mercer', external_id: 'SYN-JM-742' });
   assert.equal((await q('SELECT 1 FROM user_conditions WHERE user_id = $1', [DEMO_USER_ID])).length, 1);
+  assert.equal((await q('SELECT 1 FROM user_medications WHERE user_id = $1', [DEMO_USER_ID])).length, 1);
+  assert.equal((await q('SELECT 1 FROM user_allergies WHERE user_id = $1', [DEMO_USER_ID])).length, 1);
   const records = await listRecords(undefined, ctx);
   assert.ok(records.some(r => r.id === 'library:jordan-mercer-health.json'));
   assert.equal((await getRecentMetrics(30, ctx)).length, 30);

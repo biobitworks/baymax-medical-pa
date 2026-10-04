@@ -2,18 +2,22 @@ import { createHash, timingSafeEqual } from "node:crypto";
 import { createServer, type IncomingMessage } from "node:http";
 import { createBrowserManager, validateSessionId } from "./browser.ts";
 import { WorkerError } from "./errors.ts";
+import { checkCancellation } from "./queue.ts";
 
-async function readBody(request: IncomingMessage): Promise<Record<string, unknown>> {
+async function readBody(request: IncomingMessage, signal: AbortSignal): Promise<Record<string, unknown>> {
+  checkCancellation(signal);
   if (!request.headers["content-type"]?.startsWith("application/json"))
     throw new WorkerError("INVALID_BODY", "A JSON request body is required.");
   const chunks: Buffer[] = [];
   let size = 0;
   for await (const chunk of request) {
+    checkCancellation(signal);
     size += Buffer.byteLength(chunk);
     if (size > 64 * 1024)
       throw new WorkerError("BODY_TOO_LARGE", "Request body exceeds 64 KiB.", 413);
     chunks.push(Buffer.from(chunk));
   }
+  checkCancellation(signal);
   try {
     const result: unknown = JSON.parse(Buffer.concat(chunks).toString("utf8"));
     if (!result || typeof result !== "object" || Array.isArray(result))
@@ -35,12 +39,29 @@ export async function createWorkerServer(options: {
   dataDir: string;
   maxSessions?: number;
   idleTimeoutMs?: number;
-}) {
+}, browserFactory: typeof createBrowserManager = createBrowserManager) {
   if (options.token.length < 32)
     throw new Error("WORKER_TOKEN must contain at least 32 characters.");
   const tokenHash = createHash("sha256").update(`Bearer ${options.token}`).digest();
-  const browser = await createBrowserManager(options);
+  const browser = await browserFactory(options);
   const server = createServer(async (request, response) => {
+    const controller = new AbortController();
+    const abort = () => controller.abort();
+    request.once("aborted", abort);
+    response.once("close", abort);
+    const signal = controller.signal;
+    // Capture before reading a streamed body: a pre-handoff request must not
+    // enter the new generation just because its body finishes after settle.
+    const ticket = browser.mutationSnapshot();
+    const mutationTicket = (id: string) => {
+      const header = request.headers["x-browser-mutation-generation"];
+      if (header !== undefined) {
+        if (typeof header !== "string" || !/^(0|[1-9][0-9]*)$/.test(header) || !Number.isSafeInteger(Number(header)))
+          throw new WorkerError("INVALID_GENERATION", "A valid browser mutation generation is required.");
+        ticket.set(id, Number(header));
+      }
+      return ticket;
+    };
     response.setHeader("cache-control", "no-store");
     response.setHeader("x-content-type-options", "nosniff");
     const json = (status: number, body: unknown) => {
@@ -63,12 +84,13 @@ export async function createWorkerServer(options: {
         return;
       }
       if (pathname === "/sessions" && request.method === "POST") {
-        const body = await readBody(request);
-        json(201, await browser.create(validateSessionId(body.id), requiredUrl(body)));
+        const body = await readBody(request, signal);
+        const id = validateSessionId(body.id);
+        json(201, await browser.create(id, requiredUrl(body), signal, mutationTicket(id)));
         return;
       }
       const match =
-        /^\/sessions\/([^/]+)\/(navigate|close|screenshot|read|input|downloads)(?:\/([^/]+))?$/.exec(
+        /^\/sessions\/([^/]+)\/(navigate|close|settle|generation|screenshot|read|input|downloads)(?:\/([^/]+))?$/.exec(
           pathname,
         );
       if (!match) throw new WorkerError("NOT_FOUND", "Worker endpoint not found.", 404);
@@ -76,11 +98,15 @@ export async function createWorkerServer(options: {
       const action = match[2];
       const downloadId = match[3];
       if (action === "navigate" && !downloadId && request.method === "POST")
-        json(200, await browser.navigate(id, requiredUrl(await readBody(request))));
+        json(200, await browser.navigate(id, requiredUrl(await readBody(request, signal)), signal, mutationTicket(id)));
       else if (action === "close" && !downloadId && request.method === "POST")
-        json(200, await browser.closeSession(id));
+        json(200, await browser.closeSession(id, signal, mutationTicket(id)));
       else if (action === "input" && !downloadId && request.method === "POST")
-        json(200, await browser.input(id, await readBody(request)));
+        json(200, await browser.input(id, await readBody(request, signal), signal, mutationTicket(id)));
+      else if (action === "settle" && !downloadId && request.method === "POST")
+        json(200, await browser.settle(id));
+      else if (action === "generation" && !downloadId && request.method === "GET")
+        json(200, browser.generation(id));
       else if (action === "read" && !downloadId && request.method === "GET")
         json(200, await browser.read(id));
       else if (action === "screenshot" && !downloadId && request.method === "GET") {

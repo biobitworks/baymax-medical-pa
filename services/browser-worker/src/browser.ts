@@ -10,6 +10,7 @@ import {
 import { WorkerError } from "./errors.ts";
 import { validatePublicUrl } from "./network.ts";
 import { startEgressProxy } from "./proxy.ts";
+import { createMutationQueue } from "./queue.ts";
 
 export interface Session {
   id: string;
@@ -42,7 +43,8 @@ export async function createBrowserManager(options: {
   await mkdir(dataDir, { recursive: true, mode: 0o700 });
   const sessions = new Map<string, Session>();
   const running = new Map<string, Running>();
-  const queues = new Map<string, Promise<unknown>>();
+  const queue = createMutationQueue();
+  const { serial, mutation } = queue;
   const proxy = await startEgressProxy();
   for (const id of await readdir(dataDir)) {
     if (!SESSION_ID.test(id)) continue;
@@ -61,16 +63,6 @@ export async function createBrowserManager(options: {
     const path = join(directory(session.id), "session.json");
     await writeFile(`${path}.tmp`, JSON.stringify(session), { mode: 0o600 });
     await rename(`${path}.tmp`, path);
-  }
-  async function serial<T>(id: string, fn: () => Promise<T>): Promise<T> {
-    const previous = queues.get(id) ?? Promise.resolve();
-    const next = previous.catch(() => {}).then(fn);
-    queues.set(id, next);
-    try {
-      return await next;
-    } finally {
-      if (queues.get(id) === next) queues.delete(id);
-    }
   }
   function active(id: string) {
     const value = running.get(id);
@@ -290,10 +282,15 @@ export async function createBrowserManager(options: {
   sweeper.unref();
   return {
     list: () => [...sessions.values()],
-    create: (id: string, url: string) =>
-      serial("create", () => serial(id, () => createSession(id, url))),
-    navigate: (id: string, url: string) => serial(id, () => navigate(id, url)),
-    closeSession: (id: string) => serial(id, () => closeSession(id)),
+    mutationSnapshot: queue.snapshot,
+    generation: (id: string) => ({ id, generation: queue.generation(id) }),
+    settle: queue.settle,
+    create: (id: string, url: string, signal?: AbortSignal, ticket = queue.snapshot()) =>
+      serial("create", () => mutation(id, () => createSession(id, url), signal, ticket)),
+    navigate: (id: string, url: string, signal?: AbortSignal, ticket = queue.snapshot()) =>
+      mutation(id, () => navigate(id, url), signal, ticket),
+    closeSession: (id: string, signal?: AbortSignal, ticket = queue.snapshot()) =>
+      mutation(id, () => closeSession(id), signal, ticket),
     screenshot: (id: string) =>
       serial(id, () => active(id).page.screenshot({ type: "png", timeout: 10_000 })),
     read: (id: string) =>
@@ -322,8 +319,8 @@ export async function createBrowserManager(options: {
         await persist(session);
         return result;
       }),
-    input: (id: string, input: Record<string, unknown>) =>
-      serial(id, async () => {
+    input: (id: string, input: Record<string, unknown>, signal?: AbortSignal, ticket = queue.snapshot()) =>
+      mutation(id, async () => {
         const { page } = active(id);
         const { type, x, y, key, text, deltaY } = input;
         if (
@@ -357,7 +354,7 @@ export async function createBrowserManager(options: {
           await page.mouse.wheel(0, deltaY);
         else throw new WorkerError("INVALID_INPUT", "Unsupported browser input or coordinates.");
         return refresh(id);
-      }),
+      }, signal, ticket),
     downloads: async (id: string) => {
       const saved = await downloads(id);
       if (running.get(id)?.downloadError)
@@ -380,7 +377,7 @@ export async function createBrowserManager(options: {
     },
     close: async () => {
       clearInterval(sweeper);
-      await Promise.allSettled([...queues.values()]);
+      await queue.drain();
       await Promise.allSettled([...running.keys()].map(closeSession));
       await proxy.close();
     },

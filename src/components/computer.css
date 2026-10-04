@@ -81,3 +81,69 @@
   .computer-file-list { max-height: 240px; overflow-y: auto; }
   .computer-unlock { padding: 24px; margin-top: 0; }
 }
+/* The shared computer is a window in a cyan frame, with its real tools in the dock. */
+.computer-view { --computer-green: #058db6; gap: 0; background: #fff; color: #244450; height: 100%; min-height: 0; grid-template-rows: auto minmax(0, 1fr); }
+.computer-heading { background: #eff2f3; border-bottom: 1px solid #e3e9eb; padding: 8px 14px; gap: 8px; }
+.computer-title-tab { display: flex; align-items: center; gap: 10px; background: white; padding: 11px 17px; border-radius: 12px; box-shadow: 0 2px 3px #233e4805; min-width: 0; }
+.computer-heading h2 { font: 600 15px/1.3 Manrope, sans-serif; margin: 0; letter-spacing: -.2px; }
+.computer-view .computer-lock { background: transparent; border: 0; color: #71848c; font-size: 11px; padding: 8px; }
+.computer-stage { display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 0; min-height: 0; overflow-y: auto; padding: 48px 24px; }
+.computer-frame { flex-shrink: 0; width: 100%; max-width: 1060px; min-width: 0; box-sizing: border-box; position: relative; padding: 45px 38px 64px; border: 4px solid #04b7f0; border-radius: 27px; background: linear-gradient(140deg, #08cbea, #00a6e0); box-shadow: 0 16px 25px #22455516; }
+.computer-window { min-width: 0; background: #f9fcfc; border: 1px solid #008fb94d; border-radius: 9px; overflow: hidden; box-shadow: 0 7px 22px #047e9923; }
+.computer-panel { border: 0; border-radius: 0; padding: 18px; gap: 15px; max-height: min(65vh, 740px); overflow-y: auto; background: #f8fcfc; }
+.computer-panel:has(.computer-welcome), .computer-panel:has(.computer-screen) { background: #e6f5f7; }
+.computer-panel:has(.computer-welcome) { padding-bottom: 0; }
+.computer-toolbar { background: #eef7f8; border-color: #dcecef; padding: 10px; flex-wrap: wrap; }
+.computer-toolbar > div { flex-wrap: wrap; }
+.computer-state { color: #627e88; }
+.computer-tabs { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); display: flex; gap: 4px; width: max-content; max-width: calc(100% - 16px); padding: 5px; background: #ffffff23; border: 1px solid #ffffff44; border-radius: 13px; box-shadow: 0 4px 12px #087b9a12; }
+.computer-tabs button { display: grid; justify-items: center; gap: 4px; min-width: 66px; padding: 6px 9px; border-radius: 8px; font-size: 10px; color: #fff; }
+.computer-tabs button svg { width: 22px; height: 22px; }
+.computer-tabs button[aria-selected=true] { background: #ffffffdf; color: #087fa1; box-shadow: 0 2px 4px #126b8920; }
+.computer-handoff { display: flex; justify-content: center; align-items: center; gap: 12px; border-radius: 0 0 24px 24px; padding: 12px 18px; background: white; box-shadow: 0 8px 24px #203c4910; font-size: 13px; color: #3c5059; min-width: 0; flex-shrink: 0; }
+.computer-handoff.has-control { background: #05afe5; color: white; }
+.computer-handoff button { background: #243039; border-radius: 22px; padding: 9px 13px; font-size: 11px; }
+.computer-handoff.has-control button { background: #008dc8; }
+.computer-welcome { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 330px; padding: 28px 18px; gap: 15px; background: radial-gradient(ellipse at 15% 15%, #fff8, transparent 40%), #e6f5f7; color: #176680; }
+.computer-welcome h3 { font-size: 23px; letter-spacing: -.6px; margin: 0; }
+.computer-welcome p { font-size: 13px; max-width: 330px; line-height: 1.7; margin: 0; color: #5e8d9a; }
+.computer-welcome small { color: #6e97a1; font-size: 11px; line-height: 1.7; }
+.computer-baymax { width: 94px; height: 68px; border-radius: 48% 48% 44% 44%; display: flex; align-items: center; justify-content: center; background: #fff; box-shadow: 0 7px 0 #b9e2ea, 0 14px 20px #55aac119; margin-bottom: 5px; }
+.computer-baymax i { width: 9px; height: 9px; background: #26383e; border-radius: 50%; }
+.computer-baymax span { width: 29px; height: 2px; background: #26383e; }
+.computer-launchers { display: flex; justify-content: center; gap: 14px; margin: 7px 0; max-width: 100%; }
+.computer-launchers button.computer-secondary { display: flex; flex-direction: column; gap: 10px; background: #ffffffc4; border: 1px solid #ffffff; padding: 16px 10px; width: 105px; color: #24748b; box-shadow: 0 5px 10px #298da10a; font-size: 11px; }
+.computer-launchers button:disabled { opacity: .65; }
+.computer-view .computer-screen { border-color: #c4e4ed; border-radius: 4px; background: #e6f5f7; }
+.computer-view .computer-screen:disabled { opacity: 1; cursor: default; }
+.computer-input-disclosure { font-size: 12px; color: #4d7a86; }
+.computer-input-disclosure summary { padding: 4px 0; cursor: pointer; }
+.computer-input-disclosure[open] { display: grid; gap: 12px; }
+.computer-input-disclosure > :not(summary) { margin-top: 12px; }
+.computer-unlock { margin: 0 auto; max-width: 470px; background: transparent; border: 0; padding: 30px 25px; }
+.computer-error, .computer-notice { margin: 10px; padding: 10px 12px; font-size: 12px; }
+@media (max-width: 1000px) {
+ .computer-frame { padding: 24px 20px 64px; }
+ .computer-stage { padding: 28px 15px; }
+ .computer-files { grid-template-columns: 1fr; }
+ .computer-address { flex-wrap: wrap; }
+ .computer-address > label { flex-basis: 100%; }
+ .computer-launchers { gap: 8px; }
+ .computer-launchers button.computer-secondary { width: 90px; }
+}
+@media (max-width: 650px) {
+ .computer-stage { justify-content: flex-start; overflow: visible; padding: 22px 10px 30px; }
+ .computer-view { height: auto; }
+ .computer-frame { padding: 16px 10px 64px; border-width: 3px; border-radius: 22px; }
+ .computer-heading h2 { font-size: 13px; }
+ .computer-heading button { font-size: 0; }
+ .computer-panel { padding: 12px; max-height: none; }
+ .computer-welcome { min-height: 310px; padding: 24px 5px; }
+ .computer-welcome h3 { font-size: 20px; }
+ .computer-launchers { gap: 5px; width: 100%; }
+ .computer-launchers button.computer-secondary { flex: 1; width: auto; min-width: 0; padding: 12px 4px; font-size: 10px; }
+ .computer-tabs { width: max-content; }
+ .computer-tabs button { min-width: 65px; flex: 0; }
+ .computer-handoff { font-size: 12px; gap: 8px; padding: 10px 12px; }
+ .computer-unlock { padding: 23px 14px; }
+}

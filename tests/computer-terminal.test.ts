@@ -62,3 +62,24 @@ test('ownership labels and host binds cannot be attached',async()=>{
   const f=await fixture();mutate(f);await assert.rejects(f.service.start(),/isolation/);assert.equal(f.calls.some(c=>c.args[0]==='exec'||c.args[1]==='start'),false);
  }
 });
+
+test('queued lifecycle and file mutations are cancelled before Docker dispatch at handoff', async () => {
+ const f=await fixture(); let entered!:()=>void; let finish!:()=>void;
+ const ready=new Promise<void>(resolve=>{entered=resolve;}); const pending=new Promise<void>(resolve=>{finish=resolve;});
+ const runner: DockerRunner=async(args,options)=>{
+  if(args[0]==='exec' && !args.includes('/usr/bin/python3')) { entered(); await pending; }
+  return f.docker(args,options);
+ };
+ const terminal=new TerminalComputer(f.config,runner);
+ const command=terminal.execute({command:'long task',operationId:'held'}); await ready;
+ const abort=new AbortController();
+ const rejected=[
+  assert.rejects(terminal.file('write','/workspace/late.txt','late',abort.signal),/interrupted before execution/),
+  assert.rejects(terminal.file('mkdir','/workspace/late',undefined,abort.signal),/interrupted before execution/),
+  assert.rejects(terminal.start(abort.signal),/interrupted before execution/),
+  assert.rejects(terminal.stop(abort.signal),/interrupted before execution/),
+ ];
+ abort.abort(); finish(); await command; await Promise.all(rejected);
+ assert.equal(f.calls.filter(c=>c.args[0]==='exec').length,1);
+ assert.equal(f.calls.some(c=>c.args[0]==='container' && ['start','stop'].includes(c.args[1])),false);
+});

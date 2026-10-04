@@ -59,6 +59,18 @@ npm --prefix services/browser-worker run typecheck
 
 Unit tests use synthetic providers; browser UI tests intercept the API. `test:computer` runs the actual container through isolation, persistence, symlink refusal, idempotency, interruption, output cap, and a real 30-second timeout. `test:computer:api` starts an actual Chromium worker and tests the private route handler together with the real terminal and Mastra tool: unlock, command, file read, public browsing, screenshots converted to model image parts, input, and revocation. Both real smoke scripts clean up their own containers, volumes, and temporary profiles. The API smoke needs the worker dependencies and Chromium installed. It does not call a live language model.
 
-![Computer terminal preview](media/baymax-computer.png)
+![Shared Computer workspace preview](media/baymax-computer.png)
 
-Computer Terminal view using synthetic Playwright API fixtures. Real Docker and browser behavior is verified separately by the smoke tests.
+Desktop shared workspace using synthetic Playwright API fixtures. Real Docker and browser behavior is verified separately by the smoke tests.
+
+## Shared workspace and control
+
+The Computer screen keeps your conversation beside a cyan computer frame on desktop. On mobile, use the Chat/Computer switch. The dock opens the real browser, terminal, and workspace files. A Baymax welcome screen appears until a website is open. Browser previews refresh while the screen is visible; this is a shared screenshot view rather than a video desktop stream.
+
+Baymax can operate the computer after you unlock it. Select **Take over** before using controls that change the browser, terminal, or files. The server interrupts pending agent mutations and waits for them to settle, then grants your session control. While you have control, agent mutations are rejected. Read-only browsing of status, screenshots and files remains available. **Return control** resumes agent access. Taking control does not restart a stopped sandbox or replay an interrupted command.
+
+Manual control lasts five minutes and renews after new interaction while this view is open and focused. It expires after inactivity and is released when the owning session locks the computer. Other sessions can watch but cannot take an existing manual lease. Access expiry, server restarts and lease expiry require refreshing the displayed state. Use one Mastra API process, as required by the computer runtime.
+
+![Mobile Computer workspace](media/baymax-computer-mobile.png)
+
+Mobile view using the same synthetic Playwright API fixtures.

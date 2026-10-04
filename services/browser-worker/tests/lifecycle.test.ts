@@ -29,6 +29,9 @@ test("real Chromium cleans failed profiles and restores a saved UUID after worke
       "unclaimed profile is removed",
     );
     await browser.create(id, "https://example.com/");
+    assert.deepEqual(await browser.settle(id), { id, settled: true, generation: 1 });
+    assert.equal(browser.list()[0]?.status, "active", "handoff preserves the Chromium session");
+    assert.equal((await browser.read(id)).title, "Example Domain");
     await browser.closeSession(id);
     const context = await chromium.launchPersistentContext(join(dataDir, id, "profile"), {
       headless: true,
