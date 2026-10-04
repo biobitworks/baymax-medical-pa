@@ -1,0 +1,30 @@
+{
+  "base_head": "06d402fcee381f64d72410171f7384dd3d1fc909",
+  "branch": "redteam/bp-0006-model-wallet",
+  "breakpoint_id": "BAYMAX-BP-0019",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 656,
+        "path": "evidence/receipts/synthea/java_blocked.json",
+        "sha256": "15f84ec3d3f14765fbdec6952396be0daef2b655d3ea14b55140f49de22f246f"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 1,
+    "leaf_hashes": [
+      "39f524d8b3a8a590d09dbcdc1dfb50b8e9d967d1f796aac3055729ef1f6d7e12"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "39f524d8b3a8a590d09dbcdc1dfb50b8e9d967d1f796aac3055729ef1f6d7e12"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "Synthea execution blocked: no usable Java runtime observed before repair. Historical blocker preserved.",
+  "parent": "BAYMAX-BP-0018",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "SYNTHEA_JAVA_PREREQUISITE",
+  "state": "BLOCKED",
+  "timestamp_utc": "2026-10-04T19:53:50.009198+00:00"
+}

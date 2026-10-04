@@ -1,0 +1,14 @@
+{
+  "claim_ceiling": "Host runtime prerequisite only; does not establish Synthea build or fixture generation.",
+  "homebrew_present": true,
+  "java_executable": "/usr/bin/java",
+  "java_probe_command": "java -version",
+  "java_probe_result": "UNUSABLE_NO_RUNTIME",
+  "observed_at": "2026-10-04T19:53:49.932620+00:00",
+  "repair_plan": "Install OpenJDK 17+ through Homebrew if available, then independently re-run java -version and Synthea.",
+  "required_version": "JDK_17_PLUS",
+  "schema": "baymax.synthea_java_prerequisite.v1",
+  "secret_values_recorded": false,
+  "synthea_execution": "BLOCKED_JAVA_RUNTIME",
+  "technology_id": "SYNTHEA_JAVA_RUNTIME"
+}
