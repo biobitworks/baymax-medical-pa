@@ -45,6 +45,7 @@ import {
   formatDoctorBrief,
 } from "./mastra/lib/brief";
 import "./style.css";
+import Mascot, { MascotActivity } from "./Mascot";
 
 const GLASS_ML = 250;
 const WATER_GOAL = 8;
@@ -89,70 +90,6 @@ function ModalShell({
     >
       {children}
     </dialog>
-  );
-}
-function Mascot({ small = false }: { small?: boolean }) {
-  return (
-    <svg
-      className={`mascot ${small ? "small" : ""}`}
-      viewBox="0 0 300 330"
-      role="img"
-      aria-label="Baymax gently waving"
-    >
-      <defs>
-        <linearGradient id="body" x1="0" y1="0" x2="1" y2="1">
-          <stop stopColor="#fff" />
-          <stop offset="1" stopColor="#e1e5e0" />
-        </linearGradient>
-      </defs>
-      <ellipse cx="150" cy="308" rx="83" ry="12" fill="#294633" opacity=".09" />
-      <g className="bay-body">
-        <ellipse cx="124" cy="278" rx="28" ry="33" fill="url(#body)" />
-        <ellipse cx="179" cy="278" rx="28" ry="33" fill="url(#body)" />
-        <ellipse
-          cx="151"
-          cy="207"
-          rx="82"
-          ry="92"
-          fill="url(#body)"
-          stroke="#dbe0d9"
-        />
-        <ellipse
-          cx="69"
-          cy="210"
-          rx="22"
-          ry="64"
-          transform="rotate(15 69 210)"
-          fill="url(#body)"
-        />
-        <g className="wave">
-          <ellipse
-            cx="240"
-            cy="157"
-            rx="22"
-            ry="64"
-            transform="rotate(-35 240 157)"
-            fill="url(#body)"
-          />
-          <ellipse cx="263" cy="109" rx="23" ry="27" fill="url(#body)" />
-        </g>
-        <ellipse
-          cx="151"
-          cy="105"
-          rx="64"
-          ry="44"
-          fill="url(#body)"
-          stroke="#e0e4df"
-        />
-        <path d="M126 106h50" stroke="#252f2c" strokeWidth="3" />
-        <g className="eyes">
-          <circle cx="123" cy="106" r="6" fill="#252f2c" />
-          <circle cx="179" cy="106" r="6" fill="#252f2c" />
-        </g>
-        <circle cx="184" cy="169" r="9" fill="#f8faf7" stroke="#cbd3cb" />
-        <path d="M180 169h8m-4-4v8" stroke="#b3beb2" />
-      </g>
-    </svg>
   );
 }
 // Mastra-backed adapter: streams text from the Baymax agent (proxied to the
@@ -587,6 +524,13 @@ function AssistantMessage() {
 }
 function Chat() {
   const runtime = useLocalRuntime(adapter);
+  const { setResponding } = useContext(MascotActivity);
+  useEffect(() => {
+    const sync = () => setResponding(runtime.thread.getState().isRunning);
+    sync();
+    const unsubscribe = runtime.thread.subscribe(sync);
+    return () => { unsubscribe(); setResponding(false); };
+  }, [runtime, setResponding]);
   return (
     <AssistantRuntimeProvider runtime={runtime}>
       <CareTool />
@@ -620,6 +564,12 @@ function Chat() {
             components={{ UserMessage, AssistantMessage }}
           />
         </ThreadPrimitive.Viewport>
+        <ThreadPrimitive.If running>
+          <div className="bay-response" role="status">
+            <span className="bay-response-dots" aria-hidden="true"><i /><i /><i /></span>
+            Baymax is responding…
+          </div>
+        </ThreadPrimitive.If>
         <div className="quick-actions">
           {[
             { label: "Daily plan", prompt: "Help me prepare for a hackathon" },
@@ -674,6 +624,7 @@ const nav = [
   ["Doctor brief", FileText],
 ] as const;
 function App() {
+  const [responding, setResponding] = useState(false);
   const [page, setPage] = useState("Talk to Baymax");
   const [modal, setModal] = useState("");
   const [name, setName] = useState("Alex");
@@ -831,6 +782,7 @@ function App() {
     setMobile(false);
   };
   return (
+    <MascotActivity.Provider value={{ responding, setResponding }}>
     <CareContext.Provider
       value={{
         done,
@@ -1664,6 +1616,7 @@ function App() {
         )}
       </div>
     </CareContext.Provider>
+    </MascotActivity.Provider>
   );
 }
 createRoot(document.getElementById("root")!).render(
