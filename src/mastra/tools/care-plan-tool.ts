@@ -16,7 +16,7 @@ const carePlanItem = z.object({
 export const carePlanTool = createTool({
   id: "create-care-plan",
   description:
-    "Create an editable care plan or preparation checklist (e.g. preparing for a hackathon or a trip). Use for habits, reminders, sleep, meals, hydration, and movement. Before creating a plan, call get-recent-checkins and get-daily-metrics (and get-user-info for conditions) and tailor the items to the trends they reveal, e.g. add hydration reminders when water intake is low, small walks when movement is low, or a wind-down routine when sleep is short or energy is low. Start with small, achievable steps, and mention which trend each item addresses. Never include medication dosing changes.",
+    "Create an editable care plan or preparation checklist (e.g. preparing for a hackathon or a trip). Use for habits, reminders, sleep, meals, hydration, and movement. Before creating a plan, call get-recent-checkins, get-daily-metrics, and get-recent-runs (and get-user-info for conditions) and tailor the items to the trends they reveal, e.g. add hydration reminders when water intake is low, small walks when movement is low, gentle run/walk intervals that build on their recent runs, or a wind-down routine when sleep is short or energy is low. Start with small, achievable steps, and mention which trend each item addresses. Never include medication dosing changes.",
   inputSchema: z.object({
     title: z.string().describe("Plan title, e.g. 'Hackathon prep'"),
     startDate: z.string().optional().describe("ISO date the plan starts"),

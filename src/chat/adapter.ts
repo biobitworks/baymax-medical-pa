@@ -1,5 +1,6 @@
 import type { ChatModelAdapter, ChatModelRunResult } from '@assistant-ui/react';
 import { planSchema, briefSchema } from '../shared/workspace';
+type ToolCard = Extract<NonNullable<ChatModelRunResult['content']>[number], { type: 'tool-call' }>;
 type AgentEvent = { type?: string; payload?: Record<string, unknown> };
 export async function* readEvents(response: Response): AsyncGenerator<AgentEvent> {
   if (!response.body) throw new Error('The response was interrupted. Please try again.');
@@ -29,6 +30,7 @@ export function createAgentAdapter(options: {
   fetch?: typeof fetch;
   onToolResult?: (kind: 'plan' | 'brief', result: unknown, toolCallId: string) => void;
   getContext?: () => unknown;
+  getToolCards?: (tool: string, result: unknown, toolCallId: string) => ToolCard[];
 } = {}): ChatModelAdapter {
   return {
     async *run({ messages, abortSignal }) {
@@ -46,7 +48,9 @@ export function createAgentAdapter(options: {
       if (!response.ok || !response.body) throw new Error('Could not connect to Baymax. Please try again.');
       let text = '';
       let finished = false;
-      const cards: Extract<NonNullable<ChatModelRunResult['content']>[number], { type: 'tool-call' }>[] = [];
+      const cards: ToolCard[] = [];
+      const healthCards = new Map<string, ToolCard>();
+      const content = () => [...(text ? [{ type: 'text' as const, text }] : []), ...cards, ...healthCards.values()];
       const seen = new Set<string>();
       for await (const event of readEvents(response)) {
         if (abortSignal.aborted) return;
@@ -58,14 +62,20 @@ export function createAgentAdapter(options: {
           const id = String(event.payload?.toolCallId ?? crypto.randomUUID());
           if (seen.has(id)) continue;
           const kind = ['carePlanTool', 'create-care-plan'].includes(tool) ? 'plan' : ['doctorBriefTool', 'draft-doctor-brief'].includes(tool) ? 'brief' : undefined;
-          if (!kind) continue;
+          const extra = options.getToolCards?.(tool, event.payload?.result, id) ?? [];
+          for (const card of extra) healthCards.set(`${card.toolName}:${String((card.args as Record<string, unknown>).metric ?? card.toolCallId)}`, card);
+          if (!kind) {
+            seen.add(id);
+            if (extra.length) yield { content: content() };
+            continue;
+          }
           const result = (kind === 'plan' ? planSchema : briefSchema).safeParse(event.payload?.result);
           if (!result.success) throw new Error('The care card was interrupted. Please try again.');
           seen.add(id);
           options.onToolResult?.(kind, result.data, id);
           cards.push({ type: 'tool-call', toolCallId: id || crypto.randomUUID(), toolName: 'care_action', args: { kind }, argsText: JSON.stringify({ kind }), result: result.data });
         }
-        yield { content: [...(text ? [{ type: 'text' as const, text }] : []), ...cards] };
+        yield { content: content() };
       }
       if (abortSignal.aborted) return;
       if (!finished) throw new Error('The response was interrupted. Please try again.');
@@ -73,7 +83,7 @@ export function createAgentAdapter(options: {
       const query = history.filter(message => message.role === 'user').at(-1)?.content.toLowerCase() ?? '';
       if (!cards.length) {
         const kind = /diabet|refill|\bbuy\b/.test(query) ? 'purchase' : /travel|prescription/.test(query) ? 'travel' : undefined;
-        if (kind) yield { content: [{ type: 'text', text }, { type: 'tool-call', toolCallId: crypto.randomUUID(), toolName: 'care_action', args: { kind, diabetes: query.includes('diabet') }, argsText: JSON.stringify({ kind, diabetes: query.includes('diabet') }), result: { ready: true } }] };
+        if (kind) yield { content: [...content(), { type: 'tool-call', toolCallId: crypto.randomUUID(), toolName: 'care_action', args: { kind, diabetes: query.includes('diabet') }, argsText: JSON.stringify({ kind, diabetes: query.includes('diabet') }), result: { ready: true } }] };
       }
     },
   };

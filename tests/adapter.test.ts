@@ -28,3 +28,23 @@ test('reports server and stream failures instead of inventing a fallback', async
   const failed = createAgentAdapter({ fetch: async () => response(['data: {"type":"error","payload":{"error":"private-provider-error"}}\n\n']) });
   await assert.rejects(async () => { for await (const _ of failed.run({ messages: [], abortSignal: new AbortController().signal } as any)) {} }, /interrupted/);
 });
+
+test('preserves health cards alongside generated care plans and replaces repeated metrics', async () => {
+  const frames = [
+    { type: 'tool-result', payload: { toolName: 'recentRunsTool', toolCallId: 'r1', result: { miles: 2 } } },
+    { type: 'tool-result', payload: { toolName: 'carePlanTool', toolCallId: 'p1', result: { title: 'Run recovery', items: [{ label: 'Rest', done: false }] } } },
+    { type: 'tool-result', payload: { toolName: 'recentRunsTool', toolCallId: 'r2', result: { miles: 3 } } },
+    { type: 'finish' },
+  ];
+  const adapter = createAgentAdapter({
+    fetch: async () => response(frames.map(frame => `data: ${JSON.stringify(frame)}\n\n`)),
+    getToolCards: (tool, result, id) => tool === 'recentRunsTool' ? [{ type: 'tool-call', toolName: 'health_card', toolCallId: id, args: { metric: 'running', data: result }, argsText: '{}', result: { ready: true } }] : [],
+  });
+  const output = [];
+  for await (const item of adapter.run({ messages: [], abortSignal: new AbortController().signal } as any)) output.push(item);
+  const cards = output.at(-1)!.content!.filter(part => part.type === 'tool-call');
+  assert.equal(cards.length, 2);
+  assert.equal(cards[0].toolName, 'care_action');
+  assert.equal(cards[1].toolCallId, 'r2');
+  assert.deepEqual(cards[1].args, { metric: 'running', data: { miles: 3 } });
+});

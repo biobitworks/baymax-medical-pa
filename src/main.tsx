@@ -32,6 +32,7 @@ import {
   X,
   Droplets,
   Footprints,
+  Activity,
   Moon,
   ChevronRight,
   Bell,
@@ -56,6 +57,11 @@ import Mascot, { MascotActivity } from "./Mascot";
 import { PrescriptionShoppingCard } from "./components/PrescriptionShoppingCard";
 import "./components/prescription-shopping.css";
 
+// Triggers the agent to read all of the user's health data and answer with a
+// week-in-review, which also renders the water, movement, sleep, energy and
+// running cards.
+const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+const WEEKLY_SUMMARY_PROMPT = "Give me a summary of my last week";
 const GLASS_ML = 250;
 const WATER_GOAL = 8;
 const MOVEMENT_GOAL = 30;
@@ -66,6 +72,483 @@ type HealthOverview = {
   metrics: { date: string; hydrationMl: number; activeMinutes: number }[];
   checkins: { date: string; energy: string }[];
 };
+
+// Generative health cards. When the agent calls get-daily-metrics or
+// get-recent-checkins, the tool result is turned into cards shown in the chat.
+type DailyMetric = {
+  date: string;
+  steps: number;
+  activeMinutes: number;
+  hydrationMl: number;
+  sleepHours: number;
+};
+type Run = {
+  date: string;
+  distanceMi: number;
+  durationMin: number;
+  paceMinPerMi: number;
+  note?: string;
+};
+type RunSummary = {
+  total: number;
+  totalMiles: number;
+  totalMinutes: number;
+  averagePaceMinPerMi: number;
+  longestMi: number;
+  daysSinceLastRun: number | null;
+  runsPerWeek: number | null;
+  observations: string[];
+};
+type MetricKey = "hydration" | "movement" | "sleep";
+type HealthCardArgs =
+  | {
+      metric: MetricKey;
+      /** Newest first, as returned by get-daily-metrics */
+      daily: DailyMetric[];
+      averages: Partial<Record<string, number>>;
+      targets: { hydrationMl: number; steps: number; activeMinutes: number; sleepHours: number };
+    }
+  | {
+      metric: "running";
+      /** Newest first, as returned by get-recent-runs */
+      runs: Run[];
+      summary: RunSummary;
+    }
+  | {
+      metric: "energy";
+      /** Newest first, as returned by get-recent-checkins */
+      checkins: { date: string; energy: string; note?: string }[];
+      summary: { total: number; counts: Record<string, number>; averageEnergyScore: number };
+    };
+type AgentToolPart = {
+  type: "tool-call";
+  toolCallId: string;
+  toolName: string;
+  args: Record<string, any>;
+  argsText: string;
+  result: { ready: boolean };
+  /** Which metric this card shows, so a later result can replace it. */
+  metric: string;
+};
+const healthCardPart = (args: HealthCardArgs): AgentToolPart => ({
+  type: "tool-call",
+  toolCallId: crypto.randomUUID(),
+  toolName: "health_card",
+  args,
+  argsText: JSON.stringify(args.metric),
+  result: { ready: true },
+  metric: args.metric,
+});
+function healthCardsFromTool(toolName: string, result: any): HealthCardArgs[] {
+  if (!result || typeof result !== "object") return [];
+  if (toolName === "dailyMetricsTool" && Array.isArray(result.daily)) {
+    const { daily, summary } = result;
+    return (["hydration", "movement", "sleep"] as const).map((metric) => ({
+      metric,
+      daily,
+      averages: summary.averages,
+      targets: summary.targets,
+    }));
+  }
+  if (toolName === "recentRunsTool" && Array.isArray(result.runs)) {
+    return [{ metric: "running", runs: result.runs, summary: result.summary }];
+  }
+  if (toolName === "recentCheckinsTool" && Array.isArray(result.checkins)) {
+    return [
+      { metric: "energy", checkins: result.checkins, summary: result.summary },
+    ];
+  }
+  return [];
+}
+
+const weekday = (date: string) =>
+  new Date(`${date}T12:00:00`).toLocaleDateString(undefined, {
+    weekday: "short",
+  });
+
+const METRIC_UI = {
+  hydration: {
+    label: "HYDRATION",
+    icon: Droplets,
+    tone: "blue",
+    color: "#a3bfd0",
+    pick: (d: DailyMetric) => d.hydrationMl,
+    target: (t: HealthCardTargets) => t.hydrationMl,
+    avgKey: "hydrationMl",
+    format: (n: number) => `${(n / 1000).toFixed(1)} L`,
+    goal: (n: number) => `${(n / 1000).toFixed(1)} L`,
+    noun: "water",
+  },
+  movement: {
+    label: "MOVEMENT",
+    icon: Footprints,
+    tone: "orange",
+    color: "#cfb18e",
+    pick: (d: DailyMetric) => d.activeMinutes,
+    target: (t: HealthCardTargets) => t.activeMinutes,
+    avgKey: "activeMinutes",
+    format: (n: number) => `${Math.round(n)} min`,
+    goal: (n: number) => `${n} min`,
+    noun: "active time",
+  },
+  sleep: {
+    label: "SLEEP",
+    icon: Moon,
+    tone: "purple",
+    color: "#b3a6c6",
+    pick: (d: DailyMetric) => d.sleepHours,
+    target: (t: HealthCardTargets) => t.sleepHours,
+    avgKey: "sleepHours",
+    format: (n: number) => `${n.toFixed(1)} h`,
+    goal: (n: number) => `${n} h`,
+    noun: "sleep",
+  },
+} as const;
+type HealthCardTargets = {
+  hydrationMl: number;
+  steps: number;
+  activeMinutes: number;
+  sleepHours: number;
+};
+
+function MetricCard({
+  metric,
+  daily,
+  averages,
+  targets,
+}: Extract<HealthCardArgs, { metric: MetricKey }>) {
+  const ui = METRIC_UI[metric];
+  const Icon = ui.icon;
+  const [extraMl, setExtraMl] = useState(0);
+  const days = [...daily].reverse();
+  const target = ui.target(targets);
+  const bonus = metric === "hydration" ? extraMl : 0;
+  const values = days.map((d, i) =>
+    ui.pick(d) + (i === days.length - 1 ? bonus : 0),
+  );
+  const today = values[values.length - 1] ?? 0;
+  const avg = averages[ui.avgKey] ?? 0;
+  const below = values.filter((v) => v < target).length;
+  const addGlass = () => {
+    setExtraMl((n) => n + GLASS_ML);
+    void fetch("/health/water", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ ml: GLASS_ML }),
+    }).catch((err) => console.warn("Could not save water.", err));
+  };
+  return (
+    <div className="agent-card metric-card">
+      <div className="agent-card-top">
+        <span className={`stat-icon ${ui.tone}`}>
+          <Icon size={18} />
+        </span>
+        <span>{ui.label}</span>
+        <span className="agent-status">Last {days.length} days</span>
+      </div>
+      <h3>
+        {ui.format(today)}
+        <small> today · goal {ui.goal(target)}</small>
+      </h3>
+      <div className="metric-bars">
+        {days.map((d, i) => (
+          <div key={d.date} title={`${weekday(d.date)}: ${ui.format(values[i])}`}>
+            <div className="metric-bar">
+              <i
+                style={{
+                  height: `${Math.max(4, Math.min(100, (values[i] / target) * 100))}%`,
+                  background: values[i] >= target ? ui.color : `${ui.color}99`,
+                }}
+              />
+              <span className="metric-goal" />
+            </div>
+            <small>{weekday(d.date)}</small>
+          </div>
+        ))}
+      </div>
+      <p className="fine">
+        Averaging {ui.format(avg)} a day, under your {ui.goal(target)} goal on{" "}
+        {below} of {days.length} days.
+      </p>
+      {metric === "hydration" && (
+        <button className="text-btn" onClick={addGlass}>
+          Add a glass <Plus size={14} />
+        </button>
+      )}
+    </div>
+  );
+}
+
+const fmtPace = (minPerMi: number) => {
+  const m = Math.floor(minPerMi);
+  const sec = Math.round((minPerMi - m) * 60);
+  return `${sec === 60 ? m + 1 : m}:${String(sec === 60 ? 0 : sec).padStart(2, "0")} /mi`;
+};
+const fmtMiles = (mi: number) => `${Math.round(mi * 100) / 100} mi`;
+const fmtMinutes = (min: number) => {
+  const total = Math.round(min);
+  const h = Math.floor(total / 60);
+  const m = total % 60;
+  return h ? `${h} h ${m} min` : `${m} min`;
+};
+const shortDate = (date: string) =>
+  new Date(`${date}T12:00:00`).toLocaleDateString(undefined, {
+    month: "short",
+    day: "numeric",
+  });
+
+function RunList({ runs }: { runs: Run[] }) {
+  return (
+    <div className="run-list">
+      {runs.map((r, i) => (
+        <div className="run-row" key={`${r.date}-${i}`} title={r.note}>
+          <span className="run-date">
+            {shortDate(r.date)}
+            <small>{weekday(r.date)}</small>
+          </span>
+          <b>{fmtMiles(r.distanceMi)}</b>
+          <span>{fmtMinutes(r.durationMin)}</span>
+          <span className="run-pace">{fmtPace(r.paceMinPerMi)}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function RunCard({
+  runs,
+  summary,
+}: Extract<HealthCardArgs, { metric: "running" }>) {
+  const days = [...runs].reverse();
+  const maxMi = Math.max(1, ...days.map((r) => r.distanceMi));
+  return (
+    <div className="agent-card metric-card">
+      <div className="agent-card-top">
+        <span className="stat-icon green">
+          <Activity size={18} />
+        </span>
+        <span>RUNNING</span>
+        <span className="agent-status">Last {days.length} runs</span>
+      </div>
+      <h3>
+        {fmtMiles(summary.totalMiles)}
+        <small>
+          {" "}
+          in {fmtMinutes(summary.totalMinutes)} · avg{" "}
+          {fmtPace(summary.averagePaceMinPerMi)}
+        </small>
+      </h3>
+      <div className="metric-bars">
+        {days.map((r, i) => (
+          <div
+            key={`${r.date}-${i}`}
+            title={`${shortDate(r.date)}: ${fmtMiles(r.distanceMi)} in ${fmtMinutes(r.durationMin)}`}
+          >
+            <div className="metric-bar">
+              <i
+                style={{
+                  height: `${Math.max(8, (r.distanceMi / maxMi) * 100)}%`,
+                  background: "#9db382",
+                }}
+              />
+            </div>
+            <small>{shortDate(r.date)}</small>
+          </div>
+        ))}
+      </div>
+      <p className="fine">
+        {summary.observations.length
+          ? summary.observations.join(" ")
+          : "Nice and steady. Every run counts."}
+      </p>
+    </div>
+  );
+}
+
+function RunningSection() {
+  const [runs, setRuns] = useState<Run[]>([]);
+  const [summary, setSummary] = useState<RunSummary | null>(null);
+  const [distance, setDistance] = useState("");
+  const [minutes, setMinutes] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+  const load = async () => {
+    try {
+      const res = await fetch("/health/runs?count=10");
+      if (!res.ok) throw new Error(`/health/runs ${res.status}`);
+      const data = await res.json();
+      setRuns(data.runs);
+      setSummary(data.summary);
+      setError("");
+    } catch (err) {
+      console.warn("Running data unavailable.", err);
+      setError("Baymax can’t reach your running data right now.");
+    }
+  };
+  useEffect(() => {
+    void load();
+  }, []);
+  const distanceMi = Number(distance);
+  const durationMin = Number(minutes);
+  const valid = distanceMi > 0 && durationMin > 0;
+  const save = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!valid) return;
+    setSaving(true);
+    try {
+      const res = await fetch("/health/runs", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ distanceMi, durationMin }),
+      });
+      if (!res.ok) throw new Error(`/health/runs ${res.status}`);
+      setDistance("");
+      setMinutes("");
+      await load();
+    } catch (err) {
+      console.warn("Could not save run.", err);
+      setError("That run didn’t save. Please try again.");
+    } finally {
+      setSaving(false);
+    }
+  };
+  return (
+    <>
+      <div className="stats">
+        {[
+          ["Distance", summary ? fmtMiles(summary.totalMiles) : "–", "last 10 runs"],
+          ["Time", summary ? fmtMinutes(summary.totalMinutes) : "–", "on your feet"],
+          [
+            "Average pace",
+            summary?.averagePaceMinPerMi ? fmtPace(summary.averagePaceMinPerMi) : "–",
+            summary?.runsPerWeek ? `about ${summary.runsPerWeek} ${summary.runsPerWeek === 1 ? "run" : "runs"} a week` : "log a few runs",
+          ],
+        ].map(([label, value, hint]) => (
+          <article className="stat" key={label}>
+            <div className="stat-top">
+              <span className="stat-icon green">
+                <Activity size={20} />
+              </span>
+              <span>{label.toUpperCase()}</span>
+            </div>
+            <h3>{value}</h3>
+            <p>{hint}</p>
+          </article>
+        ))}
+      </div>
+      <div className="two-col running-grid">
+        <section className="panel">
+          <div className="section-heading">
+            <h2>Recent runs</h2>
+            <span className="muted">
+              {summary?.daysSinceLastRun != null
+                ? summary.daysSinceLastRun === 0
+                  ? "RAN TODAY"
+                  : `${summary.daysSinceLastRun} DAYS SINCE YOUR LAST RUN`
+                : ""}
+            </span>
+          </div>
+          {runs.length ? (
+            <RunList runs={runs} />
+          ) : (
+            <p className="muted">No runs yet. Your first one counts the most.</p>
+          )}
+          {summary?.observations.map((o) => (
+            <p className="notice" key={o}>
+              {o}
+            </p>
+          ))}
+        </section>
+        <section className="panel">
+          <span className="eyebrow">LOG A RUN</span>
+          <h2>How far did you go?</h2>
+          <form onSubmit={save}>
+            <label>
+              Distance (miles)
+              <input
+                type="number"
+                inputMode="decimal"
+                min="0.1"
+                step="0.01"
+                placeholder="1.5"
+                value={distance}
+                onChange={(e) => setDistance(e.target.value)}
+              />
+            </label>
+            <label>
+              Time (minutes)
+              <input
+                type="number"
+                inputMode="decimal"
+                min="1"
+                step="0.1"
+                placeholder="18"
+                value={minutes}
+                onChange={(e) => setMinutes(e.target.value)}
+              />
+            </label>
+            {valid && (
+              <p className="fine">
+                That’s a pace of {fmtPace(durationMin / distanceMi)}.
+              </p>
+            )}
+            {error && <p className="notice">{error}</p>}
+            <button className="primary" type="submit" disabled={!valid || saving}>
+              {saving ? "Saving…" : "Save my run"} <Check size={16} />
+            </button>
+          </form>
+        </section>
+      </div>
+    </>
+  );
+}
+
+const ENERGY_ICON: Record<string, string> = {
+  low: "☁",
+  okay: "◒",
+  good: "☀",
+  great: "✦",
+};
+function EnergyCard({
+  checkins,
+  summary,
+}: Extract<HealthCardArgs, { metric: "energy" }>) {
+  const c = useContext(CareContext)!;
+  const days = [...checkins].reverse();
+  const low = summary.counts.low ?? 0;
+  return (
+    <div className="agent-card metric-card">
+      <div className="agent-card-top">
+        <span className="stat-icon purple">
+          <Sparkles size={18} />
+        </span>
+        <span>YOUR ENERGY</span>
+        <span className="agent-status">Last {days.length} check-ins</span>
+      </div>
+      <h3>
+        {low} of {summary.total}
+        <small> check-ins said low</small>
+      </h3>
+      <div className="energy-row">
+        {days.map((d) => (
+          <div key={d.date} title={d.note ?? capitalize(d.energy)}>
+            <span className={`energy-chip ${d.energy}`}>
+              {ENERGY_ICON[d.energy] ?? "·"}
+            </span>
+            <small>{weekday(d.date)}</small>
+          </div>
+        ))}
+      </div>
+      <p className="fine">
+        Average energy {summary.averageEnergyScore} out of 4. You don’t have to
+        be at 100%, but let’s look for what might help.
+      </p>
+      <button className="text-btn" onClick={c.checkin}>
+        Update today’s check-in <ArrowUpRight size={14} />
+      </button>
+    </div>
+  );
+}
 
 function ModalShell({
   children,
@@ -283,6 +766,75 @@ const CareTool = makeAssistantToolUI<
   toolName: "care_action",
   render: ({ args, result, toolCallId }) => <CareCard kind={args.kind} diabetes={args.diabetes} result={result} toolCallId={toolCallId} />,
 });
+const HealthTool = makeAssistantToolUI<HealthCardArgs, { ready: boolean }>({
+  toolName: "health_card",
+  render: ({ args }) =>
+    args.metric === "energy" ? (
+      <EnergyCard {...args} />
+    ) : args.metric === "running" ? (
+      <RunCard {...args} />
+    ) : (
+      <MetricCard {...args} />
+    ),
+});
+function renderInline(text: string): React.ReactNode[] {
+  const out: React.ReactNode[] = [];
+  const re = /\*\*(.+?)\*\*|`([^`]+)`|(?<![*\w])\*([^*\s][^*]*?)\*(?![*\w])/g;
+  let last = 0;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(text))) {
+    if (m.index > last) out.push(text.slice(last, m.index));
+    if (m[1] !== undefined) out.push(<strong key={m.index}>{renderInline(m[1])}</strong>);
+    else if (m[2] !== undefined) out.push(<code key={m.index}>{m[2]}</code>);
+    else out.push(<em key={m.index}>{m[3]}</em>);
+    last = m.index + m[0].length;
+  }
+  if (last < text.length) out.push(text.slice(last));
+  return out;
+}
+function MarkdownText({ text }: { text: string }) {
+  const blocks: React.ReactNode[] = [];
+  let list: { ordered: boolean; items: string[] } | null = null;
+  let para: string[] = [];
+  const flushPara = () => {
+    if (para.length) {
+      blocks.push(<p key={blocks.length}>{renderInline(para.join(" "))}</p>);
+      para = [];
+    }
+  };
+  const flushList = () => {
+    if (list) {
+      const items = list.items.map((it, i) => <li key={i}>{renderInline(it)}</li>);
+      blocks.push(list.ordered ? <ol key={blocks.length}>{items}</ol> : <ul key={blocks.length}>{items}</ul>);
+      list = null;
+    }
+  };
+  for (const line of text.split("\n")) {
+    const bullet = /^\s*[-*•]\s+(.*)$/.exec(line);
+    const num = /^\s*\d+[.)]\s+(.*)$/.exec(line);
+    const heading = /^\s{0,3}#{1,6}\s+(.*)$/.exec(line);
+    if (bullet || num) {
+      flushPara();
+      const ordered = !!num;
+      if (list && list.ordered !== ordered) flushList();
+      list ??= { ordered, items: [] };
+      list.items.push((bullet ?? num)![1]);
+    } else if (heading) {
+      flushPara();
+      flushList();
+      blocks.push(<p key={blocks.length}><strong>{renderInline(heading[1])}</strong></p>);
+    } else if (!line.trim()) {
+      flushPara();
+      flushList();
+    } else {
+      flushList();
+      para.push(line.trim());
+    }
+  }
+  flushPara();
+  flushList();
+  return <div className="md">{blocks}</div>;
+}
 function UserMessage() {
   return (
     <MessagePrimitive.Root className="message user">
@@ -294,7 +846,9 @@ function AssistantMessage() {
   return (
     <MessagePrimitive.Root className="message assistant">
       <span className="assistant-label">✦ Baymax</span>
-      <MessagePrimitive.Content />
+      <MessagePrimitive.Content
+        components={{ Text: ({ text }: { text: string }) => <MarkdownText text={text} /> }}
+      />
       <MessagePrimitive.Error>
         <p role="alert" className="notice">Baymax couldn’t complete that response. Please try sending your message again.</p>
       </MessagePrimitive.Error>
@@ -311,6 +865,7 @@ function Chat({ conversation, onConversation, onToolResult, workspace }: {
   current.current = { workspace, onToolResult, onConversation };
   const adapter = useMemo(() => createAgentAdapter({
     onToolResult: (kind, result, id) => current.current.onToolResult(kind, result, id),
+    getToolCards: (tool, result, id) => healthCardsFromTool(tool, result).map(args => ({ ...healthCardPart(args), toolCallId: `${id}-${args.metric}` })),
     getContext: () => {
       const w = current.current.workspace;
       return { name: w.name, goal: w.goal, date: w.date, planItems: w.planItems, city: w.city, travelDate: w.travelDate, brief: w.brief, energy: w.energy };
@@ -351,6 +906,7 @@ function Chat({ conversation, onConversation, onToolResult, workspace }: {
   return (
     <AssistantRuntimeProvider runtime={runtime}>
       <CareTool />
+      <HealthTool />
       <ThreadPrimitive.Root className="chat">
         <ThreadPrimitive.Viewport className="transcript">
           {!showShopping && <ThreadPrimitive.Empty>
@@ -360,7 +916,7 @@ function Chat({ conversation, onConversation, onToolResult, workspace }: {
               <p>Your personal care companion. What’s on your mind?</p>
               <div className="suggestions">
                 {[
-                  "Help me prepare for a hackathon",
+                  WEEKLY_SUMMARY_PROMPT,
                   "I need a diabetes medication refill while travelling",
                   "Draft and email a brief to my doctor",
                 ].map((s) => (
@@ -391,7 +947,7 @@ function Chat({ conversation, onConversation, onToolResult, workspace }: {
         <div className="quick-actions">
           <button type="button" onClick={() => setShowShopping(value => !value)} aria-expanded={showShopping}>{showShopping ? "Hide shopping demo" : "Shopping demo"}</button>
           {[
-            { label: "Daily plan", prompt: "Help me prepare for a hackathon" },
+            { label: "Weekly summary", prompt: WEEKLY_SUMMARY_PROMPT },
             {
               label: "Prescription",
               prompt: "I need a diabetes medication refill while travelling",
@@ -439,6 +995,7 @@ const nav = [
   ["Today", LayoutDashboard],
   ["Talk to Baymax", MessageCircle],
   ["Your plan", Calendar],
+  ["Running", Activity],
   ["Travel care", Plane],
   ["Doctor brief", FileText],
 ] as const;
@@ -725,6 +1282,8 @@ function App() {
                       ? "Let’s talk."
                       : page === "Your plan"
                         ? "Make space for yourself."
+                        : page === "Running"
+                          ? "One foot, then the other."
                         : page === "Travel care"
                           ? "Care, wherever you go."
                           : page === "Doctor brief"
@@ -738,6 +1297,8 @@ function App() {
                       ? "No judgment. Just a companion in your corner."
                       : page === "Your plan"
                         ? "Small, sustainable steps for the days ahead."
+                        : page === "Running"
+                          ? "Every mile is yours. Go at your own pace."
                         : page === "Travel care"
                           ? "A little preparation makes a new place feel less unfamiliar."
                           : page === "Doctor brief"
@@ -1027,6 +1588,7 @@ function App() {
                 </section>
               </div>
             )}
+            {page === "Running" && <RunningSection />}
             {page === "Travel care" && (
               <>
                 <div className="two-col">
