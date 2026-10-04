@@ -5,12 +5,9 @@ import { getFitnessPreferences } from '../lib/fitness-store';
 
 export const fitnessOverviewTool = createTool({
   id: 'get-fitness-overview',
-  description: 'Open the interactive fitness dashboard with daily step and active-minute rings, saved goals, and seven-day progress. Use for fitness, movement progress, activity goals, or changing goals. These are demo metrics, not device measurements. The user can edit goals in the card; never claim goals were changed by reading this tool.',
+  description: 'Open the interactive fitness dashboard with daily step and active-minute rings, saved goals, and seven-day progress. Use for fitness, movement progress, activity goals, or changing goals. The result source field is apple_health when a phone is paired, otherwise synthetic demo metrics. The user can edit goals in the card; never claim goals were changed by reading this tool.',
   inputSchema: z.object({}),
-  execute: async () => ({
-    ...await getFitnessOverview(),
-    source: 'demo',
-  }),
+  execute: async (_input, context) => await getFitnessOverview(context),
 });
 export const onboardingTool = createTool({
   id: 'start-activity-onboarding',

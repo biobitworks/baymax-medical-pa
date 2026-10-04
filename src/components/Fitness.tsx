@@ -4,6 +4,7 @@ import type { ActivityGoals, FitnessOverview, FitnessPreferences } from '../mast
 import './fitness.css';
 
 export type SavedPreferences = FitnessPreferences & { onboarded?: boolean };
+type DashboardData = FitnessOverview & { source?: 'demo' | 'apple_health' };
 export const FITNESS_CHANGED = 'baymax-fitness-changed';
 const PRESETS = [
   { steps: 5000, activeMinutes: 20, label: 'A little every day', detail: 'Make room for movement' },
@@ -99,8 +100,8 @@ function Trend({ label, field, data }: { label: string; field: 'steps' | 'active
   return <section className={`panel fitness-trend ${field}`}><div><span className="eyebrow">LAST 7 DAYS</span><h3>{label}</h3><strong>{data.today?.[field].toLocaleString() ?? '—'} <small>{field === 'steps' ? 'steps' : 'min'}</small></strong><p className="fine">Today · goal {target.toLocaleString()}</p></div><div className="fitness-bars" role="img" aria-label={days.map(day => `${day.date}: ${day[field]} ${label}`).join('; ')}><div className="fitness-target-line" style={{ bottom: `calc(22px + ${target / max * 76}px)` }} />{days.map(day => <div className="fitness-bar-column" key={day.date}><div className="fitness-bar-track"><span style={{ height: `${day[field] / max * 100}%` }} title={`${day.date}: ${day[field]}`}>{day[field] >= target && <Check size={10} />}</span></div><small>{new Date(`${day.date}T12:00:00`).toLocaleDateString(undefined, { weekday: 'narrow' })}</small></div>)}</div></section>;
 }
 
-export function FitnessDashboard({ initialData, compact = false }: { initialData?: FitnessOverview; compact?: boolean }) {
-  const [data, setData] = useState<FitnessOverview | null>(initialData ?? null);
+export function FitnessDashboard({ initialData, compact = false }: { initialData?: DashboardData; compact?: boolean }) {
+  const [data, setData] = useState<DashboardData | null>(initialData ?? null);
   const [loading, setLoading] = useState(!initialData);
   const [error, setError] = useState('');
   const [editing, setEditing] = useState(false);
@@ -116,7 +117,7 @@ export function FitnessDashboard({ initialData, compact = false }: { initialData
     let active = true;
     async function load() {
       try {
-        const result = await fitnessRequest<FitnessOverview & { preferences: SavedPreferences }>('fitness');
+        const result = await fitnessRequest<DashboardData & { preferences: SavedPreferences }>('fitness');
         if (active) { setData(result); setPreferences(result.preferences); setError(''); }
       } catch { if (active) setError('Your activity data is unavailable. Try again when Baymax is connected.'); }
       finally { if (active) setLoading(false); }
@@ -132,7 +133,7 @@ export function FitnessDashboard({ initialData, compact = false }: { initialData
     if (today?.achieved && preferences?.notifications === 'enabled' && 'Notification' in window && Notification.permission === 'granted' && celebratedDate.current !== today.date) {
       celebratedDate.current = today.date;
       try {
-        new Notification('A little celebration from Baymax', { body: 'Both daily activity goals met in your sample activity.', tag: `baymax-activity-${today.date}` });
+        new Notification('A little celebration from Baymax', { body: 'Both daily activity goals met today.', tag: `baymax-activity-${today.date}` });
       } catch { /* Some browsers grant permission but don’t support desktop notifications. */ }
     }
   }, [data, preferences]);
@@ -153,9 +154,9 @@ export function FitnessDashboard({ initialData, compact = false }: { initialData
   const today = data.today;
   const week = [...data.daily].reverse();
   return <div className={`fitness-dashboard ${compact ? 'compact' : ''}`}>
-    <div className="fitness-toolbar"><span className="pill"><Activity size={13} /> SAMPLE ACTIVITY</span><button className="outline" onClick={() => { setGoals(data.goals); setGoalError(''); setEditing(true); }}><Settings2 size={15} /> Edit goals</button></div>
+    <div className="fitness-toolbar"><span className="pill"><Activity size={13} /> {data.source === 'apple_health' ? 'APPLE HEALTH' : 'SAMPLE ACTIVITY'}</span><button className="outline" onClick={() => { setGoals(data.goals); setGoalError(''); setEditing(true); }}><Settings2 size={15} /> Edit goals</button></div>
     {error && <p className="fitness-error" role="alert">{error} <button className="text-btn" onClick={() => setRetry(retry + 1)}>Retry</button></p>}
-    <section className="panel fitness-summary"><div className="fitness-ring-block"><ActivityRings steps={today?.steps ?? 0} minutes={today?.activeMinutes ?? 0} goals={data.goals} /><div className="fitness-legend"><span><Activity size={15} /> Active minutes</span><span><Footprints size={15} /> Steps</span></div></div><div className="fitness-summary-copy"><span className="eyebrow">TODAY’S MOVEMENT</span><h2>{today?.achieved ? 'Look at you go.' : 'Small steps. Steady progress.'}</h2><p>{today ? `Every bit counts. You’ve made time for ${today.activeMinutes} minutes of movement today.` : 'No activity recorded yet. Your next little walk is a good place to start.'}</p><div className="fitness-stat-pair"><span><Footprints size={18} /><b>{(today?.steps ?? 0).toLocaleString()}</b><small>of {data.goals.steps.toLocaleString()} steps</small></span><span><Activity size={18} /><b>{today?.activeMinutes ?? 0} min</b><small>of {data.goals.activeMinutes} active minutes</small></span></div><p className="fine">Demo data · device tracking isn’t connected.</p></div></section>
+    <section className="panel fitness-summary"><div className="fitness-ring-block"><ActivityRings steps={today?.steps ?? 0} minutes={today?.activeMinutes ?? 0} goals={data.goals} /><div className="fitness-legend"><span><Activity size={15} /> Active minutes</span><span><Footprints size={15} /> Steps</span></div></div><div className="fitness-summary-copy"><span className="eyebrow">TODAY’S MOVEMENT</span><h2>{today?.achieved ? 'Look at you go.' : 'Small steps. Steady progress.'}</h2><p>{today ? `Every bit counts. You’ve made time for ${today.activeMinutes} minutes of movement today.` : 'No activity recorded yet. Your next little walk is a good place to start.'}</p><div className="fitness-stat-pair"><span><Footprints size={18} /><b>{(today?.steps ?? 0).toLocaleString()}</b><small>of {data.goals.steps.toLocaleString()} steps</small></span><span><Activity size={18} /><b>{today?.activeMinutes ?? 0} min</b><small>of {data.goals.activeMinutes} active minutes</small></span></div><p className="fine">{data.source === 'apple_health' ? 'From your paired iPhone via Apple Health.' : 'Demo data · pair an iPhone to see real activity.'}</p></div></section>
     <div className="fitness-progress-grid"><section className="panel fitness-daily-goals"><span className="eyebrow">YOUR DAILY GOALS</span><h3>A little consistency.</h3><div className="fitness-week-rings"><div><strong>{data.achievedDays}<small>/{data.daily.length}</small></strong><p className="fine">days achieved</p></div><div className="fitness-week-days">{week.map(day => <div key={day.date} title={`${day.date}: ${day.steps} steps, ${day.activeMinutes} active minutes`}><ActivityRings steps={day.steps} minutes={day.activeMinutes} goals={data.goals} small /><small>{new Date(`${day.date}T12:00:00`).toLocaleDateString(undefined, { weekday: 'narrow' })}</small>{day.achieved && <Check className="fitness-day-check" size={12} />}</div>)}</div></div><p className="fine">A day counts when you meet both goals.</p></section><section className="panel fitness-weekly"><span className="eyebrow">YOUR WEEKLY TARGET</span><h3>Make space for movement.</h3><strong>{data.weeklyMinutes}<small> / {data.weeklyTarget} min</small></strong><progress value={Math.min(data.weeklyMinutes, data.weeklyTarget)} max={data.weeklyTarget} aria-label="Weekly active minutes" /><p className="fine">Last 7 days · your daily active-minute goal × 7.</p></section></div>
     <div className="fitness-section-heading"><h2>Your rhythm, over time.</h2><span className="fine">Last 7 days</span></div><div className="fitness-progress-grid"><Trend label="Active minutes" field="activeMinutes" data={data} /><Trend label="Steps" field="steps" data={data} /></div>
     {!compact && <section className="fitness-coach"><span className="fitness-coach-icon"><Sparkles size={22} /></span><div><h3>Let’s find what works for you.</h3><p>Adjust your starting point and choose how Baymax encourages you.</p></div><button className="outline" onClick={() => setShowSetup(true)}>Activity setup <ArrowRight size={15} /></button></section>}
