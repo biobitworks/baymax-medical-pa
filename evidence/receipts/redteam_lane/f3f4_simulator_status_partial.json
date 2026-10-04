@@ -1,0 +1,50 @@
+{
+  "candidate": {
+    "branch": "execution/model-lineage-f3f4",
+    "canonical_breakpoint_minted": false,
+    "commit": "f7799238d57a65d80730afb736e4ed646dc7b60e",
+    "implementation_receipt": "evidence/receipts/verification/model_lineage_f3f4_candidate.json",
+    "implementation_receipt_sha256": "4d1f72a7904394e7354628977ccdb46e605ece8f2f9bd7b03d97c67d3dfe804f",
+    "remote_parity": "PASS_OBSERVED",
+    "tree": "659340a40d48a282267e3b3e0a740ea60af75b11"
+  },
+  "claim_ceiling": {
+    "F3_F4_CANONICAL_ADMISSION": "DEFERRED_PENDING_FINAL_INDEPENDENT_RECEIPT",
+    "HIPAA_COMPLIANCE": "NOT_VERIFIED",
+    "PHYSICAL_IPHONE": "NOT_PROVED_BY_SIMULATOR",
+    "REAL_PHI": "BLOCKED"
+  },
+  "independent_redteam": {
+    "candidate_independently_verified": false,
+    "final_verdict": "NOT_COMPUTED",
+    "state": "PARTIAL_VERIFICATION_IN_PROGRESS"
+  },
+  "notes": [
+    "This side-lane receipt does not mint or modify a canonical BAYMAX breakpoint.",
+    "User-reported simulator observations are preserved as USER_REPORTED_CHAT, not promoted to independent observation.",
+    "Candidate commit f779923 remains unchanged as the review target."
+  ],
+  "recorded_at": "2026-10-04T22:37:44.598514+00:00",
+  "required_before_independent_verification": {
+    "exact_f779923_app_binary_source_binding": "NOT_YET_ADMITTED",
+    "f3_dataset_fcg_fhir_projection_source_ref_tamper_fail_closed": "NOT_YET_ADMITTED",
+    "historical_apollo_invalid_response_reject": "NOT_YET_ADMITTED",
+    "hostile_malformed_response_reject": "NOT_YET_ADMITTED",
+    "independent_redteam_receipt_commit_push": "THIS_RECEIPT_IS_STATUS_ONLY_NOT_FINAL_VERIFICATION",
+    "restart_reload_state_unknown_preservation": "NOT_YET_ADMITTED"
+  },
+  "schema": "baymax.redteam_f3f4_simulator_status.v1",
+  "source_classes": {
+    "candidate_remote_parity": "DIRECTLY_OBSERVED",
+    "independent_verification_completion": "NOT_OBSERVED",
+    "repository_state": "DIRECTLY_OBSERVED",
+    "simulator_progress_summary": "USER_REPORTED_CHAT"
+  },
+  "user_reported_simulator_progress": {
+    "app_launch_offline_bali_flow": "REPORTED_OBSERVED",
+    "cloud_fly_call_deferred": "REPORTED_OBSERVED",
+    "f4_code_owned_rxnorm_allowlist_rendering": "REPORTED_OBSERVED",
+    "medication_purchase_blocked": "REPORTED_OBSERVED",
+    "valid_model_response_accept_and_fco_catalog_render": "REPORTED_OBSERVED"
+  }
+}
