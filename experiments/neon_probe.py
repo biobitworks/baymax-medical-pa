@@ -82,7 +82,9 @@ def probe_gateway():
     try:
         t = time.perf_counter(); m = requests.get(B + "/v1/models", headers=H, timeout=30); r["catalog"] = {"http_status": m.status_code, "latency_s": round(time.perf_counter() - t, 3), "request_id": m.headers.get("x-request-id")}
         ids = sorted(x["id"] for x in m.json().get("data", [])) if m.status_code == 200 else []; r["catalog"]["count"] = len(ids); r["catalog"]["ids"] = ids; r["catalog"]["response_sha256"] = sha(m.content)
-        pick = next((i for pat in ("qwen", "mistral", "llama", "mini", "haiku", "flash") for i in ids if pat in i.lower()), ids[0] if ids else None); r["selected_model"] = pick
+        NONCHAT = ("embed", "gte-", "image", "rerank"); chat = [i for i in ids if not any(n in i.lower() for n in NONCHAT)]
+        want = os.environ.get("BAYMAX_GATEWAY_MODEL"); pick = want if want in chat else next((i for i in chat if "qwen" in i.lower() and "instruct" in i.lower()), None)
+        r["selected_model"] = pick; r["excluded_non_chat_models"] = sorted(set(ids) - set(chat)); r["mistral_in_catalog"] = any("mistral" in i.lower() for i in ids); r["qwen_in_catalog"] = [i for i in ids if "qwen" in i.lower()]
         if not pick: raise RuntimeError("empty catalog")
         sys.path.insert(0, os.path.join(ROOT, "experiments")); import model_experiment as M
         body = {"model": pick, "messages": [{"role": "system", "content": M.ROUTE_SYS}, {"role": "user", "content": M.ROUTE_USER}], "temperature": 0, "max_tokens": 300}
@@ -98,7 +100,7 @@ def probe_gateway():
         r["observed"] = True; r["result"] = "PASS" if r["semantic_check"]["all_match"] else "PARTIAL"
         r["claim_ceiling"] = "Gateway reachable, catalog listed, one inference executed. HTTP 200 != correctness; semantic check is the only correctness signal. Single sample. External inference lane, never a substitute for local Liquid. Synthetic prompt only."
     except Exception as e: fail(r, e, "ai_gateway")
-    out("neon_ai_gateway", r)
+    out("neon_ai_gateway_attempt2", r)
 
 def probe_storage():
     import boto3, botocore; from botocore.config import Config; import requests
@@ -128,6 +130,7 @@ def probe_storage():
     r["steps"] = steps; out("neon_object_storage", r)
 
 if __name__ == "__main__":
-    for f in (probe_control_plane, probe_postgres, probe_auth, probe_gateway, probe_storage):
+    lanes = {"control": probe_control_plane, "postgres": probe_postgres, "auth": probe_auth, "gateway": probe_gateway, "storage": probe_storage}
+    for f in ([lanes[a] for a in sys.argv[1:]] or lanes.values()):
         try: f()
         except Exception as e: print(f.__name__, "HARNESS_ERROR", scrub(e)[:200])

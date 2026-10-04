@@ -8,7 +8,7 @@ for l in open(".env"):
     l = l.strip()
     if l and not l.startswith("#") and "=" in l: k, v = l.split("=", 1); names[k.replace("export ", "").strip()] = "PRESENT" if v.strip().strip("'\"") else "EMPTY"
 local = R("gitleaks", "detect", "--no-git", "--source", ".", "--no-banner", "--redact", "-l", "error", "-r", "/dev/null")
-nl = re.search(r"(\d+) leaks? found", (local.stdout + local.stderr)); 
+nl = re.search(r"(\d+) leaks? found", (local.stdout + local.stderr));
 tracked = R(sys.executable, "scripts/secret_gate.py")
 def blob(r): return git("rev-parse", r).stdout.strip() or None
 def anc(c): return git("merge-base", "--is-ancestor", c, "HEAD").returncode == 0
