@@ -53,6 +53,8 @@ import { applyToolResult, historicalCard } from "./chat/cards";
 import { useCareWorkspace } from "./persistence/use-care-workspace";
 import { type CareWorkspace, type StoredConversation } from "./shared/workspace";
 import Mascot, { MascotActivity } from "./Mascot";
+import { PrescriptionShoppingCard } from "./components/PrescriptionShoppingCard";
+import "./components/prescription-shopping.css";
 
 const GLASS_ML = 250;
 const WATER_GOAL = 8;
@@ -129,8 +131,6 @@ function CareCard({
   result: unknown;
 }) {
   const c = useContext(CareContext)!;
-  const [approved, setApproved] = useState(false);
-  const [ordered, setOrdered] = useState(false);
   const snapshot = historicalCard(c, kind, toolCallId, result);
   if (snapshot) return (
     <div className="agent-card">
@@ -160,87 +160,7 @@ function CareCard({
         </span>
       </div>
       {kind === "purchase" ? (
-        <>
-          <div className="order-title">
-            <span className="stat-icon green">
-              <Heart size={21} />
-            </span>
-            <div>
-              <h3>Your {diabetes ? "diabetes " : ""}medication refill</h3>
-              <p>Continuing your existing prescription while travelling</p>
-            </div>
-          </div>
-          <div className="order-steps">
-            {[
-              "Prepare existing prescription details",
-              "Match a licensed local pharmacy",
-              "Verify prescription with a pharmacist",
-              "Review medication, price, and fulfilment",
-            ].map((step, i) => (
-              <div key={step}>
-                <span className={i < 2 ? "step ready" : "step"}>
-                  {i < 2 ? <Check size={12} /> : i + 1}
-                </span>
-                <span>
-                  {step}
-                  <small>
-                    {i < 2
-                      ? "Preview prepared"
-                      : i === 2
-                        ? "Professional verification required"
-                        : "Your approval required"}
-                  </small>
-                </span>
-              </div>
-            ))}
-          </div>
-          <div className="order-summary">
-            <span>
-              Medication<b>As prescribed by your clinician</b>
-            </span>
-            <span>
-              Delivery<b>Confirm with pharmacy</b>
-            </span>
-            <span>
-              Total<b>Awaiting pharmacy quote</b>
-            </span>
-          </div>
-          {ordered ? (
-            <div className="order-success">
-              <Check size={18} />
-              <div>
-                <b>Order journey previewed</b>
-                <small>
-                  No purchase has been made. A pharmacy must verify and fulfil
-                  the prescription.
-                </small>
-              </div>
-            </div>
-          ) : (
-            <>
-              <label className="consent">
-                <input
-                  type="checkbox"
-                  checked={approved}
-                  onChange={(e) => setApproved(e.target.checked)}
-                />
-                I want to review the purchase journey for my existing
-                prescription.
-              </label>
-              <button
-                className="primary"
-                disabled={!approved}
-                onClick={() => setOrdered(true)}
-              >
-                Preview order confirmation <ArrowUpRight size={15} />
-              </button>
-              <p className="fine">
-                No purchase yet. Prescription verification and payment happen
-                with a licensed pharmacy.
-              </p>
-            </>
-          )}
-        </>
+        <PrescriptionShoppingCard />
       ) : kind === "plan" ? (
         <>
           <h3>{c.goal}</h3>
@@ -396,6 +316,7 @@ function Chat({ conversation, onConversation, onToolResult, workspace }: {
       return { name: w.name, goal: w.goal, date: w.date, planItems: w.planItems, city: w.city, travelDate: w.travelDate, brief: w.brief, energy: w.energy };
     },
   }), []);
+  const [showShopping, setShowShopping] = useState(false);
   const runtime = useLocalRuntime(adapter);
   const initialConversation = useRef(conversation);
   const restored = useRef(false);
@@ -432,7 +353,7 @@ function Chat({ conversation, onConversation, onToolResult, workspace }: {
       <CareTool />
       <ThreadPrimitive.Root className="chat">
         <ThreadPrimitive.Viewport className="transcript">
-          <ThreadPrimitive.Empty>
+          {!showShopping && <ThreadPrimitive.Empty>
             <div className="chat-welcome">
               <Mascot small />
               <h2>Hello. I am Baymax.</h2>
@@ -455,10 +376,11 @@ function Chat({ conversation, onConversation, onToolResult, workspace }: {
                 ))}
               </div>
             </div>
-          </ThreadPrimitive.Empty>
+          </ThreadPrimitive.Empty>}
           <ThreadPrimitive.Messages
             components={{ UserMessage, AssistantMessage }}
           />
+          {showShopping && <PrescriptionShoppingCard />}
         </ThreadPrimitive.Viewport>
         <ThreadPrimitive.If running>
           <div className="bay-response" role="status">
@@ -467,6 +389,7 @@ function Chat({ conversation, onConversation, onToolResult, workspace }: {
           </div>
         </ThreadPrimitive.If>
         <div className="quick-actions">
+          <button type="button" onClick={() => setShowShopping(value => !value)} aria-expanded={showShopping}>{showShopping ? "Hide shopping demo" : "Shopping demo"}</button>
           {[
             { label: "Daily plan", prompt: "Help me prepare for a hackathon" },
             {
