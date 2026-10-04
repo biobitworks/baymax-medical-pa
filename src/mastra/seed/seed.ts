@@ -121,7 +121,8 @@ export async function resetDemo(q: Query, options: SeedOptions = {}) {
     `WITH a AS (DELETE FROM conversations WHERE user_id = $1),
           b AS (DELETE FROM records WHERE user_id = $1 AND source = 'upload'),
           c AS (DELETE FROM checkins WHERE user_id = $1),
-          d AS (DELETE FROM daily_metrics WHERE user_id = $1)
+          d AS (DELETE FROM daily_metrics WHERE user_id = $1),
+          e AS (DELETE FROM user_fitness_preferences WHERE user_id = $1)
      DELETE FROM runs WHERE user_id = $1`,
     [userId],
   );

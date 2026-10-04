@@ -1,7 +1,7 @@
-import { getFitnessOverview } from "../lib/fitness-data";
 import { createTool } from '@mastra/core/tools';
 import { z } from 'zod';
-import { getFitnessPreferences } from '../lib/fitness';
+import { getFitnessOverview } from '../lib/fitness-data';
+import { getFitnessPreferences } from '../lib/fitness-store';
 
 export const fitnessOverviewTool = createTool({
   id: 'get-fitness-overview',
@@ -16,5 +16,5 @@ export const onboardingTool = createTool({
   id: 'start-activity-onboarding',
   description: 'Show interactive onboarding to introduce movement tracking, explain active minutes, choose daily goals, and optionally enable browser notifications. Use when the user asks to get started, set up fitness, or redo onboarding. This only opens the form; the user confirms and saves their own preferences.',
   inputSchema: z.object({}),
-  execute: async () => ({ preferences: getFitnessPreferences() }),
+  execute: async () => ({ preferences: await getFitnessPreferences() }),
 });

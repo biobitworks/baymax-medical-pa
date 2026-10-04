@@ -1,4 +1,3 @@
-import { getFitnessPreferences } from "../lib/fitness";
 import { createTool } from "@mastra/core/tools";
 import { z } from "zod";
 import { dbOf, userIdOf } from "../lib/demo-user";
@@ -30,7 +29,7 @@ export const userInfoTool = createTool({
     ]);
     if (!user) throw new Error("User profile not found");
     return {
-      name: getFitnessPreferences().onboarded ? getFitnessPreferences().name : String(user.name),
+      name: String(user.name),
       ...(user.age == null ? {} : { age: Number(user.age) }),
       conditions: conditions.map((c) => (c.status && c.status !== "active" ? `${c.name} (${c.status})` : String(c.name))),
       medications: medications.map((m) => String(m.name)),

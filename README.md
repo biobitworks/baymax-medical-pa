@@ -114,10 +114,10 @@ npm run preview
 | Assistant UI | Implemented: runtime, message primitives, composer, suggestions, tool UI |
 | Mastra | Implemented: live agent text and care plan/doctor brief tool results |
 | Neon | Implemented: consent-based browser workspace and conversation persistence, plus AI Gateway |
-| Exa | Implemented: server-side search and source cards; requires `EXA_API_KEY` |
+| Exa | Implemented: server-side agent search with source cards; requires `EXA_API_KEY` |
 | Fly.io | Dockerfile, Nginx config, and starter Fly configuration included; not deployed |
 
-The app has live LLM and database connections. Pharmacy fulfilment, payment, server-side email delivery and background notifications remain unimplemented. The GIFs use sample details.
+The app has live LLM and database connections. Pharmacy fulfilment, payment, server-side email delivery, and background notifications remain unimplemented. The GIFs use sample details.
 
 ## Fly.io deployment preparation
 
@@ -229,6 +229,6 @@ The welcome flow introduces steps and active minutes, lets the user choose daily
 
 Baymax can render the same interactive components in chat using `fitnessOverviewTool` and `onboardingTool`. Try “Open my fitness dashboard” or “Start my activity onboarding,” or use the Fitness and Activity setup shortcuts. Tools open the UI; users confirm goal and preference changes themselves.
 
-`GET /health/fitness` reads activity plus saved goals. `GET` and `POST /health/preferences` read/save onboarding preferences; `POST /health/goals` updates goals. UI and agent tools share the single-user demo store. Data is sample activity, not synced device data. Goals and preferences survive page refresh but reset on server restart. Browser notifications can celebrate completed demo goals while the fitness component is mounted; there are no scheduled or background reminders.
+`GET /health/fitness` reads activity plus saved goals. `GET` and `POST /health/preferences` read/save onboarding preferences; `POST /health/goals` updates goals. UI and agent tools share the demo user's Postgres-backed preferences (`user_fitness_preferences`; the name is stored on `users`). Data is sample activity, not synced device data. Goals and preferences persist across refreshes and restarts, and are cleared by the demo reset. Browser notifications can celebrate completed demo goals while the fitness component is mounted; there are no scheduled or background reminders.
 
 Run `npm run test:fitness` for goal validation and progress calculations, and `npm run build` for TypeScript and production bundling.

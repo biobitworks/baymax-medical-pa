@@ -62,7 +62,7 @@ import { type CareWorkspace, type StoredConversation } from "./shared/workspace"
 import Mascot, { MascotActivity } from "./Mascot";
 import { PrescriptionShoppingCard } from "./components/PrescriptionShoppingCard";
 import { WebSearchCard } from "./components/WebSearchCard";
-import { type WebSearchCardArgs } from "./components/web-search-state";
+import { searchCardFromEvent, type SearchCardPart, type WebSearchCardArgs } from "./components/web-search-state";
 import "./components/prescription-shopping.css";
 import { ActivityOnboarding, FitnessDashboard, FITNESS_CHANGED, fitnessRequest, type SavedPreferences } from "./components/Fitness";
 import type { FitnessOverview } from "./mastra/lib/fitness";
@@ -111,9 +111,9 @@ type RunSummary = {
 };
 type MetricKey = "hydration" | "movement" | "sleep";
 type HealthCardArgs =
+  | LabTrendsArgs
   | { metric: "fitness"; overview: FitnessOverview }
   | { metric: "onboarding"; preferences: SavedPreferences }
-  | LabTrendsArgs
   | {
       metric: MetricKey;
       /** Newest first, as returned by get-daily-metrics */
@@ -843,12 +843,12 @@ const CareTool = makeAssistantToolUI<
 const HealthTool = makeAssistantToolUI<HealthCardArgs, { ready: boolean }>({
   toolName: "health_card",
   render: ({ args }) =>
-    args.metric === "fitness" ? (
+    args.metric === "labs" ? (
+      <LabTrendsCard {...args} />
+    ) : args.metric === "fitness" ? (
       <FitnessDashboard initialData={args.overview} compact />
     ) : args.metric === "onboarding" ? (
       <ActivityOnboarding initialPreferences={args.preferences} />
-    ) : args.metric === "labs" ? (
-      <LabTrendsCard {...args} />
     ) : args.metric === "energy" ? (
       <EnergyCard {...args} />
     ) : args.metric === "running" ? (
@@ -1203,6 +1203,8 @@ function App() {
   const [responding, setResponding] = useState(false);
   const [page, setPage] = useState("Talk to Baymax");
   const [modal, setModal] = useState("");
+  const [preferencesLoading, setPreferencesLoading] = useState(true);
+  const [fitnessPreferences, setFitnessPreferences] = useState<SavedPreferences>();
   const persistence = useCareWorkspace();
   const { workspace, setWorkspace, setField } = persistence;
   const { name, ready, energy, done, water, reminders, nudge, city, travelDate, date, goal, brief, recipient, subject, planItems, tripReady, checklist, activeMinutes, week } = workspace;
@@ -1223,8 +1225,6 @@ function App() {
   const onToolResult = useCallback((kind: "plan" | "brief", result: unknown, toolCallId: string) => {
     setWorkspace(previous => applyToolResult(previous, kind, result, toolCallId));
   }, [setWorkspace]);
-  const [preferencesLoading, setPreferencesLoading] = useState(true);
-  const [fitnessPreferences, setFitnessPreferences] = useState<SavedPreferences>();
   const [emailConsent, setEmailConsent] = useState(false);
   const [toast, setToast] = useState("");
   const setTripReady = (value: boolean) => setField("tripReady", value);
@@ -1243,24 +1243,22 @@ function App() {
     setToast(s);
     setTimeout(() => setToast(""), 3500);
   };
+  // Initialize the new-visit demo overview after restoring the care workspace.
+  // A saved or already-opened workspace always keeps its own values.
   useEffect(() => {
     let active = true;
     const apply = (preferences: SavedPreferences) => {
       if (!active) return;
       setFitnessPreferences(preferences);
+      if (preferences.onboarded) { setName(preferences.name); setReady(true); }
     };
-    const onChange = (event: Event) => {
-      const preferences = (event as CustomEvent<SavedPreferences>).detail;
-      apply(preferences); setName(preferences.name);
-    };
+    const onChange = (event: Event) => apply((event as CustomEvent<SavedPreferences>).detail);
     window.addEventListener(FITNESS_CHANGED, onChange);
     void fitnessRequest<SavedPreferences>("preferences").then(apply).catch(() => {}).finally(() => { if (active) setPreferencesLoading(false); });
     return () => { active = false; window.removeEventListener(FITNESS_CHANGED, onChange); };
   }, []);
   // Load today's numbers and the last week from the Mastra server. The agent
   // tools read the same data, so the app and Baymax always agree.
-  // Initialize the new-visit demo overview after restoring the care workspace.
-  // A saved or already-opened workspace always keeps its own values.
   useEffect(() => {
     if (persistence.loading || persistence.loadError) return;
     let cancelled = false;
@@ -2017,7 +2015,6 @@ function App() {
                   <p>
                     Save your profile, care plans, and preferences for your next visit in this browser. Your chat history and health data are saved to your account.
                     Turning this off deletes the saved copy and keeps your current care space for this visit.
-                    Activity goals currently use the demo server session and reset when it restarts.
                   </p>
                   <p className="fine">
                     Choose what you share. Review any brief before opening it in
@@ -2065,7 +2062,7 @@ function App() {
         )}{" "}
         {!ready && !preferencesLoading && (
           <ModalShell welcome>
-            <ActivityOnboarding initialName={name} memoryControl={<label className="consent"><input type="checkbox" checked={workspace.remember} onChange={e => setField("remember", e.target.checked)} />Remember my care space across visits in this browser.</label>} initialPreferences={fitnessPreferences} onCancel={() => { setReady(true); go("Physical fitness"); }} onComplete={(preferences) => {
+            <ActivityOnboarding initialName={name} initialPreferences={fitnessPreferences} welcomeExtra={<label className="consent"><input type="checkbox" checked={workspace.remember} onChange={e => setField("remember", e.target.checked)} />Remember my care space across visits in this browser.</label>} onCancel={() => { setReady(true); go("Physical fitness"); }} onComplete={(preferences) => {
               setName(preferences.name); setReady(true); go("Physical fitness");
             }} />
           </ModalShell>
@@ -2164,12 +2161,13 @@ function App() {
                   <button
                     className="primary"
                     onClick={() => {
-                      const displayName = name.trim() || "Jordan";
+                      const displayName = name.trim() || "Alex";
                       void (async () => {
                         try {
                           const current = fitnessPreferences ?? await fitnessRequest<SavedPreferences>("preferences");
                           const saved = await fitnessRequest<SavedPreferences>("preferences", { name: displayName, goals: current.goals, notifications: current.notifications });
                           window.dispatchEvent(new CustomEvent(FITNESS_CHANGED, { detail: saved }));
+                          setName(saved.name);
                           setModal("");
                         } catch { notify("Your name didn’t save. Please try again."); }
                       })();
@@ -2184,7 +2182,6 @@ function App() {
                   <p>
                     This clears your saved profile, care plans, preferences, and brief, and restores the sample chats, check-ins, and health history.
                     Your downloaded brief stays on your device.
-                    Demo activity goals remain until the server restarts.
                   </p>
                   {persistence.error && <p role="alert" className="notice">{persistence.error}</p>}
                   <button
