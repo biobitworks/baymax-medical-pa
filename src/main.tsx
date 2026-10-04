@@ -133,6 +133,7 @@ function Mascot({ small = false }: { small?: boolean }) {
     </svg>
   );
 }
+// UI-first fixture adapter. Replace this boundary with a Mastra-backed API.
 const adapter: ChatModelAdapter = {
   async *run({ messages, abortSignal }) {
     const query =
@@ -142,28 +143,12 @@ const adapter: ChatModelAdapter = {
         .map((p) => p.text)
         .join(" ")
         .toLowerCase() || "";
-    let text =
-      query.includes("med") || query.includes("prescription")
-        ? "Let’s make a travel medication checklist. Keep your medication name, prescribed dose, remaining supply, and prescription documents together. A local clinician or pharmacist needs to confirm local requirements and any refill. Use the checklist below to get ready. A pharmacy or clinician needs to confirm prescription requirements."
-        : query.includes("doctor") || query.includes("brief")
-          ? "I can help you organize a concise doctor brief: medications, allergies, relevant history, and the questions you want answered. Review and edit the brief below, then prepare an email to your doctor. Nothing is shared automatically."
-          : query.includes("hackathon")
-            ? "Let’s make room for you in the build schedule. Here’s a plan: a meal before coding, a short movement break, water within reach, and a consistent wind-down time. Set your date below and check off a small win. I’ll keep your checklist here, ready when you need it."
-            : query.includes("sleep")
-              ? "A busy brain deserves a softer landing. Try adding a wind-down break to your plan and checking in on how rested you feel tomorrow. I can help organize your routine, but a clinician should assess symptoms and medical concerns."
-              : "I’m here. A small step counts: check in on your energy, take a movement break, or prepare for your next trip. What would feel most helpful today? Let’s take one step at a time.";
-    for (let i = 0; i < text.length; i += 24) {
-      if (abortSignal.aborted) return;
-      await new Promise((r) => setTimeout(r, 25));
-      yield { content: [{ type: "text", text: text.slice(0, i + 24) }] };
-    }
+    const diabetes = query.includes("diabet");
     const kind =
-      query.includes("diabet") ||
-      query.includes("buy") ||
-      query.includes("refill")
-        ? "purchase"
-        : query.includes("doctor") || query.includes("brief")
-          ? "brief"
+      query.includes("doctor") || query.includes("brief")
+        ? "brief"
+        : diabetes || query.includes("buy") || query.includes("refill")
+          ? "purchase"
           : query.includes("travel") ||
               query.includes("prescription") ||
               query.includes("medication")
@@ -171,21 +156,33 @@ const adapter: ChatModelAdapter = {
             : query.includes("hackathon") || query.includes("plan")
               ? "plan"
               : "checkin";
+    const responses = {
+      purchase: `I’ve prepared a refill order preview for your prescribed ${diabetes ? "diabetes " : ""}medication. Review the steps below before anything is purchased.`,
+      brief:
+        "Let’s bring your context to your next doctor. Review and edit the brief below, then prepare an email. Nothing is shared automatically.",
+      travel:
+        "Let’s get your care ready for the trip. Bring your existing prescription and medication documents, and confirm refill requirements with a local clinician or pharmacist.",
+      plan: "Let’s make room for you in the build schedule. Choose your date and check off a small win. Meals, movement, and a wind-down break belong on the plan, too.",
+      checkin: query.includes("sleep")
+        ? "A busy brain deserves a softer landing. Let’s check in on your energy and make space for a wind-down break."
+        : "I’m here. A small step counts. Let’s check in with your energy and take one thing at a time.",
+    };
+    const text = responses[kind];
+    for (let i = 0; i < text.length; i += 18) {
+      await new Promise((resolve) => setTimeout(resolve, 35));
+      if (abortSignal.aborted) return;
+      yield { content: [{ type: "text", text: text.slice(0, i + 18) }] };
+    }
+    if (abortSignal.aborted) return;
     yield {
       content: [
-        {
-          type: "text",
-          text:
-            kind === "purchase"
-              ? "I’ve prepared a refill order preview for your prescribed diabetes medication. You’ll be able to review each step before anything is purchased."
-              : text,
-        },
+        { type: "text", text },
         {
           type: "tool-call",
           toolCallId: crypto.randomUUID(),
           toolName: "care_action",
-          args: { kind },
-          argsText: JSON.stringify({ kind }),
+          args: { kind, diabetes },
+          argsText: JSON.stringify({ kind, diabetes }),
           result: { ready: true },
         },
       ],
@@ -213,7 +210,13 @@ type CareState = {
   checkin: () => void;
 };
 const CareContext = createContext<CareState | null>(null);
-function CareCard({ kind }: { kind: string }) {
+function CareCard({
+  kind,
+  diabetes = false,
+}: {
+  kind: string;
+  diabetes?: boolean;
+}) {
   const c = useContext(CareContext)!;
   const [approved, setApproved] = useState(false);
   const [ordered, setOrdered] = useState(false);
@@ -244,7 +247,7 @@ function CareCard({ kind }: { kind: string }) {
               <Heart size={21} />
             </span>
             <div>
-              <h3>Your diabetes medication refill</h3>
+              <h3>Your {diabetes ? "diabetes " : ""}medication refill</h3>
               <p>Continuing your existing prescription while travelling</p>
             </div>
           </div>
@@ -438,9 +441,12 @@ function CareCard({ kind }: { kind: string }) {
     </div>
   );
 }
-const CareTool = makeAssistantToolUI<{ kind: string }, { ready: boolean }>({
+const CareTool = makeAssistantToolUI<
+  { kind: string; diabetes?: boolean },
+  { ready: boolean }
+>({
   toolName: "care_action",
-  render: ({ args }) => <CareCard kind={args.kind} />,
+  render: ({ args }) => <CareCard kind={args.kind} diabetes={args.diabetes} />,
 });
 function UserMessage() {
   return (

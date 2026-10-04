@@ -115,7 +115,7 @@ Review it, edit it, and share it with your new doctor so you do not have to star
 
 Health information deserves deliberate protection. Our goal is a HIPAA-compliant, privacy-first product.
 
-**This hackathon project is a concept-stage prototype. HIPAA compliance has not been verified, and no completed security controls are claimed. Use synthetic data for demos.**
+**This hackathon project is a frontend prototype. HIPAA compliance has not been verified, and no completed security controls are claimed. Use synthetic data for demos.**
 
 Planned safeguards include:
 
@@ -129,7 +129,7 @@ Planned safeguards include:
 
 ## Sponsors and stack we aim to use
 
-These are planned integrations, not implemented features or confirmed partnerships.
+Assistant UI is implemented. The remaining integrations are planned; see the integration status above. These are not claims of confirmed partnerships.
 
 | Technology | Planned role |
 | --- | --- |
