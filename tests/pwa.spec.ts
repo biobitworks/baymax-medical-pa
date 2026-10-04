@@ -1,8 +1,14 @@
 import { expect, test, type Page } from '@playwright/test';
 
 async function openApp(page: Page) {
+  await page.route('**/care-state', route => route.fulfill({
+    json: { state: null, revision: 0 },
+  }));
+  await page.route('**/health/preferences', route => route.fulfill({
+    json: { name: 'Test', onboarded: true, goals: { steps: 5000, activeMinutes: 20 }, notifications: 'off' },
+  }));
   await page.goto('/');
-  await page.getByRole('button', { name: /Let’s take care of you/ }).click();
+  await expect(page.getByRole('textbox', { name: 'Message Baymax' })).toBeVisible();
 }
 async function controlled(page: Page) {
   await page.evaluate(async () => {
@@ -41,7 +47,7 @@ test('offline navigation shows reconnect screen and reconnect returns to the app
   await expect(page.getByRole('button', { name: 'Try again' })).toBeVisible();
   await context.setOffline(false);
   await page.getByRole('button', { name: 'Try again' }).click();
-  await expect(page.getByRole('dialog', { name: 'Welcome to Baymax' })).toBeVisible();
+  await expect(page.getByRole('textbox', { name: 'Message Baymax' })).toBeVisible();
 });
 
 test('worker does not cache API or travel responses or hide failed requests', async ({ page, context }) => {
@@ -109,4 +115,23 @@ test('a rejected install prompt gives a recovery message', async ({ page }) => {
   });
   await page.getByRole('button', { name: 'Install Baymax', exact: true }).click();
   await expect(page.getByRole('status').filter({ hasText: 'Installation couldn’t open.' })).toBeVisible();
+});
+
+test('notification replay serves the static demo and completes all three simulated actions', async ({ page }) => {
+  const response = await page.goto('/demo/notifications.html?record=1');
+  expect(response?.ok()).toBe(true);
+  await expect(page.getByRole('heading', { name: 'Small steps. Big Baymax energy.' })).toBeVisible();
+  for (const [kind, cta, success] of [
+    ['meds', 'Mark as taken', 'Medication checked off.'],
+    ['refill', 'Prepare refill request', 'Your refill request is ready.'],
+    ['exercise', 'Start my walk', 'Your walk has started.'],
+  ]) {
+    await page.evaluate(kind => {
+      (window as unknown as { baymaxNotificationDemo: { showNotification(kind: string): void } }).baymaxNotificationDemo.showNotification(kind);
+    }, kind);
+    await page.locator(`[data-open="${kind}"]`).click();
+    await page.getByRole('button', { name: cta, exact: true }).click();
+    await expect(page.locator('#result')).toContainText(success);
+    await page.getByRole('button', { name: 'Reminders', exact: true }).click();
+  }
 });

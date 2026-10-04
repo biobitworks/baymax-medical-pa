@@ -8,6 +8,11 @@ test('a new worker waits for consent before reloading the active session', async
   const root = resolve('dist');
   const server = createServer(async (req, res) => {
     const path = new URL(req.url!, 'http://localhost').pathname;
+    if (path === '/care-state') {
+      res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
+      res.end(JSON.stringify({ state: null, revision: 0 }));
+      return;
+    }
     const file = resolve(root, '.' + (path === '/' ? '/index.html' : path));
     if (!file.startsWith(root + '/')) { res.writeHead(404).end(); return; }
     try {
@@ -21,7 +26,7 @@ test('a new worker waits for consent before reloading the active session', async
   const address = server.address() as { port: number };
   try {
     await page.goto(`http://127.0.0.1:${address.port}/`);
-    await page.getByRole('button', { name: /Let’s take care of you/ }).click();
+    await page.getByRole('button', { name: 'Close onboarding' }).click();
     await page.evaluate(async () => {
       await navigator.serviceWorker.ready;
       if (!navigator.serviceWorker.controller) await new Promise<void>(resolve => navigator.serviceWorker.addEventListener('controllerchange', () => resolve(), { once: true }));
@@ -37,7 +42,7 @@ test('a new worker waits for consent before reloading the active session', async
     await expect(page.getByRole('button', { name: 'Update now' })).toHaveCount(0);
     await expect(page.locator('html')).toHaveAttribute('data-session-marker', 'keep');
     await page.reload();
-    await page.getByRole('button', { name: /Let’s take care of you/ }).click();
+    await page.getByRole('button', { name: 'Close onboarding' }).click();
     await expect(page.getByRole('button', { name: 'Update now' })).toBeVisible();
     await page.getByRole('button', { name: 'Update now' }).click();
     await expect(page.getByRole('dialog', { name: 'Welcome to Baymax' })).toBeVisible();

@@ -12,25 +12,25 @@ A conversation-first care companion built with **Assistant UI**, React, TypeScri
 
 ### Prepare for a hackathon
 
-Plan your date, check off small wins, and complete a daily energy check-in without leaving the conversation.
+Review your preparation plan, check off a small win, and complete a daily energy check-in.
 
 ![Care plan and check-in walkthrough](docs/media/care-plan.gif)
 
 ### Prescription concierge
 
-A diabetes medication refill **order preview** with a visible workflow, professional verification requirements, and review controls. No medication is purchased or prescribed by this frontend.
+Open **Shopping demo** in the chat quick actions to try a sample prescription cart. Choose between two demo pharmacies, adjust the pack count, review the total, and confirm a simulated order. Pharmacy names, prices, availability, and medication details are illustrative. No prescription is verified, no payment is collected, and no order is sent.
 
 ![Prescription order preview walkthrough](docs/media/prescription-preview.gif)
 
 ### Email a doctor brief
 
-Edit the brief in chat, enter a recipient, and review the email before opening a draft in your email app. The user sends the email there; server-side delivery is not implemented.
+Edit a fictional health brief, enter a sample recipient, and review the email draft. This walkthrough stops at the approved preview; opening the email app and sending remain user actions.
 
 ![Doctor brief email walkthrough](docs/media/doctor-email.gif)
 
 ### Mobile reminders: medication, refills and movement
 
-A mobile notification concept shows Baymax asking you to take your scheduled medication as prescribed, buy your next refill, and start a ten-minute walk. Each reminder opens a corresponding care action. The lock screen and care screens are simulated using fictional information; live push delivery and refill purchases are not connected.
+A playful mobile notification concept uses short Baymax nudges, bright action buttons, and small-win celebrations while asking you to take your scheduled medication as prescribed, buy your next refill, and start a ten-minute walk. Each reminder opens a corresponding care action. The lock screen and care screens are simulated using fictional information; live push delivery and refill purchases are not connected.
 
 ![Mobile notification demo: medication, refills and exercise](docs/media/mobile-notifications.gif)
 
@@ -38,7 +38,7 @@ A mobile notification concept shows Baymax asking you to take your scheduled med
 
 ### Our 2D companion
 
-SVG animation with gentle breathing, waving, and blinking. Respects reduced-motion preferences.
+An authored sprite companion with greeting, idle breathing and blinking, and thinking animations. The preview shows the artwork enlarged and at its actual header size. The app respects reduced-motion preferences.
 
 ![Animated Baymax companion](docs/media/baymax-animation.gif)
 
@@ -48,25 +48,71 @@ Requires Node.js 22.22+ or 24.11+ (Node.js 24 LTS recommended).
 
 ```bash
 npm ci
+cp .env.example .env
+# Fill in DATABASE_URL and Neon AI Gateway values in .env.
+npm run db:migrate
+npm run agent:dev
+# In a second terminal:
 npm run dev
 ```
 
-Open the local URL Vite prints.
+Open the local URL Vite prints. Vite proxies `/api`, `/travel`, `/health`, and `/care-state` to Mastra on port 4111. Enable **Remember across visits** during onboarding or in Privacy & preferences to save your care space. A successful save is shown above the page heading.
+
+The ignored `.env` is server-only. `DATABASE_URL` powers the workspace store; `NEON_AI_GATEWAY_TOKEN` and `NEON_AI_GATEWAY_BASE_URL` power the existing `neon/gpt-5-6-luna` agent. Auth and S3 variables are reserved for future login/uploads and are not used by the browser-bound persistence implementation. Saving uses an HttpOnly cookie, so separate browser profiles have separate workspaces. There is no account login or cross-device sync.
+
+`npm run db:migrate` creates only the additive `baymax_care_workspaces` table and its monotonic revision sequence and is safe to rerun. The UI loads saved state before accepting changes, serializes saves, and rejects stale revisions. Turning off memory deletes the remote copy; Delete my care space also clears the conversation and returns to onboarding. Unsaved changes stay in memory and show a retry action on failure; they are never copied into localStorage.
+
+### Agent web search with Exa
+
+Baymax's Mastra agent has a server-side `search-web` tool powered by
+[Exa Search](https://exa.ai/docs/reference/search). It returns source links,
+publication dates when available, and relevant excerpts for current web information.
+Search calls also render a sources card in chat with clickable titles, domains,
+dates, and excerpts. The card shows searching, empty, and unavailable states.
+
+Add `EXA_API_KEY` to your local `.env` (see `.env.example`), keep the existing
+Neon AI Gateway credentials, and start the agent:
 
 ```bash
+npm run agent:dev
+```
+
+Try asking Baymax to find official guidance for travelling with prescription
+medication to Spain. The agent is instructed to use general queries, keep
+identifiable health details out of search, and cite its sources. Search requires
+an Exa key and does not purchase medication or confirm personal treatment advice.
+Restart the agent after changing `.env`. Never use a `VITE_` prefix for the key.
+If port 4111 is busy, Mastra prints another port. Set `MASTRA_API_URL` in `.env`
+to that server URL (for example, `http://localhost:4112`) and restart Vite.
+
+Run the search integration tests (mocked API responses, no API key required):
+
+```bash
+npm run test:search
+```
+
+```bash
+npm test
 npm run build
+# Stop agent:dev before building its production output.
+npm run agent:build
+# Set APP_ORIGIN in .env to the exact preview URL, e.g. http://localhost:4173.
+npm run agent:start
+# In a second terminal:
 npm run preview
 ```
 
 ## Implemented frontend
 
-- Conversation-first Assistant UI runtime with streamed fixture responses.
+- Conversation-first Assistant UI runtime streaming live Mastra responses through Neon AI Gateway.
 - Generative UI rendered through `makeAssistantToolUI` and tool-call message parts.
+- Agent-generated care plan and doctor brief contents populate editable cards and their corresponding pages.
 - Editable inline care plans and travel checklists.
 - Prescription order preview with review and confirmation states.
 - Doctor brief editing, recipient validation, email review, and `mailto:` handoff.
 - Daily check-ins, hydration logging, movement tasks, and preferences.
-- Session-only state; navigation preserves the conversation, refresh clears it.
+- Optional Neon persistence for profile, check-ins, hydration, movement/weekly overview, tasks, plans, travel context and generated checklist, brief/email draft, preferences, and conversation including tool results.
+- Clear restore/save errors, retry controls, optimistic revisions, and user-controlled deletion.
 - Mobile and desktop layouts, keyboard-accessible dialogs, and reduced-motion support.
 
 ## Install Baymax on your phone (PWA)
@@ -90,16 +136,16 @@ Verify PWA behavior with `npx playwright install chromium` (once) and `npm run t
 | Sponsor | Status |
 | --- | --- |
 | Assistant UI | Implemented: runtime, message primitives, composer, suggestions, tool UI |
-| Mastra | Next: replace the fixture adapter with server-side agent orchestration |
-| Neon | Next: consent-based profile and agent memory |
-| Exa | Next: source-backed travel and pharmacy research |
+| Mastra | Implemented: live agent text and care plan/doctor brief tool results |
+| Neon | Implemented: consent-based browser workspace and conversation persistence, plus AI Gateway |
+| Exa | Implemented: server-side agent search with source cards; requires `EXA_API_KEY` |
 | Fly.io | Dockerfile, Nginx config, and starter Fly configuration included; not deployed |
 
-The frontend has no live LLM, pharmacy, payment, email delivery, database, or background notification connection. The GIFs use fictional details. UI copy avoids implementation badges while the repository documents these limits.
+The app has live LLM and database connections. Pharmacy fulfilment, payment, server-side email delivery, and background notifications remain unimplemented. The GIFs use sample details.
 
 ## Fly.io deployment preparation
 
-The included Dockerfile builds the Vite frontend and serves it on port 8080. Choose an available app name in `fly.toml`, then use your Fly account to create and deploy the app. No deployment or billing action has been performed.
+The included Dockerfile builds the Vite frontend and serves it on port 8080. It is still a frontend-only deployment: run the Mastra backend separately and configure the frontend reverse proxy for `/api`, `/travel`, `/health`, and `/care-state` before deployment. Set server-side `APP_ORIGIN` to the exact public frontend origin so cookies are Secure and write origins are validated. No deployment or billing action has been performed.
 
 ## The idea
 
@@ -143,9 +189,13 @@ Review it, edit it, and share it with your new doctor so you do not have to star
 
 Health information deserves deliberate protection. Our goal is a HIPAA-compliant, privacy-first product.
 
-**This hackathon project is a frontend prototype. HIPAA compliance has not been verified, and no completed security controls are claimed. Use synthetic data for demos.**
+**This hackathon project is a prototype with live backend connections. HIPAA compliance has not been verified. Use synthetic data for demos.**
 
-Planned safeguards include:
+Implemented persistence safeguards: explicit storage consent, server-only credentials, hashed random browser session IDs, HttpOnly/SameSite cookies (Secure on HTTPS), write-origin checks, bounded schema validation, parameterized queries, revision checks, and remote deletion.
+
+The new health tools and `/health` endpoints inherited from main still use shared, synthetic in-memory sample data; the saved browser workspace is separate from that demo store. Restoring a workspace preserves its saved check-in, hydration, and weekly overview instead of replacing them with demo values.
+
+Account authentication, access audit logging, cross-device access, file upload, export of the entire workspace, and compliance review remain future work. Further safeguards include:
 
 - Explicit consent for storing health information and sharing it with external services.
 - Data minimization and user-controlled memory.
@@ -157,7 +207,7 @@ Planned safeguards include:
 
 ## Sponsors and stack we aim to use
 
-Assistant UI is implemented. The remaining integrations are planned; see the integration status above. These are not claims of confirmed partnerships.
+Assistant UI, Mastra, and Neon are connected. See the integration status above for remaining work. These are not claims of confirmed partnerships.
 
 | Technology | Planned role |
 | --- | --- |
@@ -170,12 +220,12 @@ Assistant UI is implemented. The remaining integrations are planned; see the int
 ## Planned hackathon MVP
 
 - [ ] Conversational onboarding with a synthetic health profile.
-- [ ] User-controlled agent memory.
+- [x] User-controlled browser workspace and conversation memory.
 - [ ] Daily lifestyle check-ins and configurable reminders.
 - [ ] A hackathon preparation routine.
 - [ ] A travel medication support workflow with source links.
-- [ ] A doctor-ready health brief with review before sharing.
-- [ ] Privacy controls and a documented data flow.
+- [x] A doctor-ready health brief with review before sharing.
+- [x] Storage consent, deletion controls, and a documented persistence data flow.
 
 ## Demo story
 
@@ -185,7 +235,9 @@ Baymax turns that request into a preparation routine, daily check-ins, a medicat
 
 ## Project status
 
-**Frontend implemented.** Interactive UI flows and animated walkthroughs are ready for the hackathon. Sponsor backend integrations, real prescription fulfilment, email delivery, deployment, and compliance verification remain to be built.
+**UI, agent, and Neon persistence connected.** Interactive care cards now use live tool results, and consenting users can restore their care space across refreshes. Live Neon save/restore/delete and a structured agent plan response have been verified. Real prescription fulfilment, server-side email delivery, account login, web research, deployment, and compliance verification remain to be built.
+
+Validation: `npm test` covers SQL persistence with PGlite, consent, session isolation, invalid requests, conflicts, deletion/retry behavior, stream framing, and component restore/reset flows. `SMOKE_BASE_URL=http://127.0.0.1:5173 npm run test:live` exercises a disposable synthetic workspace and a live agent plan against running servers, then deletes its test document. This live check uses the configured gateway and database; it is not part of the offline test suite.
 
 ## Medical boundaries
 
@@ -195,3 +247,12 @@ Baymax is intended to support organization, habits, and healthcare conversations
 
 **Baymax: caring enough to remind you again.**
 
+## Activity onboarding and fitness
+
+The welcome flow introduces steps and active minutes, lets the user choose daily goals, and offers optional browser notifications. Physical fitness shows two activity rings, daily goal completion, a rolling seven-day target, and trends. Running remains a separate page.
+
+Baymax can render the same interactive components in chat using `fitnessOverviewTool` and `onboardingTool`. Try “Open my fitness dashboard” or “Start my activity onboarding,” or use the Fitness and Activity setup shortcuts. Tools open the UI; users confirm goal and preference changes themselves.
+
+`GET /health/fitness` reads activity plus saved goals. `GET` and `POST /health/preferences` read/save onboarding preferences; `POST /health/goals` updates goals. UI and agent tools share the demo user's Postgres-backed preferences (`user_fitness_preferences`; the name is stored on `users`). Data is sample activity, not synced device data. Goals and preferences persist across refreshes and restarts, and are cleared by the demo reset. Browser notifications can celebrate completed demo goals while the fitness component is mounted; there are no scheduled or background reminders.
+
+Run `npm run test:fitness` for goal validation and progress calculations, and `npm run build` for TypeScript and production bundling.

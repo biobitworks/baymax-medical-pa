@@ -1,6 +1,13 @@
-import { defineConfig } from "vite";
+import { defineConfig, loadEnv } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
-export default defineConfig({
+
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), "MASTRA_");
+  const agentUrl = env.MASTRA_API_URL || "http://localhost:4111";
+  const proxy = Object.fromEntries(
+    ["/api", "/care-state", "/travel", "/health", "/records", "/conversations", "/demo/reset"].map((p) => [p, agentUrl]),
+  );
+  return {
   plugins: [VitePWA({
     strategies: "injectManifest",
     srcDir: "src",
@@ -28,13 +35,12 @@ export default defineConfig({
       ],
     },
   })],
-  server: {
-    host: "0.0.0.0",
-    watch: { usePolling: true },
-    // Mastra dev server (npm run agent:dev)
-    proxy: {
-      "/api": "http://localhost:4111",
-      "/travel": "http://localhost:4111",
+    preview: { proxy },
+    server: {
+      host: "0.0.0.0",
+      watch: { usePolling: true },
+      // Mastra dev server (npm run agent:dev)
+      proxy,
     },
-  },
+  };
 });

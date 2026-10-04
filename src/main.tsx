@@ -1,5 +1,7 @@
 import React, {
   useState,
+  useMemo,
+  useCallback,
   useEffect,
   useRef,
   createContext,
@@ -12,9 +14,12 @@ import {
   ThreadPrimitive,
   ComposerPrimitive,
   MessagePrimitive,
-  type ChatModelAdapter,
+  AttachmentPrimitive,
+  type AttachmentAdapter,
+  type ExportedMessageRepository,
   makeAssistantToolUI,
 } from "@assistant-ui/react";
+import { LabTrendsCard, type LabTrendsArgs } from "./components/LabTrendsCard";
 import {
   ArrowUp,
   ArrowUpRight,
@@ -30,6 +35,7 @@ import {
   X,
   Droplets,
   Footprints,
+  Activity,
   Moon,
   ChevronRight,
   Bell,
@@ -39,6 +45,8 @@ import {
   Sparkles,
   Menu,
   Mail,
+  Trash2,
+  History,
 } from "lucide-react";
 import {
   DEFAULT_TRAVEL_CHECKLIST,
@@ -46,6 +54,531 @@ import {
 } from "./mastra/lib/brief";
 import "./style.css";
 import { PwaControls } from "./pwa/PwaControls";
+import { initializeHealthOverview } from "./persistence/health-overview";
+import { createAgentAdapter } from "./chat/adapter";
+import { conversationsApi, relativeTime, EMPTY_CONVERSATION, type ConversationSummary } from "./chat/conversations-client";
+import { applyToolResult, historicalCard } from "./chat/cards";
+import { useCareWorkspace } from "./persistence/use-care-workspace";
+import { type CareWorkspace, type StoredConversation } from "./shared/workspace";
+import Mascot, { MascotActivity } from "./Mascot";
+import { PrescriptionShoppingCard } from "./components/PrescriptionShoppingCard";
+import { WebSearchCard } from "./components/WebSearchCard";
+import { searchCardFromEvent, type SearchCardPart, type WebSearchCardArgs } from "./components/web-search-state";
+import "./components/prescription-shopping.css";
+import { ActivityOnboarding, FitnessDashboard, FITNESS_CHANGED, fitnessRequest, type SavedPreferences } from "./components/Fitness";
+import type { FitnessOverview } from "./mastra/lib/fitness";
+
+// Triggers the agent to read all of the user's health data and answer with a
+// week-in-review, which also renders the water, movement, sleep, energy and
+// running cards.
+const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+const WEEKLY_SUMMARY_PROMPT = "Give me a summary of my last week";
+const GLASS_ML = 250;
+const WATER_GOAL = 8;
+const MOVEMENT_GOAL = 30;
+
+type HealthOverview = {
+  today: { date: string; hydrationMl: number; activeMinutes: number };
+  todayCheckin: { date: string; energy: string } | null;
+  metrics: { date: string; hydrationMl: number; activeMinutes: number }[];
+  checkins: { date: string; energy: string }[];
+};
+
+// Generative health cards. When the agent calls get-daily-metrics or
+// get-recent-checkins, the tool result is turned into cards shown in the chat.
+type DailyMetric = {
+  date: string;
+  steps: number;
+  activeMinutes: number;
+  hydrationMl: number;
+  sleepHours: number;
+};
+type Run = {
+  date: string;
+  distanceMi: number;
+  durationMin: number;
+  paceMinPerMi: number;
+  note?: string;
+};
+type RunSummary = {
+  total: number;
+  totalMiles: number;
+  totalMinutes: number;
+  averagePaceMinPerMi: number;
+  longestMi: number;
+  daysSinceLastRun: number | null;
+  runsPerWeek: number | null;
+  observations: string[];
+};
+type MetricKey = "hydration" | "movement" | "sleep";
+type HealthCardArgs =
+  | LabTrendsArgs
+  | { metric: "fitness"; overview: FitnessOverview }
+  | { metric: "onboarding"; preferences: SavedPreferences }
+  | {
+      metric: MetricKey;
+      /** Newest first, as returned by get-daily-metrics */
+      daily: DailyMetric[];
+      averages: Partial<Record<string, number>>;
+      targets: { hydrationMl: number; steps: number; activeMinutes: number; sleepHours: number };
+    }
+  | {
+      metric: "running";
+      /** Newest first, as returned by get-recent-runs */
+      runs: Run[];
+      summary: RunSummary;
+    }
+  | {
+      metric: "energy";
+      /** Newest first, as returned by get-recent-checkins */
+      checkins: { date: string; energy: string; note?: string }[];
+      summary: { total: number; counts: Record<string, number>; averageEnergyScore: number };
+    };
+type AgentToolPart = {
+  type: "tool-call";
+  toolCallId: string;
+  toolName: string;
+  args: Record<string, any>;
+  argsText: string;
+  result: { ready: boolean };
+  /** Which metric this card shows, so a later result can replace it. */
+  metric: string;
+};
+const healthCardPart = (args: HealthCardArgs): AgentToolPart => ({
+  type: "tool-call",
+  toolCallId: crypto.randomUUID(),
+  toolName: "health_card",
+  args,
+  argsText: JSON.stringify(args.metric),
+  result: { ready: true },
+  metric: args.metric === "labs" ? `labs:${args.title}` : args.metric,
+});
+function healthCardsFromTool(toolName: string, result: any): HealthCardArgs[] {
+  if (!result || typeof result !== "object") return [];
+  if (toolName === "fitnessOverviewTool" && Array.isArray(result.daily)) {
+    return [{ metric: "fitness", overview: result }];
+  }
+  if (toolName === "onboardingTool" && result.preferences) {
+    return [{ metric: "onboarding", preferences: result.preferences }];
+  }
+  if (toolName === "dailyMetricsTool" && Array.isArray(result.daily)) {
+    const { daily, summary } = result;
+    return (["hydration", "movement", "sleep"] as const).map((metric) => ({
+      metric,
+      daily,
+      averages: summary.averages,
+      targets: summary.targets,
+    }));
+  }
+  if (toolName === "recentRunsTool" && Array.isArray(result.runs)) {
+    return [{ metric: "running", runs: result.runs, summary: result.summary }];
+  }
+  if (toolName === "recentCheckinsTool" && Array.isArray(result.checkins)) {
+    return [
+      { metric: "energy", checkins: result.checkins, summary: result.summary },
+    ];
+  }
+  if (toolName === "labTrendsTool" && Array.isArray(result.series)) {
+    return [
+      {
+        metric: "labs",
+        title: result.title ?? "Lab trends",
+        series: result.series,
+        unmatched: result.unmatched,
+      },
+    ];
+  }
+  return [];
+}
+
+const weekday = (date: string) =>
+  new Date(`${date}T12:00:00`).toLocaleDateString(undefined, {
+    weekday: "short",
+  });
+
+const METRIC_UI = {
+  hydration: {
+    label: "HYDRATION",
+    icon: Droplets,
+    tone: "blue",
+    color: "#a3bfd0",
+    pick: (d: DailyMetric) => d.hydrationMl,
+    target: (t: HealthCardTargets) => t.hydrationMl,
+    avgKey: "hydrationMl",
+    format: (n: number) => `${(n / 1000).toFixed(1)} L`,
+    goal: (n: number) => `${(n / 1000).toFixed(1)} L`,
+    noun: "water",
+  },
+  movement: {
+    label: "MOVEMENT",
+    icon: Footprints,
+    tone: "orange",
+    color: "#cfb18e",
+    pick: (d: DailyMetric) => d.activeMinutes,
+    target: (t: HealthCardTargets) => t.activeMinutes,
+    avgKey: "activeMinutes",
+    format: (n: number) => `${Math.round(n)} min`,
+    goal: (n: number) => `${n} min`,
+    noun: "active time",
+  },
+  sleep: {
+    label: "SLEEP",
+    icon: Moon,
+    tone: "purple",
+    color: "#b3a6c6",
+    pick: (d: DailyMetric) => d.sleepHours,
+    target: (t: HealthCardTargets) => t.sleepHours,
+    avgKey: "sleepHours",
+    format: (n: number) => `${n.toFixed(1)} h`,
+    goal: (n: number) => `${n} h`,
+    noun: "sleep",
+  },
+} as const;
+type HealthCardTargets = {
+  hydrationMl: number;
+  steps: number;
+  activeMinutes: number;
+  sleepHours: number;
+};
+
+function MetricCard({
+  metric,
+  daily,
+  averages,
+  targets,
+}: Extract<HealthCardArgs, { metric: MetricKey }>) {
+  const ui = METRIC_UI[metric];
+  const Icon = ui.icon;
+  const [extraMl, setExtraMl] = useState(0);
+  const days = [...daily].reverse();
+  const target = ui.target(targets);
+  const bonus = metric === "hydration" ? extraMl : 0;
+  const values = days.map((d, i) =>
+    ui.pick(d) + (i === days.length - 1 ? bonus : 0),
+  );
+  const today = values[values.length - 1] ?? 0;
+  const avg = averages[ui.avgKey] ?? 0;
+  const below = values.filter((v) => v < target).length;
+  const addGlass = () => {
+    setExtraMl((n) => n + GLASS_ML);
+    void fetch("/health/water", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ ml: GLASS_ML }),
+    }).catch((err) => console.warn("Could not save water.", err));
+  };
+  return (
+    <div className="agent-card metric-card">
+      <div className="agent-card-top">
+        <span className={`stat-icon ${ui.tone}`}>
+          <Icon size={18} />
+        </span>
+        <span>{ui.label}</span>
+        <span className="agent-status">Last {days.length} days</span>
+      </div>
+      <h3>
+        {ui.format(today)}
+        <small> today · goal {ui.goal(target)}</small>
+      </h3>
+      <div className="metric-bars">
+        {days.map((d, i) => (
+          <div key={d.date} title={`${weekday(d.date)}: ${ui.format(values[i])}`}>
+            <div className="metric-bar">
+              <i
+                style={{
+                  height: `${Math.max(4, Math.min(100, (values[i] / target) * 100))}%`,
+                  background: values[i] >= target ? ui.color : `${ui.color}99`,
+                }}
+              />
+              <span className="metric-goal" />
+            </div>
+            <small>{weekday(d.date)}</small>
+          </div>
+        ))}
+      </div>
+      <p className="fine">
+        Averaging {ui.format(avg)} a day, under your {ui.goal(target)} goal on{" "}
+        {below} of {days.length} days.
+      </p>
+      {metric === "hydration" && (
+        <button className="text-btn" onClick={addGlass}>
+          Add a glass <Plus size={14} />
+        </button>
+      )}
+    </div>
+  );
+}
+
+const fmtPace = (minPerMi: number) => {
+  const m = Math.floor(minPerMi);
+  const sec = Math.round((minPerMi - m) * 60);
+  return `${sec === 60 ? m + 1 : m}:${String(sec === 60 ? 0 : sec).padStart(2, "0")} /mi`;
+};
+const fmtMiles = (mi: number) => `${Math.round(mi * 100) / 100} mi`;
+const fmtMinutes = (min: number) => {
+  const total = Math.round(min);
+  const h = Math.floor(total / 60);
+  const m = total % 60;
+  return h ? `${h} h ${m} min` : `${m} min`;
+};
+const shortDate = (date: string) =>
+  new Date(`${date}T12:00:00`).toLocaleDateString(undefined, {
+    month: "short",
+    day: "numeric",
+  });
+
+function RunList({ runs }: { runs: Run[] }) {
+  return (
+    <div className="run-list">
+      {runs.map((r, i) => (
+        <div className="run-row" key={`${r.date}-${i}`} title={r.note}>
+          <span className="run-date">
+            {shortDate(r.date)}
+            <small>{weekday(r.date)}</small>
+          </span>
+          <b>{fmtMiles(r.distanceMi)}</b>
+          <span>{fmtMinutes(r.durationMin)}</span>
+          <span className="run-pace">{fmtPace(r.paceMinPerMi)}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function RunCard({
+  runs,
+  summary,
+}: Extract<HealthCardArgs, { metric: "running" }>) {
+  const days = [...runs].reverse();
+  const maxMi = Math.max(1, ...days.map((r) => r.distanceMi));
+  return (
+    <div className="agent-card metric-card">
+      <div className="agent-card-top">
+        <span className="stat-icon green">
+          <Activity size={18} />
+        </span>
+        <span>RUNNING</span>
+        <span className="agent-status">Last {days.length} runs</span>
+      </div>
+      <h3>
+        {fmtMiles(summary.totalMiles)}
+        <small>
+          {" "}
+          in {fmtMinutes(summary.totalMinutes)} · avg{" "}
+          {fmtPace(summary.averagePaceMinPerMi)}
+        </small>
+      </h3>
+      <div className="metric-bars">
+        {days.map((r, i) => (
+          <div
+            key={`${r.date}-${i}`}
+            title={`${shortDate(r.date)}: ${fmtMiles(r.distanceMi)} in ${fmtMinutes(r.durationMin)}`}
+          >
+            <div className="metric-bar">
+              <i
+                style={{
+                  height: `${Math.max(8, (r.distanceMi / maxMi) * 100)}%`,
+                  background: "#9db382",
+                }}
+              />
+            </div>
+            <small>{shortDate(r.date)}</small>
+          </div>
+        ))}
+      </div>
+      <p className="fine">
+        {summary.observations.length
+          ? summary.observations.join(" ")
+          : "Nice and steady. Every run counts."}
+      </p>
+    </div>
+  );
+}
+
+function RunningSection() {
+  const [runs, setRuns] = useState<Run[]>([]);
+  const [summary, setSummary] = useState<RunSummary | null>(null);
+  const [distance, setDistance] = useState("");
+  const [minutes, setMinutes] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+  const load = async () => {
+    try {
+      const res = await fetch("/health/runs?count=10");
+      if (!res.ok) throw new Error(`/health/runs ${res.status}`);
+      const data = await res.json();
+      setRuns(data.runs);
+      setSummary(data.summary);
+      setError("");
+    } catch (err) {
+      console.warn("Running data unavailable.", err);
+      setError("Baymax can’t reach your running data right now.");
+    }
+  };
+  useEffect(() => {
+    void load();
+  }, []);
+  const distanceMi = Number(distance);
+  const durationMin = Number(minutes);
+  const valid = distanceMi > 0 && durationMin > 0;
+  const save = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!valid) return;
+    setSaving(true);
+    try {
+      const res = await fetch("/health/runs", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ distanceMi, durationMin }),
+      });
+      if (!res.ok) throw new Error(`/health/runs ${res.status}`);
+      setDistance("");
+      setMinutes("");
+      await load();
+    } catch (err) {
+      console.warn("Could not save run.", err);
+      setError("That run didn’t save. Please try again.");
+    } finally {
+      setSaving(false);
+    }
+  };
+  return (
+    <>
+      <div className="stats">
+        {[
+          ["Distance", summary ? fmtMiles(summary.totalMiles) : "–", "last 10 runs"],
+          ["Time", summary ? fmtMinutes(summary.totalMinutes) : "–", "on your feet"],
+          [
+            "Average pace",
+            summary?.averagePaceMinPerMi ? fmtPace(summary.averagePaceMinPerMi) : "–",
+            summary?.runsPerWeek ? `about ${summary.runsPerWeek} ${summary.runsPerWeek === 1 ? "run" : "runs"} a week` : "log a few runs",
+          ],
+        ].map(([label, value, hint]) => (
+          <article className="stat" key={label}>
+            <div className="stat-top">
+              <span className="stat-icon green">
+                <Activity size={20} />
+              </span>
+              <span>{label.toUpperCase()}</span>
+            </div>
+            <h3>{value}</h3>
+            <p>{hint}</p>
+          </article>
+        ))}
+      </div>
+      <div className="two-col running-grid">
+        <section className="panel">
+          <div className="section-heading">
+            <h2>Recent runs</h2>
+            <span className="muted">
+              {summary?.daysSinceLastRun != null
+                ? summary.daysSinceLastRun === 0
+                  ? "RAN TODAY"
+                  : `${summary.daysSinceLastRun} DAYS SINCE YOUR LAST RUN`
+                : ""}
+            </span>
+          </div>
+          {runs.length ? (
+            <RunList runs={runs} />
+          ) : (
+            <p className="muted">No runs yet. Your first one counts the most.</p>
+          )}
+          {summary?.observations.map((o) => (
+            <p className="notice" key={o}>
+              {o}
+            </p>
+          ))}
+        </section>
+        <section className="panel">
+          <span className="eyebrow">LOG A RUN</span>
+          <h2>How far did you go?</h2>
+          <form onSubmit={save}>
+            <label>
+              Distance (miles)
+              <input
+                type="number"
+                inputMode="decimal"
+                min="0.1"
+                step="0.01"
+                placeholder="1.5"
+                value={distance}
+                onChange={(e) => setDistance(e.target.value)}
+              />
+            </label>
+            <label>
+              Time (minutes)
+              <input
+                type="number"
+                inputMode="decimal"
+                min="1"
+                step="0.1"
+                placeholder="18"
+                value={minutes}
+                onChange={(e) => setMinutes(e.target.value)}
+              />
+            </label>
+            {valid && (
+              <p className="fine">
+                That’s a pace of {fmtPace(durationMin / distanceMi)}.
+              </p>
+            )}
+            {error && <p className="notice">{error}</p>}
+            <button className="primary" type="submit" disabled={!valid || saving}>
+              {saving ? "Saving…" : "Save my run"} <Check size={16} />
+            </button>
+          </form>
+        </section>
+      </div>
+    </>
+  );
+}
+
+const ENERGY_ICON: Record<string, string> = {
+  low: "☁",
+  okay: "◒",
+  good: "☀",
+  great: "✦",
+};
+function EnergyCard({
+  checkins,
+  summary,
+}: Extract<HealthCardArgs, { metric: "energy" }>) {
+  const c = useContext(CareContext)!;
+  const days = [...checkins].reverse();
+  const low = summary.counts.low ?? 0;
+  return (
+    <div className="agent-card metric-card">
+      <div className="agent-card-top">
+        <span className="stat-icon purple">
+          <Sparkles size={18} />
+        </span>
+        <span>YOUR ENERGY</span>
+        <span className="agent-status">Last {days.length} check-ins</span>
+      </div>
+      <h3>
+        {low} of {summary.total}
+        <small> check-ins said low</small>
+      </h3>
+      <div className="energy-row">
+        {days.map((d) => (
+          <div key={d.date} title={d.note ?? capitalize(d.energy)}>
+            <span className={`energy-chip ${d.energy}`}>
+              {ENERGY_ICON[d.energy] ?? "·"}
+            </span>
+            <small>{weekday(d.date)}</small>
+          </div>
+        ))}
+      </div>
+      <p className="fine">
+        Average energy {summary.averageEnergyScore} out of 4. You don’t have to
+        be at 100%, but let’s look for what might help.
+      </p>
+      <button className="text-btn" onClick={c.checkin}>
+        Update today’s check-in <ArrowUpRight size={14} />
+      </button>
+    </div>
+  );
+}
 
 function ModalShell({
   children,
@@ -74,227 +607,56 @@ function ModalShell({
     </dialog>
   );
 }
-function Mascot({ small = false }: { small?: boolean }) {
-  return (
-    <svg
-      className={`mascot ${small ? "small" : ""}`}
-      viewBox="0 0 300 330"
-      role="img"
-      aria-label="Baymax gently waving"
-    >
-      <defs>
-        <linearGradient id="body" x1="0" y1="0" x2="1" y2="1">
-          <stop stopColor="#fff" />
-          <stop offset="1" stopColor="#e1e5e0" />
-        </linearGradient>
-      </defs>
-      <ellipse cx="150" cy="308" rx="83" ry="12" fill="#294633" opacity=".09" />
-      <g className="bay-body">
-        <ellipse cx="124" cy="278" rx="28" ry="33" fill="url(#body)" />
-        <ellipse cx="179" cy="278" rx="28" ry="33" fill="url(#body)" />
-        <ellipse
-          cx="151"
-          cy="207"
-          rx="82"
-          ry="92"
-          fill="url(#body)"
-          stroke="#dbe0d9"
-        />
-        <ellipse
-          cx="69"
-          cy="210"
-          rx="22"
-          ry="64"
-          transform="rotate(15 69 210)"
-          fill="url(#body)"
-        />
-        <g className="wave">
-          <ellipse
-            cx="240"
-            cy="157"
-            rx="22"
-            ry="64"
-            transform="rotate(-35 240 157)"
-            fill="url(#body)"
-          />
-          <ellipse cx="263" cy="109" rx="23" ry="27" fill="url(#body)" />
-        </g>
-        <ellipse
-          cx="151"
-          cy="105"
-          rx="64"
-          ry="44"
-          fill="url(#body)"
-          stroke="#e0e4df"
-        />
-        <path d="M126 106h50" stroke="#252f2c" strokeWidth="3" />
-        <g className="eyes">
-          <circle cx="123" cy="106" r="6" fill="#252f2c" />
-          <circle cx="179" cy="106" r="6" fill="#252f2c" />
-        </g>
-        <circle cx="184" cy="169" r="9" fill="#f8faf7" stroke="#cbd3cb" />
-        <path d="M180 169h8m-4-4v8" stroke="#b3beb2" />
-      </g>
-    </svg>
-  );
-}
-// Mastra-backed adapter: streams text from the Baymax agent (proxied to the
-// Mastra server by Vite at /api). Agent tool calls decide which care card to
-// show; prescription and travel have no agent tool yet, so keywords pick them.
-// Falls back to the fixture adapter if the agent server is unreachable.
-const AGENT_STREAM_URL = "/api/agents/baymaxAgent/stream";
-const TOOL_TO_CARD: Record<string, string> = {
-  carePlanTool: "plan",
-  doctorBriefTool: "brief",
-};
-const adapter: ChatModelAdapter = {
-  async *run(options) {
-    const { messages, abortSignal } = options;
-    const history = messages
-      .map((m) => ({
-        role: m.role,
-        content: m.content
-          .filter((p) => p.type === "text")
-          .map((p) => (p as { text: string }).text)
-          .join(" "),
-      }))
-      .filter(
-        (m) => (m.role === "user" || m.role === "assistant") && m.content,
-      );
-    const lastUser =
-      history
-        .filter((m) => m.role === "user")
-        .at(-1)
-        ?.content.toLowerCase() || "";
-    let res: Response;
-    try {
-      res = await fetch(AGENT_STREAM_URL, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ messages: history }),
-        signal: abortSignal,
-      });
-      if (!res.ok || !res.body) throw new Error(`agent ${res.status}`);
-    } catch (err) {
-      if (abortSignal.aborted) return;
-      console.warn("Agent unavailable, using fixture responses.", err);
-      yield* fixtureAdapter.run(options) as AsyncGenerator<never>;
-      return;
-    }
-
-    let text = "";
-    let cardKind: string | undefined;
-    const reader = res.body.getReader();
-    const decoder = new TextDecoder();
-    let buffer = "";
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      buffer += decoder.decode(value, { stream: true });
-      const events = buffer.split("\n\n");
-      buffer = events.pop() ?? "";
-      for (const event of events) {
-        const line = event.split("\n").find((l) => l.startsWith("data: "));
-        if (!line) continue;
-        let chunk: { type?: string; payload?: Record<string, unknown> };
-        try {
-          chunk = JSON.parse(line.slice(6));
-        } catch {
-          continue;
-        }
-        if (chunk.type === "text-delta") {
-          text += String(chunk.payload?.text ?? "");
-          yield { content: [{ type: "text", text }] };
-        } else if (chunk.type === "tool-call") {
-          cardKind = TOOL_TO_CARD[String(chunk.payload?.toolName)] ?? cardKind;
-        }
-      }
-    }
-    if (abortSignal.aborted) return;
-
-    const keywordKind =
-      lastUser.includes("diabet") ||
-      lastUser.includes("refill") ||
-      lastUser.includes("buy")
-        ? "purchase"
-        : lastUser.includes("travel") || lastUser.includes("prescription")
-          ? "travel"
-          : undefined;
-    const kind = cardKind ?? keywordKind;
-    if (!kind) return;
-    const diabetes = lastUser.includes("diabet");
-    yield {
+const TEXT_FILE_ACCEPT = ".txt,.md,.csv,.tsv,.json,.xml,.log,text/*,application/json";
+// Uploads go to the server as conversation artifacts; the agent reads them
+// with list-medical-records / read-medical-record rather than inline text.
+const createAttachmentAdapter = (conversationId: string): AttachmentAdapter => ({
+  accept: TEXT_FILE_ACCEPT,
+  async add({ file }) {
+    return {
+      id: crypto.randomUUID(),
+      type: "document",
+      name: file.name,
+      contentType: file.type || "text/plain",
+      file,
+      status: { type: "requires-action", reason: "composer-send" },
+    };
+  },
+  async send(attachment) {
+    const res = await fetch("/records/upload", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        conversationId,
+        name: attachment.name,
+        content: await attachment.file.text(),
+      }),
+    });
+    const body = (await res.json().catch(() => ({}))) as {
+      record?: { id: string };
+      error?: string;
+    };
+    if (!res.ok || !body.record)
+      throw new Error(body.error ?? `Upload failed (${res.status})`);
+    return {
+      ...attachment,
+      id: body.record.id,
+      status: { type: "complete" },
       content: [
-        { type: "text", text },
         {
-          type: "tool-call",
-          toolCallId: crypto.randomUUID(),
-          toolName: "care_action",
-          args: { kind, diabetes },
-          argsText: JSON.stringify({ kind, diabetes }),
-          result: { ready: true },
+          type: "text",
+          text: `[Attached record "${attachment.name}", id ${body.record.id}]`,
         },
       ],
     };
   },
-};
-// UI-first fixture adapter, kept as an offline fallback.
-const fixtureAdapter: ChatModelAdapter = {
-  async *run({ messages, abortSignal }) {
-    const query =
-      messages
-        .at(-1)
-        ?.content.filter((p) => p.type === "text")
-        .map((p) => p.text)
-        .join(" ")
-        .toLowerCase() || "";
-    const diabetes = query.includes("diabet");
-    const kind =
-      query.includes("doctor") || query.includes("brief")
-        ? "brief"
-        : diabetes || query.includes("buy") || query.includes("refill")
-          ? "purchase"
-          : query.includes("travel") ||
-              query.includes("prescription") ||
-              query.includes("medication")
-            ? "travel"
-            : query.includes("hackathon") || query.includes("plan")
-              ? "plan"
-              : "checkin";
-    const responses = {
-      purchase: `I’ve prepared a refill order preview for your prescribed ${diabetes ? "diabetes " : ""}medication. Review the steps below before anything is purchased.`,
-      brief:
-        "Let’s bring your context to your next doctor. Review and edit the brief below, then prepare an email. Nothing is shared automatically.",
-      travel:
-        "Let’s get your care ready for the trip. Bring your existing prescription and medication documents, and confirm refill requirements with a local clinician or pharmacist.",
-      plan: "Let’s make room for you in the build schedule. Choose your date and check off a small win. Meals, movement, and a wind-down break belong on the plan, too.",
-      checkin: query.includes("sleep")
-        ? "A busy brain deserves a softer landing. Let’s check in on your energy and make space for a wind-down break."
-        : "I’m here. A small step counts. Let’s check in with your energy and take one thing at a time.",
-    };
-    const text = responses[kind];
-    for (let i = 0; i < text.length; i += 18) {
-      await new Promise((resolve) => setTimeout(resolve, 35));
-      if (abortSignal.aborted) return;
-      yield { content: [{ type: "text", text: text.slice(0, i + 18) }] };
-    }
-    if (abortSignal.aborted) return;
-    yield {
-      content: [
-        { type: "text", text },
-        {
-          type: "tool-call",
-          toolCallId: crypto.randomUUID(),
-          toolName: "care_action",
-          args: { kind, diabetes },
-          argsText: JSON.stringify({ kind, diabetes }),
-          result: { ready: true },
-        },
-      ],
-    };
-  },
-};
+  async remove() {},
+});
 type CareState = {
+  activePlanId: string | null;
+  activeBriefId: string | null;
+  activateCard: (kind: "plan" | "brief", result: unknown, toolCallId: string) => void;
+  planItems: CareWorkspace["planItems"];
   done: string[];
   toggle: (s: string) => void;
   date: string;
@@ -318,13 +680,23 @@ const CareContext = createContext<CareState | null>(null);
 function CareCard({
   kind,
   diabetes = false,
+  toolCallId,
+  result,
 }: {
   kind: string;
   diabetes?: boolean;
+  toolCallId: string;
+  result: unknown;
 }) {
   const c = useContext(CareContext)!;
-  const [approved, setApproved] = useState(false);
-  const [ordered, setOrdered] = useState(false);
+  const snapshot = historicalCard(c, kind, toolCallId, result);
+  if (snapshot) return (
+    <div className="agent-card">
+      <div className="agent-card-top"><span className="agent-symbol">✦</span><span>{snapshot.kind === "plan" ? "EARLIER PLAN" : "EARLIER DOCTOR BRIEF"}</span></div>
+      {snapshot.kind === "plan" ? <><h3>{snapshot.data.title}</h3>{snapshot.data.items.map((item, index) => <p key={index}>{item.done ? "✓ " : "○ "}{item.label}{item.when ? ` · ${item.when}` : ""}</p>)}</> : <textarea className="chat-brief" aria-label="Earlier doctor brief" readOnly value={snapshot.data.brief} />}
+      <button className="outline" onClick={() => c.activateCard(snapshot.kind, snapshot.data, toolCallId)}>Use this {snapshot.kind === "plan" ? "plan" : "brief"}</button>
+    </div>
+  );
   return (
     <div className="agent-card">
       <div className="agent-card-top">
@@ -346,90 +718,10 @@ function CareCard({
         </span>
       </div>
       {kind === "purchase" ? (
-        <>
-          <div className="order-title">
-            <span className="stat-icon green">
-              <Heart size={21} />
-            </span>
-            <div>
-              <h3>Your {diabetes ? "diabetes " : ""}medication refill</h3>
-              <p>Continuing your existing prescription while travelling</p>
-            </div>
-          </div>
-          <div className="order-steps">
-            {[
-              "Prepare existing prescription details",
-              "Match a licensed local pharmacy",
-              "Verify prescription with a pharmacist",
-              "Review medication, price, and fulfilment",
-            ].map((step, i) => (
-              <div key={step}>
-                <span className={i < 2 ? "step ready" : "step"}>
-                  {i < 2 ? <Check size={12} /> : i + 1}
-                </span>
-                <span>
-                  {step}
-                  <small>
-                    {i < 2
-                      ? "Preview prepared"
-                      : i === 2
-                        ? "Professional verification required"
-                        : "Your approval required"}
-                  </small>
-                </span>
-              </div>
-            ))}
-          </div>
-          <div className="order-summary">
-            <span>
-              Medication<b>As prescribed by your clinician</b>
-            </span>
-            <span>
-              Delivery<b>Confirm with pharmacy</b>
-            </span>
-            <span>
-              Total<b>Awaiting pharmacy quote</b>
-            </span>
-          </div>
-          {ordered ? (
-            <div className="order-success">
-              <Check size={18} />
-              <div>
-                <b>Order journey previewed</b>
-                <small>
-                  No purchase has been made. A pharmacy must verify and fulfil
-                  the prescription.
-                </small>
-              </div>
-            </div>
-          ) : (
-            <>
-              <label className="consent">
-                <input
-                  type="checkbox"
-                  checked={approved}
-                  onChange={(e) => setApproved(e.target.checked)}
-                />
-                I want to review the purchase journey for my existing
-                prescription.
-              </label>
-              <button
-                className="primary"
-                disabled={!approved}
-                onClick={() => setOrdered(true)}
-              >
-                Preview order confirmation <ArrowUpRight size={15} />
-              </button>
-              <p className="fine">
-                No purchase yet. Prescription verification and payment happen
-                with a licensed pharmacy.
-              </p>
-            </>
-          )}
-        </>
+        <PrescriptionShoppingCard />
       ) : kind === "plan" ? (
         <>
-          <h3>Build something great. Feel good doing it.</h3>
+          <h3>{c.goal}</h3>
           <div className="inline-fields">
             <label>
               Event
@@ -447,16 +739,12 @@ function CareCard({
               />
             </label>
           </div>
-          {[
-            "Take a 10-minute walk",
-            "Make time for a real meal",
-            "Set a wind-down reminder",
-          ].map((t) => (
+          {c.planItems.map(({ label: t, when }) => (
             <button className="task" onClick={() => c.toggle(t)} key={t}>
               <span className={`check ${c.done.includes(t) ? "checked" : ""}`}>
                 {c.done.includes(t) && <Check size={13} />}
               </span>
-              <b>{t}</b>
+              <span><b>{t}</b>{when && <small>{when}</small>}</span>
             </button>
           ))}
           <button className="text-btn" onClick={c.checkin}>
@@ -548,14 +836,115 @@ function CareCard({
 }
 const CareTool = makeAssistantToolUI<
   { kind: string; diabetes?: boolean },
-  { ready: boolean }
+  unknown
 >({
   toolName: "care_action",
-  render: ({ args }) => <CareCard kind={args.kind} diabetes={args.diabetes} />,
+  render: ({ args, result, toolCallId }) => <CareCard kind={args.kind} diabetes={args.diabetes} result={result} toolCallId={toolCallId} />,
 });
+const HealthTool = makeAssistantToolUI<HealthCardArgs, { ready: boolean }>({
+  toolName: "health_card",
+  render: ({ args }) =>
+    args.metric === "labs" ? (
+      <LabTrendsCard {...args} />
+    ) : args.metric === "fitness" ? (
+      <FitnessDashboard initialData={args.overview} compact />
+    ) : args.metric === "onboarding" ? (
+      <ActivityOnboarding initialPreferences={args.preferences} />
+    ) : args.metric === "energy" ? (
+      <EnergyCard {...args} />
+    ) : args.metric === "running" ? (
+      <RunCard {...args} />
+    ) : (
+      <MetricCard {...args} />
+    ),
+});
+const WebSearchTool = makeAssistantToolUI<WebSearchCardArgs, { ready: boolean }>({
+  toolName: "web_search",
+  render: ({ args }) => <WebSearchCard args={args} />,
+});
+function renderInline(text: string): React.ReactNode[] {
+  const out: React.ReactNode[] = [];
+  const re = /\*\*(.+?)\*\*|`([^`]+)`|(?<![*\w])\*([^*\s][^*]*?)\*(?![*\w])/g;
+  let last = 0;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(text))) {
+    if (m.index > last) out.push(text.slice(last, m.index));
+    if (m[1] !== undefined) out.push(<strong key={m.index}>{renderInline(m[1])}</strong>);
+    else if (m[2] !== undefined) out.push(<code key={m.index}>{m[2]}</code>);
+    else out.push(<em key={m.index}>{m[3]}</em>);
+    last = m.index + m[0].length;
+  }
+  if (last < text.length) out.push(text.slice(last));
+  return out;
+}
+function MarkdownText({ text }: { text: string }) {
+  const blocks: React.ReactNode[] = [];
+  let list: { ordered: boolean; items: string[] } | null = null;
+  let para: string[] = [];
+  const flushPara = () => {
+    if (para.length) {
+      blocks.push(<p key={blocks.length}>{renderInline(para.join(" "))}</p>);
+      para = [];
+    }
+  };
+  const flushList = () => {
+    if (list) {
+      const items = list.items.map((it, i) => <li key={i}>{renderInline(it)}</li>);
+      blocks.push(list.ordered ? <ol key={blocks.length}>{items}</ol> : <ul key={blocks.length}>{items}</ul>);
+      list = null;
+    }
+  };
+  for (const line of text.split("\n")) {
+    const bullet = /^\s*[-*•]\s+(.*)$/.exec(line);
+    const num = /^\s*\d+[.)]\s+(.*)$/.exec(line);
+    const heading = /^\s{0,3}#{1,6}\s+(.*)$/.exec(line);
+    if (bullet || num) {
+      flushPara();
+      const ordered = !!num;
+      if (list && list.ordered !== ordered) flushList();
+      list ??= { ordered, items: [] };
+      list.items.push((bullet ?? num)![1]);
+    } else if (heading) {
+      flushPara();
+      flushList();
+      blocks.push(<p key={blocks.length}><strong>{renderInline(heading[1])}</strong></p>);
+    } else if (!line.trim()) {
+      flushPara();
+      flushList();
+    } else {
+      flushList();
+      para.push(line.trim());
+    }
+  }
+  flushPara();
+  flushList();
+  return <div className="md">{blocks}</div>;
+}
+function ComposerAttachment() {
+  return (
+    <AttachmentPrimitive.Root className="attachment-chip">
+      <FileText size={14} />
+      <AttachmentPrimitive.Name />
+      <AttachmentPrimitive.Remove aria-label="Remove attachment">
+        <X size={13} />
+      </AttachmentPrimitive.Remove>
+    </AttachmentPrimitive.Root>
+  );
+}
+function MessageAttachment() {
+  return (
+    <AttachmentPrimitive.Root className="attachment-chip">
+      <FileText size={14} />
+      <AttachmentPrimitive.Name />
+    </AttachmentPrimitive.Root>
+  );
+}
 function UserMessage() {
   return (
     <MessagePrimitive.Root className="message user">
+      <MessagePrimitive.Attachments
+        components={{ Attachment: MessageAttachment }}
+      />
       <MessagePrimitive.Content />
     </MessagePrimitive.Root>
   );
@@ -564,25 +953,81 @@ function AssistantMessage() {
   return (
     <MessagePrimitive.Root className="message assistant">
       <span className="assistant-label">✦ Baymax</span>
-      <MessagePrimitive.Content />
+      <MessagePrimitive.Content
+        components={{ Text: ({ text }: { text: string }) => <MarkdownText text={text} /> }}
+      />
+      <MessagePrimitive.Error>
+        <p role="alert" className="notice">Baymax couldn’t complete that response. Please try sending your message again.</p>
+      </MessagePrimitive.Error>
     </MessagePrimitive.Root>
   );
 }
-function Chat() {
-  const runtime = useLocalRuntime(adapter);
+function Chat({ conversationId, conversation, onConversation, onToolResult, workspace }: {
+  conversationId: string;
+  conversation: StoredConversation;
+  onConversation: (conversationId: string, conversation: StoredConversation) => void;
+  onToolResult: (kind: "plan" | "brief", result: unknown, toolCallId: string) => void;
+  workspace: CareWorkspace;
+}) {
+  const current = useRef({ workspace, onToolResult, onConversation });
+  current.current = { workspace, onToolResult, onConversation };
+  const adapter = useMemo(() => createAgentAdapter({
+    getConversationId: () => conversationId,
+    onToolResult: (kind, result, id) => current.current.onToolResult(kind, result, id),
+    getToolCards: (tool, result, id) => healthCardsFromTool(tool, result).map(args => ({ ...healthCardPart(args), toolCallId: `${id}-${args.metric}` })),
+    getContext: () => {
+      const w = current.current.workspace;
+      return { name: w.name, goal: w.goal, date: w.date, planItems: w.planItems, city: w.city, travelDate: w.travelDate, brief: w.brief, energy: w.energy };
+    },
+  }), [conversationId]);
+  const attachmentAdapter = useMemo(() => createAttachmentAdapter(conversationId), [conversationId]);
+  const [showShopping, setShowShopping] = useState(false);
+  const runtime = useLocalRuntime(adapter, { adapters: { attachments: attachmentAdapter } });
+  const initialConversation = useRef(conversation);
+  const restored = useRef(false);
+  const lastExport = useRef(JSON.stringify(conversation));
+  useEffect(() => {
+    if (!restored.current) {
+      restored.current = true;
+      const repository = initialConversation.current;
+      runtime.thread.import({ ...repository, messages: repository.messages.map(item => ({ ...item, message: { ...item.message, createdAt: new Date(item.message.createdAt) } })) } as unknown as ExportedMessageRepository);
+    }
+    const unsubscribe = runtime.thread.subscribe(() => {
+      if (runtime.thread.getState().isRunning) return;
+      const serialized = JSON.stringify(runtime.thread.export());
+      if (serialized !== lastExport.current) {
+        lastExport.current = serialized;
+        current.current.onConversation(conversationId, JSON.parse(serialized));
+      }
+    });
+    const beforeUnload = (event: BeforeUnloadEvent) => {
+      if (runtime.thread.getState().isRunning && current.current.workspace.remember) { event.preventDefault(); event.returnValue = ""; }
+    };
+    window.addEventListener("beforeunload", beforeUnload);
+    return () => { window.removeEventListener("beforeunload", beforeUnload); unsubscribe(); runtime.thread.cancelRun(); };
+  }, [runtime, conversationId]);
+  const { setResponding } = useContext(MascotActivity);
+  useEffect(() => {
+    const sync = () => setResponding(runtime.thread.getState().isRunning);
+    sync();
+    const unsubscribe = runtime.thread.subscribe(sync);
+    return () => { unsubscribe(); setResponding(false); };
+  }, [runtime, setResponding]);
   return (
     <AssistantRuntimeProvider runtime={runtime}>
       <CareTool />
+      <HealthTool />
+      <WebSearchTool />
       <ThreadPrimitive.Root className="chat">
         <ThreadPrimitive.Viewport className="transcript">
-          <ThreadPrimitive.Empty>
+          {!showShopping && <ThreadPrimitive.Empty>
             <div className="chat-welcome">
               <Mascot small />
               <h2>Hello. I am Baymax.</h2>
               <p>Your personal care companion. What’s on your mind?</p>
               <div className="suggestions">
                 {[
-                  "Help me prepare for a hackathon",
+                  WEEKLY_SUMMARY_PROMPT,
                   "I need a diabetes medication refill while travelling",
                   "Draft and email a brief to my doctor",
                 ].map((s) => (
@@ -598,14 +1043,24 @@ function Chat() {
                 ))}
               </div>
             </div>
-          </ThreadPrimitive.Empty>
+          </ThreadPrimitive.Empty>}
           <ThreadPrimitive.Messages
             components={{ UserMessage, AssistantMessage }}
           />
+          {showShopping && <PrescriptionShoppingCard />}
         </ThreadPrimitive.Viewport>
+        <ThreadPrimitive.If running>
+          <div className="bay-response" role="status">
+            <span className="bay-response-dots" aria-hidden="true"><i /><i /><i /></span>
+            Baymax is responding…
+          </div>
+        </ThreadPrimitive.If>
         <div className="quick-actions">
+          <button type="button" onClick={() => setShowShopping(value => !value)} aria-expanded={showShopping}>{showShopping ? "Hide shopping demo" : "Shopping demo"}</button>
           {[
-            { label: "Daily plan", prompt: "Help me prepare for a hackathon" },
+            { label: "Weekly summary", prompt: WEEKLY_SUMMARY_PROMPT },
+            { label: "Fitness", prompt: "Open my fitness dashboard" },
+            { label: "Activity setup", prompt: "Start my activity onboarding" },
             {
               label: "Prescription",
               prompt: "I need a diabetes medication refill while travelling",
@@ -626,6 +1081,16 @@ function Chat() {
           ))}
         </div>
         <ComposerPrimitive.Root className="composer">
+          <ComposerPrimitive.Attachments
+            components={{ Attachment: ComposerAttachment }}
+          />
+          <ComposerPrimitive.AddAttachment
+            className="attach"
+            aria-label="Attach a medical record"
+            title="Attach a text file (txt, md, csv, json)"
+          >
+            <Plus size={19} />
+          </ComposerPrimitive.AddAttachment>
           <ComposerPrimitive.Input
             placeholder="Tell Baymax what you need…"
             aria-label="Message Baymax"
@@ -649,44 +1114,189 @@ function Chat() {
     </AssistantRuntimeProvider>
   );
 }
+function ChatHub({ workspace, onToolResult }: {
+  workspace: CareWorkspace;
+  onToolResult: (kind: "plan" | "brief", result: unknown, toolCallId: string) => void;
+}) {
+  const [chats, setChats] = useState<ConversationSummary[]>([]);
+  const [activeId, setActiveId] = useState<string>(() => crypto.randomUUID());
+  const [initial, setInitial] = useState<StoredConversation | null>(EMPTY_CONVERSATION);
+  const [open, setOpen] = useState(false);
+  const [error, setError] = useState("");
+  const latest = useRef(activeId);
+  latest.current = activeId;
+  const refresh = useCallback(async () => {
+    try { setChats(await conversationsApi.list()); setError(""); }
+    catch { setError("Your previous chats are unavailable right now."); }
+  }, []);
+  useEffect(() => { void refresh(); }, [refresh]);
+  const openChat = async (id: string) => {
+    setOpen(false);
+    if (id === latest.current) return;
+    setInitial(null);
+    setActiveId(id);
+    try {
+      const loaded = await conversationsApi.load(id);
+      if (latest.current === id) setInitial(loaded);
+    } catch {
+      if (latest.current === id) { setError("That chat could not be opened."); setInitial(EMPTY_CONVERSATION); }
+    }
+  };
+  const newChat = () => {
+    setOpen(false);
+    setActiveId(crypto.randomUUID());
+    setInitial(EMPTY_CONVERSATION);
+  };
+  const remove = async (id: string) => {
+    try {
+      await conversationsApi.remove(id);
+      if (id === latest.current) newChat();
+      await refresh();
+    } catch { setError("That chat could not be deleted."); }
+  };
+  const save = useCallback(async (id: string, conversation: StoredConversation) => {
+    if (!conversation.messages.length) return;
+    try { await conversationsApi.save(id, conversation); await refresh(); }
+    catch { setError("Your last message could not be saved to your chat history."); }
+  }, [refresh]);
+  return (
+    <div className="chat-hub">
+      <div className="chat-hub-bar">
+        <button className="text-btn" aria-expanded={open} aria-controls="chat-history" onClick={() => setOpen(value => !value)}>
+          <History size={15} /> Chats
+        </button>
+        <button className="text-btn" onClick={newChat}><Plus size={15} /> New chat</button>
+      </div>
+      {error && <p role="alert" className="notice chat-hub-error">{error}</p>}
+      {open && (
+        <aside id="chat-history" className="chat-history" aria-label="Previous chats">
+          {chats.length === 0 ? <p className="muted">No saved chats yet.</p> : (
+            <ul>
+              {chats.map(chat => (
+                <li key={chat.id} className={chat.id === activeId ? "active" : ""}>
+                  <button className="chat-history-item" onClick={() => void openChat(chat.id)} title={chat.title}>
+                    <span>{chat.title}</span>
+                    <time dateTime={chat.updatedAt}>{relativeTime(chat.updatedAt)}</time>
+                  </button>
+                  <button className="chat-history-delete" aria-label={`Delete chat: ${chat.title}`} onClick={() => void remove(chat.id)}>
+                    <Trash2 size={14} />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </aside>
+      )}
+      {initial && <Chat key={activeId} conversationId={activeId} conversation={initial} workspace={workspace} onConversation={save} onToolResult={onToolResult} />}
+    </div>
+  );
+}
 const nav = [
   ["Today", LayoutDashboard],
   ["Talk to Baymax", MessageCircle],
   ["Your plan", Calendar],
+  ["Physical fitness", Footprints],
+  ["Running", Activity],
   ["Travel care", Plane],
   ["Doctor brief", FileText],
 ] as const;
 function App() {
+  const [responding, setResponding] = useState(false);
   const [page, setPage] = useState("Talk to Baymax");
   const [modal, setModal] = useState("");
-  const [name, setName] = useState("Alex");
-  const [ready, setReady] = useState(false);
-  const [energy, setEnergy] = useState("");
-  const [done, setDone] = useState<string[]>([]);
-  const [water, setWater] = useState(3);
-  const [reminders, setReminders] = useState(true);
-  const [nudge, setNudge] = useState("Gentle");
-  const [city, setCity] = useState("San Francisco");
-  const [travelDate, setTravelDate] = useState("2026-10-09");
-  const [date, setDate] = useState("2026-10-10");
-  const [goal, setGoal] = useState("Build Personal Agents Hackathon");
-  const [brief, setBrief] = useState(
-    "MY HEALTH BRIEF — review and complete before sharing\n\nPatient: [Your name]\nReason for visit: Establishing care while travelling.\nMedications: [Add your prescribed medication and dose.]\nAllergies: Not yet confirmed.\nRelevant history: Not yet confirmed.\nQuestions: What records do you need? How can I arrange follow-up care?",
-  );
-  const [recipient, setRecipient] = useState("");
-  const [subject, setSubject] = useState("My health brief for our appointment");
+  const [preferencesLoading, setPreferencesLoading] = useState(true);
+  const [fitnessPreferences, setFitnessPreferences] = useState<SavedPreferences>();
+  const persistence = useCareWorkspace();
+  const { workspace, setWorkspace, setField } = persistence;
+  const { name, ready, energy, done, water, reminders, nudge, city, travelDate, date, goal, brief, recipient, subject, planItems, tripReady, checklist, activeMinutes, week } = workspace;
+  const setName = (value: string) => setField("name", value);
+  const setReady = (value: boolean) => setField("ready", value);
+  const setEnergy = (value: CareWorkspace["energy"]) => setField("energy", value);
+  const setWater = (value: number) => setField("water", value);
+  const setWeek = (value: CareWorkspace["week"] | ((previous: CareWorkspace["week"]) => CareWorkspace["week"])) => setField("week", value);
+  const setReminders = (value: boolean) => setField("reminders", value);
+  const setNudge = (value: string) => setField("nudge", value as CareWorkspace["nudge"]);
+  const setCity = (value: string) => setField("city", value);
+  const setTravelDate = (value: string) => setField("travelDate", value);
+  const setDate = (value: string) => setField("date", value);
+  const setGoal = (value: string) => setField("goal", value);
+  const setBrief = (value: string) => setField("brief", value);
+  const setRecipient = (value: string) => setField("recipient", value);
+  const setSubject = (value: string) => setField("subject", value);
+  const onToolResult = useCallback((kind: "plan" | "brief", result: unknown, toolCallId: string) => {
+    setWorkspace(previous => applyToolResult(previous, kind, result, toolCallId));
+  }, [setWorkspace]);
   const [emailConsent, setEmailConsent] = useState(false);
   const [toast, setToast] = useState("");
-  const [tripReady, setTripReady] = useState(false);
-  const [checklist, setChecklist] = useState<string[]>([]);
+  const setTripReady = (value: boolean) => setField("tripReady", value);
+  const setChecklist = (value: string[]) => setField("checklist", value);
   const [checklistLoading, setChecklistLoading] = useState(false);
   const [briefLoading, setBriefLoading] = useState(false);
   const [mobile, setMobile] = useState(false);
-  const toggle = (s: string) =>
-    setDone((d) => (d.includes(s) ? d.filter((x) => x !== s) : [...d, s]));
+  const toggle = (label: string) => setWorkspace(previous => {
+    const checked = !previous.done.includes(label);
+    return { ...previous,
+      done: checked ? [...previous.done, label] : previous.done.filter(item => item !== label),
+      planItems: previous.planItems.map(item => item.label === label ? { ...item, done: checked } : item),
+    };
+  });
   const notify = (s: string) => {
     setToast(s);
     setTimeout(() => setToast(""), 3500);
+  };
+  // Initialize the new-visit demo overview after restoring the care workspace.
+  // A saved or already-opened workspace always keeps its own values.
+  useEffect(() => {
+    let active = true;
+    const apply = (preferences: SavedPreferences) => {
+      if (!active) return;
+      setFitnessPreferences(preferences);
+      if (preferences.onboarded) { setName(preferences.name); setReady(true); }
+    };
+    const onChange = (event: Event) => apply((event as CustomEvent<SavedPreferences>).detail);
+    window.addEventListener(FITNESS_CHANGED, onChange);
+    void fitnessRequest<SavedPreferences>("preferences").then(apply).catch(() => {}).finally(() => { if (active) setPreferencesLoading(false); });
+    return () => { active = false; window.removeEventListener(FITNESS_CHANGED, onChange); };
+  }, []);
+  // Load today's numbers and the last week from the Mastra server. The agent
+  // tools read the same data, so the app and Baymax always agree.
+  useEffect(() => {
+    if (persistence.loading || persistence.loadError) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch("/health/overview?days=7");
+        if (!res.ok) throw new Error(`/health/overview ${res.status}`);
+        const data: HealthOverview = await res.json();
+        if (cancelled) return;
+        setWorkspace(previous => initializeHealthOverview(previous, data));
+      } catch (err) {
+        console.warn("Health data unavailable, using local defaults.", err);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [persistence.loading, persistence.loadError, persistence.resetKey, setWorkspace]);
+  const saveHealth = (path: string, body: object) =>
+    fetch(path, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(body),
+    }).catch((err) => console.warn("Could not save health data.", err));
+  const addWater = () => {
+    if (water >= WATER_GOAL) return;
+    setWater(water + 1);
+    void saveHealth("/health/water", { ml: GLASS_ML });
+  };
+  const saveEnergy = () => {
+    void saveHealth("/health/checkin", { energy: energy.toLowerCase() });
+    const today = new Date().toLocaleDateString("en-CA");
+    setWeek((w) =>
+      w.map((d) =>
+        d.date === today ? { ...d, energy: energy.toLowerCase() as "low" | "okay" | "good" | "great" } : d,
+      ),
+    );
   };
   const download = () => {
     const u = URL.createObjectURL(new Blob([brief], { type: "text/plain" }));
@@ -757,9 +1367,21 @@ function App() {
     setPage(s);
     setMobile(false);
   };
+  if (persistence.loading || persistence.loadError) return (
+    <div className="app-loading" role="status">
+      <Mascot small />
+      <h2>{persistence.loading ? "Opening your care space…" : "We couldn’t open your saved care space."}</h2>
+      {persistence.loadError && !persistence.loading && <><p>Your saved information will be kept until we can restore it.</p><button className="primary" onClick={() => void persistence.retry()}>Try again</button></>}
+    </div>
+  );
   return (
+    <MascotActivity.Provider value={{ responding, setResponding }}>
     <CareContext.Provider
       value={{
+        activePlanId: workspace.activePlanId,
+        activeBriefId: workspace.activeBriefId,
+        activateCard: onToolResult,
+        planItems,
         done,
         toggle,
         date,
@@ -862,6 +1484,10 @@ function App() {
             </button>
           </header>
           <div className="content">
+            <div className="persistence-status" role="status">
+              <ShieldCheck size={14} /><span>{persistence.status}</span>
+              {persistence.error && <><span role="alert">{persistence.error}</span><button className="text-btn" disabled={persistence.busy} onClick={async () => { if (await persistence.retry()) { setModal(""); setPage("Talk to Baymax"); } }}>Try again</button></>}
+            </div>
             <div className="page-heading">
               <div>
                 <p className="eyebrow">A LITTLE CARE GOES A LONG WAY</p>
@@ -872,6 +1498,10 @@ function App() {
                       ? "Let’s talk."
                       : page === "Your plan"
                         ? "Make space for yourself."
+                        : page === "Physical fitness"
+                          ? "A little movement. Every day."
+                        : page === "Running"
+                          ? "One foot, then the other."
                         : page === "Travel care"
                           ? "Care, wherever you go."
                           : page === "Doctor brief"
@@ -885,6 +1515,10 @@ function App() {
                       ? "No judgment. Just a companion in your corner."
                       : page === "Your plan"
                         ? "Small, sustainable steps for the days ahead."
+                        : page === "Physical fitness"
+                          ? "Find your rhythm, set your goals, and watch the little things add up."
+                        : page === "Running"
+                          ? "Every mile is yours. Go at your own pace."
                         : page === "Travel care"
                           ? "A little preparation makes a new place feel less unfamiliar."
                           : page === "Doctor brief"
@@ -956,17 +1590,17 @@ function App() {
                       <button
                         className="icon"
                         aria-label="Add one glass of water"
-                        onClick={() => setWater(Math.min(8, water + 1))}
+                        onClick={addWater}
                       >
                         <Plus size={17} />
                       </button>
                     </div>
                     <h3>
                       {water}
-                      <small> / 8 glasses</small>
+                      <small> / {WATER_GOAL} glasses</small>
                     </h3>
                     <div className="water-bars">
-                      {Array.from({ length: 8 }, (_, i) => (
+                      {Array.from({ length: WATER_GOAL }, (_, i) => (
                         <i key={i} className={i < water ? "filled" : ""} />
                       ))}
                     </div>
@@ -980,15 +1614,22 @@ function App() {
                       <span>MOVEMENT</span>
                     </div>
                     <h3>
-                      {done.includes("Take a 10-minute walk") ? "10" : "0"}
-                      <small> / 10 minutes</small>
+                      {activeMinutes +
+                        (done.includes("Take a 10-minute walk") ? 10 : 0)}
+                      <small> / {MOVEMENT_GOAL} minutes</small>
                     </h3>
                     <div className="track">
                       <i
                         style={{
-                          width: done.includes("Take a 10-minute walk")
-                            ? "100%"
-                            : "0%",
+                          width: `${Math.min(
+                            100,
+                            ((activeMinutes +
+                              (done.includes("Take a 10-minute walk")
+                                ? 10
+                                : 0)) /
+                              MOVEMENT_GOAL) *
+                              100,
+                          )}%`,
                         }}
                       />
                     </div>
@@ -1023,6 +1664,42 @@ function App() {
                     </button>
                   </article>
                 </div>
+                {week.length > 0 && (
+                  <section className="panel week-panel">
+                    <div className="section-heading">
+                      <h2>
+                        Your last 7 days <span>ENERGY, WATER, MOVEMENT</span>
+                      </h2>
+                    </div>
+                    <div className="week">
+                      {week.map((d) => (
+                        <div className="week-day" key={d.date}>
+                          <span
+                            className={`energy-dot ${d.energy ?? "none"}`}
+                            title={d.energy ? `Energy: ${d.energy}` : "No check-in"}
+                          />
+                          <div className="week-bar" title="Water">
+                            <i
+                              style={{
+                                height: `${Math.min(100, (d.hydrationMl / 2000) * 100)}%`,
+                              }}
+                            />
+                          </div>
+                          <small>
+                            {new Date(`${d.date}T12:00:00`).toLocaleDateString(
+                              undefined,
+                              { weekday: "short" },
+                            )}
+                          </small>
+                        </div>
+                      ))}
+                    </div>
+                    <p className="muted">
+                      Dots show energy (cloudy is low, bright is great). Bars
+                      show water against about 2 litres.
+                    </p>
+                  </section>
+                )}
                 <div className="lower-grid">
                   <section className="panel">
                     <div className="section-heading">
@@ -1081,7 +1758,7 @@ function App() {
               hidden={page !== "Talk to Baymax"}
               className="panel chat-panel"
             >
-              <Chat />
+              <ChatHub key={persistence.resetKey} workspace={workspace} onToolResult={onToolResult} />
             </section>
             {page === "Your plan" && (
               <div className="two-col">
@@ -1112,20 +1789,14 @@ function App() {
                 </section>
                 <section className="panel">
                   <h2>Your daily preparation</h2>
-                  {[
-                    "Take a 10-minute walk",
-                    "Make time for a real meal",
-                    "Pack medication documents",
-                    "Set a wind-down reminder",
-                    "Schedule your next routine checkup",
-                  ].map((s) => (
+                  {planItems.map(({ label: s, when }) => (
                     <button className="task" key={s} onClick={() => toggle(s)}>
                       <span
                         className={`check ${done.includes(s) ? "checked" : ""}`}
                       >
                         {done.includes(s) && <Check size={13} />}
                       </span>
-                      <b>{s}</b>
+                      <span><b>{s}</b>{when && <small>{when}</small>}</span>
                     </button>
                   ))}
                   <button
@@ -1137,6 +1808,8 @@ function App() {
                 </section>
               </div>
             )}
+            {page === "Physical fitness" && <FitnessDashboard />}
+            {page === "Running" && <RunningSection />}
             {page === "Travel care" && (
               <>
                 <div className="two-col">
@@ -1329,17 +2002,20 @@ function App() {
                     </select>
                   </label>
                   <p className="notice">
-                    Preference saved for this session:{" "}
-                    {reminders ? nudge : "Nudges off"}. Your preferences apply
-                    while you’re here.
+                    Your preference: {reminders ? nudge : "Nudges off"}.
+                    {workspace.remember ? " Remembered for your next visit." : " Applies while you’re here."}
                   </p>
                 </section>
                 <section className="panel">
                   <ShieldCheck className="green-text" size={30} />
                   <h2>Privacy comes first.</h2>
+                  <label className="consent">
+                    <input type="checkbox" checked={workspace.remember} disabled={persistence.busy} onChange={e => void persistence.changeMemory(e.target.checked)} />
+                    Remember across visits
+                  </label>
                   <p>
-                    Your information stays in this session. Refreshing clears
-                    your profile, check-ins, and conversations.
+                    Save your profile, care plans, and preferences for your next visit in this browser. Your chat history and health data are saved to your account.
+                    Turning this off deletes the saved copy and keeps your current care space for this visit.
                   </p>
                   <p className="fine">
                     Choose what you share. Review any brief before opening it in
@@ -1352,7 +2028,7 @@ function App() {
                     }}
                   >
                     <RotateCcw size={15} />
-                    Reset my session
+                    Delete my care space
                   </button>
                 </section>
               </div>
@@ -1365,7 +2041,7 @@ function App() {
             </footer>
           </div>
           <nav className="bottom-nav" aria-label="Main navigation">
-            {[nav[1], nav[0], nav[2], nav[3], nav[4]].map(([item, I]) => (
+            {[nav[1], nav[0], nav[2], nav[3], nav[5]].map(([item, I]) => (
               <button
                 key={item}
                 aria-label={item}
@@ -1385,40 +2061,11 @@ function App() {
             onClick={() => setMobile(false)}
           />
         )}{" "}
-        {!ready && (
+        {!ready && !preferencesLoading && (
           <ModalShell welcome>
-            <section className="modal welcome">
-              <Mascot small />
-              <span className="eyebrow">MEET YOUR CARE COMPANION</span>
-              <h2>
-                A little adorable.
-                <br />A lot of love.
-              </h2>
-              <p>
-                I’m Baymax. I’ll help you make room for your health, even when
-                life gets busy.
-              </p>
-              <label>
-                What should I call you?
-                <input
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  maxLength={30}
-                />
-              </label>
-              <p className="fine">
-                Your space, your pace. You choose what to share.
-              </p>
-              <button
-                className="primary"
-                onClick={() => {
-                  setName(name.trim() || "Alex");
-                  setReady(true);
-                }}
-              >
-                Let’s take care of you <ArrowUpRight size={16} />
-              </button>
-            </section>
+            <ActivityOnboarding initialName={name} initialPreferences={fitnessPreferences} welcomeExtra={<label className="consent"><input type="checkbox" checked={workspace.remember} onChange={e => setField("remember", e.target.checked)} />Remember my care space across visits in this browser.</label>} onCancel={() => { setReady(true); go("Physical fitness"); }} onComplete={(preferences) => {
+              setName(preferences.name); setReady(true); go("Physical fitness");
+            }} />
           </ModalShell>
         )}
         {modal && (
@@ -1440,7 +2087,7 @@ function App() {
                     {["Low", "Okay", "Good", "Great"].map((s, i) => (
                       <button
                         className={energy === s ? "selected" : ""}
-                        onClick={() => setEnergy(s)}
+                        onClick={() => setEnergy(s as CareWorkspace["energy"])}
                         key={s}
                       >
                         <span>{["☁", "◒", "☀", "✦"][i]}</span>
@@ -1452,6 +2099,7 @@ function App() {
                     className="primary"
                     disabled={!energy}
                     onClick={() => {
+                      saveEnergy();
                       setModal("");
                       notify(
                         "Check-in complete. Thank you for making a little time for yourself.",
@@ -1514,8 +2162,16 @@ function App() {
                   <button
                     className="primary"
                     onClick={() => {
-                      setName(name.trim() || "Alex");
-                      setModal("");
+                      const displayName = name.trim() || "Alex";
+                      void (async () => {
+                        try {
+                          const current = fitnessPreferences ?? await fitnessRequest<SavedPreferences>("preferences");
+                          const saved = await fitnessRequest<SavedPreferences>("preferences", { name: displayName, goals: current.goals, notifications: current.notifications });
+                          window.dispatchEvent(new CustomEvent(FITNESS_CHANGED, { detail: saved }));
+                          setName(saved.name);
+                          setModal("");
+                        } catch { notify("Your name didn’t save. Please try again."); }
+                      })();
                     }}
                   >
                     Save name
@@ -1525,14 +2181,19 @@ function App() {
                 <>
                   <h2>Start fresh?</h2>
                   <p>
-                    This clears your check-ins, tasks, and preferences. Your
-                    downloaded brief stays on your device.
+                    This clears your saved profile, care plans, preferences, and brief, and restores the sample chats, check-ins, and health history.
+                    Your downloaded brief stays on your device.
                   </p>
+                  {persistence.error && <p role="alert" className="notice">{persistence.error}</p>}
                   <button
                     className="primary"
-                    onClick={() => window.location.reload()}
+                    disabled={persistence.busy}
+                    onClick={async () => {
+                      try { await conversationsApi.resetDemo(); } catch { setToast("Could not restore the sample data. Please try again."); return; }
+                      if (await persistence.reset()) { setModal(""); setPage("Talk to Baymax"); }
+                    }}
                   >
-                    Reset session
+                    {persistence.busy ? "Deleting…" : "Delete and start fresh"}
                   </button>
                 </>
               )}
@@ -1547,6 +2208,7 @@ function App() {
         )}
       </div>
     </CareContext.Provider>
+    </MascotActivity.Provider>
   );
 }
 createRoot(document.getElementById("root")!).render(

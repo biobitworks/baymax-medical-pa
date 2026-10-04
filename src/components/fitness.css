@@ -1,0 +1,126 @@
+.fitness-dashboard { --fitness-teal: #359780; --fitness-blue: #4b74a4; display: grid; gap: 20px; }
+.fitness-toolbar, .fitness-section-heading, .fitness-onboarding-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.fitness-toolbar .outline { padding: 10px 14px; }
+.fitness-summary { display: grid; grid-template-columns: .9fr 1.2fr; align-items: center; gap: 36px; padding: 30px 38px; background: linear-gradient(115deg, #fff 42%, #f2f6ee); }
+.fitness-ring-block { display: grid; justify-items: center; gap: 16px; }
+.fitness-rings { position: relative; width: 238px; aspect-ratio: 1; }
+.fitness-rings svg { width: 100%; height: 100%; overflow: visible; }
+.fitness-rings circle { transition: stroke-dashoffset .6s ease; }
+.fitness-ring-center { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; }
+.fitness-ring-center strong { font: 800 43px Manrope, sans-serif; color: #359780; line-height: 1.15; }
+.fitness-ring-center span { font-size: 11px; color: #738177; }
+.fitness-ring-center b { font: 800 23px Manrope, sans-serif; color: #4b74a4; margin-top: 8px; }
+.fitness-legend, .fitness-goal-values { display: flex; align-items: center; justify-content: center; gap: 18px; font-size: 12px; }
+.fitness-legend span, .fitness-goal-values span { display: inline-flex; align-items: center; gap: 6px; }
+.fitness-legend span:first-child, .fitness-goal-values span:last-child { color: #359780; }
+.fitness-legend span:last-child, .fitness-goal-values span:first-child { color: #4b74a4; }
+.fitness-summary-copy h2 { font: 700 29px/1.3 Manrope, sans-serif; margin: 12px 0; letter-spacing: -.8px; }
+.fitness-summary-copy > p { max-width: 360px; color: #718074; font-size: 14px; line-height: 1.7; }
+.fitness-stat-pair { display: flex; gap: 36px; margin: 24px 0 16px; }
+.fitness-stat-pair > span { display: grid; gap: 5px; color: #4b74a4; }
+.fitness-stat-pair > span:last-child { color: #359780; }
+.fitness-stat-pair b { font: 800 22px Manrope, sans-serif; }
+.fitness-stat-pair small { color: #748177; font-size: 11px; }
+.fitness-progress-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.fitness-progress-grid h3, .fitness-coach h3 { font: 700 17px Manrope, sans-serif; margin: 10px 0 16px; }
+.fitness-week-rings { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin: 22px 0; }
+.fitness-week-rings strong, .fitness-weekly > strong { font: 800 27px Manrope, sans-serif; color: #359780; }
+.fitness-week-rings strong small, .fitness-weekly > strong small { font-size: 13px; font-weight: 500; }
+.fitness-week-rings p { margin: 5px 0; white-space: nowrap; }
+.fitness-week-days { display: flex; gap: 7px; }
+.fitness-week-days > div { position: relative; text-align: center; }
+.fitness-rings.small { width: 28px; }
+.fitness-week-days small { display: block; font-size: 10px; margin-top: 7px; color: #7d897e; }
+.fitness-day-check { position: absolute; top: -14px; left: 8px; color: #359780; }
+.fitness-weekly progress { display: block; width: 100%; height: 8px; appearance: none; border: 0; border-radius: 8px; overflow: hidden; margin: 22px 0; background: #e0eeea; }
+.fitness-weekly progress::-webkit-progress-bar { background: #e0eeea; }
+.fitness-weekly progress::-webkit-progress-value { background: #359780; border-radius: 8px; }
+.fitness-weekly progress::-moz-progress-bar { background: #359780; }
+.fitness-section-heading h2 { font: 700 20px Manrope, sans-serif; margin: 12px 0 0; }
+.fitness-trend { display: flex; align-items: center; justify-content: space-between; gap: 22px; }
+.fitness-trend h3 { margin-bottom: 20px; }
+.fitness-trend strong { font: 800 23px Manrope, sans-serif; color: #359780; }
+.fitness-trend.steps strong { color: #4b74a4; }
+.fitness-trend strong small { font-size: 12px; }
+.fitness-bars { position: relative; display: flex; align-items: flex-end; justify-content: space-between; flex: 1; max-width: 230px; min-width: 130px; gap: 9px; height: 100px; }
+.fitness-bar-column { flex: 1; display: grid; justify-items: center; gap: 8px; z-index: 1; }
+.fitness-bar-track { height: 76px; display: flex; align-items: flex-end; }
+.fitness-bar-track > span { display: flex; justify-content: center; align-items: flex-start; padding-top: 3px; width: 12px; min-height: 2px; border-radius: 3px 3px 0 0; background: #359780; color: #fff; }
+.steps .fitness-bar-track > span { background: #4b74a4; }
+.fitness-bar-column small { font-size: 10px; color: #7a877e; }
+.fitness-target-line { position: absolute; width: 100%; border-top: 1px dashed #c5dcd4; }
+.fitness-coach { display: flex; align-items: center; gap: 18px; background: #edf2e6; border: 1px solid #dfe7d6; padding: 24px; border-radius: 16px; }
+.fitness-coach-icon { background: white; color: #729169; padding: 14px; border-radius: 50%; display: flex; }
+.fitness-coach h3 { margin: 0 0 6px; }
+.fitness-coach p { margin: 0; color: #75806f; font-size: 12px; line-height: 1.6; }
+.fitness-coach .outline { margin-left: auto; flex-shrink: 0; }
+.fitness-onboarding { max-width: 560px; width: 100%; padding: 32px; background: #fff; border: 1px solid #e2e7dc; border-radius: 22px; }
+.modal-backdrop .fitness-onboarding { border: 0; }
+.fitness-step-track { display: flex; gap: 14px; margin: 24px 0 28px; }
+.fitness-step-track > span { display: grid; gap: 9px; flex: 1; font-size: 10px; color: #8f998c; }
+.fitness-step-track i { display: block; height: 3px; border-radius: 4px; background: #edf0e8; }
+.fitness-step-track .active { color: #5c7b53; }
+.fitness-step-track .active i { background: #8da67a; }
+.fitness-illustration { display: flex; align-items: center; justify-content: center; color: #5c8154; background: #f0f5e9; border-radius: 28px; width: 86px; height: 86px; margin: 0 auto 22px; }
+.fitness-illustration.step-1 { color: #359780; background: #eaf5f1; }
+.fitness-illustration.step-2 { color: #4b74a4; background: #edf2f8; }
+.fitness-onboarding h2 { font: 700 27px/1.3 Manrope, sans-serif; letter-spacing: -.6px; text-align: center; margin: 0 0 16px; }
+.fitness-onboarding h2:focus { outline: none; }
+.fitness-onboarding > p { font-size: 14px; line-height: 1.7; text-align: center; color: #758171; }
+.fitness-onboarding label { text-align: left; }
+.fitness-onboarding > .fine { font-size: 11px; }
+.fitness-explain { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 26px 0; }
+.fitness-explain > span { display: grid; justify-items: center; gap: 10px; background: #f7f9f4; padding: 22px 12px; border-radius: 16px; color: #359780; }
+.fitness-explain > span:first-child { color: #4b74a4; }
+.fitness-explain b { font-size: 13px; }
+.fitness-explain small { color: #7e8878; font-size: 11px; }
+.fitness-goal-options { display: grid; gap: 12px; margin: 22px 0; }
+.fitness-goal-option { display: flex; align-items: center; gap: 12px; border: 1px solid #e0e5da; padding: 16px; border-radius: 13px; cursor: pointer; margin: 0; position: relative; }
+.fitness-goal-option.selected { border-color: #7f9e6e; background: #f4f7ed; box-shadow: 0 0 0 1px #7f9e6e; }
+.fitness-goal-option:focus-within { outline: 3px solid #aac299; outline-offset: 2px; }
+.fitness-goal-option > input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.fitness-goal-option > span:first-of-type { flex: 1; display: grid; gap: 5px; }
+.fitness-goal-option b { font-size: 13px; }
+.fitness-goal-option small { font-size: 11px; color: #8b9484; }
+.fitness-goal-values { margin-top: 8px; justify-content: flex-start; font-size: 12px; gap: 20px; }
+.fitness-choice-check { width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; border: 1px solid #dce3d3; border-radius: 50%; }
+.selected .fitness-choice-check { background: #79986b; color: #fff; border-color: #79986b; }
+.fitness-onboarding-actions { display: flex; align-items: center; justify-content: space-between; margin-top: 28px; gap: 12px; }
+.fitness-onboarding-actions > .primary { margin-left: auto; }
+.fitness-final-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+.fitness-onboarding-actions .text-btn { display: inline-flex; align-items: center; gap: 3px; }
+.fitness-notification-preview { display: flex; align-items: center; gap: 14px; background: #f5f6f2; padding: 22px 18px; border: 1px solid #e9ece2; box-shadow: 0 10px 0 4px #f7f8f5; border-radius: 14px; margin: 38px 0; }
+.fitness-notification-preview > span { color: #75946a; display: flex; }
+.fitness-notification-preview b { font-size: 12px; }
+.fitness-notification-preview p { font-size: 11px; line-height: 1.7; color: #7f8978; margin: 5px 0 0; }
+.fitness-error { font-size: 13px; padding: 12px; border-radius: 10px; background: #fff3ef; color: #95543e; line-height: 1.5; }
+.fitness-goal-modal { max-width: 480px; }
+.fitness-complete { text-align: center; }
+.fitness-dashboard.compact { width: 100%; max-width: 680px; margin: 14px 0; }
+.compact .fitness-summary { padding: 24px; gap: 22px; }
+.compact .fitness-summary-copy h2 { font-size: 22px; }
+.compact .fitness-rings:not(.small) { width: 200px; }
+.compact .fitness-progress-grid { grid-template-columns: 1fr; }
+@media (max-width: 1100px) { .fitness-progress-grid { grid-template-columns: 1fr; } }
+@media (max-width: 650px) {
+  .fitness-summary, .compact .fitness-summary { grid-template-columns: 1fr; gap: 24px; padding: 28px 22px; }
+  .fitness-summary-copy { text-align: center; }
+  .fitness-summary-copy > p { margin-left: auto; margin-right: auto; }
+  .fitness-stat-pair { justify-content: center; }
+  .fitness-summary-copy h2 { font-size: 25px; }
+  .fitness-coach { flex-wrap: wrap; padding: 20px; }
+  .fitness-coach > div { flex: 1; }
+  .fitness-coach .outline { margin-left: 0; width: 100%; justify-content: center; }
+  .fitness-onboarding { padding: 24px 20px; }
+  .fitness-onboarding h2 { font-size: 24px; }
+  .fitness-onboarding-actions { flex-wrap: wrap; }
+  .fitness-final-actions { flex: 1; }
+  .fitness-final-actions .primary { font-size: 12px; }
+  .fitness-goal-values { font-size: 11px; gap: 14px; }
+  .fitness-week-days { gap: 4px; }
+  .fitness-rings.small { width: 26px; }
+  .fitness-trend { gap: 12px; }
+  .fitness-trend strong { font-size: 20px; }
+  .fitness-toolbar .pill { font-size: 9px; }
+}
+@media (prefers-reduced-motion: reduce) { .fitness-rings circle { transition: none; } }
