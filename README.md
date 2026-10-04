@@ -4,6 +4,8 @@
 
 **Build Personal Agents Hackathon Project Submission**
 
+**Project site:** [thinkun.github.io/baymax-site](https://thinkun.github.io/baymax-site/) (source in [`site/`](site/index.html))
+
 Baymax is a privacy-first personal medical assistant that helps you take care of yourself before health becomes an emergency. It remembers what matters, nudges you to follow through, and helps you carry your health context wherever life takes you.
 
 ## UI walkthroughs
@@ -48,8 +50,9 @@ Requires Node.js 22.22+ or 24.11+ (Node.js 24 LTS recommended).
 
 ```bash
 npm ci
-cp .env.example .env
-# Fill in DATABASE_URL and Neon AI Gateway values in .env.
+cp .env.example .env.local
+# Fill in DATABASE_URL and Neon AI Gateway values in .env.local (git-ignored).
+# .env is committed and holds non-secret defaults only; never put credentials in it.
 npm run db:migrate
 npm run agent:dev
 # In a second terminal:
