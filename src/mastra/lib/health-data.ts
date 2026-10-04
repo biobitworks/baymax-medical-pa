@@ -187,3 +187,101 @@ export function summarizeMetrics(list: DailyMetrics[]) {
   }
   return { days: n, averages, daysBelowTarget, targets: TARGETS, observations };
 }
+
+// ---------------------------------------------------------------------------
+// Running
+// ---------------------------------------------------------------------------
+
+export type Run = {
+  /** Local calendar date, YYYY-MM-DD */
+  date: string;
+  distanceMi: number;
+  durationMin: number;
+  /** Minutes per mile */
+  paceMinPerMi: number;
+  note?: string;
+};
+
+const RUN_NOTES = [
+  "Had to walk the last stretch.",
+  "Slow and steady.",
+  "Legs felt heavy.",
+  "Short loop around the block.",
+];
+
+const makeRun = (date: string, distanceMi: number, durationMin: number, note?: string): Run => ({
+  date,
+  distanceMi: Math.round(distanceMi * 100) / 100,
+  durationMin: Math.round(durationMin * 10) / 10,
+  paceMinPerMi: Math.round((durationMin / distanceMi) * 100) / 100,
+  ...(note ? { note } : {}),
+});
+
+/**
+ * Newest first. Alex runs rarely (a handful of short, slow runs a month).
+ */
+const buildRuns = (): Run[] =>
+  Array.from({ length: HISTORY_DAYS }, (_, i) => i).flatMap((i): Run[] => {
+    // Always include a run 2 days ago so recent data is never empty.
+    if (i !== 2 && rand(i + 500) >= 0.17) return [];
+    const distance = 1 + rand(i + 550) * 1.5;
+    const pace = 11.5 + rand(i + 600) * 2.5;
+    const note =
+      rand(i + 650) < 0.5
+        ? RUN_NOTES[Math.floor(rand(i + 700) * RUN_NOTES.length)]
+        : undefined;
+    return [makeRun(isoDate(i), distance, distance * pace, note)];
+  });
+
+const runs = buildRuns();
+
+/** The `count` most recent runs, newest first. */
+export const getRecentRuns = (count: number): Run[] => runs.slice(0, count);
+
+/** Records a run for today. In-memory only. */
+export function saveRun(distanceMi: number, durationMin: number, note?: string): Run {
+  const run = makeRun(isoDate(0), distanceMi, durationMin, note);
+  runs.unshift(run);
+  return run;
+}
+
+const daysBetween = (isoA: string, isoB: string) =>
+  Math.round(
+    (new Date(`${isoA}T12:00:00`).getTime() - new Date(`${isoB}T12:00:00`).getTime()) /
+      86_400_000,
+  );
+
+export function summarizeRuns(list: Run[]) {
+  const totalMiles = Math.round(list.reduce((a, r) => a + r.distanceMi, 0) * 100) / 100;
+  const totalMinutes = Math.round(list.reduce((a, r) => a + r.durationMin, 0) * 10) / 10;
+  const averagePaceMinPerMi = totalMiles
+    ? Math.round((totalMinutes / totalMiles) * 100) / 100
+    : 0;
+  const longestMi = list.reduce((m, r) => Math.max(m, r.distanceMi), 0);
+  const daysSinceLastRun = list[0] ? daysBetween(isoDate(0), list[0].date) : null;
+  const spanDays = list.length > 1 ? daysBetween(list[0].date, list[list.length - 1].date) + 1 : 0;
+  const runsPerWeek = spanDays ? Math.round((list.length / spanDays) * 7 * 10) / 10 : null;
+  const observations: string[] = [];
+  if (!list.length) observations.push("No runs logged yet.");
+  if (daysSinceLastRun !== null && daysSinceLastRun >= 3) {
+    observations.push(`Last run was ${daysSinceLastRun} days ago.`);
+  }
+  if (runsPerWeek !== null && runsPerWeek < 2) {
+    observations.push(`Averaging about ${runsPerWeek} runs per week, under a common 2 to 3 a week starter routine.`);
+  }
+  if (list.length >= 2 && averagePaceMinPerMi >= 11) {
+    observations.push(
+      `Easy average pace of about ${averagePaceMinPerMi} min/mi, typical of someone building up fitness.`,
+    );
+  }
+  return {
+    total: list.length,
+    totalMiles,
+    totalMinutes,
+    averagePaceMinPerMi,
+    longestMi,
+    daysSinceLastRun,
+    runsPerWeek,
+    observations,
+  };
+}

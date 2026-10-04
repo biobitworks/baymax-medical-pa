@@ -5,9 +5,12 @@ import {
   addHydration,
   getRecentCheckins,
   getRecentMetrics,
+  getRecentRuns,
   saveCheckin,
+  saveRun,
   summarizeCheckins,
   summarizeMetrics,
+  summarizeRuns,
 } from "../lib/health-data";
 
 const checkinBody = z.object({
@@ -17,6 +20,12 @@ const checkinBody = z.object({
 
 const waterBody = z.object({
   ml: z.number().int().min(50).max(1000).default(250),
+});
+
+const runBody = z.object({
+  distanceMi: z.number().min(0.1).max(100),
+  durationMin: z.number().min(1).max(1000),
+  note: z.string().trim().max(200).optional(),
 });
 
 /**
@@ -56,6 +65,25 @@ export const healthRoutes = [
       const parsed = waterBody.safeParse(await c.req.json().catch(() => ({})));
       if (!parsed.success) return c.json({ error: "Invalid amount" }, 400);
       return c.json({ today: addHydration(parsed.data.ml) });
+    },
+  }),
+
+  registerApiRoute("/health/runs", {
+    method: "GET",
+    handler: async (c) => {
+      const count = Math.min(30, Math.max(1, Number(c.req.query("count")) || 10));
+      const runs = getRecentRuns(count);
+      return c.json({ runs, summary: summarizeRuns(runs) });
+    },
+  }),
+
+  registerApiRoute("/health/runs", {
+    method: "POST",
+    handler: async (c) => {
+      const parsed = runBody.safeParse(await c.req.json().catch(() => ({})));
+      if (!parsed.success) return c.json({ error: "Invalid run" }, 400);
+      const { distanceMi, durationMin, note } = parsed.data;
+      return c.json({ run: saveRun(distanceMi, durationMin, note) });
     },
   }),
 ];
