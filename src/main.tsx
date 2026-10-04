@@ -40,6 +40,10 @@ import {
   Menu,
   Mail,
 } from "lucide-react";
+import {
+  DEFAULT_TRAVEL_CHECKLIST,
+  formatDoctorBrief,
+} from "./mastra/lib/brief";
 import "./style.css";
 
 function ModalShell({
@@ -157,8 +161,10 @@ const adapter: ChatModelAdapter = {
         (m) => (m.role === "user" || m.role === "assistant") && m.content,
       );
     const lastUser =
-      history.filter((m) => m.role === "user").at(-1)?.content.toLowerCase() ||
-      "";
+      history
+        .filter((m) => m.role === "user")
+        .at(-1)
+        ?.content.toLowerCase() || "";
     let res: Response;
     try {
       res = await fetch(AGENT_STREAM_URL, {
@@ -205,13 +211,14 @@ const adapter: ChatModelAdapter = {
     }
     if (abortSignal.aborted) return;
 
-    const keywordKind = lastUser.includes("diabet") ||
+    const keywordKind =
+      lastUser.includes("diabet") ||
       lastUser.includes("refill") ||
       lastUser.includes("buy")
-      ? "purchase"
-      : lastUser.includes("travel") || lastUser.includes("prescription")
-        ? "travel"
-        : undefined;
+        ? "purchase"
+        : lastUser.includes("travel") || lastUser.includes("prescription")
+          ? "travel"
+          : undefined;
     const kind = cardKind ?? keywordKind;
     if (!kind) return;
     const diabetes = lastUser.includes("diabet");
@@ -669,6 +676,10 @@ function App() {
   const [subject, setSubject] = useState("My health brief for our appointment");
   const [emailConsent, setEmailConsent] = useState(false);
   const [toast, setToast] = useState("");
+  const [tripReady, setTripReady] = useState(false);
+  const [checklist, setChecklist] = useState<string[]>([]);
+  const [checklistLoading, setChecklistLoading] = useState(false);
+  const [briefLoading, setBriefLoading] = useState(false);
   const [mobile, setMobile] = useState(false);
   const toggle = (s: string) =>
     setDone((d) => (d.includes(s) ? d.filter((x) => x !== s) : [...d, s]));
@@ -684,6 +695,62 @@ function App() {
     a.click();
     URL.revokeObjectURL(u);
     notify("Your reviewed brief has been downloaded.");
+  };
+  const postTravel = async (path: string, body: object) => {
+    const res = await fetch(path, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    if (!res.ok) throw new Error(`${path} ${res.status}`);
+    return res.json();
+  };
+  const prepareChecklist = async () => {
+    const destination = city.trim();
+    if (!destination) {
+      notify("Add a destination so Baymax can prepare your checklist.");
+      return;
+    }
+    setTripReady(true);
+    setChecklistLoading(true);
+    try {
+      const data = await postTravel("/travel/checklist", {
+        destination,
+        departureDate: travelDate,
+      });
+      setChecklist(data.items);
+    } catch (err) {
+      console.warn("Agent unavailable, using default checklist.", err);
+      setChecklist(DEFAULT_TRAVEL_CHECKLIST);
+    } finally {
+      setChecklistLoading(false);
+    }
+  };
+  const openTravelBrief = async () => {
+    const destination = city.trim();
+    go("Doctor brief");
+    setBriefLoading(true);
+    try {
+      const data = await postTravel("/travel/brief", {
+        destination,
+        departureDate: travelDate,
+        checklist,
+      });
+      setBrief(data.brief);
+    } catch (err) {
+      console.warn("Agent unavailable, using template brief.", err);
+      setBrief(
+        formatDoctorBrief({
+          reason: `Establishing care while travelling to ${destination}.`,
+          questions: [
+            "What records do you need from me?",
+            "How can I arrange follow-up care while I am away?",
+          ],
+        }),
+      );
+    } finally {
+      setBriefLoading(false);
+    }
   };
   const go = (s: string) => {
     setPage(s);
@@ -1100,24 +1167,28 @@ function App() {
                     </div>
                     <button
                       className="primary"
-                      onClick={() =>
-                        notify(
-                          `Checklist ready for ${city || "your trip"}. Complete the steps on the right.`,
-                        )
-                      }
+                      onClick={prepareChecklist}
+                      disabled={checklistLoading}
                     >
                       Prepare checklist <ArrowUpRight size={16} />
                     </button>
                   </section>
-                  <section className="panel">
+                  <section
+                    className={`panel slide-panel ${tripReady ? "revealed" : ""}`}
+                    aria-hidden={!tripReady}
+                    aria-live="polite"
+                  >
                     <span className="eyebrow">MEDICATION TRAVEL CHECKLIST</span>
                     <h2>A few things to bring.</h2>
-                    {[
-                      "Confirm remaining supply with your clinician",
-                      "Bring prescription and medication packaging",
-                      "Ask a local pharmacist about refill requirements",
-                      "Prepare a doctor brief",
-                    ].map((s) => (
+                    {checklistLoading && (
+                      <>
+                        <div className="skeleton-line" />
+                        <div className="skeleton-line" />
+                        <div className="skeleton-line" />
+                        <div className="skeleton-line" />
+                      </>
+                    )}
+                    {(checklistLoading ? [] : checklist).map((s) => (
                       <button
                         className="task"
                         key={s}
@@ -1139,10 +1210,11 @@ function App() {
                       recommend substitutions.
                     </p>
                     <button
-                      className="text-btn"
-                      onClick={() => go("Doctor brief")}
+                      className="primary cta-brief"
+                      onClick={openTravelBrief}
+                      disabled={checklistLoading}
                     >
-                      Open doctor brief <ArrowUpRight size={15} />
+                      Open doctor brief <ArrowUpRight size={16} />
                     </button>
                   </section>
                 </div>
@@ -1157,11 +1229,21 @@ function App() {
                     Editable health brief
                     <textarea
                       className="brief"
-                      value={brief}
+                      value={
+                        briefLoading
+                          ? "Baymax is drafting your brief..."
+                          : brief
+                      }
+                      disabled={briefLoading}
+                      aria-busy={briefLoading}
                       onChange={(e) => setBrief(e.target.value)}
                     />
                   </label>
-                  <button className="outline" onClick={download}>
+                  <button
+                    className="outline"
+                    onClick={download}
+                    disabled={briefLoading}
+                  >
                     <Download size={17} />
                     Download a copy
                   </button>

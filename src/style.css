@@ -1660,3 +1660,53 @@ header > .icon {
 .chat-first .chat-panel {
   padding: 0;
 }
+
+/* Travel: right panel slides in after "Prepare checklist" */
+.slide-panel {
+  opacity: 0;
+  transform: translateX(48px);
+  pointer-events: none;
+  visibility: hidden;
+  transition:
+    opacity 0.5s ease,
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 0.55s;
+}
+.slide-panel.revealed {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+  visibility: visible;
+  transition-delay: 0s;
+}
+@media (max-width: 1000px) {
+  .slide-panel:not(.revealed) {
+    display: none;
+  }
+  .slide-panel {
+    transform: translateY(24px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .slide-panel {
+    transition: none;
+  }
+}
+.skeleton-line {
+  height: 14px;
+  margin: 18px 0;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #e9ede6, #f5f7f2, #e9ede6);
+  background-size: 200% 100%;
+  animation: shimmer 1.2s linear infinite;
+}
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+.cta-brief {
+  width: 100%;
+  justify-content: center;
+  margin-top: 6px;
+}

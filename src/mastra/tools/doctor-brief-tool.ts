@@ -1,5 +1,6 @@
 import { createTool } from "@mastra/core/tools";
 import { z } from "zod";
+import { formatDoctorBrief } from "../lib/brief";
 
 /**
  * Drafts a doctor brief from information the user has chosen to share.
@@ -20,28 +21,8 @@ export const doctorBriefTool = createTool({
     brief: z.string(),
     needsReview: z.literal(true),
   }),
-  execute: async ({ reason, medications, allergies, history, questions }) => {
-    const list = (items: string[], fallback: string) =>
-      items.length ? items.map((i) => `- ${i}`).join("\n") : fallback;
-
-    const brief = [
-      "MY HEALTH BRIEF (review and complete before sharing)",
-      "",
-      `Reason for visit: ${reason}`,
-      "",
-      "Medications:",
-      list(medications, "- [Add your prescribed medication and dose.]"),
-      "",
-      "Allergies:",
-      list(allergies, "- Not yet confirmed."),
-      "",
-      "Relevant history:",
-      list(history, "- Not yet confirmed."),
-      "",
-      "Questions for the doctor:",
-      list(questions, "- What records do you need?"),
-    ].join("\n");
-
-    return { brief, needsReview: true as const };
-  },
+  execute: async (input) => ({
+    brief: formatDoctorBrief(input),
+    needsReview: true as const,
+  }),
 });
