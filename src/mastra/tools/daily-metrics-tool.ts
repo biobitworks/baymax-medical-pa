@@ -1,6 +1,8 @@
 import { createTool } from "@mastra/core/tools";
 import { z } from "zod";
 import { getRecentMetrics, summarizeMetrics } from "../lib/health-data";
+import { importedHealth } from '../lib/health-reader';
+import { summarizeAppleHealth } from '../lib/apple-health';
 
 /**
  * Reads the user's daily movement, hydration, and sleep data. Hardcoded sample
@@ -20,22 +22,24 @@ export const dailyMetricsTool = createTool({
       .describe("How many of the most recent days to return (Y)"),
   }),
   outputSchema: z.object({
+    source: z.enum(['demo', 'apple_health']),
+    lastSyncAt: z.string().nullable(),
     daily: z.array(
       z.object({
         date: z.string().describe("YYYY-MM-DD"),
-        steps: z.number(),
-        activeMinutes: z.number(),
-        hydrationMl: z.number(),
-        sleepHours: z.number(),
+        steps: z.number().nullable(),
+        activeMinutes: z.number().nullable(),
+        hydrationMl: z.number().nullable(),
+        sleepHours: z.number().nullable(),
       }),
     ),
     summary: z.object({
       days: z.number(),
       averages: z.object({
-        steps: z.number(),
-        activeMinutes: z.number(),
-        hydrationMl: z.number(),
-        sleepHours: z.number(),
+        steps: z.number().nullable(),
+        activeMinutes: z.number().nullable(),
+        hydrationMl: z.number().nullable(),
+        sleepHours: z.number().nullable(),
       }),
       daysBelowTarget: z.object({
         hydration: z.number(),
@@ -52,8 +56,10 @@ export const dailyMetricsTool = createTool({
       observations: z.array(z.string()),
     }),
   }),
-  execute: async ({ days }) => {
+  execute: async ({ days }, context) => {
+    const health = await importedHealth(context, days);
+    if (health.connected) return { source: 'apple_health' as const, lastSyncAt: health.lastSyncAt, daily: health.daily, summary: summarizeAppleHealth(health.daily) };
     const daily = getRecentMetrics(days);
-    return { daily, summary: summarizeMetrics(daily) };
+    return { source: 'demo' as const, lastSyncAt: null, daily, summary: summarizeMetrics(daily) };
   },
 });

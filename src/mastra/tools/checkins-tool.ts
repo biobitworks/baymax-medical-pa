@@ -5,6 +5,7 @@ import {
   getRecentCheckins,
   summarizeCheckins,
 } from "../lib/health-data";
+import { importedHealth } from '../lib/health-reader';
 
 /**
  * Reads the user's daily "How's your energy?" check-ins (Low / Okay / Good /
@@ -39,7 +40,9 @@ export const recentCheckinsTool = createTool({
       observations: z.array(z.string()),
     }),
   }),
-  execute: async ({ count }) => {
+  execute: async ({ count }, context) => {
+    const health = await importedHealth(context);
+    if (health.connected) return { checkins: [], summary: { ...summarizeCheckins([]), observations: ['Apple Health does not supply Baymax energy check-ins. Use the care workspace context or ask the user how they feel.'] } };
     const checkins = getRecentCheckins(count);
     return { checkins, summary: summarizeCheckins(checkins) };
   },
