@@ -54,8 +54,11 @@ export async function queryLabSeries(
   const wanted = (query.biomarkers ?? []).map((b) => ({ raw: b, key: norm(b) }));
   const panelKey = query.panel ? norm(query.panel) : undefined;
 
+  // No biomarkers or panel given: plot everything (e.g. "my latest bloodwork").
+  const selectAll = wanted.length === 0 && !panelKey;
   const picked = rows.filter((r) => {
     if (query.since && r.date < query.since) return false;
+    if (selectAll) return true;
     // Biomarkers and panel are combined: a row matching either is included.
     if (panelKey && norm(r.panel ?? "").includes(panelKey)) return true;
     const k = norm(r.biomarker);
