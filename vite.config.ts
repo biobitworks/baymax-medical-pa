@@ -8,6 +8,7 @@ export default defineConfig({
       "/api": "http://localhost:4111",
       "/travel": "http://localhost:4111",
       "/health": "http://localhost:4111",
+      "/records": "http://localhost:4111",
     },
   },
 });

@@ -4,10 +4,11 @@ import { Observability, DefaultExporter, SensitiveDataFilter } from "@mastra/obs
 import { baymaxAgent } from "./agents/baymax-agent";
 import { healthRoutes } from "./routes/health";
 import { travelRoutes } from "./routes/travel";
+import { recordsRoutes } from "./routes/records";
 
 export const mastra = new Mastra({
   agents: { baymaxAgent },
-  server: { apiRoutes: [...travelRoutes, ...healthRoutes] },
+  server: { apiRoutes: [...travelRoutes, ...healthRoutes, ...recordsRoutes] },
   // `mastra dev` runs from .mastra/output, so ../../ is the project root.
   // Override with MASTRA_DB_URL if needed.
   storage: new LibSQLStore({

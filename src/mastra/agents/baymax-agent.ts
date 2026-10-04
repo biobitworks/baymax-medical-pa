@@ -5,6 +5,8 @@ import { userInfoTool } from "../tools/user-info-tool";
 import { recentCheckinsTool } from "../tools/checkins-tool";
 import { dailyMetricsTool } from "../tools/daily-metrics-tool";
 import { recentRunsTool } from "../tools/runs-tool";
+import { labTrendsTool } from "../tools/lab-trends-tool";
+import { listRecordsTool, readRecordTool } from "../tools/records-tool";
 
 export const baymaxAgent = new Agent({
   id: "baymax-agent",
@@ -19,6 +21,8 @@ What you do:
 - Look up the current user's profile (name, conditions, medications) with the get-user-info tool to personalize your help.
 - Check the user's recent energy check-ins (get-recent-checkins) and daily movement, hydration, and sleep data (get-daily-metrics) to spot trends. Check the user's recent runs (get-recent-runs) when they ask about running or fitness. Do all of this proactively before creating care plans or doctor briefs, and when the user says they feel tired or off. Share trends gently as observations, never as diagnoses.
 - When the user asks for a summary or review of their week, call get-recent-checkins (count 7), get-daily-metrics (days 7), and get-recent-runs (count 7) together, then reply with a short, warm overview: one line each for energy, water, movement, sleep, and running, the one or two trends that stand out (and how they might connect), and a single gentle suggestion. Keep it brief because the app shows a card for each metric.
+- Medical records: use list-medical-records to see the user's records (labs, vitals, conditions, and any files they attached in this chat), then read-medical-record to pull one into context. Do this when the user asks about labs, results, vitals, or an attached file. Quote only what the records say and never diagnose from them.
+- Charts: when the user wants to see, graph or compare bloodwork over time, call show-lab-trends (biomarkers or panel, optional since). The app draws the chart card, so do not re-list every number; add a short, gentle read of the trend and suggest questions for their doctor.
 - Create editable care plans with the create-care-plan tool.
 - Draft doctor briefs with the draft-doctor-brief tool, using only information the user has shared.
 - Help the user prepare questions for clinicians and pharmacists.
@@ -48,5 +52,8 @@ Style: caring, concise, and a little cheeky. Ask one clarifying question at a ti
     recentCheckinsTool,
     dailyMetricsTool,
     recentRunsTool,
+    listRecordsTool,
+    readRecordTool,
+    labTrendsTool,
   },
 });

@@ -12,9 +12,12 @@ import {
   ThreadPrimitive,
   ComposerPrimitive,
   MessagePrimitive,
+  AttachmentPrimitive,
+  type AttachmentAdapter,
   type ChatModelAdapter,
   makeAssistantToolUI,
 } from "@assistant-ui/react";
+import { LabTrendsCard, type LabTrendsArgs } from "./components/LabTrendsCard";
 import {
   ArrowUp,
   ArrowUpRight,
@@ -100,6 +103,7 @@ type RunSummary = {
 };
 type MetricKey = "hydration" | "movement" | "sleep";
 type HealthCardArgs =
+  | LabTrendsArgs
   | {
       metric: MetricKey;
       /** Newest first, as returned by get-daily-metrics */
@@ -136,7 +140,7 @@ const healthCardPart = (args: HealthCardArgs): AgentToolPart => ({
   args,
   argsText: JSON.stringify(args.metric),
   result: { ready: true },
-  metric: args.metric,
+  metric: args.metric === "labs" ? `labs:${args.title}` : args.metric,
 });
 function healthCardsFromTool(toolName: string, result: any): HealthCardArgs[] {
   if (!result || typeof result !== "object") return [];
@@ -155,6 +159,16 @@ function healthCardsFromTool(toolName: string, result: any): HealthCardArgs[] {
   if (toolName === "recentCheckinsTool" && Array.isArray(result.checkins)) {
     return [
       { metric: "energy", checkins: result.checkins, summary: result.summary },
+    ];
+  }
+  if (toolName === "labTrendsTool" && Array.isArray(result.series)) {
+    return [
+      {
+        metric: "labs",
+        title: result.title ?? "Lab trends",
+        series: result.series,
+        unmatched: result.unmatched,
+      },
     ];
   }
   return [];
@@ -585,16 +599,70 @@ const TOOL_TO_CARD: Record<string, string> = {
   carePlanTool: "plan",
   doctorBriefTool: "brief",
 };
+// Identifies this chat session so uploaded files can be pulled in by the
+// agent's records tools (sent as request context).
+const CONVERSATION_ID = crypto.randomUUID();
+const TEXT_FILE_ACCEPT = ".txt,.md,.csv,.tsv,.json,.xml,.log,text/*,application/json";
+// Uploads go to the server as conversation artifacts; the agent reads them
+// with list-medical-records / read-medical-record rather than inline text.
+const attachmentAdapter: AttachmentAdapter = {
+  accept: TEXT_FILE_ACCEPT,
+  async add({ file }) {
+    return {
+      id: crypto.randomUUID(),
+      type: "document",
+      name: file.name,
+      contentType: file.type || "text/plain",
+      file,
+      status: { type: "requires-action", reason: "composer-send" },
+    };
+  },
+  async send(attachment) {
+    const res = await fetch("/records/upload", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        conversationId: CONVERSATION_ID,
+        name: attachment.name,
+        content: await attachment.file.text(),
+      }),
+    });
+    const body = (await res.json().catch(() => ({}))) as {
+      record?: { id: string };
+      error?: string;
+    };
+    if (!res.ok || !body.record)
+      throw new Error(body.error ?? `Upload failed (${res.status})`);
+    return {
+      ...attachment,
+      id: body.record.id,
+      status: { type: "complete" },
+      content: [
+        {
+          type: "text",
+          text: `[Attached record "${attachment.name}", id ${body.record.id}]`,
+        },
+      ],
+    };
+  },
+  async remove() {},
+};
 const adapter: ChatModelAdapter = {
   async *run(options) {
     const { messages, abortSignal } = options;
     const history = messages
       .map((m) => ({
         role: m.role,
-        content: m.content
-          .filter((p) => p.type === "text")
-          .map((p) => (p as { text: string }).text)
-          .join(" "),
+        content: [
+          ...m.content
+            .filter((p) => p.type === "text")
+            .map((p) => (p as { text: string }).text),
+          ...(m.role === "user" ? (m.attachments ?? []) : []).flatMap((a) =>
+            a.content
+              .filter((p) => p.type === "text")
+              .map((p) => (p as { text: string }).text),
+          ),
+        ].join(" "),
       }))
       .filter(
         (m) => (m.role === "user" || m.role === "assistant") && m.content,
@@ -609,7 +677,10 @@ const adapter: ChatModelAdapter = {
       res = await fetch(AGENT_STREAM_URL, {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ messages: history }),
+        body: JSON.stringify({
+          messages: history,
+          requestContext: { conversationId: CONVERSATION_ID },
+        }),
         signal: abortSignal,
       });
       if (!res.ok || !res.body) throw new Error(`agent ${res.status}`);
@@ -928,7 +999,9 @@ const CareTool = makeAssistantToolUI<
 const HealthTool = makeAssistantToolUI<HealthCardArgs, { ready: boolean }>({
   toolName: "health_card",
   render: ({ args }) =>
-    args.metric === "energy" ? (
+    args.metric === "labs" ? (
+      <LabTrendsCard {...args} />
+    ) : args.metric === "energy" ? (
       <EnergyCard {...args} />
     ) : args.metric === "running" ? (
       <RunCard {...args} />
@@ -994,9 +1067,31 @@ function MarkdownText({ text }: { text: string }) {
   flushList();
   return <div className="md">{blocks}</div>;
 }
+function ComposerAttachment() {
+  return (
+    <AttachmentPrimitive.Root className="attachment-chip">
+      <FileText size={14} />
+      <AttachmentPrimitive.Name />
+      <AttachmentPrimitive.Remove aria-label="Remove attachment">
+        <X size={13} />
+      </AttachmentPrimitive.Remove>
+    </AttachmentPrimitive.Root>
+  );
+}
+function MessageAttachment() {
+  return (
+    <AttachmentPrimitive.Root className="attachment-chip">
+      <FileText size={14} />
+      <AttachmentPrimitive.Name />
+    </AttachmentPrimitive.Root>
+  );
+}
 function UserMessage() {
   return (
     <MessagePrimitive.Root className="message user">
+      <MessagePrimitive.Attachments
+        components={{ Attachment: MessageAttachment }}
+      />
       <MessagePrimitive.Content />
     </MessagePrimitive.Root>
   );
@@ -1013,7 +1108,9 @@ function AssistantMessage() {
 }
 function Chat() {
   const [showShopping, setShowShopping] = useState(false);
-  const runtime = useLocalRuntime(adapter);
+  const runtime = useLocalRuntime(adapter, {
+    adapters: { attachments: attachmentAdapter },
+  });
   const { setResponding } = useContext(MascotActivity);
   useEffect(() => {
     const sync = () => setResponding(runtime.thread.getState().isRunning);
@@ -1086,6 +1183,16 @@ function Chat() {
           ))}
         </div>
         <ComposerPrimitive.Root className="composer">
+          <ComposerPrimitive.Attachments
+            components={{ Attachment: ComposerAttachment }}
+          />
+          <ComposerPrimitive.AddAttachment
+            className="attach"
+            aria-label="Attach a medical record"
+            title="Attach a text file (txt, md, csv, json)"
+          >
+            <Plus size={19} />
+          </ComposerPrimitive.AddAttachment>
           <ComposerPrimitive.Input
             placeholder="Tell Baymax what you need…"
             aria-label="Message Baymax"
