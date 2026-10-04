@@ -1981,6 +1981,26 @@ function App() {
                         onChange={(e) => setSubject(e.target.value)}
                       />
                     </label>
+                    <a
+                      className="pdf-preview"
+                      href="/health/summary.pdf"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="Open your health summary PDF in a new tab"
+                    >
+                      <span className="pdf-preview-frame">
+                        <iframe
+                          title="Health summary preview"
+                          src="/health/summary.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH"
+                          tabIndex={-1}
+                          loading="lazy"
+                        />
+                      </span>
+                      <span className="pdf-preview-meta">
+                        <b>Health summary (PDF)</b>
+                        <small>Medications, bloodwork and more. Click to preview the full document. Attach it to your email from there.</small>
+                      </span>
+                    </a>
                     <button className="primary" type="submit">
                       <Mail size={16} />
                       Review email

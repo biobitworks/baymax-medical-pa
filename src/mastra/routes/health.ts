@@ -1,6 +1,7 @@
 import { getFitnessOverview } from "../lib/fitness-data";
 import { registerApiRoute } from "@mastra/core/server";
 import { z } from "zod";
+import { loadHealthSummary, renderHealthSummaryPdf } from "../lib/health-summary-pdf";
 import {
   ENERGY_LEVELS,
   addHydration,
@@ -39,6 +40,22 @@ const runBody = z.object({
  * agent tools use, so the agent always sees what the user sees.
  */
 export const healthRoutes = [
+  // Stylized PDF of everything Baymax holds on the user. Served inline so the
+  // browser previews it rather than downloading.
+  registerApiRoute("/health/summary.pdf", {
+    method: "GET",
+    handler: async (c) => {
+      const data = await loadHealthSummary({ requestContext: c.get("requestContext") });
+      const pdf = await renderHealthSummaryPdf(data);
+      return new Response(pdf as unknown as BodyInit, {
+        headers: {
+          "content-type": "application/pdf",
+          "content-disposition": 'inline; filename="baymax-health-summary.pdf"',
+          "cache-control": "no-store",
+        },
+      });
+    },
+  }),
   registerApiRoute("/health/fitness", {
     method: "GET",
     handler: async (c) => {
