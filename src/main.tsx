@@ -46,6 +46,9 @@ import {
   formatDoctorBrief,
 } from "./mastra/lib/brief";
 import "./style.css";
+import Mascot, { MascotActivity } from "./Mascot";
+import { PrescriptionShoppingCard } from "./components/PrescriptionShoppingCard";
+import "./components/prescription-shopping.css";
 
 // Triggers the agent to read all of the user's health data and answer with a
 // week-in-review, which also renders the water, movement, sleep, energy and
@@ -573,70 +576,6 @@ function ModalShell({
     </dialog>
   );
 }
-function Mascot({ small = false }: { small?: boolean }) {
-  return (
-    <svg
-      className={`mascot ${small ? "small" : ""}`}
-      viewBox="0 0 300 330"
-      role="img"
-      aria-label="Baymax gently waving"
-    >
-      <defs>
-        <linearGradient id="body" x1="0" y1="0" x2="1" y2="1">
-          <stop stopColor="#fff" />
-          <stop offset="1" stopColor="#e1e5e0" />
-        </linearGradient>
-      </defs>
-      <ellipse cx="150" cy="308" rx="83" ry="12" fill="#294633" opacity=".09" />
-      <g className="bay-body">
-        <ellipse cx="124" cy="278" rx="28" ry="33" fill="url(#body)" />
-        <ellipse cx="179" cy="278" rx="28" ry="33" fill="url(#body)" />
-        <ellipse
-          cx="151"
-          cy="207"
-          rx="82"
-          ry="92"
-          fill="url(#body)"
-          stroke="#dbe0d9"
-        />
-        <ellipse
-          cx="69"
-          cy="210"
-          rx="22"
-          ry="64"
-          transform="rotate(15 69 210)"
-          fill="url(#body)"
-        />
-        <g className="wave">
-          <ellipse
-            cx="240"
-            cy="157"
-            rx="22"
-            ry="64"
-            transform="rotate(-35 240 157)"
-            fill="url(#body)"
-          />
-          <ellipse cx="263" cy="109" rx="23" ry="27" fill="url(#body)" />
-        </g>
-        <ellipse
-          cx="151"
-          cy="105"
-          rx="64"
-          ry="44"
-          fill="url(#body)"
-          stroke="#e0e4df"
-        />
-        <path d="M126 106h50" stroke="#252f2c" strokeWidth="3" />
-        <g className="eyes">
-          <circle cx="123" cy="106" r="6" fill="#252f2c" />
-          <circle cx="179" cy="106" r="6" fill="#252f2c" />
-        </g>
-        <circle cx="184" cy="169" r="9" fill="#f8faf7" stroke="#cbd3cb" />
-        <path d="M180 169h8m-4-4v8" stroke="#b3beb2" />
-      </g>
-    </svg>
-  );
-}
 // Mastra-backed adapter: streams text from the Baymax agent (proxied to the
 // Mastra server by Vite at /api). Agent tool calls decide which care card to
 // show; prescription and travel have no agent tool yet, so keywords pick them.
@@ -838,8 +777,6 @@ function CareCard({
   diabetes?: boolean;
 }) {
   const c = useContext(CareContext)!;
-  const [approved, setApproved] = useState(false);
-  const [ordered, setOrdered] = useState(false);
   return (
     <div className="agent-card">
       <div className="agent-card-top">
@@ -861,87 +798,7 @@ function CareCard({
         </span>
       </div>
       {kind === "purchase" ? (
-        <>
-          <div className="order-title">
-            <span className="stat-icon green">
-              <Heart size={21} />
-            </span>
-            <div>
-              <h3>Your {diabetes ? "diabetes " : ""}medication refill</h3>
-              <p>Continuing your existing prescription while travelling</p>
-            </div>
-          </div>
-          <div className="order-steps">
-            {[
-              "Prepare existing prescription details",
-              "Match a licensed local pharmacy",
-              "Verify prescription with a pharmacist",
-              "Review medication, price, and fulfilment",
-            ].map((step, i) => (
-              <div key={step}>
-                <span className={i < 2 ? "step ready" : "step"}>
-                  {i < 2 ? <Check size={12} /> : i + 1}
-                </span>
-                <span>
-                  {step}
-                  <small>
-                    {i < 2
-                      ? "Preview prepared"
-                      : i === 2
-                        ? "Professional verification required"
-                        : "Your approval required"}
-                  </small>
-                </span>
-              </div>
-            ))}
-          </div>
-          <div className="order-summary">
-            <span>
-              Medication<b>As prescribed by your clinician</b>
-            </span>
-            <span>
-              Delivery<b>Confirm with pharmacy</b>
-            </span>
-            <span>
-              Total<b>Awaiting pharmacy quote</b>
-            </span>
-          </div>
-          {ordered ? (
-            <div className="order-success">
-              <Check size={18} />
-              <div>
-                <b>Order journey previewed</b>
-                <small>
-                  No purchase has been made. A pharmacy must verify and fulfil
-                  the prescription.
-                </small>
-              </div>
-            </div>
-          ) : (
-            <>
-              <label className="consent">
-                <input
-                  type="checkbox"
-                  checked={approved}
-                  onChange={(e) => setApproved(e.target.checked)}
-                />
-                I want to review the purchase journey for my existing
-                prescription.
-              </label>
-              <button
-                className="primary"
-                disabled={!approved}
-                onClick={() => setOrdered(true)}
-              >
-                Preview order confirmation <ArrowUpRight size={15} />
-              </button>
-              <p className="fine">
-                No purchase yet. Prescription verification and payment happen
-                with a licensed pharmacy.
-              </p>
-            </>
-          )}
-        </>
+        <PrescriptionShoppingCard />
       ) : kind === "plan" ? (
         <>
           <h3>Build something great. Feel good doing it.</h3>
@@ -1155,14 +1012,22 @@ function AssistantMessage() {
   );
 }
 function Chat() {
+  const [showShopping, setShowShopping] = useState(false);
   const runtime = useLocalRuntime(adapter);
+  const { setResponding } = useContext(MascotActivity);
+  useEffect(() => {
+    const sync = () => setResponding(runtime.thread.getState().isRunning);
+    sync();
+    const unsubscribe = runtime.thread.subscribe(sync);
+    return () => { unsubscribe(); setResponding(false); };
+  }, [runtime, setResponding]);
   return (
     <AssistantRuntimeProvider runtime={runtime}>
       <CareTool />
       <HealthTool />
       <ThreadPrimitive.Root className="chat">
         <ThreadPrimitive.Viewport className="transcript">
-          <ThreadPrimitive.Empty>
+          {!showShopping && <ThreadPrimitive.Empty>
             <div className="chat-welcome">
               <Mascot small />
               <h2>Hello. I am Baymax.</h2>
@@ -1185,12 +1050,20 @@ function Chat() {
                 ))}
               </div>
             </div>
-          </ThreadPrimitive.Empty>
+          </ThreadPrimitive.Empty>}
           <ThreadPrimitive.Messages
             components={{ UserMessage, AssistantMessage }}
           />
+          {showShopping && <PrescriptionShoppingCard />}
         </ThreadPrimitive.Viewport>
+        <ThreadPrimitive.If running>
+          <div className="bay-response" role="status">
+            <span className="bay-response-dots" aria-hidden="true"><i /><i /><i /></span>
+            Baymax is responding…
+          </div>
+        </ThreadPrimitive.If>
         <div className="quick-actions">
+          <button type="button" onClick={() => setShowShopping(value => !value)} aria-expanded={showShopping}>{showShopping ? "Hide shopping demo" : "Shopping demo"}</button>
           {[
             { label: "Weekly summary", prompt: WEEKLY_SUMMARY_PROMPT },
             {
@@ -1245,6 +1118,7 @@ const nav = [
   ["Doctor brief", FileText],
 ] as const;
 function App() {
+  const [responding, setResponding] = useState(false);
   const [page, setPage] = useState("Talk to Baymax");
   const [modal, setModal] = useState("");
   const [name, setName] = useState("Alex");
@@ -1402,6 +1276,7 @@ function App() {
     setMobile(false);
   };
   return (
+    <MascotActivity.Provider value={{ responding, setResponding }}>
     <CareContext.Provider
       value={{
         done,
@@ -2240,6 +2115,7 @@ function App() {
         )}
       </div>
     </CareContext.Provider>
+    </MascotActivity.Provider>
   );
 }
 createRoot(document.getElementById("root")!).render(
