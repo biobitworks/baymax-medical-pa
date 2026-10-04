@@ -34,7 +34,11 @@ function findDataDir(): string {
 export async function seedProfile(q: Query, options: SeedOptions = {}) {
   const userId = options.userId ?? DEMO_USER_ID;
   const dir = options.dataDir ?? findDataDir();
-  const files = existsSync(dir) ? readdirSync(dir).filter((f) => TEXT_EXTENSIONS.includes(extOf(f))).sort() : [];
+  // *-followup-* files are the upload demo input (the user attaches them in chat),
+  // so they must not be preloaded as history or used as the baseline profile.
+  const files = existsSync(dir)
+    ? readdirSync(dir).filter((f) => TEXT_EXTENSIONS.includes(extOf(f)) && !/-followup-/.test(f)).sort()
+    : [];
   const jsonFile = files.find((f) => extOf(f) === ".json");
   const health = jsonFile ? JSON.parse(readFileSync(join(dir, jsonFile), "utf8")) : {};
   const profile = health.profile ?? { name: "Jordan Mercer" };

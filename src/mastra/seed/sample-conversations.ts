@@ -49,7 +49,7 @@ export const SAMPLE_CONVERSATIONS = (today: Date): SampleConversation[] => [
     when: daysAgo(today, 1, 18),
     turns: [{
       user: "What do my latest HbA1c and glucose results mean?",
-      assistant: "From your records: on 2026-08-12 your HbA1c was 6.7% (flagged above the 5.6% reference) and fasting glucose was 132 mg/dL. In April they were 6.9% and 141 mg/dL, so both have moved down a little. I can't diagnose anything, but this is a good trend to bring to your next appointment. Would you like me to draft a short brief with these numbers and a few questions for your doctor?",
+      assistant: "From your records: on 2026-07-04 your HbA1c was 6.7% (flagged above the 5.6% reference) and fasting glucose was 132 mg/dL. On 2026-04-04 they were 6.9% and 141 mg/dL, so both have moved down a little. I can't diagnose anything, but this is a good trend to bring to your next appointment. Would you like me to draft a short brief with these numbers and a few questions for your doctor?",
     }, {
       user: "Yes, what questions should I ask?",
       assistant: "A few to consider: What HbA1c target makes sense for me? How often should I be retested? Are there lifestyle changes you'd prioritize first, like movement, meals, or sleep? Is there anything in my lipid panel (ApoB and LDL were flagged above range) we should follow up on together?",

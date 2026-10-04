@@ -39,7 +39,7 @@ test('seeding twice is idempotent', async () => {
 test('lab trends come from Postgres and dedupe the JSON and CSV copies', async () => {
   const { series } = await queryLabSeries({ biomarkers: ['HbA1c'] }, undefined, ctx);
   assert.equal(series.length, 1);
-  assert.deepEqual(series[0].points, [{ date: '2026-04-15', value: 6.9 }, { date: '2026-08-12', value: 6.7 }]);
+  assert.deepEqual(series[0].points, [{ date: '2026-04-04', value: 6.9 }, { date: '2026-07-04', value: 6.7 }]);
 });
 test('check-ins, water, and runs persist', async () => {
   await saveCheckin('great', 'Synthetic note', ctx);
