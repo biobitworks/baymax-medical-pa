@@ -133,8 +133,105 @@ function Mascot({ small = false }: { small?: boolean }) {
     </svg>
   );
 }
-// UI-first fixture adapter. Replace this boundary with a Mastra-backed API.
+// Mastra-backed adapter: streams text from the Baymax agent (proxied to the
+// Mastra server by Vite at /api). Agent tool calls decide which care card to
+// show; prescription and travel have no agent tool yet, so keywords pick them.
+// Falls back to the fixture adapter if the agent server is unreachable.
+const AGENT_STREAM_URL = "/api/agents/baymaxAgent/stream";
+const TOOL_TO_CARD: Record<string, string> = {
+  carePlanTool: "plan",
+  doctorBriefTool: "brief",
+};
 const adapter: ChatModelAdapter = {
+  async *run(options) {
+    const { messages, abortSignal } = options;
+    const history = messages
+      .map((m) => ({
+        role: m.role,
+        content: m.content
+          .filter((p) => p.type === "text")
+          .map((p) => (p as { text: string }).text)
+          .join(" "),
+      }))
+      .filter(
+        (m) => (m.role === "user" || m.role === "assistant") && m.content,
+      );
+    const lastUser =
+      history.filter((m) => m.role === "user").at(-1)?.content.toLowerCase() ||
+      "";
+    let res: Response;
+    try {
+      res = await fetch(AGENT_STREAM_URL, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ messages: history }),
+        signal: abortSignal,
+      });
+      if (!res.ok || !res.body) throw new Error(`agent ${res.status}`);
+    } catch (err) {
+      if (abortSignal.aborted) return;
+      console.warn("Agent unavailable, using fixture responses.", err);
+      yield* fixtureAdapter.run(options) as AsyncGenerator<never>;
+      return;
+    }
+
+    let text = "";
+    let cardKind: string | undefined;
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = "";
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const events = buffer.split("\n\n");
+      buffer = events.pop() ?? "";
+      for (const event of events) {
+        const line = event.split("\n").find((l) => l.startsWith("data: "));
+        if (!line) continue;
+        let chunk: { type?: string; payload?: Record<string, unknown> };
+        try {
+          chunk = JSON.parse(line.slice(6));
+        } catch {
+          continue;
+        }
+        if (chunk.type === "text-delta") {
+          text += String(chunk.payload?.text ?? "");
+          yield { content: [{ type: "text", text }] };
+        } else if (chunk.type === "tool-call") {
+          cardKind = TOOL_TO_CARD[String(chunk.payload?.toolName)] ?? cardKind;
+        }
+      }
+    }
+    if (abortSignal.aborted) return;
+
+    const keywordKind = lastUser.includes("diabet") ||
+      lastUser.includes("refill") ||
+      lastUser.includes("buy")
+      ? "purchase"
+      : lastUser.includes("travel") || lastUser.includes("prescription")
+        ? "travel"
+        : undefined;
+    const kind = cardKind ?? keywordKind;
+    if (!kind) return;
+    const diabetes = lastUser.includes("diabet");
+    yield {
+      content: [
+        { type: "text", text },
+        {
+          type: "tool-call",
+          toolCallId: crypto.randomUUID(),
+          toolName: "care_action",
+          args: { kind, diabetes },
+          argsText: JSON.stringify({ kind, diabetes }),
+          result: { ready: true },
+        },
+      ],
+    };
+  },
+};
+// UI-first fixture adapter, kept as an offline fallback.
+const fixtureAdapter: ChatModelAdapter = {
   async *run({ messages, abortSignal }) {
     const query =
       messages
