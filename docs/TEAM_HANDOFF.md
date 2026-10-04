@@ -34,11 +34,13 @@ Credential receipts may record only variable name plus `PRESENT`/`ABSENT` and sa
 
 ## Current custody state
 
-Latest admitted breakpoint: `BAYMAX-BP-0012`.
+Externally pushed custody anchor immediately preceding this handoff-document correction: `BAYMAX-BP-0014`.
 
-BP-0012 Merkle root: `e8a593c91e31e00989e945713764fa79e90622eb8081391458e7aa306c8c5714`
+BP-0014 Merkle root: `350f2ece7b680b096254000d5d1bedb0ecf50bde702b3ef34e5466fc6243a3dd`
 
-Chain head: `7b220de3b18944275cb0440ec08cba1c6a36c2274306440f183ef7f6a25a8786`
+BP-0014 chain head: `3650351d94563a9b55eccefee4bbc6be2e35d559f84580238563f0722c501c4a`
+
+This document is expected to be admitted by a successor breakpoint; therefore it intentionally names its parent anchor rather than claiming its own future root.
 
 `verify_chain.py` is authoritative for current custody semantics. `MMR_STATE=NOT_COMPUTED`. Git signing remains `BLOCKED_HUMAN_SIGNING_SETUP`.
 
