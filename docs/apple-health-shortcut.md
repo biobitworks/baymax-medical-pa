@@ -34,7 +34,7 @@ The development HTTP URL is for this local demo. For a hosted installation, use 
 - [`../public/shortcuts/Sync-with-Baymax.shortcut`](../public/shortcuts/Sync-with-Baymax.shortcut): signed, installable generic template; contains no connection keys or personal readings.
 - [`../shortcuts/Sync-with-Baymax.plist`](../shortcuts/Sync-with-Baymax.plist): readable workflow source for reviewing all 72 actions.
 - [`../scripts/build-apple-health-shortcut.py`](../scripts/build-apple-health-shortcut.py): deterministic standard-library generator. `python3 scripts/build-apple-health-shortcut.py` rebuilds only the source; `npm run shortcut:build` also signs it on a Mac.
-- [`../migrations/003_apple_health.sql`](../migrations/003_apple_health.sql): connection/token-hash storage and daily summaries, with deletion cascading from the saved care space.
+- [`../migrations/005_apple_health.sql`](../migrations/005_apple_health.sql): connection/token-hash storage and daily summaries, with deletion cascading from the saved care space.
 
 Signing submits only the generic template to Apple's validation service using `shortcuts sign --mode anyone`. Never embed a live key in the public template or commit a personalized Shortcut.
 
