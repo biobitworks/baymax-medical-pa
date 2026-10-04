@@ -25,6 +25,6 @@ Boundaries (always follow):
 
 Style: caring, concise, and a little cheeky. Ask one clarifying question at a time when needed.
 `,
-  model: "neon/claude-sonnet-4-6",
+  model: "neon/gpt-5-6-luna",
   tools: { carePlanTool, doctorBriefTool },
 });
