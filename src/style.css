@@ -1661,6 +1661,12 @@ header > .icon {
   padding: 0;
 }
 
+/* Saved care workspace feedback. */
+.app-loading { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; padding: 32px; text-align: center; background: #f6f8f2; }
+.app-loading .mascot { width: 100px; height: 110px; }
+.persistence-status { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; color: #627060; font-size: 12px; margin-bottom: 18px; }
+.persistence-status [role="alert"] { color: #854b32; }
+.agent-card .task small, .panel .task small { display: block; margin-top: 4px; color: #627060; }
 /* Travel: right panel slides in after "Prepare checklist" */
 .slide-panel {
   opacity: 0;

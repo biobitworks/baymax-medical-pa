@@ -1,5 +1,7 @@
 import React, {
   useState,
+  useMemo,
+  useCallback,
   useEffect,
   useRef,
   createContext,
@@ -12,7 +14,7 @@ import {
   ThreadPrimitive,
   ComposerPrimitive,
   MessagePrimitive,
-  type ChatModelAdapter,
+  type ExportedMessageRepository,
   makeAssistantToolUI,
 } from "@assistant-ui/react";
 import {
@@ -45,6 +47,10 @@ import {
   formatDoctorBrief,
 } from "./mastra/lib/brief";
 import "./style.css";
+import { createAgentAdapter } from "./chat/adapter";
+import { applyToolResult, historicalCard } from "./chat/cards";
+import { useCareWorkspace } from "./persistence/use-care-workspace";
+import { type CareWorkspace, type StoredConversation } from "./shared/workspace";
 
 function ModalShell({
   children,
@@ -137,163 +143,11 @@ function Mascot({ small = false }: { small?: boolean }) {
     </svg>
   );
 }
-// Mastra-backed adapter: streams text from the Baymax agent (proxied to the
-// Mastra server by Vite at /api). Agent tool calls decide which care card to
-// show; prescription and travel have no agent tool yet, so keywords pick them.
-// Falls back to the fixture adapter if the agent server is unreachable.
-const AGENT_STREAM_URL = "/api/agents/baymaxAgent/stream";
-const TOOL_TO_CARD: Record<string, string> = {
-  carePlanTool: "plan",
-  doctorBriefTool: "brief",
-};
-const adapter: ChatModelAdapter = {
-  async *run(options) {
-    const { messages, abortSignal } = options;
-    const history = messages
-      .map((m) => ({
-        role: m.role,
-        content: m.content
-          .filter((p) => p.type === "text")
-          .map((p) => (p as { text: string }).text)
-          .join(" "),
-      }))
-      .filter(
-        (m) => (m.role === "user" || m.role === "assistant") && m.content,
-      );
-    const lastUser =
-      history
-        .filter((m) => m.role === "user")
-        .at(-1)
-        ?.content.toLowerCase() || "";
-    let res: Response;
-    try {
-      res = await fetch(AGENT_STREAM_URL, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ messages: history }),
-        signal: abortSignal,
-      });
-      if (!res.ok || !res.body) throw new Error(`agent ${res.status}`);
-    } catch (err) {
-      if (abortSignal.aborted) return;
-      console.warn("Agent unavailable, using fixture responses.", err);
-      yield* fixtureAdapter.run(options) as AsyncGenerator<never>;
-      return;
-    }
-
-    let text = "";
-    let cardKind: string | undefined;
-    const reader = res.body.getReader();
-    const decoder = new TextDecoder();
-    let buffer = "";
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      buffer += decoder.decode(value, { stream: true });
-      const events = buffer.split("\n\n");
-      buffer = events.pop() ?? "";
-      for (const event of events) {
-        const line = event.split("\n").find((l) => l.startsWith("data: "));
-        if (!line) continue;
-        let chunk: { type?: string; payload?: Record<string, unknown> };
-        try {
-          chunk = JSON.parse(line.slice(6));
-        } catch {
-          continue;
-        }
-        if (chunk.type === "text-delta") {
-          text += String(chunk.payload?.text ?? "");
-          yield { content: [{ type: "text", text }] };
-        } else if (chunk.type === "tool-call") {
-          cardKind = TOOL_TO_CARD[String(chunk.payload?.toolName)] ?? cardKind;
-        }
-      }
-    }
-    if (abortSignal.aborted) return;
-
-    const keywordKind =
-      lastUser.includes("diabet") ||
-      lastUser.includes("refill") ||
-      lastUser.includes("buy")
-        ? "purchase"
-        : lastUser.includes("travel") || lastUser.includes("prescription")
-          ? "travel"
-          : undefined;
-    const kind = cardKind ?? keywordKind;
-    if (!kind) return;
-    const diabetes = lastUser.includes("diabet");
-    yield {
-      content: [
-        { type: "text", text },
-        {
-          type: "tool-call",
-          toolCallId: crypto.randomUUID(),
-          toolName: "care_action",
-          args: { kind, diabetes },
-          argsText: JSON.stringify({ kind, diabetes }),
-          result: { ready: true },
-        },
-      ],
-    };
-  },
-};
-// UI-first fixture adapter, kept as an offline fallback.
-const fixtureAdapter: ChatModelAdapter = {
-  async *run({ messages, abortSignal }) {
-    const query =
-      messages
-        .at(-1)
-        ?.content.filter((p) => p.type === "text")
-        .map((p) => p.text)
-        .join(" ")
-        .toLowerCase() || "";
-    const diabetes = query.includes("diabet");
-    const kind =
-      query.includes("doctor") || query.includes("brief")
-        ? "brief"
-        : diabetes || query.includes("buy") || query.includes("refill")
-          ? "purchase"
-          : query.includes("travel") ||
-              query.includes("prescription") ||
-              query.includes("medication")
-            ? "travel"
-            : query.includes("hackathon") || query.includes("plan")
-              ? "plan"
-              : "checkin";
-    const responses = {
-      purchase: `I’ve prepared a refill order preview for your prescribed ${diabetes ? "diabetes " : ""}medication. Review the steps below before anything is purchased.`,
-      brief:
-        "Let’s bring your context to your next doctor. Review and edit the brief below, then prepare an email. Nothing is shared automatically.",
-      travel:
-        "Let’s get your care ready for the trip. Bring your existing prescription and medication documents, and confirm refill requirements with a local clinician or pharmacist.",
-      plan: "Let’s make room for you in the build schedule. Choose your date and check off a small win. Meals, movement, and a wind-down break belong on the plan, too.",
-      checkin: query.includes("sleep")
-        ? "A busy brain deserves a softer landing. Let’s check in on your energy and make space for a wind-down break."
-        : "I’m here. A small step counts. Let’s check in with your energy and take one thing at a time.",
-    };
-    const text = responses[kind];
-    for (let i = 0; i < text.length; i += 18) {
-      await new Promise((resolve) => setTimeout(resolve, 35));
-      if (abortSignal.aborted) return;
-      yield { content: [{ type: "text", text: text.slice(0, i + 18) }] };
-    }
-    if (abortSignal.aborted) return;
-    yield {
-      content: [
-        { type: "text", text },
-        {
-          type: "tool-call",
-          toolCallId: crypto.randomUUID(),
-          toolName: "care_action",
-          args: { kind, diabetes },
-          argsText: JSON.stringify({ kind, diabetes }),
-          result: { ready: true },
-        },
-      ],
-    };
-  },
-};
 type CareState = {
+  activePlanId: string | null;
+  activeBriefId: string | null;
+  activateCard: (kind: "plan" | "brief", result: unknown, toolCallId: string) => void;
+  planItems: CareWorkspace["planItems"];
   done: string[];
   toggle: (s: string) => void;
   date: string;
@@ -317,13 +171,25 @@ const CareContext = createContext<CareState | null>(null);
 function CareCard({
   kind,
   diabetes = false,
+  toolCallId,
+  result,
 }: {
   kind: string;
   diabetes?: boolean;
+  toolCallId: string;
+  result: unknown;
 }) {
   const c = useContext(CareContext)!;
   const [approved, setApproved] = useState(false);
   const [ordered, setOrdered] = useState(false);
+  const snapshot = historicalCard(c, kind, toolCallId, result);
+  if (snapshot) return (
+    <div className="agent-card">
+      <div className="agent-card-top"><span className="agent-symbol">✦</span><span>{snapshot.kind === "plan" ? "EARLIER PLAN" : "EARLIER DOCTOR BRIEF"}</span></div>
+      {snapshot.kind === "plan" ? <><h3>{snapshot.data.title}</h3>{snapshot.data.items.map((item, index) => <p key={index}>{item.done ? "✓ " : "○ "}{item.label}{item.when ? ` · ${item.when}` : ""}</p>)}</> : <textarea className="chat-brief" aria-label="Earlier doctor brief" readOnly value={snapshot.data.brief} />}
+      <button className="outline" onClick={() => c.activateCard(snapshot.kind, snapshot.data, toolCallId)}>Use this {snapshot.kind === "plan" ? "plan" : "brief"}</button>
+    </div>
+  );
   return (
     <div className="agent-card">
       <div className="agent-card-top">
@@ -428,7 +294,7 @@ function CareCard({
         </>
       ) : kind === "plan" ? (
         <>
-          <h3>Build something great. Feel good doing it.</h3>
+          <h3>{c.goal}</h3>
           <div className="inline-fields">
             <label>
               Event
@@ -446,16 +312,12 @@ function CareCard({
               />
             </label>
           </div>
-          {[
-            "Take a 10-minute walk",
-            "Make time for a real meal",
-            "Set a wind-down reminder",
-          ].map((t) => (
+          {c.planItems.map(({ label: t, when }) => (
             <button className="task" onClick={() => c.toggle(t)} key={t}>
               <span className={`check ${c.done.includes(t) ? "checked" : ""}`}>
                 {c.done.includes(t) && <Check size={13} />}
               </span>
-              <b>{t}</b>
+              <span><b>{t}</b>{when && <small>{when}</small>}</span>
             </button>
           ))}
           <button className="text-btn" onClick={c.checkin}>
@@ -547,10 +409,10 @@ function CareCard({
 }
 const CareTool = makeAssistantToolUI<
   { kind: string; diabetes?: boolean },
-  { ready: boolean }
+  unknown
 >({
   toolName: "care_action",
-  render: ({ args }) => <CareCard kind={args.kind} diabetes={args.diabetes} />,
+  render: ({ args, result, toolCallId }) => <CareCard kind={args.kind} diabetes={args.diabetes} result={result} toolCallId={toolCallId} />,
 });
 function UserMessage() {
   return (
@@ -564,11 +426,51 @@ function AssistantMessage() {
     <MessagePrimitive.Root className="message assistant">
       <span className="assistant-label">✦ Baymax</span>
       <MessagePrimitive.Content />
+      <MessagePrimitive.Error>
+        <p role="alert" className="notice">Baymax couldn’t complete that response. Please try sending your message again.</p>
+      </MessagePrimitive.Error>
     </MessagePrimitive.Root>
   );
 }
-function Chat() {
+function Chat({ conversation, onConversation, onToolResult, workspace }: {
+  conversation: StoredConversation;
+  onConversation: (conversation: StoredConversation) => void;
+  onToolResult: (kind: "plan" | "brief", result: unknown, toolCallId: string) => void;
+  workspace: CareWorkspace;
+}) {
+  const current = useRef({ workspace, onToolResult, onConversation });
+  current.current = { workspace, onToolResult, onConversation };
+  const adapter = useMemo(() => createAgentAdapter({
+    onToolResult: (kind, result, id) => current.current.onToolResult(kind, result, id),
+    getContext: () => {
+      const w = current.current.workspace;
+      return { name: w.name, goal: w.goal, date: w.date, planItems: w.planItems, city: w.city, travelDate: w.travelDate, brief: w.brief, energy: w.energy };
+    },
+  }), []);
   const runtime = useLocalRuntime(adapter);
+  const initialConversation = useRef(conversation);
+  const restored = useRef(false);
+  const lastExport = useRef(JSON.stringify(conversation));
+  useEffect(() => {
+    if (!restored.current) {
+      restored.current = true;
+      const repository = initialConversation.current;
+      runtime.thread.import({ ...repository, messages: repository.messages.map(item => ({ ...item, message: { ...item.message, createdAt: new Date(item.message.createdAt) } })) } as unknown as ExportedMessageRepository);
+    }
+    const unsubscribe = runtime.thread.subscribe(() => {
+      if (runtime.thread.getState().isRunning) return;
+      const serialized = JSON.stringify(runtime.thread.export());
+      if (serialized !== lastExport.current) {
+        lastExport.current = serialized;
+        current.current.onConversation(JSON.parse(serialized));
+      }
+    });
+    const beforeUnload = (event: BeforeUnloadEvent) => {
+      if (runtime.thread.getState().isRunning && current.current.workspace.remember) { event.preventDefault(); event.returnValue = ""; }
+    };
+    window.addEventListener("beforeunload", beforeUnload);
+    return () => { window.removeEventListener("beforeunload", beforeUnload); unsubscribe(); runtime.thread.cancelRun(); };
+  }, [runtime]);
   return (
     <AssistantRuntimeProvider runtime={runtime}>
       <CareTool />
@@ -658,31 +560,40 @@ const nav = [
 function App() {
   const [page, setPage] = useState("Talk to Baymax");
   const [modal, setModal] = useState("");
-  const [name, setName] = useState("Alex");
-  const [ready, setReady] = useState(false);
-  const [energy, setEnergy] = useState("");
-  const [done, setDone] = useState<string[]>([]);
-  const [water, setWater] = useState(3);
-  const [reminders, setReminders] = useState(true);
-  const [nudge, setNudge] = useState("Gentle");
-  const [city, setCity] = useState("San Francisco");
-  const [travelDate, setTravelDate] = useState("2026-10-09");
-  const [date, setDate] = useState("2026-10-10");
-  const [goal, setGoal] = useState("Build Personal Agents Hackathon");
-  const [brief, setBrief] = useState(
-    "MY HEALTH BRIEF — review and complete before sharing\n\nPatient: [Your name]\nReason for visit: Establishing care while travelling.\nMedications: [Add your prescribed medication and dose.]\nAllergies: Not yet confirmed.\nRelevant history: Not yet confirmed.\nQuestions: What records do you need? How can I arrange follow-up care?",
-  );
-  const [recipient, setRecipient] = useState("");
-  const [subject, setSubject] = useState("My health brief for our appointment");
+  const persistence = useCareWorkspace();
+  const { workspace, setWorkspace, setField } = persistence;
+  const { name, ready, energy, done, water, reminders, nudge, city, travelDate, date, goal, brief, recipient, subject, planItems, tripReady, checklist } = workspace;
+  const setName = (value: string) => setField("name", value);
+  const setReady = (value: boolean) => setField("ready", value);
+  const setEnergy = (value: CareWorkspace["energy"]) => setField("energy", value);
+  const setWater = (value: number) => setField("water", value);
+  const setReminders = (value: boolean) => setField("reminders", value);
+  const setNudge = (value: string) => setField("nudge", value as CareWorkspace["nudge"]);
+  const setCity = (value: string) => setField("city", value);
+  const setTravelDate = (value: string) => setField("travelDate", value);
+  const setDate = (value: string) => setField("date", value);
+  const setGoal = (value: string) => setField("goal", value);
+  const setBrief = (value: string) => setField("brief", value);
+  const setRecipient = (value: string) => setField("recipient", value);
+  const setSubject = (value: string) => setField("subject", value);
+  const onConversation = useCallback((conversation: StoredConversation) => setField("conversation", conversation), [setField]);
+  const onToolResult = useCallback((kind: "plan" | "brief", result: unknown, toolCallId: string) => {
+    setWorkspace(previous => applyToolResult(previous, kind, result, toolCallId));
+  }, [setWorkspace]);
   const [emailConsent, setEmailConsent] = useState(false);
   const [toast, setToast] = useState("");
-  const [tripReady, setTripReady] = useState(false);
-  const [checklist, setChecklist] = useState<string[]>([]);
+  const setTripReady = (value: boolean) => setField("tripReady", value);
+  const setChecklist = (value: string[]) => setField("checklist", value);
   const [checklistLoading, setChecklistLoading] = useState(false);
   const [briefLoading, setBriefLoading] = useState(false);
   const [mobile, setMobile] = useState(false);
-  const toggle = (s: string) =>
-    setDone((d) => (d.includes(s) ? d.filter((x) => x !== s) : [...d, s]));
+  const toggle = (label: string) => setWorkspace(previous => {
+    const checked = !previous.done.includes(label);
+    return { ...previous,
+      done: checked ? [...previous.done, label] : previous.done.filter(item => item !== label),
+      planItems: previous.planItems.map(item => item.label === label ? { ...item, done: checked } : item),
+    };
+  });
   const notify = (s: string) => {
     setToast(s);
     setTimeout(() => setToast(""), 3500);
@@ -756,9 +667,20 @@ function App() {
     setPage(s);
     setMobile(false);
   };
+  if (persistence.loading || persistence.loadError) return (
+    <div className="app-loading" role="status">
+      <Mascot small />
+      <h2>{persistence.loading ? "Opening your care space…" : "We couldn’t open your saved care space."}</h2>
+      {persistence.loadError && !persistence.loading && <><p>Your saved information will be kept until we can restore it.</p><button className="primary" onClick={() => void persistence.retry()}>Try again</button></>}
+    </div>
+  );
   return (
     <CareContext.Provider
       value={{
+        activePlanId: workspace.activePlanId,
+        activeBriefId: workspace.activeBriefId,
+        activateCard: onToolResult,
+        planItems,
         done,
         toggle,
         date,
@@ -861,6 +783,10 @@ function App() {
             </button>
           </header>
           <div className="content">
+            <div className="persistence-status" role="status">
+              <ShieldCheck size={14} /><span>{persistence.status}</span>
+              {persistence.error && <><span role="alert">{persistence.error}</span><button className="text-btn" disabled={persistence.busy} onClick={async () => { if (await persistence.retry()) { setModal(""); setPage("Talk to Baymax"); } }}>Try again</button></>}
+            </div>
             <div className="page-heading">
               <div>
                 <p className="eyebrow">A LITTLE CARE GOES A LONG WAY</p>
@@ -1080,7 +1006,7 @@ function App() {
               hidden={page !== "Talk to Baymax"}
               className="panel chat-panel"
             >
-              <Chat />
+              <Chat key={persistence.resetKey} conversation={workspace.conversation} workspace={workspace} onConversation={onConversation} onToolResult={onToolResult} />
             </section>
             {page === "Your plan" && (
               <div className="two-col">
@@ -1111,20 +1037,14 @@ function App() {
                 </section>
                 <section className="panel">
                   <h2>Your daily preparation</h2>
-                  {[
-                    "Take a 10-minute walk",
-                    "Make time for a real meal",
-                    "Pack medication documents",
-                    "Set a wind-down reminder",
-                    "Schedule your next routine checkup",
-                  ].map((s) => (
+                  {planItems.map(({ label: s, when }) => (
                     <button className="task" key={s} onClick={() => toggle(s)}>
                       <span
                         className={`check ${done.includes(s) ? "checked" : ""}`}
                       >
                         {done.includes(s) && <Check size={13} />}
                       </span>
-                      <b>{s}</b>
+                      <span><b>{s}</b>{when && <small>{when}</small>}</span>
                     </button>
                   ))}
                   <button
@@ -1328,17 +1248,20 @@ function App() {
                     </select>
                   </label>
                   <p className="notice">
-                    Preference saved for this session:{" "}
-                    {reminders ? nudge : "Nudges off"}. Your preferences apply
-                    while you’re here.
+                    Your preference: {reminders ? nudge : "Nudges off"}.
+                    {workspace.remember ? " Remembered for your next visit." : " Applies while you’re here."}
                   </p>
                 </section>
                 <section className="panel">
                   <ShieldCheck className="green-text" size={30} />
                   <h2>Privacy comes first.</h2>
+                  <label className="consent">
+                    <input type="checkbox" checked={workspace.remember} disabled={persistence.busy} onChange={e => void persistence.changeMemory(e.target.checked)} />
+                    Remember across visits
+                  </label>
                   <p>
-                    Your information stays in this session. Refreshing clears
-                    your profile, check-ins, and conversations.
+                    Save your profile, care plans, check-ins, preferences, and conversation for your next visit in this browser.
+                    Turning this off deletes the saved copy and keeps your current care space for this visit.
                   </p>
                   <p className="fine">
                     Choose what you share. Review any brief before opening it in
@@ -1351,7 +1274,7 @@ function App() {
                     }}
                   >
                     <RotateCcw size={15} />
-                    Reset my session
+                    Delete my care space
                   </button>
                 </section>
               </div>
@@ -1405,8 +1328,12 @@ function App() {
                   maxLength={30}
                 />
               </label>
+              <label className="consent">
+                <input type="checkbox" checked={workspace.remember} onChange={e => setField("remember", e.target.checked)} />
+                Remember my care space across visits in this browser.
+              </label>
               <p className="fine">
-                Your space, your pace. You choose what to share.
+                Your space, your pace. You can delete saved information in Privacy & preferences.
               </p>
               <button
                 className="primary"
@@ -1439,7 +1366,7 @@ function App() {
                     {["Low", "Okay", "Good", "Great"].map((s, i) => (
                       <button
                         className={energy === s ? "selected" : ""}
-                        onClick={() => setEnergy(s)}
+                        onClick={() => setEnergy(s as CareWorkspace["energy"])}
                         key={s}
                       >
                         <span>{["☁", "◒", "☀", "✦"][i]}</span>
@@ -1524,14 +1451,18 @@ function App() {
                 <>
                   <h2>Start fresh?</h2>
                   <p>
-                    This clears your check-ins, tasks, and preferences. Your
-                    downloaded brief stays on your device.
+                    This deletes your saved profile, care plans, check-ins, preferences, brief, and conversation.
+                    Your downloaded brief stays on your device.
                   </p>
+                  {persistence.error && <p role="alert" className="notice">{persistence.error}</p>}
                   <button
                     className="primary"
-                    onClick={() => window.location.reload()}
+                    disabled={persistence.busy}
+                    onClick={async () => {
+                      if (await persistence.reset()) { setModal(""); setPage("Talk to Baymax"); }
+                    }}
                   >
-                    Reset session
+                    {persistence.busy ? "Deleting…" : "Delete and start fresh"}
                   </button>
                 </>
               )}
