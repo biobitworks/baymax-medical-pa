@@ -28,6 +28,14 @@ Edit a fictional health brief, enter a sample recipient, and review the email dr
 
 ![Doctor brief email walkthrough](docs/media/doctor-email.gif)
 
+### Mobile reminders: medication, refills and movement
+
+A playful mobile notification concept uses short Baymax nudges, bright action buttons, and small-win celebrations while asking you to take your scheduled medication as prescribed, buy your next refill, and start a ten-minute walk. Each reminder opens a corresponding care action. The lock screen and care screens are simulated using fictional information; live push delivery and refill purchases are not connected.
+
+![Mobile notification demo: medication, refills and exercise](docs/media/mobile-notifications.gif)
+
+[Watch the MP4 recording](docs/media/mobile-notifications.mp4). After starting the app, open `/demo/notifications.html` to replay the interactive demo. Re-record it with `npm run record:notifications` while the production preview is running (default: `http://localhost:4181`, configurable with `BAYMAX_DEMO_URL`). Requires FFmpeg and Playwright Chromium.
+
 ### Our 2D companion
 
 An authored sprite companion with greeting, idle breathing and blinking, and thinking animations. The preview shows the artwork enlarged and at its actual header size. The app respects reduced-motion preferences.
@@ -36,7 +44,7 @@ An authored sprite companion with greeting, idle breathing and blinking, and thi
 
 ## Run locally
 
-Requires Node.js 22+.
+Requires Node.js 22.22+ or 24.11+ (Node.js 24 LTS recommended).
 
 ```bash
 npm ci
@@ -106,6 +114,22 @@ npm run preview
 - Optional Neon persistence for profile, check-ins, hydration, movement/weekly overview, tasks, plans, travel context and generated checklist, brief/email draft, preferences, and conversation including tool results.
 - Clear restore/save errors, retry controls, optimistic revisions, and user-controlled deletion.
 - Mobile and desktop layouts, keyboard-accessible dialogs, and reduced-motion support.
+
+## Install Baymax on your phone (PWA)
+
+The production frontend is an installable Progressive Web App with a standalone window and Baymax home-screen icons.
+
+- **Android / Chrome:** open the hosted app and tap **Install Baymax** when available, or use the browser’s install menu.
+- **iPhone / iPad:** open the hosted app in Safari, choose **Share → Add to Home Screen → Add**. The in-app install button shows these instructions.
+- **Desktop:** use Chrome or Edge’s install option when available.
+
+Installation requires HTTPS hosting (localhost is allowed for development). The normal Vite development server does not register a worker. Test the production version with `npm run build` followed by `npm run preview`. A plain HTTP address on your local network will not enable phone installation.
+
+Only public JavaScript, CSS, icons, the manifest and a static offline page are stored in the service-worker cache. Conversations, health profiles, API responses and travel responses are not cached by the worker. When opened offline, Baymax shows a reconnect page; chat still needs a network connection. Installation does not add persistent health memory or background reminders.
+
+New versions wait until you select **Update now**. Updating reloads the app and clears its current session; **Later** preserves your active session. The included Nginx configuration revalidates files and serves missing worker/manifest assets as 404s.
+
+Verify PWA behavior with `npx playwright install chromium` (once) and `npm run test:pwa`. The suite checks manifest/icons, installation controls, offline/reconnect behavior, sensitive request exclusion and update consent. Regenerate the checked-in PNG icons with `npm run icons`.
 
 ## Sponsor integration status
 

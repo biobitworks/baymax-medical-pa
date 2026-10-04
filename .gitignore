@@ -3,4 +3,6 @@ dist/
 .env.*
 !.env.example
 .mastra/
+test-results/
+playwright-report/
 mastra.db*

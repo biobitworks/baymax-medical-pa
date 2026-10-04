@@ -53,6 +53,7 @@ import {
   formatDoctorBrief,
 } from "./mastra/lib/brief";
 import "./style.css";
+import { PwaControls } from "./pwa/PwaControls";
 import { initializeHealthOverview } from "./persistence/health-overview";
 import { createAgentAdapter } from "./chat/adapter";
 import { conversationsApi, relativeTime, EMPTY_CONVERSATION, type ConversationSummary } from "./chat/conversations-client";
@@ -2213,5 +2214,6 @@ function App() {
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <App />
+    <PwaControls />
   </React.StrictMode>,
 );
