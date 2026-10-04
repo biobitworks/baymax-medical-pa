@@ -1,0 +1,149 @@
+.computer-view { --computer-green: #359780; display: grid; gap: 18px; color: #33443b; min-width: 0; }
+.computer-heading, .computer-toolbar, .computer-toolbar > div, .computer-browser-meta, .computer-editor-actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.computer-heading { height: auto; padding: 0; margin: 0; max-width: none; position: static; }
+.computer-eyebrow { font-size: 10px; letter-spacing: 1.6px; color: #7a8e80; font-weight: 800; }
+.computer-heading h2 { font: 700 27px/1.3 Manrope, sans-serif; margin: 8px 0; letter-spacing: -.7px; }
+.computer-heading p, .computer-help { color: #718074; font-size: 13px; line-height: 1.65; margin: 0; }
+.computer-view button { display: inline-flex; align-items: center; justify-content: center; gap: 7px; border: 1px solid transparent; border-radius: 10px; padding: 10px 14px; background: var(--computer-green); color: white; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; }
+.computer-view button.computer-secondary { background: white; color: #496256; border-color: #dce7df; }
+.computer-view button:disabled { opacity: .5; cursor: default; }
+.computer-view :is(input, textarea, select) { display: block; box-sizing: border-box; width: 100%; padding: 10px 12px; background: white; color: #33443b; border: 1px solid #dce7df; border-radius: 9px; font: inherit; font-size: 13px; min-width: 0; }
+.computer-view textarea { resize: vertical; }
+.computer-view :is(button, input, textarea, select, summary):focus-visible { outline: 3px solid #82b9a8; outline-offset: 3px; }
+.computer-view label { display: grid; gap: 7px; font-size: 12px; font-weight: 650; color: #536a5d; min-width: 0; }
+.computer-view h3 { font: 700 17px Manrope, sans-serif; }
+.computer-error, .computer-notice { padding: 13px 16px; border-radius: 10px; font-size: 13px; line-height: 1.6; overflow-wrap: anywhere; }
+.computer-error { color: #a24238; background: #fff0ec; border: 1px solid #f2d1c9; }
+.computer-notice { background: #eaf5ee; color: #2a7158; }
+.computer-unlock { max-width: 530px; width: 100%; box-sizing: border-box; margin: 20px auto; padding: 30px; background: white; border: 1px solid #e0e9e2; border-radius: 18px; }
+.computer-unlock > svg { color: var(--computer-green); }
+.computer-unlock p { font-size: 13px; line-height: 1.8; color: #718074; }
+.computer-unlock form { display: grid; gap: 12px; margin: 22px 0; }
+.computer-unlock details { font-size: 12px; color: #607769; }
+.computer-unlock summary { cursor: pointer; }
+.computer-toolbar { padding: 12px 16px; border: 1px solid #e0e9e2; border-radius: 12px; background: white; }
+.computer-state { display: inline-flex; align-items: center; gap: 8px; color: #718074; font-size: 12px; }
+.computer-state i { height: 7px; width: 7px; border-radius: 50%; background: #94a299; }
+.computer-state.is-running i { background: var(--computer-green); }
+.computer-tabs { display: flex; gap: 6px; padding: 4px; background: #eaf0ea; border-radius: 12px; width: fit-content; }
+.computer-tabs button { background: transparent; color: #728276; min-width: 115px; }
+.computer-tabs button[aria-selected=true] { background: white; color: #2f7862; box-shadow: 0 2px 6px #2c4a3610; }
+.computer-panel { padding: 22px; background: white; border: 1px solid #e0e9e2; border-radius: 15px; min-width: 0; display: grid; gap: 18px; }
+.computer-command { display: grid; gap: 14px; }
+.computer-command textarea { min-height: 80px; font-family: ui-monospace, monospace; }
+.computer-command button { justify-self: start; }
+.computer-receipts { display: grid; gap: 12px; }
+.computer-receipt { padding: 16px; border-radius: 10px; color: #dce9e1; background: #253c31; min-width: 0; }
+.computer-receipt > div { display: flex; align-items: start; justify-content: space-between; gap: 12px; font-size: 12px; }
+.computer-receipt code { white-space: pre-wrap; overflow-wrap: anywhere; }
+.computer-receipt > div span { flex-shrink: 0; color: #a9c7b5; }
+.computer-receipt small { display: block; color: #9ab5a4; margin-top: 8px; }
+.computer-receipt pre, .computer-page-read pre { font: 12px/1.7 ui-monospace, monospace; white-space: pre-wrap; overflow-wrap: anywhere; }
+.computer-receipt p { font-size: 12px; color: #bccdbf; }
+.computer-receipt .computer-stderr { color: #ffc5b9; }
+.computer-empty { color: #86958b; font-size: 13px; padding: 20px 0; }
+.computer-address { display: flex; align-items: end; gap: 9px; min-width: 0; }
+.computer-grow { flex: 1; }
+.computer-files { display: grid; grid-template-columns: minmax(175px, .8fr) minmax(0, 1.5fr); gap: 20px; }
+.computer-file-list { padding: 12px; border: 1px solid #e3ebe5; border-radius: 10px; min-width: 0; }
+.computer-file-list > strong { display: block; font: 12px ui-monospace, monospace; color: #728276; overflow-wrap: anywhere; margin: 4px 0 12px; }
+.computer-file-list .computer-file-entry { width: 100%; justify-content: start; background: #f5f8f4; color: #4d6758; padding: 10px; margin: 3px 0; text-align: left; }
+.computer-file-entry span { flex: 1; overflow-wrap: anywhere; }
+.computer-file-entry small { font-size: 10px; color: #8a9b8e; white-space: nowrap; }
+.computer-file-editor { display: grid; gap: 12px; }
+.computer-file-editor textarea { min-height: 260px; font-family: ui-monospace, monospace; }
+.computer-editor-actions { justify-content: start; flex-wrap: wrap; }
+.computer-editor-actions span { font-size: 11px; color: #819286; }
+.computer-browser-meta { font-size: 12px; color: #728276; min-width: 0; }
+.computer-browser-meta span { overflow-wrap: anywhere; }
+.computer-browser-meta button { flex-shrink: 0; }
+.computer-view .computer-screen { display: block; padding: 0; border: 1px solid #dce7df; background: #eff4ef; width: 100%; overflow: hidden; aspect-ratio: 1280 / 800; border-radius: 8px; cursor: crosshair; }
+.computer-screen img { width: 100%; height: 100%; display: block; object-fit: fill; }
+.computer-screen-empty { display: grid; justify-items: center; align-content: center; gap: 10px; min-height: 220px; background: #f4f7f2; border: 1px dashed #d6e0d7; border-radius: 10px; color: #819486; font-size: 13px; text-align: center; padding: 15px; }
+.computer-browser-controls { display: flex; flex-wrap: wrap; align-items: end; gap: 9px; }
+.computer-browser-controls label { width: 130px; }
+.computer-page-read { background: #f5f8f4; border: 1px solid #e0e9e2; border-radius: 10px; padding: 16px; overflow-wrap: anywhere; }
+.computer-page-read h3 { margin-top: 0; }
+.computer-page-read small { color: #7d8f82; }
+@media (max-width: 650px) {
+  .computer-heading { align-items: start; }
+  .computer-heading h2 { font-size: 22px; }
+  .computer-heading button { font-size: 0; padding: 10px; }
+  .computer-heading button svg { width: 17px; }
+  .computer-panel { padding: 14px; }
+  .computer-toolbar { align-items: start; flex-direction: column; }
+  .computer-toolbar > div { width: 100%; justify-content: end; }
+  .computer-tabs { width: auto; }
+  .computer-tabs button { min-width: 0; flex: 1; padding: 10px; }
+  .computer-address { flex-wrap: wrap; }
+  .computer-address > label { flex-basis: 100%; }
+  .computer-files { grid-template-columns: 1fr; }
+  .computer-file-list { max-height: 240px; overflow-y: auto; }
+  .computer-unlock { padding: 24px; margin-top: 0; }
+}
+/* The shared computer is a window in a cyan frame, with its real tools in the dock. */
+.computer-view { --computer-green: #058db6; gap: 0; background: #fff; color: #244450; height: 100%; min-height: 0; grid-template-rows: auto minmax(0, 1fr); }
+.computer-heading { background: #eff2f3; border-bottom: 1px solid #e3e9eb; padding: 8px 14px; gap: 8px; }
+.computer-title-tab { display: flex; align-items: center; gap: 10px; background: white; padding: 11px 17px; border-radius: 12px; box-shadow: 0 2px 3px #233e4805; min-width: 0; }
+.computer-heading h2 { font: 600 15px/1.3 Manrope, sans-serif; margin: 0; letter-spacing: -.2px; }
+.computer-view .computer-lock { background: transparent; border: 0; color: #71848c; font-size: 11px; padding: 8px; }
+.computer-stage { display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 0; min-height: 0; overflow-y: auto; padding: 48px 24px; }
+.computer-frame { flex-shrink: 0; width: 100%; max-width: 1060px; min-width: 0; box-sizing: border-box; position: relative; padding: 45px 38px 64px; border: 4px solid #04b7f0; border-radius: 27px; background: linear-gradient(140deg, #08cbea, #00a6e0); box-shadow: 0 16px 25px #22455516; }
+.computer-window { min-width: 0; background: #f9fcfc; border: 1px solid #008fb94d; border-radius: 9px; overflow: hidden; box-shadow: 0 7px 22px #047e9923; }
+.computer-panel { border: 0; border-radius: 0; padding: 18px; gap: 15px; max-height: min(65vh, 740px); overflow-y: auto; background: #f8fcfc; }
+.computer-panel:has(.computer-welcome), .computer-panel:has(.computer-screen) { background: #e6f5f7; }
+.computer-panel:has(.computer-welcome) { padding-bottom: 0; }
+.computer-toolbar { background: #eef7f8; border-color: #dcecef; padding: 10px; flex-wrap: wrap; }
+.computer-toolbar > div { flex-wrap: wrap; }
+.computer-state { color: #627e88; }
+.computer-tabs { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); display: flex; gap: 4px; width: max-content; max-width: calc(100% - 16px); padding: 5px; background: #ffffff23; border: 1px solid #ffffff44; border-radius: 13px; box-shadow: 0 4px 12px #087b9a12; }
+.computer-tabs button { display: grid; justify-items: center; gap: 4px; min-width: 66px; padding: 6px 9px; border-radius: 8px; font-size: 10px; color: #fff; }
+.computer-tabs button svg { width: 22px; height: 22px; }
+.computer-tabs button[aria-selected=true] { background: #ffffffdf; color: #087fa1; box-shadow: 0 2px 4px #126b8920; }
+.computer-handoff { display: flex; justify-content: center; align-items: center; gap: 12px; border-radius: 0 0 24px 24px; padding: 12px 18px; background: white; box-shadow: 0 8px 24px #203c4910; font-size: 13px; color: #3c5059; min-width: 0; flex-shrink: 0; }
+.computer-handoff.has-control { background: #05afe5; color: white; }
+.computer-handoff button { background: #243039; border-radius: 22px; padding: 9px 13px; font-size: 11px; }
+.computer-handoff.has-control button { background: #008dc8; }
+.computer-welcome { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 330px; padding: 28px 18px; gap: 15px; background: radial-gradient(ellipse at 15% 15%, #fff8, transparent 40%), #e6f5f7; color: #176680; }
+.computer-welcome h3 { font-size: 23px; letter-spacing: -.6px; margin: 0; }
+.computer-welcome p { font-size: 13px; max-width: 330px; line-height: 1.7; margin: 0; color: #5e8d9a; }
+.computer-welcome small { color: #6e97a1; font-size: 11px; line-height: 1.7; }
+.computer-baymax { width: 94px; height: 68px; border-radius: 48% 48% 44% 44%; display: flex; align-items: center; justify-content: center; background: #fff; box-shadow: 0 7px 0 #b9e2ea, 0 14px 20px #55aac119; margin-bottom: 5px; }
+.computer-baymax i { width: 9px; height: 9px; background: #26383e; border-radius: 50%; }
+.computer-baymax span { width: 29px; height: 2px; background: #26383e; }
+.computer-launchers { display: flex; justify-content: center; gap: 14px; margin: 7px 0; max-width: 100%; }
+.computer-launchers button.computer-secondary { display: flex; flex-direction: column; gap: 10px; background: #ffffffc4; border: 1px solid #ffffff; padding: 16px 10px; width: 105px; color: #24748b; box-shadow: 0 5px 10px #298da10a; font-size: 11px; }
+.computer-launchers button:disabled { opacity: .65; }
+.computer-view .computer-screen { border-color: #c4e4ed; border-radius: 4px; background: #e6f5f7; }
+.computer-view .computer-screen:disabled { opacity: 1; cursor: default; }
+.computer-input-disclosure { font-size: 12px; color: #4d7a86; }
+.computer-input-disclosure summary { padding: 4px 0; cursor: pointer; }
+.computer-input-disclosure[open] { display: grid; gap: 12px; }
+.computer-input-disclosure > :not(summary) { margin-top: 12px; }
+.computer-unlock { margin: 0 auto; max-width: 470px; background: transparent; border: 0; padding: 30px 25px; }
+.computer-error, .computer-notice { margin: 10px; padding: 10px 12px; font-size: 12px; }
+@media (max-width: 1000px) {
+ .computer-frame { padding: 24px 20px 64px; }
+ .computer-stage { padding: 28px 15px; }
+ .computer-files { grid-template-columns: 1fr; }
+ .computer-address { flex-wrap: wrap; }
+ .computer-address > label { flex-basis: 100%; }
+ .computer-launchers { gap: 8px; }
+ .computer-launchers button.computer-secondary { width: 90px; }
+}
+@media (max-width: 650px) {
+ .computer-stage { justify-content: flex-start; overflow: visible; padding: 22px 10px 30px; }
+ .computer-view { height: auto; }
+ .computer-frame { padding: 16px 10px 64px; border-width: 3px; border-radius: 22px; }
+ .computer-heading h2 { font-size: 13px; }
+ .computer-heading button { font-size: 0; }
+ .computer-panel { padding: 12px; max-height: none; }
+ .computer-welcome { min-height: 310px; padding: 24px 5px; }
+ .computer-welcome h3 { font-size: 20px; }
+ .computer-launchers { gap: 5px; width: 100%; }
+ .computer-launchers button.computer-secondary { flex: 1; width: auto; min-width: 0; padding: 12px 4px; font-size: 10px; }
+ .computer-tabs { width: max-content; }
+ .computer-tabs button { min-width: 65px; flex: 0; }
+ .computer-handoff { font-size: 12px; gap: 8px; padding: 10px 12px; }
+ .computer-unlock { padding: 23px 14px; }
+}

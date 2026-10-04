@@ -1,3 +1,5 @@
+import { Computer } from "./components/Computer";
+import { ComputerActionCard, type ComputerActionArgs } from "./components/ComputerActionCard";
 import React, {
   useState,
   useMemo,
@@ -26,6 +28,7 @@ import {
   Heart,
   LayoutDashboard,
   MessageCircle,
+  Monitor,
   Plane,
   FileText,
   ShieldCheck,
@@ -54,6 +57,7 @@ import {
 } from "./mastra/lib/brief";
 import { TravelAdvisories, loadingResearch, type TravelResearch } from "./components/TravelAdvisories";
 import "./style.css";
+import "./components/computer-workspace.css";
 import { PwaControls } from "./pwa/PwaControls";
 import { initializeHealthOverview } from "./persistence/health-overview";
 import { createAgentAdapter } from "./chat/adapter";
@@ -114,6 +118,7 @@ type RunSummary = {
 };
 type MetricKey = "hydration" | "movement" | "sleep";
 type HealthCardArgs =
+  | ComputerActionArgs
   | LabTrendsArgs
   | { metric: "fitness"; overview: FitnessOverview }
   | { metric: "onboarding"; preferences: SavedPreferences }
@@ -158,6 +163,11 @@ const healthCardPart = (args: HealthCardArgs): AgentToolPart => ({
 });
 function healthCardsFromTool(toolName: string, result: any): HealthCardArgs[] {
   if (!result || typeof result !== "object") return [];
+  if (['computerTool', 'use-baymax-computer'].includes(toolName) && typeof result.action === 'string') {
+    const data = result.data;
+    const content = result.error || (data && typeof data === 'object' && 'stdout' in data ? [data.stdout, data.stderr, `Exit: ${data.exitCode ?? 'unknown'}`, data.timedOut ? 'Timed out' : '', data.interrupted ? 'Interrupted' : '', data.truncated ? 'Output truncated' : ''].filter(Boolean).join('\n') : JSON.stringify(data ?? {}));
+    return [{metric:'computer', action:result.action, ok:result.ok === true, summary:String(content).slice(0,4000)}];
+  }
   if (toolName === "fitnessOverviewTool" && Array.isArray(result.daily)) {
     return [{ metric: "fitness", overview: result }];
   }
@@ -860,7 +870,9 @@ const CareTool = makeAssistantToolUI<
 const HealthTool = makeAssistantToolUI<HealthCardArgs, { ready: boolean }>({
   toolName: "health_card",
   render: ({ args }) =>
-    args.metric === "labs" ? (
+    args.metric === "computer" ? (
+      <ComputerActionCard {...args} />
+    ) : args.metric === "labs" ? (
       <LabTrendsCard {...args} />
     ) : args.metric === "fitness" ? (
       <FitnessDashboard initialData={args.overview} compact />
@@ -1229,6 +1241,7 @@ const nav = [
   ["Running", Activity],
   ["Travel care", Plane],
   ["Doctor brief", FileText],
+  ["Computer", Monitor],
 ] as const;
 function App() {
   const [responding, setResponding] = useState(false);
@@ -1403,10 +1416,16 @@ function App() {
       setBriefLoading(false);
     }
   };
+  const [computerMobileView, setComputerMobileView] = useState<"Computer" | "Chat">("Computer");
   const go = (s: string) => {
     setPage(s);
     setMobile(false);
   };
+  useEffect(() => {
+    const open = () => { setPage("Computer"); setMobile(false); setComputerMobileView("Computer"); };
+    window.addEventListener('baymax-open-computer', open);
+    return () => window.removeEventListener('baymax-open-computer', open);
+  }, []);
   if (persistence.loading || persistence.loadError) return (
     <div className="app-loading" role="status">
       <Mascot small />
@@ -1445,7 +1464,7 @@ function App() {
         checkin: () => setModal("checkin"),
       }}
     >
-      <div className={`app ${page === "Talk to Baymax" ? "chat-first" : ""}`}>
+      <div className={`app ${page === "Talk to Baymax" ? "chat-first" : ""} ${page === "Computer" ? "computer-workspace" : ""}`}>
         <aside className={mobile ? "sidebar open" : "sidebar"}>
           <a
             className="brand"
@@ -1465,6 +1484,8 @@ function App() {
             {nav.map(([s, I]) => (
               <button
                 key={s}
+                aria-label={s}
+                title={s}
                 className={page === s ? "nav active" : "nav"}
                 onClick={() => go(s)}
               >
@@ -1546,7 +1567,7 @@ function App() {
                           ? "Care, wherever you go."
                           : page === "Doctor brief"
                             ? "Your story. A little clearer."
-                            : "Your care. Your rules."}
+                            : page === "Computer" ? "A workspace for Baymax." : "Your care. Your rules."}
                 </h1>
                 <p>
                   {page === "Today"
@@ -1563,7 +1584,7 @@ function App() {
                           ? "A little preparation makes a new place feel less unfamiliar."
                           : page === "Doctor brief"
                             ? "Bring your context to your next conversation with a doctor."
-                            : "Choose what Baymax remembers and how often it checks in."}
+                            : page === "Computer" ? "Follow the work, take control, and keep your files close." : "Choose what Baymax remembers and how often it checks in."}
                 </p>
               </div>
               {page === "Today" && (
@@ -1794,12 +1815,13 @@ function App() {
                 </div>
               </>
             )}
-            <section
-              hidden={page !== "Talk to Baymax"}
-              className="panel chat-panel"
-            >
+            <div className={`conversation-workspace ${page === "Computer" ? `is-computer mobile-${computerMobileView.toLowerCase()}` : ""}`} hidden={page !== "Talk to Baymax" && page !== "Computer"}>
+              {page === "Computer" && <div className="workspace-mobile-switch" role="group" aria-label="Workspace view">{(["Chat", "Computer"] as const).map(view => <button key={view} aria-pressed={computerMobileView === view} onClick={() => setComputerMobileView(view)}>{view}</button>)}</div>}
+            <section className="panel chat-panel" aria-label="Chat with Baymax">
               <ChatHub key={persistence.resetKey} workspace={workspace} onToolResult={onToolResult} />
             </section>
+              {page === "Computer" && <div className="workspace-computer-pane"><Computer /></div>}
+            </div>
             {page === "Your plan" && (
               <div className="two-col">
                 <section className="panel">
