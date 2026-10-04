@@ -1,0 +1,90 @@
+{
+  "base_head": "7d729fdb3754a2cd91a0b64fd6074f15f99093ae",
+  "branch": "codex/synthea-pinned-iphone-fixture-v1",
+  "breakpoint_id": "BAYMAX-BP-0023",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 1938,
+        "path": "evidence/breakpoints/BAYMAX-BP-0022.json",
+        "sha256": "549cf3ec5b1bed6a7e742677d99b15b11ee83f25f44971fc5b963127a789cd68"
+      },
+      {
+        "bytes": 399,
+        "path": "src/baymax_evidence/__init__.py",
+        "sha256": "8b2d7d3bbe721d6a1445558358e69797c453bcd449903795263b1064e692aaed"
+      },
+      {
+        "bytes": 2501,
+        "path": "src/baymax_evidence/dataset.py",
+        "sha256": "8a26af435064a2a6a1b2815540b3ff12cda3f535af9b55ba74d7318161610e71"
+      },
+      {
+        "bytes": 2949,
+        "path": "src/baymax_evidence/fhir.py",
+        "sha256": "2521b9858348800e30317e27c99417c114c321dd12eaf179ec211abce4872ef6"
+      },
+      {
+        "bytes": 641,
+        "path": "src/baymax_evidence/public_sources.py",
+        "sha256": "2a26e263b4cfd6ad2f5f0585aed217313402d14542bd72f6495b9e9018344e5e"
+      },
+      {
+        "bytes": 2163,
+        "path": "evidence/datasets/synthea_dataset_source_fco.json",
+        "sha256": "91683cbf124176cdf0e11e956b8a3c39fcdc34398411122b1731fa68f3bace40"
+      },
+      {
+        "bytes": 2575,
+        "path": "evidence/datasets/synthea_source_manifest.json",
+        "sha256": "aec2fbbd2ca092346fd23b9f31f604d66f991a7e60d09b6f1d69aed7c55eb510"
+      },
+      {
+        "bytes": 88035,
+        "path": "evidence/transforms/synthea_brock407_fcg.json",
+        "sha256": "ae3c5eb92b7aaf80a2c180206b2285df993aed965b2a7d9b4977588a5ba4612c"
+      },
+      {
+        "bytes": 3658,
+        "path": "scripts/build_synthea_evidence.py",
+        "sha256": "a689a52116bfd8f84f43cff182585854566cd40bdaa4055ece342d174a096eaf"
+      },
+      {
+        "bytes": 3835,
+        "path": "tests/test_evidence.py",
+        "sha256": "d659c01feb727b4f8e27d5e295bc85db43c0fb579e2bba3b40ab6b185fd99992"
+      },
+      {
+        "bytes": 2496,
+        "path": "evidence/receipts/tasks/synthetic_structure_admission.json",
+        "sha256": "874b9543d7f5538f609a84d9b54d7a90e3abb9969f70b39415ca0b38a6dd4c73"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 11,
+    "leaf_hashes": [
+      "e71db79a39b2da9927862c69abc6fe8eca137db57ef7e6a0bbe0d3192e80e8a0",
+      "e5720f1ce1e62a0d87dcf4d560a035d7708aa146503cacff43eba3081c3c2124",
+      "744f8e099fa63adf5473989ea5e1c2134f0012c2d7ca97d94f77a9826c5df13e",
+      "c62d92a67b875234974f046d7cd064206bcec13c5c3c071009e265d26b819b88",
+      "123f92855548a6b271ac60e897e5c164dd19d3c1f0570312aefffecc42dd7076",
+      "231a31169a5bf91b78e2aa8159dc213c6e8c407d3223c6b8ce86c8c46650b791",
+      "13a3b9681dac683bcc64386f6e1478a157591c05518556467db3ebfe148998e2",
+      "7ea905ca67631d090849f1ab73c50b096114694dd01df75981fa5622ffd81cf2",
+      "1387b57dcaab261d077913f2acdcb5da00f3a13d2d04f14fdaa2018f8f7e0c62",
+      "4047e4ae8be1fb119c986e563259369875d217bff6ccfe4b11706305e44bded0",
+      "36d8cc43d732683b0e8bbfa8f900703c0b8e2270663208c214603051c75a7eea"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "95bc45c1bb3a1d8ede91e70d4ec51dbbd30d45e9b60cdf1776eba22a98525052"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "User-authorized admission of current untracked FHIR/FCO/FCG structure; raw FHIR local-only; values NOT_MAPPED.",
+  "parent": "BAYMAX-BP-0022",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "SYNTHETIC_STRUCTURE_ADMISSION",
+  "state": "SUPPORTED",
+  "timestamp_utc": "2026-10-04T20:08:54.341668+00:00"
+}
