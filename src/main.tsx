@@ -1,3 +1,5 @@
+import { Computer } from "./components/Computer";
+import { ComputerActionCard, type ComputerActionArgs } from "./components/ComputerActionCard";
 import React, {
   useState,
   useMemo,
@@ -26,6 +28,7 @@ import {
   Heart,
   LayoutDashboard,
   MessageCircle,
+  Monitor,
   Plane,
   FileText,
   ShieldCheck,
@@ -113,6 +116,7 @@ type RunSummary = {
 };
 type MetricKey = "hydration" | "movement" | "sleep";
 type HealthCardArgs =
+  | ComputerActionArgs
   | LabTrendsArgs
   | { metric: "fitness"; overview: FitnessOverview }
   | { metric: "onboarding"; preferences: SavedPreferences }
@@ -157,6 +161,11 @@ const healthCardPart = (args: HealthCardArgs): AgentToolPart => ({
 });
 function healthCardsFromTool(toolName: string, result: any): HealthCardArgs[] {
   if (!result || typeof result !== "object") return [];
+  if (['computerTool', 'use-baymax-computer'].includes(toolName) && typeof result.action === 'string') {
+    const data = result.data;
+    const content = result.error || (data && typeof data === 'object' && 'stdout' in data ? [data.stdout, data.stderr, `Exit: ${data.exitCode ?? 'unknown'}`, data.timedOut ? 'Timed out' : '', data.interrupted ? 'Interrupted' : '', data.truncated ? 'Output truncated' : ''].filter(Boolean).join('\n') : JSON.stringify(data ?? {}));
+    return [{metric:'computer', action:result.action, ok:result.ok === true, summary:String(content).slice(0,4000)}];
+  }
   if (toolName === "fitnessOverviewTool" && Array.isArray(result.daily)) {
     return [{ metric: "fitness", overview: result }];
   }
@@ -850,7 +859,9 @@ const CareTool = makeAssistantToolUI<
 const HealthTool = makeAssistantToolUI<HealthCardArgs, { ready: boolean }>({
   toolName: "health_card",
   render: ({ args }) =>
-    args.metric === "labs" ? (
+    args.metric === "computer" ? (
+      <ComputerActionCard {...args} />
+    ) : args.metric === "labs" ? (
       <LabTrendsCard {...args} />
     ) : args.metric === "fitness" ? (
       <FitnessDashboard initialData={args.overview} compact />
@@ -1205,6 +1216,7 @@ const nav = [
   ["Running", Activity],
   ["Travel care", Plane],
   ["Doctor brief", FileText],
+  ["Computer", Monitor],
 ] as const;
 function App() {
   const [responding, setResponding] = useState(false);
@@ -1373,6 +1385,11 @@ function App() {
     setPage(s);
     setMobile(false);
   };
+  useEffect(() => {
+    const open = () => { setPage("Computer"); setMobile(false); };
+    window.addEventListener('baymax-open-computer', open);
+    return () => window.removeEventListener('baymax-open-computer', open);
+  }, []);
   if (persistence.loading || persistence.loadError) return (
     <div className="app-loading" role="status">
       <Mascot small />
@@ -1512,7 +1529,7 @@ function App() {
                           ? "Care, wherever you go."
                           : page === "Doctor brief"
                             ? "Your story. A little clearer."
-                            : "Your care. Your rules."}
+                            : page === "Computer" ? "A workspace for Baymax." : "Your care. Your rules."}
                 </h1>
                 <p>
                   {page === "Today"
@@ -1529,7 +1546,7 @@ function App() {
                           ? "A little preparation makes a new place feel less unfamiliar."
                           : page === "Doctor brief"
                             ? "Bring your context to your next conversation with a doctor."
-                            : "Choose what Baymax remembers and how often it checks in."}
+                            : page === "Computer" ? "Follow the work, take control, and keep your files close." : "Choose what Baymax remembers and how often it checks in."}
                 </p>
               </div>
               {page === "Today" && (
@@ -1814,6 +1831,7 @@ function App() {
                 </section>
               </div>
             )}
+            {page === "Computer" && <Computer />}
             {page === "Physical fitness" && <FitnessDashboard />}
             {page === "Running" && <RunningSection />}
             {page === "Travel care" && (

@@ -10,6 +10,8 @@ import { healthRoutes } from "./routes/health";
 import { travelRoutes } from "./routes/travel";
 import { recordsRoutes } from "./routes/records";
 import { conversationRoutes } from "./routes/conversations";
+import { computerTraceFilter } from "./computer/tracing";
+import { computerRoutes } from "./routes/computer";
 import { demoRoutes } from "./routes/demo";
 import { appleHealthRoutes } from "./routes/apple-health";
 import { bindHealthSession } from "./persistence/session";
@@ -23,7 +25,7 @@ export const mastra = new Mastra({
       bindHealthSession(c.req.raw, c.get('requestContext'));
       await next();
     }],
-    apiRoutes: [...travelRoutes, ...healthRoutes, ...recordsRoutes, ...conversationRoutes, ...demoRoutes, ...appleHealthRoutes, ...["GET", "PUT", "DELETE"].map(method =>
+    apiRoutes: [...computerRoutes, ...travelRoutes, ...healthRoutes, ...recordsRoutes, ...conversationRoutes, ...demoRoutes, ...appleHealthRoutes, ...["GET", "PUT", "DELETE"].map(method =>
       registerApiRoute("/care-state", {
         method: method as "GET" | "PUT" | "DELETE",
         handler: c => handleCareState(c.req.raw),
@@ -42,7 +44,7 @@ export const mastra = new Mastra({
         serviceName: "baymax",
         // Local only: no data leaves the machine.
         exporters: [new DefaultExporter()],
-        spanOutputProcessors: [new SensitiveDataFilter()],
+        spanOutputProcessors: [new SensitiveDataFilter(), computerTraceFilter()],
       },
     },
   }),
