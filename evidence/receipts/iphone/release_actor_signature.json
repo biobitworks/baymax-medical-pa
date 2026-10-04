@@ -1,0 +1,11 @@
+{
+  "actor_id": "chatgpt-codex-synthea-v1",
+  "detached_signature": "w46tG3UgSd7/yNmt+qWDrCv2L2qyKjqCv/0V8lHE44uAQktCNLHE/Yq2+WhLs3cTWFCHFH2uUJfQy2gl7wlPAw==",
+  "git_signature": "UNSIGNED",
+  "private_key_committed": false,
+  "public_key": "FrtgXApOqgX46+DHPmqJpTUiX6B+ybariUWkuo3Nri8=",
+  "public_key_fingerprint": "ccb79765cadc5aa28fae88bff783a72e85a4b1ad596e075cef9de3f83cb346ac",
+  "signature_algorithm": "Ed25519",
+  "signature_verification": "PASS",
+  "signed_payload_sha256": "3a81b04d875d8aaa7cfb67f79757df56722de2349f54aa40b5a9eeee82be9d77"
+}

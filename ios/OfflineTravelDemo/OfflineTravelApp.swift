@@ -74,13 +74,13 @@ struct TravelView: View {
                         Label("SYNTHETIC DATA", systemImage: "testtube.2")
                         Text("Travel dates: UNKNOWN · destination Bali, Indonesia")
                         if let legacy {
-                            Text("Medication context: (legacy.medication_context.count) synthetic records")
+                            Text("Medication context: \(legacy.medication_context.count) synthetic records")
                             ForEach(Array(legacy.medication_context.prefix(4).enumerated()), id: \.offset) { index, item in
-                                Text("Record (index + 1): (describeMedication(item))").font(.caption)
+                                Text("Record \(index + 1): \(describeMedication(item))").font(.caption)
                             }
                         }
-                        Text("Medical correctness: (value.correctness_state)")
-                        Text("Source references: (value.resource_references.count) bounded · (value.omitted_reference_count) omitted by the bounded phone projection")
+                        Text("Medical correctness: \(value.correctness_state)")
+                        Text("Source references: \(value.resource_references.count) bounded · \(value.omitted_reference_count) omitted by the bounded phone projection")
                         ForEach(value.unknown_states, id: \.self) {
                             Text("UNKNOWN: " + $0).foregroundStyle(.orange)
                         }
@@ -91,7 +91,7 @@ struct TravelView: View {
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(entry.label)
                                 Text("SYNTHETIC_FIXTURE · NOT_LIVE_DIRECTORY").font(.caption.bold()).foregroundStyle(.orange)
-                                Text("Availability (entry.availability) · phone (entry.phone)").font(.caption)
+                                Text("Availability \(entry.availability) · phone \(entry.phone)").font(.caption)
                                 Text("Synthetic map point: -8.65, 115.22 · accuracy UNKNOWN · navigation disabled").font(.caption)
                                 Text("Call " + (entry.call_enabled ? "enabled" : "disabled") + " · purchase " + (entry.purchase_enabled ? "enabled" : "disabled")).font(.caption)
                             }
@@ -101,11 +101,11 @@ struct TravelView: View {
                     if let wallet {
                         Section("Synthetic wallet snapshot") {
                             Text(wallet.wallet_type)
-                            Text("State: (wallet.state)")
-                            Text("Balance: (wallet.synthetic_balance) (wallet.currency)")
+                            Text("State: \(wallet.state)")
+                            Text("Balance: \(wallet.synthetic_balance) \(wallet.currency)")
                             Text("REAL_MONEY=" + (wallet.real_money ? "YES" : "NO"))
-                            Text("PRESCRIPTION_PURCHASE=(wallet.prescription_purchase)")
-                            Text("Phone key: (wallet.phone_key_state)")
+                            Text("PRESCRIPTION_PURCHASE=\(wallet.prescription_purchase)")
+                            Text("Phone key: \(wallet.phone_key_state)")
                             Text(wallet.claim_boundary).font(.caption).foregroundStyle(.secondary)
                         }
                     }
@@ -148,9 +148,9 @@ struct TravelView: View {
                             ForEach(display.unknown, id: \.self) { Text("UNKNOWN: " + $0).foregroundStyle(.orange) }
                             ForEach(display.recommendedQuestions, id: \.self) { Text("Question: " + $0) }
                             Text("medical_action=NONE · clinician review required").font(.caption.bold())
-                            Text("Model identity: (inference.model_identity_state)")
-                            Text("Network evidence: (inference.network_state) / (inference.network_observation_state)")
-                            Text("Destination packet SHA: (inference.destination_packet_sha256)")
+                            Text("Model identity: \(inference.model_identity_state)")
+                            Text("Network evidence: \(inference.network_state) / \(inference.network_observation_state)")
+                            Text("Destination packet SHA: \(inference.destination_packet_sha256)")
                                 .font(.caption2)
                         }
                     }
@@ -197,7 +197,7 @@ struct TravelView: View {
     private func loadContext() {
         let decision = ComplianceGate.evaluate(.readContext, online: online, consent: consent)
         guard decision.state == "LOCAL_ONLY" else {
-            status = "(decision.state): (decision.reason)"
+            status = "\(decision.state): \(decision.reason)"
             return
         }
         do {
@@ -285,7 +285,7 @@ struct TravelView: View {
         let decision = ComplianceGate.guardedRequest(action, online: online, consent: consent) {
             // No live provider adapter is admitted in this demo.
         }
-        status = "(decision.state): (decision.reason)"
+        status = "\(decision.state): \(decision.reason)"
     }
 
     private func clearSession(reason: String) {

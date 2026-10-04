@@ -1,0 +1,132 @@
+{
+  "base_head": "74eab8e1fa63b3935e556b3900fac7dc4a5daad4",
+  "branch": "codex/iphone-apollo-release",
+  "breakpoint_id": "BAYMAX-BP-0030",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 3069,
+        "path": "docs/demo/REVIEW.md",
+        "sha256": "9a7c8c919a296e96e8258cec3f12d21b0f9dcd445b4e1c0964cc478cc2d3098e"
+      },
+      {
+        "bytes": 9014548,
+        "path": "docs/demo/apollo-local-model-2026-10-04.mov",
+        "sha256": "ef8b2d2b1d90bfd838d4a1e9be4ef3937b15b45b25d474375ea232c1ff1fc12b"
+      },
+      {
+        "bytes": 4802,
+        "path": "evidence/lineage/codex_mirror_bp0028.json",
+        "sha256": "507769f67d60233f5cd3c28836748a350c3124a5489812725c1d32c524b08113"
+      },
+      {
+        "bytes": 1570,
+        "path": "evidence/receipts/iphone/local_model_recording_observation.json",
+        "sha256": "804f2bc3bdcde70c039b815edd374149e42fa5053d6ae61cefd1ff6da4fdc99c"
+      },
+      {
+        "bytes": 1942,
+        "path": "evidence/receipts/iphone/mirror_actor_execution.json",
+        "sha256": "ad04902697e409b91d32231a17f0e8f637f7c1b14e502b2e870b8c1a1a598d2b"
+      },
+      {
+        "bytes": 522,
+        "path": "evidence/receipts/iphone/mirror_actor_signature.json",
+        "sha256": "370f58d120a4966841d20526f447249e492fa3fefa2d2c0859c2622778bd25d7"
+      },
+      {
+        "bytes": 398,
+        "path": "evidence/receipts/iphone/mirror_build_attempt1_failed.json",
+        "sha256": "5ebf9879aa3c46102dc34ec285287c2f6dd94ddabb9596b5329118beecf7d08d"
+      },
+      {
+        "bytes": 1392,
+        "path": "evidence/receipts/iphone/mirror_ready_v2.json",
+        "sha256": "2bb75a689b55a9dcf72edf8462df374614ae96ea19a53800cdae4254f7ed49fb"
+      },
+      {
+        "bytes": 537,
+        "path": "evidence/receipts/iphone/mirror_v2_snapshot.json",
+        "sha256": "6513190f1698b5d05fb5a73ba0ccee75fb180e066caab5894d0005d3d54581b1"
+      },
+      {
+        "bytes": 4915,
+        "path": "evidence/receipts/iphone/swift_gate_run_v2.json",
+        "sha256": "6997e442ce097f3b4b22a71335bcc9da228e07ba5191c1762a0e1325e31f07f0"
+      },
+      {
+        "bytes": 5411,
+        "path": "ios/OfflineTravelDemo/GateCheck.swift",
+        "sha256": "7b991c9fe146db3874f3d1d7e104c373d672cb19e73a9404a2ffc3ac615ee80a"
+      },
+      {
+        "bytes": 15905,
+        "path": "ios/OfflineTravelDemo/OfflineTravelApp.swift",
+        "sha256": "a99c2e59eef22abeae0a3e5d8b2ea7a645eb41438e2511d4018da60ec0f9c6de"
+      },
+      {
+        "bytes": 3760,
+        "path": "ios/README.md",
+        "sha256": "014bebb50caebce3c700f925acfe72677cd9fe052a689f1027b5dff30a84d6b2"
+      },
+      {
+        "bytes": 1110,
+        "path": "scripts/build_apollo_packet.py",
+        "sha256": "433442a4f326e29424f5428754cc78a07a17d239da5453426a015a86b192a8bd"
+      },
+      {
+        "bytes": 574,
+        "path": "scripts/build_iphone_demo.sh",
+        "sha256": "8ab5eec69da6e89ff98263e3b62c5c36069664be499740b1b283508d9f90b4a0"
+      },
+      {
+        "bytes": 3482,
+        "path": "src/baymax_travel/model_v1.py",
+        "sha256": "3fc91191a2e974dfbb97576eeb9be07f43201668b84bf9bbe4758eab3195dd59"
+      },
+      {
+        "bytes": 2697,
+        "path": "evidence/receipts/iphone/release_actor_execution.json",
+        "sha256": "3a81b04d875d8aaa7cfb67f79757df56722de2349f54aa40b5a9eeee82be9d77"
+      },
+      {
+        "bytes": 553,
+        "path": "evidence/receipts/iphone/release_actor_signature.json",
+        "sha256": "73a2373b8fc9834159307716b1008b2d25ae83d771a67b29fc1c6d124dc53dc8"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 18,
+    "leaf_hashes": [
+      "c91650dcc51c01998d090a4692f84669fabe15b52c588224c3a16779affa3289",
+      "76d23aa5a4cfb565cf2ef702e3fdbcd87a19409d3079fb536af42f2cb92662bf",
+      "0ce02f36a550f1d82e8357cde16b4dd2bff4a5ce271df2ed2fe95a85a1135692",
+      "a17cdec5c195fc26d998a0a8cbfcf5ac6169b3102c708be137372431c91dd88c",
+      "805e59cb135940283bb5cc7bd2f1bf9f5bad15e99f617da7ace4b8adb9070c9b",
+      "aab13d1acdb7b9a37b8cd8e43e7a2c0c5c5cb7494562abd808aee7b09cfe81f4",
+      "ccb68ba21d52e4812195e1de11e1df2add384c5f5d86891624876d0c7d3c304f",
+      "c5cbc366daba63e72fdb25a55f151e6b78aaa65e768204d213ba501fd0751aea",
+      "2d55c42b59b30fbe957f28f37d808658674c5bd6fe9c63ff1f7f31697a9e817e",
+      "f3eb51ae87beb1b056eb80c1f03b799d39fc42da09e39f048064c4d378e33a1b",
+      "9e8955b0854b8d69d561d088dc328b9d927087b50977041e643f72f911ddcc2b",
+      "44ee6a03f416a2cf5155ce0b08a29f03f1c834d99de04ed554247d5c5d04d509",
+      "660ae5b26914e7d2cd4540f1a6a16df628c00dc675ee10c198c388cd82bcc74a",
+      "0f2dc19c83a02214ebcf1090a8de920c05d6622eafa07bb030dd89e203541dbb",
+      "dafb1472b6b03fbe624274f2b8d685db2c4fba97305d90bd5703b65acdea90b9",
+      "b9c8d108f77e752d2fe4cea6d0803e59fea1acc4f0fbd0f039d7c7adbbfe9e9d",
+      "e6ccd4fc9f432450bc2644298f5abba110c0a88d5ff7b139c075a2fb17a09672",
+      "14971d636452a650d173f0fbbb799d3507bc9f7983248df9e4693fca396ae882"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "b7e7e54caa6cf8fe5e1a76af5cdabba639f14b00bb4a3236d46372ff4ca1565d"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "Clean mirror reconciliation and authorized video publication; offline inference NOT_TESTED; actor signed, Git unsigned.",
+  "parent": "BAYMAX-BP-0029",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "IPHONE_APOLLO_RELEASE_REVIEW",
+  "state": "PARTIAL",
+  "timestamp_utc": "2026-10-04T20:57:51.999043+00:00"
+}

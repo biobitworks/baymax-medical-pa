@@ -1,0 +1,49 @@
+{
+  "actor_id": "chatgpt-codex-synthea-v1",
+  "baymax_validation_on_phone": "NOT_OBSERVED",
+  "claim_ceiling": "Displayed generation and structured response observed in supplied recording; not a verified offline/device/model identity or source-byte transfer measurement",
+  "context_destination_sha256": "NOT_INDEPENDENTLY_VERIFIED",
+  "correctness_state": "UNKNOWN",
+  "displayed_selection": {
+    "known": [
+      0,
+      1,
+      2
+    ],
+    "medical_action": "NONE",
+    "recommended_questions": [
+      0,
+      1,
+      2
+    ],
+    "requires_clinician": true,
+    "summary": "SYNTHETIC_CONTEXT_ONLY",
+    "unknown": [
+      3,
+      4,
+      5
+    ]
+  },
+  "duration_seconds": 70.719625,
+  "exact_model_id": "UNKNOWN_TRUNCATED",
+  "medical_authority": "NONE",
+  "model_label_visible": "LFM2.5-1\u2026 Q5_K_M",
+  "network_indicator": "LTE_VISIBLE",
+  "observed": "Phone-shaped UI with synthetic catalog context, generation progression, and completed displayed catalog-selection response",
+  "offline_execution": "NOT_DEMONSTRATED",
+  "response_exact_bytes": "NOT_AVAILABLE",
+  "response_sha256": "UNKNOWN",
+  "runtime_identity": "USER_DESCRIBED_APOLLO_NOT_INDEPENDENTLY_VERIFIED",
+  "sampled_seconds": [
+    5,
+    25,
+    45,
+    65
+  ],
+  "schema": "baymax.local_model_recording_observation.v1",
+  "selection_source": "VISUAL_TRANSCRIPTION_NOT_EXACT_RESPONSE_BYTES",
+  "source": "USER_SUPPLIED_LOCAL_SCREEN_RECORDING",
+  "video_bytes": 9014548,
+  "video_published": false,
+  "video_sha256": "ef8b2d2b1d90bfd838d4a1e9be4ef3937b15b45b25d474375ea232c1ff1fc12b"
+}

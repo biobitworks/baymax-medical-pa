@@ -1,0 +1,203 @@
+{
+  "case_count" : 24,
+  "cases" : [
+    {
+      "action" : "READ_CONTEXT",
+      "consent" : false,
+      "dispatch" : false,
+      "online" : false,
+      "reason" : "Demo consent required",
+      "state" : "BLOCKED"
+    },
+    {
+      "action" : "CLOUD_SUMMARY",
+      "consent" : false,
+      "dispatch" : false,
+      "online" : false,
+      "reason" : "Demo consent required",
+      "state" : "BLOCKED"
+    },
+    {
+      "action" : "WALLET_PREVIEW",
+      "consent" : false,
+      "dispatch" : false,
+      "online" : false,
+      "reason" : "Demo consent required",
+      "state" : "BLOCKED"
+    },
+    {
+      "action" : "FLY_SYNC",
+      "consent" : false,
+      "dispatch" : false,
+      "online" : false,
+      "reason" : "Demo consent required",
+      "state" : "BLOCKED"
+    },
+    {
+      "action" : "CALL",
+      "consent" : false,
+      "dispatch" : false,
+      "online" : false,
+      "reason" : "Demo consent required",
+      "state" : "BLOCKED"
+    },
+    {
+      "action" : "PURCHASE",
+      "consent" : false,
+      "dispatch" : false,
+      "online" : false,
+      "reason" : "Demo consent required",
+      "state" : "BLOCKED"
+    },
+    {
+      "action" : "READ_CONTEXT",
+      "consent" : false,
+      "dispatch" : false,
+      "online" : true,
+      "reason" : "Demo consent required",
+      "state" : "BLOCKED"
+    },
+    {
+      "action" : "CLOUD_SUMMARY",
+      "consent" : false,
+      "dispatch" : false,
+      "online" : true,
+      "reason" : "Demo consent required",
+      "state" : "BLOCKED"
+    },
+    {
+      "action" : "WALLET_PREVIEW",
+      "consent" : false,
+      "dispatch" : false,
+      "online" : true,
+      "reason" : "Demo consent required",
+      "state" : "BLOCKED"
+    },
+    {
+      "action" : "FLY_SYNC",
+      "consent" : false,
+      "dispatch" : false,
+      "online" : true,
+      "reason" : "Demo consent required",
+      "state" : "BLOCKED"
+    },
+    {
+      "action" : "CALL",
+      "consent" : false,
+      "dispatch" : false,
+      "online" : true,
+      "reason" : "Demo consent required",
+      "state" : "BLOCKED"
+    },
+    {
+      "action" : "PURCHASE",
+      "consent" : false,
+      "dispatch" : false,
+      "online" : true,
+      "reason" : "Demo consent required",
+      "state" : "BLOCKED"
+    },
+    {
+      "action" : "READ_CONTEXT",
+      "consent" : true,
+      "dispatch" : false,
+      "online" : false,
+      "reason" : "Synthetic bounded context; no network",
+      "state" : "LOCAL_ONLY"
+    },
+    {
+      "action" : "CLOUD_SUMMARY",
+      "consent" : true,
+      "dispatch" : false,
+      "online" : false,
+      "reason" : "Offline",
+      "state" : "DEFERRED"
+    },
+    {
+      "action" : "WALLET_PREVIEW",
+      "consent" : true,
+      "dispatch" : false,
+      "online" : false,
+      "reason" : "Synthetic zero-funds preview; no signing or spending",
+      "state" : "LOCAL_ONLY"
+    },
+    {
+      "action" : "FLY_SYNC",
+      "consent" : true,
+      "dispatch" : false,
+      "online" : false,
+      "reason" : "Offline",
+      "state" : "DEFERRED"
+    },
+    {
+      "action" : "CALL",
+      "consent" : true,
+      "dispatch" : false,
+      "online" : false,
+      "reason" : "Offline",
+      "state" : "DEFERRED"
+    },
+    {
+      "action" : "PURCHASE",
+      "consent" : true,
+      "dispatch" : false,
+      "online" : false,
+      "reason" : "Live medication purchase prohibited",
+      "state" : "BLOCKED"
+    },
+    {
+      "action" : "READ_CONTEXT",
+      "consent" : true,
+      "dispatch" : false,
+      "online" : true,
+      "reason" : "Synthetic bounded context; no network",
+      "state" : "LOCAL_ONLY"
+    },
+    {
+      "action" : "CLOUD_SUMMARY",
+      "consent" : true,
+      "dispatch" : false,
+      "online" : true,
+      "reason" : "Provider\/action authorization absent",
+      "state" : "DEFERRED"
+    },
+    {
+      "action" : "WALLET_PREVIEW",
+      "consent" : true,
+      "dispatch" : false,
+      "online" : true,
+      "reason" : "Synthetic zero-funds preview; no signing or spending",
+      "state" : "LOCAL_ONLY"
+    },
+    {
+      "action" : "FLY_SYNC",
+      "consent" : true,
+      "dispatch" : false,
+      "online" : true,
+      "reason" : "Provider\/action authorization absent",
+      "state" : "DEFERRED"
+    },
+    {
+      "action" : "CALL",
+      "consent" : true,
+      "dispatch" : false,
+      "online" : true,
+      "reason" : "Provider\/action authorization absent",
+      "state" : "DEFERRED"
+    },
+    {
+      "action" : "PURCHASE",
+      "consent" : true,
+      "dispatch" : false,
+      "online" : true,
+      "reason" : "Live medication purchase prohibited",
+      "state" : "BLOCKED"
+    }
+  ],
+  "decode" : "PASS",
+  "fco_id" : "offline-travel:d3db604b1e40bf3b2faedc3027f04fe459a6c5a828ca735f185ff1a99af2fd72",
+  "model_contract" : "PASS_POSITIVE_ID_SELECTION",
+  "provider_calls" : 0,
+  "redteam_bypass_rejected" : 21,
+  "schema" : "baymax.swift_gate_run.v2"
+}
