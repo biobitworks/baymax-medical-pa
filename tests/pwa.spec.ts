@@ -8,6 +8,7 @@ async function openApp(page: Page) {
     json: { name: 'Test', onboarded: true, goals: { steps: 5000, activeMinutes: 20 }, notifications: 'off' },
   }));
   await page.goto('/');
+  await page.getByRole('navigation', { name: 'Main navigation' }).getByRole('button', { name: 'Talk', exact: true }).click();
   await expect(page.getByRole('textbox', { name: 'Message Baymax' })).toBeVisible();
 }
 async function controlled(page: Page) {
@@ -47,6 +48,7 @@ test('offline navigation shows reconnect screen and reconnect returns to the app
   await expect(page.getByRole('button', { name: 'Try again' })).toBeVisible();
   await context.setOffline(false);
   await page.getByRole('button', { name: 'Try again' }).click();
+  await page.getByRole('navigation', { name: 'Main navigation' }).getByRole('button', { name: 'Talk', exact: true }).click();
   await expect(page.getByRole('textbox', { name: 'Message Baymax' })).toBeVisible();
 });
 

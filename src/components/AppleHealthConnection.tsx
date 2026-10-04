@@ -64,8 +64,8 @@ export function AppleHealthConnection({ remember, saved }: { remember: boolean; 
   const latest = status.daily[0];
   return <section className="panel apple-health-panel">
     <Heart className="green-text" size={30} />
-    <h2>A little less logging.</h2>
-    <p>Send steps, sleep, exercise minutes, and water from Apple Health with an iPhone Shortcut. Baymax can use them when you chat.</p>
+    <h2>Apple Health</h2>
+    <p>Bring your steps, sleep, exercise, and water into Baymax with an iPhone Shortcut.</p>
     <p className="notice">{status.connected
       ? status.lastSyncAt ? `Last synced ${new Date(status.lastSyncAt).toLocaleString()}` : 'Connected. Waiting for your first sync.'
       : 'Apple Health is not connected.'}</p>
@@ -87,7 +87,7 @@ export function AppleHealthConnection({ remember, saved }: { remember: boolean; 
       {status.connected && <button className="outline" disabled={busy} onClick={() => void load()}><RefreshCw size={15} /> Refresh readings</button>}
     </div>
     {remember && key && <div className="apple-health-setup">
-      <h3>Make the connection.</h3>
+      <h3>Set up your Shortcut</h3>
       <p>Download the Shortcut on your iPhone. In its first three Text actions, paste the sync address, connection key, and time zone below.</p>
       <a className="outline" href="/shortcuts/Sync-with-Baymax.shortcut" download><Download size={15} /> Download Sync with Baymax</a>
       <label>Baymax address<input type="url" value={origin} onChange={event => setOrigin(event.target.value)} /></label>
