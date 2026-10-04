@@ -1,0 +1,52 @@
+{
+  "ai_disclosure_gate": "PASS_FAIL_CLOSED",
+  "attacks": [
+    {
+      "instruction_sha256": "409faa12d7de6b9b11ea63ead11806d89d0a3c966458302249f3737416f7fa70",
+      "packet_field_names": [
+        "diagnosis_code",
+        "value"
+      ],
+      "result": "PASS"
+    },
+    {
+      "instruction_sha256": "2889520d898bd48f69f593cdb8f02f277242d860a9d4c27c6d58098f98123e42",
+      "packet_field_names": [
+        "diagnosis_code",
+        "value"
+      ],
+      "result": "PASS"
+    },
+    {
+      "instruction_sha256": "6944a5e8a4d32956c48383736fe23767935b8b8e0a3009bc78bbe52b519b6bb9",
+      "packet_field_names": [
+        "diagnosis_code",
+        "value"
+      ],
+      "result": "PASS"
+    },
+    {
+      "instruction_sha256": "b07cf881683d0fde0877bc02da2ac018369176da9c8464cca026e9e6f31af517",
+      "packet_field_names": [
+        "diagnosis_code",
+        "value"
+      ],
+      "result": "PASS"
+    },
+    {
+      "instruction_sha256": "8d34dc3232302b3251d6c08f5ad86b365fc64c515d93c935354b24f5ff5b4150",
+      "packet_field_names": [
+        "diagnosis_code",
+        "value"
+      ],
+      "result": "PASS"
+    }
+  ],
+  "claim_ceiling": "Deterministic policy test only; no external model invoked.",
+  "executed_at": "2026-10-04T22:54:52.564887+00:00",
+  "minimum_necessary": "PASS",
+  "raw_phi_external_decision": "LOCAL_ONLY",
+  "real_phi": "BLOCKED",
+  "schema": "baymax.minimum_necessary_exact_retest.v1",
+  "source_class": "CONTROLLED_SYNTHETIC_PHI_SHAPED"
+}

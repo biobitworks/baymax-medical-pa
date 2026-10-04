@@ -1,0 +1,22 @@
+{
+  "active_row_delete": "PASS",
+  "application_logs": "NOT_TESTED_STANDALONE_PROBE_NOT_APP_RUNTIME",
+  "branch_id": "br-falling-block-b5qoil65",
+  "canary_in_neon_provider_logs": false,
+  "canary_in_row": true,
+  "canary_in_sql_text": true,
+  "canary_plaintext_recorded": false,
+  "canary_sha256": "1f97b91788abec356f637af97272228a5d6eddf250b7780b913692fbe78bdc62",
+  "claim_ceiling": "Controlled marker only. Provider-log result covers the queried Neon pg_endpoint log surface for the observed window, not every possible logging or tracing subsystem.",
+  "log_query_return_code": 0,
+  "neon_branch_logs_accessible": true,
+  "parameterized_sql": true,
+  "pg_stat_activity_visible": true,
+  "project_id": "cold-rice-87700506",
+  "real_phi": false,
+  "result": "FAIL",
+  "schema": "baymax.neon_canary_observability.v1",
+  "schema_delete": "PASS",
+  "source_class": "CONTROLLED_SYNTHETIC_PHI_SHAPED",
+  "traces": "UNKNOWN_NOT_SEPARATELY_EXPOSED_BY_THIS_PROBE"
+}

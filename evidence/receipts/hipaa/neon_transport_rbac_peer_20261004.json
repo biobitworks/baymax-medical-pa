@@ -1,0 +1,34 @@
+{
+  "branch_id": "br-falling-block-b5qoil65",
+  "database_role": "neondb_owner",
+  "observed_at": "2026-10-04T22:56:02.978236+00:00",
+  "project_id": "cold-rice-87700506",
+  "rbac": {
+    "bypassrls": true,
+    "createdb": true,
+    "createrole": true,
+    "login": true,
+    "replication": true,
+    "rls_effective": "NO",
+    "row_security_setting": "on",
+    "superuser": false
+  },
+  "rbac_result": "FAIL",
+  "real_phi": "BLOCKED",
+  "schema": "baymax.neon_transport_rbac_peer.v1",
+  "tls": {
+    "attributes": {
+      "alpn": "postgresql",
+      "cipher": "TLS_AES_256_GCM_SHA384",
+      "compression": "off",
+      "key_bits": "256",
+      "library": "OpenSSL",
+      "protocol": "TLSv1.3"
+    },
+    "ca_source": "certifi",
+    "cert_hostname_verified": "PASS_BY_SUCCESSFUL_VERIFY_FULL_CONNECT",
+    "encrypted": true,
+    "server_identity_verified": "PASS_BY_SUCCESSFUL_VERIFY_FULL_CONNECT",
+    "sslmode": "verify-full"
+  }
+}

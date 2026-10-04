@@ -1,0 +1,90 @@
+{
+  "base_head": "9ae033b41645bed3bc223ba4680ed9f632dac724",
+  "branch": "redteam/neon-hipaa-current",
+  "breakpoint_id": "BAYMAX-BP-0042",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 2227,
+        "path": "evidence/breakpoints/BAYMAX-BP-0041.json",
+        "sha256": "68466069c0c8c1c4c54c21b86a416681e3751240136def36cea5fd8f37d57a8c"
+      },
+      {
+        "bytes": 3637,
+        "path": "docs/HIPAA_NEON_EXACT_PROJECT_VERIFICATION_20261004.md",
+        "sha256": "ac1e119721b03356c7827dbedf2c07124755515d216dd5bc73f3322691bb23d4"
+      },
+      {
+        "bytes": 604,
+        "path": "evidence/receipts/hipaa/neon_exact_project_probe_attempt1_failed.json",
+        "sha256": "8bc59e35353ae3b2f610c8e9d465091879ece7e53eadcc7c71af4eb1ad7e8ab4"
+      },
+      {
+        "bytes": 630,
+        "path": "evidence/receipts/hipaa/neon_exact_project_probe_attempt2_failed.json",
+        "sha256": "bb20e491061627fceb34b55f96d16cffd1ac58163dc3270c35b99c6d8d8baf8c"
+      },
+      {
+        "bytes": 6334,
+        "path": "evidence/receipts/hipaa/neon_exact_project_probe_attempt3.json",
+        "sha256": "ae33b4e4e4b85a2a76f8edaede2549c994fd797f0e90cdcd582b7e6716fe418a"
+      },
+      {
+        "bytes": 935,
+        "path": "evidence/receipts/hipaa/neon_transport_rbac_peer_20261004.json",
+        "sha256": "23f856168c590715842e5d37f586238e07870475d3a12c2d4adf5e53fb050d61"
+      },
+      {
+        "bytes": 960,
+        "path": "evidence/receipts/hipaa/neon_canary_observability_20261004.json",
+        "sha256": "7caf3d2110a4970feca26740089b726e250e5b2954041c53fb6075b33c6ed734"
+      },
+      {
+        "bytes": 1475,
+        "path": "evidence/receipts/hipaa/minimum_necessary_exact_retest_20261004.json",
+        "sha256": "c976078b80f4fe6c3f2d91051d53e06fee6ec1eb24e9dca6eb6da0cf28bf0bd6"
+      },
+      {
+        "bytes": 1883,
+        "path": "evidence/receipts/hipaa/application_encryption_exact_path_review_20261004.json",
+        "sha256": "4e2087caea7f067ac890d0567545e7733e19a867b752ae47c8d35fad2754edef"
+      },
+      {
+        "bytes": 17008,
+        "path": "evidence/receipts/hipaa/neon_exact_project_qualification_20261004.json",
+        "sha256": "5c5c4af7ed61770bcfa78b6c4f5f908fb4d44db1dfee7b8c0c6dccc82fdffe4d"
+      },
+      {
+        "bytes": 7001,
+        "path": "evidence/receipts/hipaa/neon_qualification_current_20261004.json",
+        "sha256": "55ba7f4af8028b3613d8387dd893aafb49c7c774cfd667604011893f139f619d"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 11,
+    "leaf_hashes": [
+      "324777ba7faed34b78a6f26a2e112f56621a9b16e879c2d7296fa9439c3248c1",
+      "95b8e5fd4815cf70c9f19abf29c89f41d46d54c1cacf2d8a27684f32dae9d85a",
+      "bf059b5eb54389d168162785e8082cf92ef65dcab29aa96cd4d9ae720c68bbfa",
+      "e434324e0273fcd7b9923ecc91b5c77ecc681e845532bf1bcf730baea04848e7",
+      "2664a6d0b123c3463615cd319c8df643883a62cc785291dca3406c94f2e2ea0a",
+      "14058c92f1e8e7efe5effe95ae0ca145a356eecb3d164da2ca5a4852cc672e85",
+      "2621166fc99ebc85200b665256c46f5af70d2168c20eaac9f412e683f82e58d5",
+      "deeba517205218fdd25030e880af1611967f51f90acabfaf9891b99487276d6d",
+      "cd96e7673c6ec5e3d4f78d8463b5922349a17e43f5bc079cfdc386b46d9e5c4b",
+      "02cbc684e6af0f53d9ad6cd9d9ec667b966a821f44a4093f4a72b67995411d74",
+      "064a4e289850a8e1bc3a36993638cbad5e857c4835aee3cd0e983a0f483308ed"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "1f13c7f253d8c28c5bae195f87b7625df5ebbf27d2758d09d77612b5031f4e5c"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "Re-test exact Neon project cold-rice-87700506 / branch br-falling-block-b5qoil65. Identity and verify-full TLS peer verification PASS; controlled CRUD and minimum-necessary PASS; provider pg_endpoint log-window canary absent. Overall real-PHI qualification FAIL_CLOSED because hipaa=false, BAA unverified, RBAC excessive/BYPASSRLS, canary exposed in pg_stat_activity SQL text, application AEAD/key custody absent, retention/purge incomplete, and current Baymax runtime DATABASE_URL targets a different endpoint.",
+  "parent": "BAYMAX-BP-0041",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "HIPAA_NEON_EXACT_PROJECT_REQUALIFICATION",
+  "state": "FAIL",
+  "timestamp_utc": "2026-10-04T22:59:48.915023+00:00"
+}

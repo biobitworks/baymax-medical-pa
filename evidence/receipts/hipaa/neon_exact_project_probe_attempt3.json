@@ -1,0 +1,184 @@
+{
+  "account_settings": {
+    "allowed_ips": {
+      "ips": [],
+      "protected_branches_only": false
+    },
+    "block_public_connections": false,
+    "block_vpc_connections": false,
+    "branch_protected": false,
+    "endpoint_passwordless_access": true,
+    "endpoint_pooler_enabled": false,
+    "hipaa_enabled": false,
+    "history_retention_seconds": 86400,
+    "store_passwords": true
+  },
+  "attempt": 3,
+  "baa_state": "NOT_VERIFIED_FROM_AVAILABLE_EVIDENCE",
+  "claim_ceiling": "Exact Neon project/branch technical controls were tested with controlled synthetic PHI-shaped data. Project setting hipaa=false and BAA not verified; real PHI remains blocked.",
+  "control_plane_identity": {
+    "branch_identity_state": "OBSERVED",
+    "matched_project_found": true,
+    "project_identity_state": "OBSERVED_MATCHED_TO_DATABASE_ENDPOINT",
+    "region": "aws-us-east-2"
+  },
+  "hipaa_compliance": "NOT_VERIFIED",
+  "hipaa_ready_project": "FAIL_CLOSED_NOT_READY_FOR_REAL_PHI",
+  "observed_at": "2026-10-04T22:48:39.141308+00:00",
+  "real_phi": "BLOCKED",
+  "schema": "baymax.neon_exact_project_hipaa_verification.v1",
+  "source_class": "CONTROLLED_SYNTHETIC_PHI_SHAPED_ONLY",
+  "target": {
+    "branch_id": "br-falling-block-b5qoil65",
+    "branch_name": "production",
+    "project_id": "cold-rice-87700506",
+    "project_name": "bay-max",
+    "region_id": "aws-us-east-2"
+  },
+  "technical_probe": {
+    "application_level_payload_encryption": "NOT_IMPLEMENTED",
+    "canary_plaintext_recorded": false,
+    "canary_sha256": "8a043331992bdeaed7ba823183af2e9fc668f30ff51af1a841e6cee757fe0fcd",
+    "control_plane": {
+      "account_identity_state": "OBSERVED_CONTROL_PLANE_ACCESS",
+      "branch_count": 1,
+      "branch_id_hash": "f1b6d4420f90",
+      "branch_identity_state": "OBSERVED",
+      "calls": {
+        "endpoints": [
+          {
+            "count": 1,
+            "status": 200
+          }
+        ],
+        "organizations": {
+          "count": 1,
+          "status": 200
+        },
+        "projects": {
+          "count": 1,
+          "status": 200
+        }
+      },
+      "control_plane_endpoint_id_hashes": [
+        "1c78ea78718f"
+      ],
+      "credential_present": true,
+      "executed": true,
+      "history_retention_seconds": 86400,
+      "matched_project_found": true,
+      "observed": true,
+      "pg_version": 18,
+      "project_id_hash": "2df51ce134c8",
+      "project_identity_state": "OBSERVED_MATCHED_TO_DATABASE_ENDPOINT",
+      "region": "aws-us-east-2"
+    },
+    "controlled_source_class": "CONTROLLED_SYNTHETIC_PHI_SHAPED",
+    "database_activity_canary_test": {
+      "canary_visible": true,
+      "pg_stat_activity_visible": true
+    },
+    "database_identity": {
+      "database_name_hash": "693fe5919fc2",
+      "role_name_hash": "6f1981911003",
+      "server_product": "PostgreSQL 18.6 (4e955f5)"
+    },
+    "endpoint": {
+      "channel_binding": "require",
+      "endpoint_id_hash": "1c78ea78718f",
+      "pooler": true,
+      "region_hint_from_hostname": "us-east-2",
+      "sanitized_host": "<endpoint>.c-7.us-east-2.aws.neon.tech",
+      "sslmode": "verify-full"
+    },
+    "logical_deletion": "PASS_OBSERVED",
+    "pg_stat_statements_installed": false,
+    "rbac_observation": {
+      "rolbypassrls": true,
+      "rolcreatedb": true,
+      "rolcreaterole": true,
+      "rolreplication": true,
+      "rolsuper": false
+    },
+    "readback_identity_match": true,
+    "real_phi": "BLOCKED",
+    "request_identity": "56811030ef58b06fb84223f10a8c07a6e7085fdc4cbecf4aeae5c24b56b99bc4",
+    "response_identity": "219606a4f30618dbbfc19bb4db0b6646a896ff1eed16056679304585280f23dc",
+    "row_identity_hash": "48d707732630e992",
+    "schema_cleanup": "PASS_OBSERVED",
+    "source_fco": {
+      "contains_real_phi": false,
+      "source_class": "CONTROLLED_SYNTHETIC_PHI_SHAPED",
+      "source_sha256": "219606a4f30618dbbfc19bb4db0b6646a896ff1eed16056679304585280f23dc",
+      "type": "ControlledHealthSourceFCO"
+    },
+    "sponsor_qualification_fco": {
+      "application_level_payload_encryption": "NOT_IMPLEMENTED",
+      "audit_logging_state": "UNKNOWN",
+      "baa_present": "BLOCKED_HUMAN_VERIFICATION",
+      "baa_scope": "UNKNOWN",
+      "backup_state": "UNKNOWN",
+      "credential_present": true,
+      "database_at_rest_encryption": "UNKNOWN_ACCOUNT_SPECIFIC",
+      "deletion_state": "PASS_OBSERVED",
+      "dpa_state": "UNKNOWN",
+      "executed": true,
+      "hipaa_feature_state": "UNKNOWN",
+      "implemented": true,
+      "log_export_state": "UNKNOWN",
+      "observed": true,
+      "pitr_state": "UNKNOWN",
+      "rbac_state": "RISK_PRIVILEGED_ROLE",
+      "result": "FAIL",
+      "retention_state": "UNKNOWN",
+      "sdk_present": true,
+      "service": "Postgres",
+      "sponsor": "Neon",
+      "subprocessor_state": "UNKNOWN",
+      "tls_in_transit": "PASS_ENCRYPTED_CHANNEL_OBSERVED",
+      "training_use_state": "UNKNOWN",
+      "type": "SponsorQualificationFCO"
+    },
+    "successor_fco": {
+      "predecessor_source_sha256": "219606a4f30618dbbfc19bb4db0b6646a896ff1eed16056679304585280f23dc",
+      "source_sha256": "92a0c5fedb7389c9a508627e8d9c0a949ebeb136eba56eb936a7295ab244e1b6",
+      "state": "OBSERVED_SUCCESSOR",
+      "type": "ControlledHealthSourceFCO"
+    },
+    "transport_encryption": {
+      "peer_identity_verification": "UNKNOWN_SSLMODE_REQUIRE_NOT_VERIFY_FULL",
+      "pooled_or_primary": {
+        "bits": null,
+        "cipher": null,
+        "dsn_channel_binding": "require",
+        "dsn_sslmode": "verify-full",
+        "libpq_ssl_in_use": true,
+        "pg_stat_ssl_observed": true,
+        "pg_stat_ssl_ssl": false,
+        "pooler": true,
+        "protocol": null
+      },
+      "unpooled": {
+        "bits": null,
+        "cipher": null,
+        "endpoint": {
+          "channel_binding": "require",
+          "endpoint_id_hash": "1c78ea78718f",
+          "pooler": false,
+          "region_hint_from_hostname": "us-east-2",
+          "sanitized_host": "<endpoint>.c-7.us-east-2.aws.neon.tech",
+          "sslmode": "verify-full"
+        },
+        "libpq_ssl_in_use": true,
+        "pg_stat_ssl_observed": true,
+        "pg_stat_ssl_ssl": false,
+        "protocol": null
+      }
+    }
+  },
+  "tls_client_verification": {
+    "channel_binding": "require",
+    "sslmode": "verify-full",
+    "sslrootcert_source": "certifi_CA_bundle"
+  }
+}

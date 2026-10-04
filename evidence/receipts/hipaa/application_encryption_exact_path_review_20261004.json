@@ -1,0 +1,38 @@
+{
+  "aead_api_hits": [],
+  "claim_ceiling": "Tracked-path static implementation evidence only. It supports absence of application AEAD/key-custody implementation in the reviewed storage path; it does not prove properties of untracked/deployed components.",
+  "device_file_protection_api_hits": [],
+  "executed_at": "2026-10-04T22:55:09.777691+00:00",
+  "health_persistence_plaintext_sql_paths": [
+    "src/mastra/lib/records.ts",
+    "src/mastra/persistence/apple-health-store.ts",
+    "src/mastra/persistence/conversations.ts",
+    "src/mastra/persistence/store.ts"
+  ],
+  "key_deletion_api_hits": [],
+  "key_rotation_api_hits": [],
+  "keychain_api_hits": [],
+  "paths_reviewed": [
+    "src/mastra/persistence/database.ts",
+    "src/mastra/persistence/store.ts",
+    "src/mastra/persistence/conversations.ts",
+    "src/mastra/persistence/apple-health-store.ts",
+    "src/mastra/lib/records.ts",
+    "ios/OfflineTravelDemo/ModelInference.swift",
+    "ios/OfflineTravelDemo/OfflineTravelApp.swift"
+  ],
+  "raw_pattern_gate_note": "Earlier current-run broad static gate produced self/repository false positives; this exact-path review supersedes that interpretation without rewriting historical receipts.",
+  "real_phi": "BLOCKED",
+  "result": "FAIL",
+  "schema": "baymax.application_encryption_exact_path_review.v1",
+  "scope": "actual tracked health/conversation persistence and iOS offline application paths",
+  "secure_enclave_api_hits": [],
+  "states": {
+    "APPLICATION_PAYLOAD_ENCRYPTION": "NOT_IMPLEMENTED_OBSERVED_TRACKED_STORAGE_PATH",
+    "DEVICE_FILE_PROTECTION": "NOT_IMPLEMENTED_OBSERVED_TRACKED_APP_PATH",
+    "KEYCHAIN": "NOT_IMPLEMENTED_OBSERVED_TRACKED_APP_PATH",
+    "KEY_DELETION": "NOT_IMPLEMENTED_OBSERVED_TRACKED_APP_PATH",
+    "KEY_ROTATION": "NOT_IMPLEMENTED_OBSERVED_TRACKED_APP_PATH",
+    "SECURE_ENCLAVE": "NOT_IMPLEMENTED_OBSERVED_TRACKED_APP_PATH"
+  }
+}

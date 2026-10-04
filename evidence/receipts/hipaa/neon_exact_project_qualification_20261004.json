@@ -1,0 +1,391 @@
+{
+  "claim_ceiling": "This exact Baymax Neon project/branch was identity-matched and passed verify-full TLS peer verification, controlled CRUD, minimum-necessary routing, and the queried provider-log canary check. It did not pass overall deployment qualification for real PHI because project HIPAA mode is disabled, BAA/account scope is unverified, the only observed database role is overprivileged and bypasses RLS, the controlled parameter value is exposed in pg_stat_activity, application payload encryption/key custody is not implemented in the tracked storage path, backup/PITR/provider retention purge is not verified, and the current Baymax runtime DATABASE_URL points to a different Neon endpoint. HIPAA_COMPLIANCE=NOT_VERIFIED; REAL_PHI=BLOCKED.",
+  "classification": {
+    "BLOCKED": [
+      "BAA_STATE",
+      "REAL_PHI"
+    ],
+    "FAIL": [
+      "HIPAA_FEATURE_ENABLED",
+      "RBAC",
+      "CANARY_PG_STAT_ACTIVITY",
+      "APPLICATION_PAYLOAD_ENCRYPTION",
+      "KEYCHAIN",
+      "SECURE_ENCLAVE",
+      "KEY_ROTATION",
+      "KEY_DELETION",
+      "BAYMAX_RUNTIME_TARGET_BINDING"
+    ],
+    "NOT_TESTED": [
+      "APPLICATION_LOG_CANARY_IN_LIVE_BAYMAX_RUNTIME",
+      "RECOVERY_PURGE_DRILL"
+    ],
+    "PARTIAL": [
+      "NEON_AT_REST",
+      "RETENTION",
+      "NEON_DELETION",
+      "HIPAA_READY_TEMPLATE"
+    ],
+    "PASS": [
+      "PROJECT_MATCH",
+      "BRANCH_MATCH",
+      "ENDPOINT_MATCH",
+      "REGION_MATCH",
+      "TLS_ENCRYPTED",
+      "TLS_PEER_IDENTITY",
+      "CONTROLLED_CRUD",
+      "MINIMUM_NECESSARY",
+      "AI_DISCLOSURE_GATE",
+      "LOGICAL_DELETE",
+      "CANARY_LOGS_QUERIED_WINDOW"
+    ],
+    "UNKNOWN": [
+      "BAA_SCOPE_STATE",
+      "ACCOUNT_ELIGIBILITY",
+      "BACKUP_DELETE",
+      "PITR_DELETE",
+      "CANARY_TRACES",
+      "PROVIDER_LOG_RETENTION"
+    ]
+  },
+  "compensatory_controls": [
+    {
+      "claim_ceiling": "No HIPAA compliance or BAA claim",
+      "compensating_control": "REAL_PHI=BLOCKED",
+      "missing_control": "HIPAA_FEATURE_ENABLED_AND_VERIFIED_BAA",
+      "residual_risk": "deployment cannot process real PHI",
+      "result": "ACTIVE",
+      "risk": "PHI processing authority/configuration not established",
+      "type": "CompensatoryControlFCO"
+    },
+    {
+      "claim_ceiling": "RBAC=FAIL",
+      "compensating_control": "REAL_PHI=BLOCKED; controlled synthetic tests only",
+      "missing_control": "LEAST_PRIVILEGE_DATABASE_ROLE",
+      "residual_risk": "credential compromise has excessive blast radius",
+      "result": "ACTIVE",
+      "risk": "application credential can create roles/databases, replicate, and bypass RLS",
+      "type": "CompensatoryControlFCO"
+    },
+    {
+      "claim_ceiling": "LOG_LEAK_GATE=FAIL",
+      "compensating_control": "REAL_PHI=BLOCKED; no real PHI in SQL parameters",
+      "missing_control": "OBSERVABILITY_CANARY_ISOLATION",
+      "residual_risk": "database activity viewers can observe sensitive values",
+      "result": "ACTIVE",
+      "risk": "bound sensitive value appears in pg_stat_activity SQL text",
+      "type": "CompensatoryControlFCO"
+    },
+    {
+      "claim_ceiling": "No encrypted SensitiveHealthFCO claim",
+      "compensating_control": "CONTROLLED_DATA_ONLY; REAL_PHI=BLOCKED",
+      "missing_control": "APPLICATION_LEVEL_PAYLOAD_ENCRYPTION_AND_KEY_CUSTODY",
+      "residual_risk": "database/provider plaintext processing remains",
+      "result": "ACTIVE",
+      "risk": "tracked storage paths persist health/conversation content without app AEAD envelope",
+      "type": "CompensatoryControlFCO"
+    },
+    {
+      "claim_ceiling": "Deletion PASS only for active row/schema",
+      "compensating_control": "REAL_PHI=BLOCKED",
+      "missing_control": "COMPLETE_RETENTION_AND_PURGE_VERIFICATION",
+      "residual_risk": "historical copies may remain within provider retention systems",
+      "result": "ACTIVE",
+      "risk": "active delete does not prove backup/PITR/log purge",
+      "type": "CompensatoryControlFCO"
+    },
+    {
+      "claim_ceiling": "Target-project qualification does not prove current app runtime binding",
+      "compensating_control": "do not promote target project as production runtime until credentials are reconciled",
+      "missing_control": "BAYMAX_RUNTIME_TARGET_BINDING",
+      "residual_risk": "tested target and running app configuration diverge",
+      "result": "ACTIVE",
+      "risk": "current Baymax DATABASE_URL resolves to a different Neon endpoint",
+      "type": "CompensatoryControlFCO"
+    }
+  ],
+  "fcg": {
+    "edges": [
+      {
+        "from": "controlledhealthsourcefco:5d0363596344a33146f6b3b4",
+        "to": "neonexecutionfco:6a4663ff8f01b9ba291958f9",
+        "type": "SENT_TO"
+      },
+      {
+        "from": "neonexecutionfco:6a4663ff8f01b9ba291958f9",
+        "to": "sponsorqualificationfco:c98149ace82ab93d5c9f87f5",
+        "type": "QUALIFIED_BY"
+      },
+      {
+        "from": "neonexecutionfco:6a4663ff8f01b9ba291958f9",
+        "to": "compensatorycontrolfco:e45bb671158a314f24fe9c7f",
+        "type": "GOVERNED_BY"
+      },
+      {
+        "from": "neonexecutionfco:6a4663ff8f01b9ba291958f9",
+        "to": "compensatorycontrolfco:015c316c8edd5d2acbec343a",
+        "type": "GOVERNED_BY"
+      },
+      {
+        "from": "neonexecutionfco:6a4663ff8f01b9ba291958f9",
+        "to": "compensatorycontrolfco:7378c44a1d220328103fa483",
+        "type": "GOVERNED_BY"
+      },
+      {
+        "from": "neonexecutionfco:6a4663ff8f01b9ba291958f9",
+        "to": "compensatorycontrolfco:79fcc09d83027d08d4917869",
+        "type": "GOVERNED_BY"
+      },
+      {
+        "from": "neonexecutionfco:6a4663ff8f01b9ba291958f9",
+        "to": "compensatorycontrolfco:5a001169074e8b4a9460799e",
+        "type": "GOVERNED_BY"
+      },
+      {
+        "from": "neonexecutionfco:6a4663ff8f01b9ba291958f9",
+        "to": "compensatorycontrolfco:6218d290d30cea9c522c6202",
+        "type": "GOVERNED_BY"
+      },
+      {
+        "from": "compensatorycontrolfco:e45bb671158a314f24fe9c7f",
+        "to": "qualificationreceiptfco:e293bba02cd5655274317b46",
+        "type": "PRODUCED"
+      },
+      {
+        "from": "compensatorycontrolfco:015c316c8edd5d2acbec343a",
+        "to": "qualificationreceiptfco:e293bba02cd5655274317b46",
+        "type": "PRODUCED"
+      },
+      {
+        "from": "compensatorycontrolfco:7378c44a1d220328103fa483",
+        "to": "qualificationreceiptfco:e293bba02cd5655274317b46",
+        "type": "PRODUCED"
+      },
+      {
+        "from": "compensatorycontrolfco:79fcc09d83027d08d4917869",
+        "to": "qualificationreceiptfco:e293bba02cd5655274317b46",
+        "type": "PRODUCED"
+      },
+      {
+        "from": "compensatorycontrolfco:5a001169074e8b4a9460799e",
+        "to": "qualificationreceiptfco:e293bba02cd5655274317b46",
+        "type": "PRODUCED"
+      },
+      {
+        "from": "compensatorycontrolfco:6218d290d30cea9c522c6202",
+        "to": "qualificationreceiptfco:e293bba02cd5655274317b46",
+        "type": "PRODUCED"
+      },
+      {
+        "from": "qualificationreceiptfco:e293bba02cd5655274317b46",
+        "to": "compliancedecisionfco:7ccf7a25ae143faf201660f5",
+        "type": "ADMITTED_BY"
+      }
+    ],
+    "nodes": [
+      {
+        "contains_real_phi": false,
+        "id": "controlledhealthsourcefco:5d0363596344a33146f6b3b4",
+        "source_class": "CONTROLLED_SYNTHETIC_PHI_SHAPED",
+        "source_sha256": "219606a4f30618dbbfc19bb4db0b6646a896ff1eed16056679304585280f23dc",
+        "type": "ControlledHealthSourceFCO"
+      },
+      {
+        "branch_id": "br-falling-block-b5qoil65",
+        "canary_plaintext_recorded": false,
+        "canary_sha256": "1f97b91788abec356f637af97272228a5d6eddf250b7780b913692fbe78bdc62",
+        "controlled_crud": "PASS",
+        "database_role": "neondb_owner",
+        "id": "neonexecutionfco:6a4663ff8f01b9ba291958f9",
+        "logical_delete": "PASS",
+        "pg_stat_activity_leak": true,
+        "project_id": "cold-rice-87700506",
+        "provider_log_window_leak": false,
+        "region": "aws-us-east-2",
+        "request_identity": "56811030ef58b06fb84223f10a8c07a6e7085fdc4cbecf4aeae5c24b56b99bc4",
+        "response_identity": "219606a4f30618dbbfc19bb4db0b6646a896ff1eed16056679304585280f23dc",
+        "schema_delete": "PASS",
+        "tls_peer_identity": "PASS_VERIFY_FULL_CERT_HOSTNAME",
+        "type": "NeonExecutionFCO"
+      },
+      {
+        "application_payload_encryption": "NOT_IMPLEMENTED",
+        "baa_state": "BLOCKED_HUMAN_VERIFICATION",
+        "branch_id": "br-falling-block-b5qoil65",
+        "hipaa_feature_enabled": false,
+        "id": "sponsorqualificationfco:c98149ace82ab93d5c9f87f5",
+        "identity": "PASS",
+        "observability": "FAIL",
+        "project_id": "cold-rice-87700506",
+        "rbac": "FAIL",
+        "result": "FAIL_CLOSED",
+        "retention": "PARTIAL",
+        "service": "Postgres",
+        "sponsor": "Neon",
+        "tls_peer_identity": "PASS",
+        "type": "SponsorQualificationFCO"
+      },
+      {
+        "claim_ceiling": "No HIPAA compliance or BAA claim",
+        "compensating_control": "REAL_PHI=BLOCKED",
+        "id": "compensatorycontrolfco:e45bb671158a314f24fe9c7f",
+        "missing_control": "HIPAA_FEATURE_ENABLED_AND_VERIFIED_BAA",
+        "residual_risk": "deployment cannot process real PHI",
+        "result": "ACTIVE",
+        "risk": "PHI processing authority/configuration not established",
+        "type": "CompensatoryControlFCO"
+      },
+      {
+        "claim_ceiling": "RBAC=FAIL",
+        "compensating_control": "REAL_PHI=BLOCKED; controlled synthetic tests only",
+        "id": "compensatorycontrolfco:015c316c8edd5d2acbec343a",
+        "missing_control": "LEAST_PRIVILEGE_DATABASE_ROLE",
+        "residual_risk": "credential compromise has excessive blast radius",
+        "result": "ACTIVE",
+        "risk": "application credential can create roles/databases, replicate, and bypass RLS",
+        "type": "CompensatoryControlFCO"
+      },
+      {
+        "claim_ceiling": "LOG_LEAK_GATE=FAIL",
+        "compensating_control": "REAL_PHI=BLOCKED; no real PHI in SQL parameters",
+        "id": "compensatorycontrolfco:7378c44a1d220328103fa483",
+        "missing_control": "OBSERVABILITY_CANARY_ISOLATION",
+        "residual_risk": "database activity viewers can observe sensitive values",
+        "result": "ACTIVE",
+        "risk": "bound sensitive value appears in pg_stat_activity SQL text",
+        "type": "CompensatoryControlFCO"
+      },
+      {
+        "claim_ceiling": "No encrypted SensitiveHealthFCO claim",
+        "compensating_control": "CONTROLLED_DATA_ONLY; REAL_PHI=BLOCKED",
+        "id": "compensatorycontrolfco:79fcc09d83027d08d4917869",
+        "missing_control": "APPLICATION_LEVEL_PAYLOAD_ENCRYPTION_AND_KEY_CUSTODY",
+        "residual_risk": "database/provider plaintext processing remains",
+        "result": "ACTIVE",
+        "risk": "tracked storage paths persist health/conversation content without app AEAD envelope",
+        "type": "CompensatoryControlFCO"
+      },
+      {
+        "claim_ceiling": "Deletion PASS only for active row/schema",
+        "compensating_control": "REAL_PHI=BLOCKED",
+        "id": "compensatorycontrolfco:5a001169074e8b4a9460799e",
+        "missing_control": "COMPLETE_RETENTION_AND_PURGE_VERIFICATION",
+        "residual_risk": "historical copies may remain within provider retention systems",
+        "result": "ACTIVE",
+        "risk": "active delete does not prove backup/PITR/log purge",
+        "type": "CompensatoryControlFCO"
+      },
+      {
+        "claim_ceiling": "Target-project qualification does not prove current app runtime binding",
+        "compensating_control": "do not promote target project as production runtime until credentials are reconciled",
+        "id": "compensatorycontrolfco:6218d290d30cea9c522c6202",
+        "missing_control": "BAYMAX_RUNTIME_TARGET_BINDING",
+        "residual_risk": "tested target and running app configuration diverge",
+        "result": "ACTIVE",
+        "risk": "current Baymax DATABASE_URL resolves to a different Neon endpoint",
+        "type": "CompensatoryControlFCO"
+      },
+      {
+        "branch_id": "br-falling-block-b5qoil65",
+        "evidence_receipts": [
+          "evidence/receipts/hipaa/neon_exact_project_probe_attempt1_failed.json",
+          "evidence/receipts/hipaa/neon_exact_project_probe_attempt2_failed.json",
+          "evidence/receipts/hipaa/neon_exact_project_probe_attempt3.json",
+          "evidence/receipts/hipaa/neon_transport_rbac_peer_20261004.json",
+          "evidence/receipts/hipaa/neon_canary_observability_20261004.json",
+          "evidence/receipts/hipaa/minimum_necessary_exact_retest_20261004.json",
+          "evidence/receipts/hipaa/application_encryption_exact_path_review_20261004.json"
+        ],
+        "id": "qualificationreceiptfco:e293bba02cd5655274317b46",
+        "project_id": "cold-rice-87700506",
+        "result": "FAIL_CLOSED_NOT_QUALIFIED_FOR_REAL_PHI",
+        "type": "QualificationReceiptFCO",
+        "verified_at": "2026-10-04T22:57:20.961056+00:00"
+      },
+      {
+        "decision": "BLOCK_REAL_PHI",
+        "hipaa_compliance": "NOT_VERIFIED",
+        "hipaa_ready_template": "PARTIAL_FAIL_CLOSED",
+        "id": "compliancedecisionfco:7ccf7a25ae143faf201660f5",
+        "real_phi": "BLOCKED",
+        "reason_codes": [
+          "HIPAA_FEATURE_DISABLED",
+          "BAA_UNVERIFIED",
+          "RBAC_EXCESSIVE",
+          "PG_STAT_ACTIVITY_CANARY_EXPOSURE",
+          "APP_ENCRYPTION_MISSING",
+          "RETENTION_PURGE_INCOMPLETE",
+          "RUNTIME_ENDPOINT_MISMATCH"
+        ],
+        "type": "ComplianceDecisionFCO"
+      }
+    ],
+    "schema": "baymax.qualification_fcg.v1"
+  },
+  "next_action": "Enable and verify the project HIPAA feature and signed BAA scope; create a least-privilege application role; redesign sensitive SQL usage so controlled values do not appear in pg_stat_activity; implement and functionally test application AEAD/key custody; reconcile Baymax runtime credentials to this target endpoint; define and verify backup/PITR/log retention and deletion semantics; then rerun this exact qualification.",
+  "repo_head": "9ae033b41645bed3bc223ba4680ed9f632dac724",
+  "schema": "baymax.neon_exact_project_qualification_receipt.v1",
+  "source_class": "CONTROLLED_SYNTHETIC_PHI_SHAPED_ONLY",
+  "vendor_public_baseline": {
+    "neon_hipaa_baa_source": "https://neon.com/blog/hipaa",
+    "neon_security_source": "https://neon.com/security",
+    "status": "SUPPORTING_VENDOR_LEVEL_ONLY_NOT_ACCOUNT_PROOF"
+  },
+  "verdict": {
+    "ACCOUNT_ELIGIBILITY": "UNKNOWN",
+    "AI_DISCLOSURE_GATE": "PASS_FAIL_CLOSED",
+    "APPLICATION_LOGS": "NOT_TESTED_STANDALONE_PROBE",
+    "APPLICATION_PAYLOAD_ENCRYPTION": "NOT_IMPLEMENTED_OBSERVED_TRACKED_STORAGE_PATH",
+    "BAA_SCOPE_STATE": "UNKNOWN",
+    "BAA_STATE": "BLOCKED_HUMAN_VERIFICATION",
+    "BACKUP_DELETE": "UNKNOWN",
+    "BAYMAX_RUNTIME_DATABASE_HOST_HASH": "68f22368c7681275405a6c0d2371d772145a1ba6c351ac67d75e14c74efd9caf",
+    "BAYMAX_RUNTIME_TARGET_BINDING": "FAIL",
+    "BRANCH_ID": "br-falling-block-b5qoil65",
+    "BRANCH_MATCH": "PASS",
+    "BYPASSRLS": true,
+    "CANARY_IN_ROW": "YES",
+    "CANARY_IN_SQL_TEXT": "YES_FAIL",
+    "CANARY_LOGS": "NO_IN_QUERIED_NEON_PG_ENDPOINT_WINDOW",
+    "CANARY_PG_STAT_ACTIVITY": "YES_FAIL",
+    "CANARY_TRACES": "UNKNOWN_NOT_SEPARATELY_INSPECTED",
+    "CERT_HOSTNAME_VERIFIED": "PASS",
+    "CIPHER": "TLS_AES_256_GCM_SHA384",
+    "CONTROLLED_CRUD": "PASS_UNDER_OVERPRIVILEGED_ROLE",
+    "CREATEDB": true,
+    "CREATEROLE": true,
+    "DATABASE_HOST_HASH": "5c252038fcc3e94905f177eb558139f6c5de89848bb6560d54a5cb8529e05df2",
+    "DATABASE_ROLE": "neondb_owner",
+    "DEVICE_FILE_PROTECTION": "NOT_IMPLEMENTED_OBSERVED_TRACKED_APP_PATH",
+    "ENDPOINT_MATCH": "PASS",
+    "HIPAA_COMPLIANCE": "NOT_VERIFIED",
+    "HIPAA_FEATURE_ENABLED": "FAIL_FALSE",
+    "HIPAA_FEATURE_PRESENT": "PASS",
+    "HIPAA_READY_TEMPLATE": "PARTIAL_FAIL_CLOSED",
+    "KEYCHAIN": "NOT_IMPLEMENTED_OBSERVED_TRACKED_APP_PATH",
+    "KEY_DELETION": "NOT_IMPLEMENTED_OBSERVED_TRACKED_APP_PATH",
+    "KEY_ROTATION": "NOT_IMPLEMENTED_OBSERVED_TRACKED_APP_PATH",
+    "LOGICAL_DELETE": "PASS_ACTIVE_ROW_AND_SCHEMA",
+    "LOGIN": true,
+    "MINIMUM_NECESSARY": "PASS",
+    "NEON_AT_REST": "PARTIAL_VENDOR_DOCUMENTED_ACCOUNT_SPECIFIC_NOT_VERIFIED",
+    "NEON_DELETION": "PASS_LOGICAL_PARTIAL_OVERALL",
+    "PITR_DELETE": "UNKNOWN_NOT_EXECUTED",
+    "PROJECT_ID": "cold-rice-87700506",
+    "PROJECT_MATCH": "PASS",
+    "RBAC": "FAIL",
+    "REAL_PHI": "BLOCKED",
+    "REGION": "aws-us-east-2",
+    "REGION_MATCH": "PASS",
+    "REPLICATION": true,
+    "RETENTION": "PARTIAL_HISTORY_RETENTION_86400_SECONDS_PROVIDER_RETENTION_UNKNOWN",
+    "RLS_EFFECTIVE": "NO",
+    "SECURE_ENCLAVE": "NOT_IMPLEMENTED_OBSERVED_TRACKED_APP_PATH",
+    "SERVER_IDENTITY_VERIFIED": "PASS",
+    "SUPERUSER": false,
+    "TLS_ENCRYPTED": "PASS",
+    "TLS_PEER_IDENTITY": "PASS_VERIFY_FULL_CERT_HOSTNAME",
+    "TLS_VERSION": "TLSv1.3"
+  },
+  "verified_at": "2026-10-04T22:57:20.961056+00:00"
+}

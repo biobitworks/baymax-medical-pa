@@ -1,0 +1,14 @@
+{
+  "attempt": 2,
+  "branch_id": "br-falling-block-b5qoil65",
+  "claim_ceiling": "This failure is a client-side certificate-verification result for this execution environment; it does not establish a Neon service failure.",
+  "database_mutation": "NOT_STARTED",
+  "failure_class": "CLIENT_CERTIFICATE_VERIFY_FAILED_WITH_SYSTEM_TRUST_MODE",
+  "observed_at": "2026-10-04T22:47:01.666792+00:00",
+  "project_id": "cold-rice-87700506",
+  "real_phi": "NONE_USED",
+  "requested_sslmode": "verify-full",
+  "schema": "baymax.neon_exact_project_probe_attempt.v1",
+  "sslrootcert_mode": "system",
+  "state": "FAILED_PRE_DATABASE_MUTATION"
+}
