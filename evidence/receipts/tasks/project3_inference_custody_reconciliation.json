@@ -1,0 +1,80 @@
+{
+  "bali_offline_custody": {
+    "cloud_sync": "DEFERRED_WHILE_OFFLINE",
+    "deterministic_rejection": "OBSERVED",
+    "full_baymax_app_e2e": "NOT_YET_OBSERVED",
+    "live_stock_price_hours": "UNKNOWN_WHILE_OFFLINE",
+    "offline_bundle": "IMPLEMENTED",
+    "physical_local_inference": "OBSERVED",
+    "source_fco_fcg": "SUPPORTED_PROTOTYPE",
+    "wallet_local_policy": "EXECUTED_PROTOTYPE"
+  },
+  "bali_reconnect_custody": {
+    "design": "OFFLINE_SUCCESSOR_THEN_EXPLICIT_REMOTE_EVIDENCE_ADMISSION",
+    "fly_replica_rejoin": "NOT_TESTED",
+    "live_reconnect_execution": "NOT_TESTED_END_TO_END",
+    "rule": "Remote state may append receipts/successors but must not replace offline canonical state."
+  },
+  "canonical_parent": {
+    "branch": "integration/iphone-offline-v2",
+    "breakpoint": "BAYMAX-BP-0033",
+    "chain_head": "4d7bbacd1ba58d8c8e8f04bfc10802307c9fccaa511849620bde5f85ca474f02",
+    "head": "d4389ecfa7589c4e376d9be14658b9d4494f7fd5",
+    "merkle_root": "ee51fe916b91cc8628f2a37e34f7acc9e92b46c9c0cd31c8c445b3119339b3b8"
+  },
+  "claim_ceiling": "The current evidence supports a multi-tier inference/custody architecture and observed offline local inference, but not a complete Bali offline-to-online Baymax app + Fly wallet E2E or medical/regulatory correctness.",
+  "external_lineage_file": "evidence/lineage/project3_actor_lineages.json",
+  "human_readable_map": "docs/PROJECT3_INFERENCE_CUSTODY_MAP.md",
+  "inference_ladder": {
+    "L0_deterministic": "EXECUTED",
+    "L1_physical_iphone_apollo": "OBSERVED_AIRPLANE_MODE_UI",
+    "L2_local_mac_liquid": "EXECUTED_ROUTING_NEGATIVE",
+    "L3_magicstudio_heavy_local": "NOT_TESTED",
+    "L4_neon_gateway": "PASS_SYNTHETIC_N1_CONTROL_PLANE_PARTIAL",
+    "L5_upstream_mastra": "IMPLEMENTED_UPSTREAM_COMPLIANCE_INTEGRATION_REVIEW_REQUIRED",
+    "L6_frontier_remote": "PROPOSED_DEFERRED"
+  },
+  "observed_at": "2026-10-04T21:26:39.011823+00:00",
+  "project_tasks": {
+    "issue_3_offline_first_ai": "PARTIAL",
+    "issue_4_privacy_compliance": "PARTIAL",
+    "issue_5_agent_wallet": "PARTIAL_SYNTHETIC_REAL_PURCHASE_BLOCKED",
+    "issue_8_fly_sandbox": "NOT_TESTED_REAL_DEPLOYMENT"
+  },
+  "project_url": "https://github.com/users/jerelvelarde/projects/3/views/1",
+  "real_phi": "NONE_IN_THIS_RECONCILIATION",
+  "repair_plan": [
+    "Canonicalize Swift/Python validator parity using Claude/Codex adversarial vectors.",
+    "Run full Baymax physical-iPhone Airplane Mode + restart E2E.",
+    "Capture exact Apollo raw reply bytes and run them through production validator.",
+    "Run on-device synthetic wallet persistence/restart test.",
+    "Run reconnect successor/admission test without replacing offline state.",
+    "Optionally deploy synthetic Fly delegate/replica and test divergence/rejoin.",
+    "Run Apple Health PR #20 physical-device check privately with no personal values committed.",
+    "Reconcile current upstream main in a clean worktree and admit the integration result.",
+    "Have Claude independently red-team and Codex independently reproduce before final task closure."
+  ],
+  "schema": "baymax.project3_inference_custody_reconciliation.v1",
+  "secrets_recorded": false,
+  "upstream_main": {
+    "apple_health_pr_20": "OPEN_FIRST_PHYSICAL_IPHONE_HEALTH_RUN_STILL_NEEDED",
+    "head": "63f58143348b6a08504df86a55bb6ea112822144",
+    "observed_via": "git ls-remote + fetched upstream/main",
+    "recent_features": [
+      "Postgres persistence and records/chat history",
+      "fitness/activity onboarding",
+      "PWA/mobile reminder demo",
+      "follow-up health data/PDF report"
+    ],
+    "repository": "jerelvelarde/baymax-medical-pa"
+  },
+  "wallet": {
+    "local_persistent_wallet": "EXECUTED_SYNTHETIC",
+    "phone_root_fly_delegate_semantics": "IMPLEMENTED_IN_PROCESS",
+    "prescription_purchase": "BLOCKED",
+    "real_fly_deployment": "NOT_TESTED",
+    "real_money": "NO",
+    "repository_mmr": "NOT_COMPUTED",
+    "wallet_mmr": "IMPLEMENTED"
+  }
+}
