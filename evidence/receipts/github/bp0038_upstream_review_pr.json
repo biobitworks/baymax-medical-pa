@@ -1,0 +1,20 @@
+{
+  "base_ref": "main",
+  "claim_ceiling": "Records observed GitHub PR creation and reviewer-request state only; does not establish review, approval, merge, correctness, or acceptance.",
+  "head_oid": "97f5fce0f9d23f73b11679fbff17ab695d383adf",
+  "head_owner": "biobitworks",
+  "head_ref": "execution/hipaa-neon-qualification",
+  "observed_at": "2026-10-04T22:08:12.747921+00:00",
+  "pull_request_number": 38,
+  "pull_request_url": "https://github.com/jerelvelarde/baymax-medical-pa/pull/38",
+  "repository": "jerelvelarde/baymax-medical-pa",
+  "result": "PASS",
+  "review_request": {
+    "result": "PASS_OBSERVED",
+    "reviewer": "jerelvelarde"
+  },
+  "schema": "baymax.github_review_pr_receipt.v1",
+  "source_breakpoint": "BAYMAX-BP-0038",
+  "source_commit": "97f5fce0f9d23f73b11679fbff17ab695d383adf",
+  "state": "OPEN"
+}

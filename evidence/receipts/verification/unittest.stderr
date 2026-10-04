@@ -1,0 +1,24 @@
+test_policy (unittest.loader._FailedTest) ... ERROR
+
+======================================================================
+ERROR: test_policy (unittest.loader._FailedTest)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_policy
+Traceback (most recent call last):
+  File "/Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/loader.py", line 436, in _find_test_path
+    module = self._get_module_from_name(name)
+  File "/Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/loader.py", line 377, in _get_module_from_name
+    __import__(name)
+  File "/Users/byron/projects/active/baymax-medical-pa/tests/test_policy.py", line 7, in <module>
+    from baymax_compliance.policy import ComplianceDecision, ComplianceRequest, route_request
+  File "/Users/byron/projects/active/baymax-medical-pa/src/baymax_compliance/__init__.py", line 3, in <module>
+    from .policy import ComplianceRequest, ComplianceDecision, route_request
+  File "/Users/byron/projects/active/baymax-medical-pa/src/baymax_compliance/policy.py", line 10, in <module>
+    from enum import StrEnum
+ImportError: cannot import name 'StrEnum' from 'enum' (/Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/enum.py)
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+FAILED (errors=1)

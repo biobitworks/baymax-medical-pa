@@ -1,0 +1,19 @@
+{
+  "catalog_path": "fixtures/iphone/apollo_catalog_v2.json",
+  "catalog_sha256": "648e0e87bc4ec024dd1d46283bd7697fc9de266aef6980d336c113c7311d8d8a",
+  "claim_boundary": "Source packet/catalog identity only; no destination transfer, model identity, offline inference, or medical correctness.",
+  "destination_byte_identity": "NOT_INDEPENDENTLY_VERIFIED",
+  "execution_substrate": "NOT_EXECUTED",
+  "model_identity": "NOT_OBSERVED",
+  "packet_bytes": 2540,
+  "packet_path": "fixtures/iphone/apollo_context_packet_v2.txt",
+  "packet_schema": "baymax.apollo-context-packet.v2",
+  "packet_sha256": "80e92bd4d0583fb58b261164ba2e53543ce7482a0f767bc7c3368c460de54147",
+  "schema": "baymax.apollo-packet-receipt.v2",
+  "source_offline_bundle_path": "fixtures/iphone/offline_travel_bundle_v1.json",
+  "source_offline_bundle_sha256": "36d5d72c202da795db07d50d807747e94922f3b958b9ee25fd646e3d038a0c93",
+  "source_offline_fco_path": "fixtures/iphone/OfflineTravelBundleFCO.json",
+  "source_offline_fco_sha256": "4f03387a3a2c407371d7538ddd4d9a108063358adfbf47294624f13748b2ba33",
+  "synthetic_only": true,
+  "transfer": "HUMAN_MEDIATED"
+}

@@ -1,0 +1,2 @@
+{"task":"custody-redteam","state":"EXECUTED","bp":"BAYMAX-BP-0002","result":"PARTIAL","ts":"2026-10-04"}
+{"task":"wallet-v0-synthetic","state":"EXECUTED","bp":"BAYMAX-BP-0007","attacks":"35 pass/0 fail/3 not_tested/1 limitation","ts":"2026-10-04"}

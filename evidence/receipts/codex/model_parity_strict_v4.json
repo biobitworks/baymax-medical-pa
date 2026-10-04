@@ -1,0 +1,967 @@
+{
+  "accepted": 7,
+  "catalog_sha256": "648e0e87bc4ec024dd1d46283bd7697fc9de266aef6980d336c113c7311d8d8a",
+  "corpora_sha256": {
+    "tests/vectors/model_admission_strict_edges_v1.json": "b35f4fcf3a2ceea3a1ddf8a7f7f47f7ca0ca52678dd59473a719821ee80c01e9",
+    "tests/vectors/model_admission_v3.json": "8e10ab3796ca5fd6eb3c0e4818a0ca2fb9dffea1eb07ebf396783dfc31e17618"
+  },
+  "exact_parity_scope": "Every vector: expected admission state and full decoded selection",
+  "rejected": 129,
+  "results": [
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_000"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_001"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_002"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_003"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_004"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_005"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_006"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_007"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_008"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_009"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_010"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_011"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_012"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_013"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_014"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_015"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_016"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_017"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_018"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_019"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_020"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v1_021"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_000"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_001"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_002"
+    },
+    {
+      "EXPECTED_STATE": "ACCEPT",
+      "PYTHON_STATE": "ACCEPT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "ACCEPT",
+      "VECTOR_ID": "CLAUDE_v2_003"
+    },
+    {
+      "EXPECTED_STATE": "ACCEPT",
+      "PYTHON_STATE": "ACCEPT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "ACCEPT",
+      "VECTOR_ID": "CLAUDE_v2_004"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_005"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_006"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_007"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_008"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_009"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_010"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_011"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_012"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_013"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_014"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_015"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_016"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_017"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_018"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_019"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_020"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_021"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_022"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_023"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_024"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_025"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_026"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_027"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_028"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_029"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_030"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_031"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_032"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_033"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_034"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_035"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_036"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_037"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_038"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_039"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "CLAUDE_v2_040"
+    },
+    {
+      "EXPECTED_STATE": "ACCEPT",
+      "PYTHON_STATE": "ACCEPT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "ACCEPT",
+      "VECTOR_ID": "VALID_SELECTION"
+    },
+    {
+      "EXPECTED_STATE": "ACCEPT",
+      "PYTHON_STATE": "ACCEPT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "ACCEPT",
+      "VECTOR_ID": "VALID_EMPTY"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "FLOAT_ID"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "EXPONENT_ID"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "BOOL_ID"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "NEGATIVE_ID"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "HUGE_ID"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "REPEATED_ID"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRING_ID"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "NESTED_ID"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "NULL_ID"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "LEXICAL_EXPONENT"
+    },
+    {
+      "EXPECTED_STATE": "ACCEPT",
+      "PYTHON_STATE": "ACCEPT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "ACCEPT",
+      "VECTOR_ID": "NEGATIVE_ZERO"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "TRAILING_JSON"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "TRAILING_TEXT"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "TOP_ARRAY"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "TRAILING_COMMA"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "DUPLICATE"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "ESCAPED_DUPLICATE"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "NORMALIZED_COLLISION"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "NAN"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "OVERSIZE"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "WALLET_OBJECT"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "OBSERVED_AIRPLANE_RESPONSE"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_BOM"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_BOM_AFTER_SPACE"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_ARRAY_TRAILING_COMMA"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_OBJECT_TRAILING_COMMA"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_COMMENT"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_LINE_COMMENT"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_CODE_FENCE"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_NON_JSON_SPACE"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_LEADING_ZERO"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_PLUS_ID"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_EMPTY"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_TRUNCATED"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_UNPAIRED_SURROGATE_KEY"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_NESTED_DUPLICATE"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_NFC_COLLISION"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_INTEGER_CLINICIAN"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_STRING_CLINICIAN"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_FALSE_CLINICIAN"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_NULL_CLINICIAN"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_SUMMARY_CASE"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_SUMMARY_SUFFIX"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_ACTION_CASE"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_DEEP_NESTING"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_KNOWN_FLOAT"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_KNOWN_EXPONENT"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_KNOWN_BOOL"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_UNKNOWN_FLOAT"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_UNKNOWN_EXPONENT"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_UNKNOWN_BOOL"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_RECOMMENDED_QUESTIONS_FLOAT"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_RECOMMENDED_QUESTIONS_EXPONENT"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_RECOMMENDED_QUESTIONS_BOOL"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_SELF_IDENTIFY_PROVIDER"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_SELF_IDENTIFY_EXECUTION_SUBSTRATE"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_SELF_IDENTIFY_MODEL_LABEL_OBSERVED"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_SELF_IDENTIFY_MODEL_REVISION"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_SELF_IDENTIFY_VALIDATOR_STATE"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_SELF_IDENTIFY_WALLET_AUTHORITY"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_SELF_IDENTIFY_MEDICAL_AUTHORITY"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_SELF_IDENTIFY_SOURCE_PACKET_SHA256"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_SELF_IDENTIFY_CATALOG_SHA256"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_MISSING_SUMMARY"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_MISSING_KNOWN"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_MISSING_UNKNOWN"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_MISSING_RECOMMENDED_QUESTIONS"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_MISSING_MEDICAL_ACTION"
+    },
+    {
+      "EXPECTED_STATE": "REJECT",
+      "PYTHON_STATE": "REJECT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "REJECT",
+      "VECTOR_ID": "STRICT_MISSING_REQUIRES_CLINICIAN"
+    },
+    {
+      "EXPECTED_STATE": "ACCEPT",
+      "PYTHON_STATE": "ACCEPT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "ACCEPT",
+      "VECTOR_ID": "STRICT_ESCAPED_VALID_KEY"
+    },
+    {
+      "EXPECTED_STATE": "ACCEPT",
+      "PYTHON_STATE": "ACCEPT",
+      "SELECTION_PARITY": true,
+      "SWIFT_STATE": "ACCEPT",
+      "VECTOR_ID": "STRICT_WHITESPACE"
+    }
+  ],
+  "schema": "baymax.model-parity.v2",
+  "state": "PASS",
+  "vector_count": 136
+}

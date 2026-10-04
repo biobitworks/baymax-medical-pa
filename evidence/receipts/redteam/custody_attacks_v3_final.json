@@ -1,0 +1,167 @@
+{
+  "attacks": [
+    {
+      "attack": "01",
+      "evidence_tail": "VERIFY=FAIL\nFAILURE=artifact evidence/breakpoints/BAYMAX-BP-0000.json: bytes differ from latest breakpoint that lists it\nFAILURE=chain[0]: file bytes changed for BAYMAX-BP-0000.json\n",
+      "expected": "REJECT",
+      "name": "modify historical breakpoint header (parent/state) without touching merkle block",
+      "observed": "REJECT",
+      "result": "PASS"
+    },
+    {
+      "attack": "01b",
+      "evidence_tail": "VERIFY=FAIL\nFAILURE=chain[4]: file bytes changed for BAYMAX-BP-0004.json\n",
+      "expected": "REJECT",
+      "name": "modify TAIL breakpoint header (state) - nothing downstream commits to it",
+      "observed": "REJECT",
+      "result": "PASS"
+    },
+    {
+      "attack": "02",
+      "evidence_tail": "ex 3\nFAILURE=chain has 5 entries but 4 breakpoint files\nFAILURE=chain[0]: index/id mismatch\nFAILURE=chain[0]: file bytes changed for BAYMAX-BP-0001.json\nFAILURE=chain[0]: merkle_root mismatch\nFAILURE=chain[1]: index/id mismatch\nFAILURE=chain[1]: file bytes changed for BAYMAX-BP-0002.json\nFAILURE=chain[1]: merkle_root mismatch\nFAILURE=chain[2]: index/id mismatch\nFAILURE=chain[2]: file bytes changed for BAYMAX-BP-0003.json\nFAILURE=chain[2]: merkle_root mismatch\nFAILURE=chain[3]: index/id mismatch\nFAILURE=chain[3]: file bytes changed for BAYMAX-BP-0004.json\nFAILURE=chain[3]: merkle_root mismatch\n",
+      "expected": "REJECT",
+      "name": "delete historical breakpoint BP-0000",
+      "observed": "REJECT",
+      "result": "PASS"
+    },
+    {
+      "attack": "02b",
+      "evidence_tail": "VERIFY=FAIL\nFAILURE=artifact scripts/verify_chain.py: bytes differ from latest breakpoint that lists it\nFAILURE=artifact evidence/receipts/redteam/gitleaks_bp0002_finding.json: bytes differ from latest breakpoint that lists it\nFAILURE=chain has 5 entries but 4 breakpoint files\n",
+      "expected": "REJECT",
+      "name": "delete TAIL breakpoint file (chain entry left in place)",
+      "observed": "REJECT",
+      "result": "PASS"
+    },
+    {
+      "attack": "02c",
+      "evidence_tail": "VERIFY=FAIL\nFAILURE=artifact scripts/verify_chain.py: bytes differ from latest breakpoint that lists it\nFAILURE=artifact evidence/receipts/redteam/gitleaks_bp0002_finding.json: bytes differ from latest breakpoint that lists it\n",
+      "expected": "REJECT",
+      "name": "truncate tail: delete tail breakpoint AND its chain entry (needs external anchor)",
+      "observed": "REJECT",
+      "result": "PASS"
+    },
+    {
+      "attack": "03",
+      "evidence_tail": "VERIFY=FAIL\nFAILURE=BAYMAX-BP-0001: merkle.merkle_root mismatch (recomputed from stored descriptors)\nFAILURE=artifact evidence/breakpoints/BAYMAX-BP-0001.json: bytes differ from latest breakpoint that lists it\nFAILURE=chain[1]: file bytes changed for BAYMAX-BP-0001.json\n",
+      "expected": "REJECT",
+      "name": "reorder leaves in BP-0001 (artifacts+leaf_hashes swapped, claimed root kept)",
+      "observed": "REJECT",
+      "result": "PASS"
+    },
+    {
+      "attack": "04",
+      "evidence_tail": "0002: id not contiguous at index 3\nFAILURE=BAYMAX-BP-0003: id not contiguous at index 4\nFAILURE=BAYMAX-BP-0004: id not contiguous at index 5\nFAILURE=chain has 5 entries but 6 breakpoint files\nFAILURE=chain[2]: index/id mismatch\nFAILURE=chain[2]: file bytes changed for BAYMAX-BP-0001.json\nFAILURE=chain[2]: merkle_root mismatch\nFAILURE=chain[3]: index/id mismatch\nFAILURE=chain[3]: file bytes changed for BAYMAX-BP-0002.json\nFAILURE=chain[3]: merkle_root mismatch\nFAILURE=chain[4]: index/id mismatch\nFAILURE=chain[4]: file bytes changed for BAYMAX-BP-0003.json\nFAILURE=chain[4]: merkle_root mismatch\n",
+      "expected": "REJECT",
+      "name": "duplicate breakpoint ID under a second filename",
+      "observed": "REJECT",
+      "result": "PASS"
+    },
+    {
+      "attack": "05",
+      "evidence_tail": "VERIFY=FAIL\nFAILURE=BAYMAX-BP-0001: duplicate artifact path\nFAILURE=artifact evidence/breakpoints/BAYMAX-BP-0001.json: bytes differ from latest breakpoint that lists it\nFAILURE=chain[1]: file bytes changed for BAYMAX-BP-0001.json\nFAILURE=chain[1]: merkle_root mismatch\n",
+      "expected": "REJECT",
+      "name": "duplicate leaf (same artifact twice), merkle recomputed consistently",
+      "observed": "REJECT",
+      "result": "PASS"
+    },
+    {
+      "attack": "06",
+      "evidence_tail": "VERIFY=FAIL\nFAILURE=BAYMAX-BP-0001: merkle.merkle_root mismatch (recomputed from stored descriptors)\nFAILURE=artifact evidence/breakpoints/BAYMAX-BP-0001.json: bytes differ from latest breakpoint that lists it\nFAILURE=chain[1]: file bytes changed for BAYMAX-BP-0001.json\nFAILURE=chain[1]: merkle_root mismatch\n",
+      "expected": "REJECT",
+      "name": "correct leaves, wrong claimed root",
+      "observed": "REJECT",
+      "result": "PASS"
+    },
+    {
+      "attack": "07",
+      "evidence_tail": "VERIFY=FAIL\nFAILURE=BAYMAX-BP-0001: merkle.leaf_ordering mismatch (recomputed from stored descriptors)\nFAILURE=artifact evidence/breakpoints/BAYMAX-BP-0001.json: bytes differ from latest breakpoint that lists it\nFAILURE=chain[1]: file bytes changed for BAYMAX-BP-0001.json\n",
+      "expected": "REJECT",
+      "name": "correct root, incorrect claimed ordering label",
+      "observed": "REJECT",
+      "result": "PASS"
+    },
+    {
+      "attack": "09",
+      "evidence_tail": "VERIFY=FAIL\nFAILURE=BAYMAX-BP-0001: unsafe artifact 'docs/cafe\u0301.md': non-NFC path\nFAILURE=artifact evidence/breakpoints/BAYMAX-BP-0001.json: bytes differ from latest breakpoint that lists it\nFAILURE=chain[1]: file bytes changed for BAYMAX-BP-0001.json\nFAILURE=chain[1]: merkle_root mismatch\n",
+      "expected": "REJECT",
+      "name": "unicode: same file referenced via NFD path alias, resealed",
+      "observed": "REJECT",
+      "result": "PASS"
+    },
+    {
+      "attack": "10",
+      "evidence_tail": "VERIFY=FAIL\nFAILURE=BAYMAX-BP-0001: unsafe artifact 'docs/linked.md': symlink component linked.md\nFAILURE=artifact evidence/breakpoints/BAYMAX-BP-0001.json: bytes differ from latest breakpoint that lists it\nFAILURE=chain[1]: file bytes changed for BAYMAX-BP-0001.json\nFAILURE=chain[1]: merkle_root mismatch\n",
+      "expected": "REJECT",
+      "name": "symlink substitution: committed artifact is a symlink to an outside file, resealed",
+      "observed": "REJECT",
+      "result": "PASS"
+    },
+    {
+      "attack": "10b",
+      "evidence_tail": "VERIFY=FAIL\nFAILURE=BAYMAX-BP-0001: unsafe artifact '../outside2.txt': traversal/empty component\nFAILURE=artifact evidence/breakpoints/BAYMAX-BP-0001.json: bytes differ from latest breakpoint that lists it\nFAILURE=chain[1]: file bytes changed for BAYMAX-BP-0001.json\nFAILURE=chain[1]: merkle_root mismatch\n",
+      "expected": "REJECT",
+      "name": "path traversal: artifact path ../outside, resealed",
+      "observed": "REJECT",
+      "result": "PASS"
+    },
+    {
+      "attack": "11",
+      "evidence_tail": "VERIFY=FAIL\nFAILURE=artifact docs/BREAKPOINT_PROTOCOL.md: bytes differ from latest breakpoint that lists it\n",
+      "expected": "REJECT",
+      "name": "artifact bytes changed after hashing",
+      "observed": "REJECT",
+      "result": "PASS"
+    },
+    {
+      "attack": "12",
+      "evidence_tail": "VERIFY=FAIL\nFAILURE=BAYMAX-BP-0001: unsafe artifact 'nope.txt': not a regular file\nFAILURE=BAYMAX-BP-0001: merkle.leaf_hashes mismatch (recomputed from stored descriptors)\nFAILURE=BAYMAX-BP-0001: merkle.merkle_root mismatch (recomputed from stored descriptors)\nFAILURE=BAYMAX-BP-0001: merkle.leaf_count mismatch (recomputed from stored descriptors)\nFAILURE=artifact evidence/breakpoints/BAYMAX-BP-0001.json: bytes differ from latest breakpoint that lists it\nFAILURE=chain[1]: file bytes changed for BAYMAX-BP-0001.json\n",
+      "expected": "REJECT",
+      "name": "breakpoint references nonexistent artifact",
+      "observed": "REJECT",
+      "result": "PASS"
+    },
+    {
+      "attack": "13",
+      "evidence_tail": "VERIFY=FAIL\nFAILURE=BAYMAX-BP-0001: base_head 'deadbeefdeadbeefdeadbeefdeadbeefdeadbeef' is not an existing commit\nFAILURE=artifact evidence/breakpoints/BAYMAX-BP-0001.json: bytes differ from latest breakpoint that lists it\nFAILURE=chain[1]: file bytes changed for BAYMAX-BP-0001.json\n",
+      "expected": "REJECT",
+      "name": "breakpoint base_head references nonexistent git commit",
+      "observed": "REJECT",
+      "result": "PASS"
+    },
+    {
+      "attack": "14",
+      "evidence_tail": "VERIFY=FAIL\nFAILURE=BAYMAX-BP-0001: repository 'someone-else/other-project' not allowed\nFAILURE=artifact evidence/breakpoints/BAYMAX-BP-0001.json: bytes differ from latest breakpoint that lists it\nFAILURE=chain[1]: file bytes changed for BAYMAX-BP-0001.json\n",
+      "expected": "REJECT",
+      "name": "cross-project artifact substitution: repository field rewritten",
+      "observed": "REJECT",
+      "result": "PASS"
+    },
+    {
+      "attack": "14b",
+      "evidence_tail": "VERIFY=FAIL\nFAILURE=artifact evidence/breakpoints/BAYMAX-BP-0001.json: bytes differ from latest breakpoint that lists it\nFAILURE=BAYMAX-BP-0001: parent 'NONE' != expected 'BAYMAX-BP-0000'\nFAILURE=chain[1]: file bytes changed for BAYMAX-BP-0001.json\n",
+      "expected": "REJECT",
+      "name": "broken parent link: BP-0001 parent rewritten",
+      "observed": "REJECT",
+      "result": "PASS"
+    },
+    {
+      "attack": "20",
+      "evidence_tail": "gitleaks exit=1",
+      "expected": "REJECT",
+      "name": "secret admitted to evidence (fake AWS key in an artifact + gitleaks gate)",
+      "observed": "REJECT",
+      "result": "PASS"
+    }
+  ],
+  "control_unmutated": {
+    "exit": 0,
+    "output_tail": "VERIFY=PASS (consistency only; not correctness/authenticity)\nCHAIN_ENTRIES=5\nCHAIN_HEAD=4143542b24500d756986df88cd6ba3b037566f538c0685b49e462053e2ae6ea5\nMMR_STATE=NOT_COMPUTED\nANCHOR=UNSIGNED (BLOCKED_HUMAN_SIGNING_SETUP)\n"
+  },
+  "schema": "baymax.redteam_receipt.v1",
+  "summary": {
+    "fail": 0,
+    "pass": 19,
+    "total": 19
+  },
+  "verifier": "scripts/verify_chain.py"
+}

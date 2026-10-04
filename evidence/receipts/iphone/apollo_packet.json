@@ -1,0 +1,15 @@
+{
+  "byte_count": 1986,
+  "inter_app_api": "NOT_IMPLEMENTED",
+  "minimum_necessary_transformation_sha256": "3fc91191a2e974dfbb97576eeb9be07f43201668b84bf9bbe4758eab3195dd59",
+  "model": "OBSERVE_ON_DEVICE",
+  "packet_schema": "baymax.apollo-context-packet.v1",
+  "physical_execution": "NOT_TESTED",
+  "runtime": "Liquid Apollo / LEAP local",
+  "sha256": "b7ef25064b0af0368d1a95f3551e2c1d9f134cd7d26306eee600de8184ff2cac",
+  "source_offline_bundle_path": "fixtures/iphone/offline_travel_bundle_v1.json",
+  "source_offline_bundle_sha256": "36d5d72c202da795db07d50d807747e94922f3b958b9ee25fd646e3d038a0c93",
+  "synthetic_only": true,
+  "transformation_path": "src/baymax_travel/model.py",
+  "version": 1
+}

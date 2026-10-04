@@ -1,0 +1,54 @@
+{
+  "base_head": "622226e6123e3cc1205a27bccbecc9750a8c832f",
+  "branch": "integration/iphone-offline-v2",
+  "breakpoint_id": "BAYMAX-BP-0028",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 1525,
+        "path": "evidence/breakpoints/BAYMAX-BP-0027.json",
+        "sha256": "d62d963449ae896fd321c533f8b549ea178bb38f7214fabbd05f4a40cb112612"
+      },
+      {
+        "bytes": 2540,
+        "path": "fixtures/iphone/apollo_context_packet_v2.txt",
+        "sha256": "80e92bd4d0583fb58b261164ba2e53543ce7482a0f767bc7c3368c460de54147"
+      },
+      {
+        "bytes": 2331,
+        "path": "fixtures/iphone/apollo_catalog_v2.json",
+        "sha256": "648e0e87bc4ec024dd1d46283bd7697fc9de266aef6980d336c113c7311d8d8a"
+      },
+      {
+        "bytes": 8339,
+        "path": "ios/OfflineTravelDemo/ModelInference.swift",
+        "sha256": "bcd89a9833e055f957e55fcf1f6509fd87d9c05d90f4780d66c6b3e2f9b6f77a"
+      },
+      {
+        "bytes": 3166,
+        "path": "evidence/receipts/iphone/apollo_physical_local_model_observed.json",
+        "sha256": "9be63ed35763a3b52cea5fcc89e43e136ea1c8d4e98e061a054d6bcdcd9a1a1f"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 5,
+    "leaf_hashes": [
+      "fa1cd1681622592ab3f502aadd3460eb095b89d5ad9fb95ae3a1b762be21bd61",
+      "375e635230ef9129d838cf960354bba56dc9fc1c39bd779dc2903421dc1033e5",
+      "e609303173e709611138f740f53255798d1e57526e8b4805889122a5f5369409",
+      "b5a1d2c12b6b2b7b99cc21aaa579f755edd2ead0963b280862b33a814a796391",
+      "9dec2f3e027755218541667511798aa86a5753dc15e5401b41fd16b855f488ec"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "6bb7475a2ded51bd5babec59919e5e6e3e6ba1fe852dbf57d509320b77906a15"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "Observed Liquid Apollo local-model generation through Apple iPhone Mirroring on a physical iPhone. Frozen synthetic v2 packet produced a contract-valid JSON transcription with medical_action NONE and requires_clinician true. Apollo UI model label is truncated; LTE is visible, so full model identity and offline/network-isolated inference remain UNKNOWN/NOT_TESTED.",
+  "parent": "BAYMAX-BP-0027",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "PHYSICAL_IPHONE_APOLLO_LOCAL_MODEL_OBSERVED",
+  "state": "PARTIAL",
+  "timestamp_utc": "2026-10-04T20:50:45.959747+00:00"
+}

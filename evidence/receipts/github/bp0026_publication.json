@@ -1,0 +1,54 @@
+{
+  "claim_ceiling": "GitHub collaboration/publication state only. Does not prove issue acceptance, merge readiness, physical-device execution, clinical correctness, HIPAA compliance, or medication-purchase authorization.",
+  "implementation_breakpoint": "BAYMAX-BP-0026",
+  "implementation_commit": "33a9cacd4336785a1857c5e08987024b77332520",
+  "issues": [
+    {
+      "comment_id": 5984227478,
+      "number": 4,
+      "repository": "jerelvelarde/baymax-medical-pa",
+      "state_after_update": "OPEN_PARTIAL",
+      "title": "Privacy compliance",
+      "url": "https://github.com/jerelvelarde/baymax-medical-pa/issues/4"
+    },
+    {
+      "comment_id": 5984227742,
+      "number": 5,
+      "repository": "jerelvelarde/baymax-medical-pa",
+      "state_after_update": "OPEN_PARTIAL",
+      "title": "Agent Wallet to buy the meds",
+      "url": "https://github.com/jerelvelarde/baymax-medical-pa/issues/5"
+    }
+  ],
+  "observed_at": "2026-10-04T20:48:16.840487+00:00",
+  "physical_iphone": "BLOCKED_DEVICE_CONNECTION",
+  "project": "baymax-medical-pa",
+  "publication_state": "PASS",
+  "pull_requests": {
+    "predecessor": {
+      "head_branch": "redteam/bp-0006-model-wallet",
+      "head_commit_observed": "226ddfeba4d0ce1e29c534f44a6132a423133b6b",
+      "number": 2,
+      "repository": "biobitworks/baymax-medical-pa",
+      "successor_comment_id": 5984228034,
+      "url": "https://github.com/biobitworks/baymax-medical-pa/pull/2"
+    },
+    "successor": {
+      "base_branch": "main",
+      "draft": true,
+      "head_branch": "integration/iphone-offline-v2",
+      "implementation_head_at_creation": "33a9cacd4336785a1857c5e08987024b77332520",
+      "number": 3,
+      "repository": "biobitworks/baymax-medical-pa",
+      "url": "https://github.com/biobitworks/baymax-medical-pa/pull/3"
+    }
+  },
+  "real_phi": "NONE",
+  "schema": "baymax.github_publication_receipt.v1",
+  "secrets_recorded": false,
+  "wallet_boundary": {
+    "autonomous_pharmacy_purchase": "NO",
+    "prescription_purchase": "BLOCKED",
+    "real_money": "NO"
+  }
+}

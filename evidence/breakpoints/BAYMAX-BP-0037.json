@@ -1,0 +1,108 @@
+{
+  "base_head": "d4d33cb733ff3c53be07dd80369dd4f53fa1553c",
+  "branch": "execution/hipaa-neon-qualification",
+  "breakpoint_id": "BAYMAX-BP-0037",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 1732,
+        "path": "evidence/breakpoints/BAYMAX-BP-0036.json",
+        "sha256": "c6a725a5855df49a32418683c2f3558607351c7e5dd211ce8173d7cd99e7347e"
+      },
+      {
+        "bytes": 365,
+        "path": "src/baymax_compliance/__init__.py",
+        "sha256": "305263c68ce5a71b0d31f4c79d3c81648faf8a6ebbe5ca64b8cc6f7c990b2a35"
+      },
+      {
+        "bytes": 1932,
+        "path": "src/baymax_compliance/context.py",
+        "sha256": "fcc5c1cbdee9bd92e740c3cce456444eb38c12dccfb9ab3738acce138047e538"
+      },
+      {
+        "bytes": 2001,
+        "path": "tests/test_context.py",
+        "sha256": "52db6e6047f3c13f0e88d26adcce606b00529cb54894b269b8774d7110f8c872"
+      },
+      {
+        "bytes": 4512,
+        "path": "experiments/minimum_necessary_probe.py",
+        "sha256": "78e19a2e4f26e31f395079e8037fec0f95ab040f96d07e414a1d7e9cd78c00b8"
+      },
+      {
+        "bytes": 4259,
+        "path": "experiments/application_encryption_gate.py",
+        "sha256": "ba46c330ad0d9eaad7520e1c3285e22108e977c5561c671066faaf60dffaf287"
+      },
+      {
+        "bytes": 19890,
+        "path": "experiments/hipaa_neon_qualification.py",
+        "sha256": "7587275cae491c2dc8705478b33806ec29868b0c136c6d08f88e28bfb7926eb8"
+      },
+      {
+        "bytes": 6092,
+        "path": "evidence/receipts/hipaa/neon_qualification_attempt3_FAIL.json",
+        "sha256": "18a0df2ab00e72c18e2b3b730dee7b19922a34d9abfdfc14148eee31ab6ad0c5"
+      },
+      {
+        "bytes": 6993,
+        "path": "evidence/receipts/hipaa/neon_qualification_attempt4.json",
+        "sha256": "a2be84695e749e3da46ced26adcb3fa7f7ec2f0e67147c1699ea237c1f55552f"
+      },
+      {
+        "bytes": 1703,
+        "path": "evidence/receipts/hipaa/neon_qualification_attempts.json",
+        "sha256": "d56029e32974682ff41f9fd5bd6de0aa8ca44d2cd4bd11e8d0b6452daf9e772e"
+      },
+      {
+        "bytes": 1967,
+        "path": "evidence/receipts/hipaa/minimum_necessary_context.json",
+        "sha256": "5e4581f9746a9b54d291b97d07b18447c64243b8fe22af71a087a4bfed5cabbf"
+      },
+      {
+        "bytes": 2191,
+        "path": "evidence/receipts/hipaa/application_encryption_gate.json",
+        "sha256": "320ac923155807ad4d083a72cea7b78130ad1608effdf5aa9d9f4990df68fcf0"
+      },
+      {
+        "bytes": 1748,
+        "path": "evidence/receipts/hipaa/neon_vendor_public_baseline.json",
+        "sha256": "dfa6a5513c22c6bacf69e5bbaf7bfa958e49558197d467da64def836a72617bf"
+      },
+      {
+        "bytes": 6906,
+        "path": "docs/HIPAA_NEON_TECHNICAL_QUALIFICATION.md",
+        "sha256": "7eebafbf02858e6525ff6aee57b9a870b886d4599467320c72cad3024c1d2983"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 14,
+    "leaf_hashes": [
+      "cbb005cd2549916954e23f22e6dd0388800c8a9b5fd775e950c167eea92068c8",
+      "a72701df9f92a38281118adc3b6f7f931fad35eb107179584cd0a120805e84a2",
+      "1a95ab696e653e509483ed89003b86162e33e348af7f5fb6073ee438a205678d",
+      "1274c2494cd67903058231a0166c513ac276ffdac1782f54a319c8f3b4f20ae8",
+      "a9280aaabe7c809092466f188b8cef0621ef952f4653f4861b6ac97ffd9b5b8a",
+      "f3e61c4bf5de9eb582e1d3ef1c6c82d824c18c26807531a96a296c14fc9f6b10",
+      "3d1d01d7bcbed2dcc2cf950726d09ecdc7fad11805988a9341811389a4237d3a",
+      "639d8ba6b45f84c8bab14232d463a83dc443b22c18386c4bc6cf223dc653588b",
+      "9325b8205183985eb7f463f028df0915acadc7bad5c315ea9f13a94c8a80d317",
+      "c1be19c0dadf20d65e0c2f9ef2e5c8955b9c917b5e2a9d79da08447d83f3eb8b",
+      "801aab7864dfd5707f109199edefa59d942bb6f946c08cadeea4d9a78d3b0bb2",
+      "d00f34bea0b1d194d073bc166d2baaa22a16e78f0151b1e5bf5569642eab10b7",
+      "3f93d4f7aff3f3427cdfbd7f85a6dbd477a7e9f75686d47e2f1f84510c6cfe15",
+      "c8ab53bf2b18353b4e95633c34eee35e12e651abde89594e2c4f31a25ca971c2"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "884181020ac14e6a13f7b6723850f65b415ca9392c83e5b8ccebb89fc6c97811"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "Controlled synthetic PHI-shaped Neon technical qualification executed. TLS and logical deletion observed; minimum-necessary routing PASS. Real-PHI qualification FAILS CLOSED because database activity exposes the controlled canary, the database role is privileged, control-plane/database project identity does not match, application-level encryption/key controls are absent, and the exact BAA/HIPAA account state is unverified. HIPAA_COMPLIANCE=NOT_VERIFIED; REAL_PHI=BLOCKED.",
+  "parent": "BAYMAX-BP-0036",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "HIPAA_NEON_ACCOUNT_QUALIFICATION",
+  "state": "FAIL",
+  "timestamp_utc": "2026-10-04T22:00:00.712471+00:00"
+}

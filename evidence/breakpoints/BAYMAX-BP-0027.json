@@ -1,0 +1,30 @@
+{
+  "base_head": "33a9cacd4336785a1857c5e08987024b77332520",
+  "branch": "integration/iphone-offline-v2",
+  "breakpoint_id": "BAYMAX-BP-0027",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 2046,
+        "path": "evidence/receipts/github/bp0026_publication.json",
+        "sha256": "de204088feac732ffe1a25bea623f35419896df6c30b85eeff48dcaaeff55c61"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 1,
+    "leaf_hashes": [
+      "bb5e2722b435e7e6b74c48cbf5d8dbf6b9202a2e7440ca14b222aa50c8a725d6"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "bb5e2722b435e7e6b74c48cbf5d8dbf6b9202a2e7440ca14b222aa50c8a725d6"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "Published BP-0026 successor status to upstream Issues #4/#5, cross-linked predecessor PR #2, and opened draft Biobitworks PR #3 from integration/iphone-offline-v2. Issues remain OPEN/PARTIAL; physical iPhone remains blocked; prescription purchase remains blocked.",
+  "parent": "BAYMAX-BP-0026",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "GITHUB_ISSUE_PR_PUBLICATION",
+  "state": "PASS",
+  "timestamp_utc": "2026-10-04T20:48:16.926384+00:00"
+}

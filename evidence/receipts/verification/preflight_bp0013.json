@@ -1,0 +1,38 @@
+{
+  "base_head": "3bdf82c0d10ea9b687895aabed932d81f43b5887",
+  "branch": "redteam/bp-0006-model-wallet",
+  "chain_verify": {
+    "claim_ceiling": "consistency only",
+    "exit": 0,
+    "state": "PASS"
+  },
+  "env": {
+    "ignored": true,
+    "tracked": false,
+    "value_recorded": false
+  },
+  "git_diff_check": {
+    "exit": 0,
+    "state": "PASS"
+  },
+  "legacy_verify": {
+    "exit": 1,
+    "known_semantics_conflict": true,
+    "state": "FAIL"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "observed_at": "2026-10-04T19:20:56Z",
+  "phi_external_execution": "BLOCKED",
+  "schema": "baymax.preflight_receipt.v1",
+  "signature_state": "UNSIGNED_NO_LOCAL_SIGNING_KEY",
+  "tests": {
+    "exit": 0,
+    "state": "PASS"
+  },
+  "tracked_secret_scan": {
+    "exit": 0,
+    "scope": "tracked/cached files only",
+    "state": "PASS"
+  },
+  "upstream_head": "34f992dd0cb2f06df7d2be05b7d3bc2edf77d6ef"
+}

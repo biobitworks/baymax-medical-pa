@@ -1,0 +1,30 @@
+{
+  "github_issue_changed": false,
+  "hipaa_claim": "NOT_MADE",
+  "historical_receipts_changed": false,
+  "issue_3_state": "PARTIAL_ACCEPTANCE_EVIDENCE",
+  "issue_4_state": "PARTIAL_ACCEPTANCE_EVIDENCE",
+  "issues": {
+    "3": {
+      "body": "Owner: Byron (GitHub: biobitworks). Assignment pending GitHub eligibility.\n\nBuild offline-first AI for Baymax.\n\nAcceptance criteria:\n- Core agent experience works without an internet connection.\n- Show online/offline state and handle unavailable network tools gracefully.\n- Demonstrate the offline experience end to end.",
+      "state": "OPEN",
+      "title": "Offline-first AI",
+      "url": "https://github.com/jerelvelarde/baymax-medical-pa/issues/3"
+    },
+    "4": {
+      "body": "Owner: Byron (GitHub: biobitworks). Assignment pending GitHub eligibility.\n\nOwn privacy and compliance readiness for Baymax.\n\nAcceptance criteria:\n- Document data flows, storage, retention, and third-party disclosures.\n- Implement consent, data minimization, and deletion controls.\n- Review sponsor integrations and document gaps before making HIPAA compliance claims.\n- Use synthetic medical data for the public hackathon demo.",
+      "state": "OPEN",
+      "title": "Privacy compliance",
+      "url": "https://github.com/jerelvelarde/baymax-medical-pa/issues/4"
+    }
+  },
+  "non_blockers": [
+    "Fly unavailable",
+    "Neon mismatch",
+    "No live pharmacy purchase",
+    "No autonomous calling",
+    "No HIPAA certification for synthetic demo"
+  ],
+  "real_phi": "BLOCKED",
+  "schema": "baymax.demo_scope_correction.v1"
+}

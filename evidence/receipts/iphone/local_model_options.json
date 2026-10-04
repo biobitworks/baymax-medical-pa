@@ -1,0 +1,29 @@
+{
+  "OpenRouter": "EXCLUDED_FROM_OFFLINE_TEST",
+  "apollo": {
+    "execution": "NOT_TESTED",
+    "inter_app_api": "NOT_IMPLEMENTED",
+    "model": "OBSERVE_ON_PHONE",
+    "network": "OFFLINE_REQUIRED_FOR_OFFLINE_CLAIM",
+    "source": "https://www.liquid.ai/apollo",
+    "state": "FALLBACK_PACKET_AND_MANUAL_COPY_READY"
+  },
+  "deterministic_no_model": {
+    "state": "LOCAL_DATA_DECODE_AND_GATE_TESTED"
+  },
+  "native_leap": {
+    "reason": "Requires SDK/model bundle; not integrated in physical-demo preparation tranche",
+    "sources": [
+      "https://github.com/Liquid4All/leap-ios",
+      "https://leap.liquid.ai/platform"
+    ],
+    "state": "DEFERRED"
+  },
+  "order": [
+    "LEAP_NATIVE",
+    "LIQUID_APOLLO",
+    "DETERMINISTIC_NO_MODEL"
+  ],
+  "physical_device_discovery": "NO_DEVICES_FOUND",
+  "simulator_runtime": "NONE_INSTALLED"
+}

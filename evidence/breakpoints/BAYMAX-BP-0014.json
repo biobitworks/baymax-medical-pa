@@ -1,0 +1,36 @@
+{
+  "base_head": "20550fc1fd19fce7a1e65f48683767c5e5776953",
+  "branch": "redteam/bp-0006-model-wallet",
+  "breakpoint_id": "BAYMAX-BP-0014",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 2567,
+        "path": "evidence/breakpoints/BAYMAX-BP-0013.json",
+        "sha256": "bf2503390b2ab71286b5701ca02068c6383fff38d4da85fc0ec755b2c75e32ef"
+      },
+      {
+        "bytes": 803,
+        "path": "evidence/receipts/git/push_bp0013.json",
+        "sha256": "32343853c42d1e2a5e6eb5df5c02bd5c83a1256f1d871ec1bc7688eecaae8048"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 2,
+    "leaf_hashes": [
+      "0240d119ba4483e25ddd90af4d3f86098db3a85a1ccbc79df4fa318983b95ab9",
+      "f74fd8ccdb55c0218e02ee7d69477b48833fc3b4a81652cb4b0f8da4de595337"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "350f2ece7b680b096254000d5d1bedb0ecf50bde702b3ef34e5466fc6243a3dd"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "Admits the observed successful origin push of BP-0013: local and remote Git SHA matched. This externally anchors the prior custody state. No Git signing key was available, so authenticity remains unsigned.",
+  "parent": "BAYMAX-BP-0013",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "REMOTE_PUSH_OBSERVED",
+  "state": "PASS",
+  "timestamp_utc": "2026-10-04T19:22:04.468555+00:00"
+}

@@ -1,0 +1,13 @@
+.web-search-card { width: 100%; box-sizing: border-box; }
+.web-search-sources { list-style: none; padding: 0; margin: 0; }
+.web-search-sources li { padding: 16px 0; border-bottom: 1px solid #edf1e7; }
+.web-search-sources li:last-child { border-bottom: 0; }
+.web-search-title { display: flex; gap: 8px; align-items: baseline; color: #334b28; font-size: 14px; font-weight: 600; text-decoration: none; line-height: 1.5; }
+.web-search-title span { overflow-wrap: anywhere; }
+.web-search-title svg { flex-shrink: 0; }
+.web-search-title:hover { text-decoration: underline; }
+.web-search-title:focus-visible { outline: 2px solid #718661; outline-offset: 4px; border-radius: 2px; }
+.web-search-meta { display: flex; flex-wrap: wrap; gap: 6px 12px; margin-top: 5px; color: #6c7365; font-size: 11px; overflow-wrap: anywhere; }
+.web-search-card .web-search-excerpt { margin: 8px 0 0; color: #4e5548; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.web-search-footer { border-top: 1px solid #edf1e7; padding-top: 10px; color: #6c7365; font-size: 10px; }
+.web-search-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }

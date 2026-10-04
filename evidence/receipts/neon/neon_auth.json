@@ -1,0 +1,61 @@
+{
+  "capability": "managed auth service provisioned? (public JWKS only; no accounts created)",
+  "claim_ceiling": "JWKS endpoint serves signing keys => auth service provisioned. No sign-up/sign-in/token-verification flow executed; no app integration; SDK absent.",
+  "cli_version": null,
+  "config_file_identities": {
+    "upstream_neon.ts_git_blob": "a44c615eab4779333b0d47cad6a3344965d1f7a3"
+  },
+  "credential_presence": {
+    "NEON_AUTH_BASE_URL": "PRESENT",
+    "NEON_AUTH_JWKS_URL": "PRESENT"
+  },
+  "env_var_names": [
+    "NEON_AUTH_BASE_URL",
+    "NEON_AUTH_JWKS_URL"
+  ],
+  "executed": true,
+  "gates": {
+    "CONFIG_DECLARED": "upstream neon.ts declares auth:true (upstream/main, not admitted to this branch)",
+    "EXECUTED": true,
+    "OBSERVED": true,
+    "SDK_PRESENT": false,
+    "SERVICE_PROVISIONED": true
+  },
+  "http_status": 200,
+  "implemented": true,
+  "jwks": {
+    "algs": [
+      "EdDSA"
+    ],
+    "has_kid": true,
+    "key_count": 1,
+    "kty": [
+      "OKP"
+    ]
+  },
+  "latency_s": 0.402,
+  "lockfile_identity": {
+    "note": "upstream lockfile contains 0 '@neon' entries",
+    "upstream_package-lock_git_blob": "3c679a532ac39cac2dec6982c115136c7a9c9115"
+  },
+  "observed": true,
+  "observed_at": "2026-10-04T19:11:37Z",
+  "phi": "none; synthetic data only",
+  "result": "PARTIAL",
+  "sanitized_endpoint": "<branch-id>.neonauth.c-6.<REDACTED>.aws.neon.tech",
+  "sanitized_response_identity": {
+    "body_sha256": "0fffd8bae5a78e228dd0dbbbd26759910ae1f46d2ca43d71bcbd443c694846a7",
+    "bytes": 149
+  },
+  "schema": "baymax.technology_receipt.v1",
+  "sdk": "requests",
+  "sdk_present": true,
+  "sdk_version": "2.32.5",
+  "source_commit": "34f992dd0cb2f06df7d2be05b7d3bc2edf77d6ef",
+  "tags": [
+    "NEON",
+    "AUTH"
+  ],
+  "technology_id": "NEON_AUTH",
+  "vendor_request_id": null
+}

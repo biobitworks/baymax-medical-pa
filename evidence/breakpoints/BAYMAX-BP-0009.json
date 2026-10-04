@@ -1,0 +1,78 @@
+{
+  "base_head": "a2a186286337aee230028dafa90978db284eb7dd",
+  "branch": "redteam/bp-0006-model-wallet",
+  "breakpoint_id": "BAYMAX-BP-0009",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 14974,
+        "path": "experiments/neon_probe.py",
+        "sha256": "36f9f1d1b60015f542548f236276c8784cd94e2f7b115fd9a526d005c43e8d06"
+      },
+      {
+        "bytes": 3706,
+        "path": "scripts/env_hygiene.py",
+        "sha256": "47b231b4b650cea54d9f2d0233d8c359a1037818de1d5e6618f6e202b4fee2ac"
+      },
+      {
+        "bytes": 1129,
+        "path": "evidence/receipts/neon/neon_control_plane.json",
+        "sha256": "d47a863fc4f3fb290e39749daf9e2576e4732632da2330244f33c422d473d168"
+      },
+      {
+        "bytes": 1854,
+        "path": "evidence/receipts/neon/neon_postgres.json",
+        "sha256": "aba25566670b53ce17e89afb05216e00823518ae371fcc4f5348c5b922643bd7"
+      },
+      {
+        "bytes": 1813,
+        "path": "evidence/receipts/neon/neon_auth.json",
+        "sha256": "a3b021c244576ab9d042b1e973d8d173cc05a8e69dc6f9bec85acddccb7d16a9"
+      },
+      {
+        "bytes": 1999,
+        "path": "evidence/receipts/neon/neon_object_storage.json",
+        "sha256": "befee33b4461276e7e1b55d4c48a886ec7dad050405c0bf858f3ec603ee5e97a"
+      },
+      {
+        "bytes": 3258,
+        "path": "evidence/receipts/neon/neon_ai_gateway_attempt1_FAILED.json",
+        "sha256": "bec58b8ea7f72e57c8f873c22f8cbebd1bf6f49b01b57a25575ae6df9ffdb806"
+      },
+      {
+        "bytes": 2585,
+        "path": "evidence/receipts/neon/hygiene_and_upstream.json",
+        "sha256": "09c41fd5dd006a0fb6f36eb59807bedb7d82bdac7e8d3e2c012d007839cae6e9"
+      },
+      {
+        "bytes": 2010,
+        "path": "evidence/breakpoints/BAYMAX-BP-0008.json",
+        "sha256": "ba7dd04f8c8c15f6ebe713b1f900447f72574ef1c2e0e0762091b434da63c943"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 9,
+    "leaf_hashes": [
+      "44f7c14a72c6ef625fb7ed5b4e58de1d7a0a5004b8b2f6f19896c3fc295e6a5f",
+      "d4f56ab656b9098d6ebad64ed33e5183aa0fd2e36dc3adfa483ed6d3313cfad7",
+      "5caa395f3960b8d9bf1c423fbdad722b41869be22ad3b63a57f208b370dec537",
+      "5cd71e10153c062aae9331d123e9f459734ab1cbe04a9f16246a1fc558238eeb",
+      "5029e7a775639216ee32781907ac63bada8084eb66cbd8ed00b90aae32010ba8",
+      "ded94cebe7aeb382eb4ba3733a90abb898ac7df76ab6a256dc534f34c67a898d",
+      "3882cf937bfc2f5ae1942d52c9e1e971c19f8c30942cf32f519ada4116d2d88f",
+      "29f17fe9d0d3b2d28c6eff579e99a4e405452e8b447a9945042acb583e31f7a0",
+      "3a0655b129aa76dc212aec121ffa1de3e28e22679dc1a3abf89f293ff93f4326"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "4581d9539d6107b1edf5898626f419d676a8696c3faa80793c6b64cbdafbf72d"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "Neon synthetic probe v1. postgres PASS, object_storage PASS, auth PARTIAL(JWKS only), control_plane BLOCKED(NEON_API_KEY empty), ai_gateway FAIL: harness selected embedding model qwen3-embedding-0-6b for chat (HTTP 400). Failure preserved unmodified; repair is a successor. Upstream neon.ts=CONFIG_DECLARED (reproduced). Signing BLOCKED. PHI external execution BLOCKED.",
+  "parent": "BAYMAX-BP-0008",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "NEON_PROBE_ATTEMPT_1",
+  "state": "FAILED",
+  "timestamp_utc": "2026-10-04T19:12:25.741710+00:00"
+}

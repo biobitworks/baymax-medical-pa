@@ -1,0 +1,151 @@
+{
+  "claim_ceiling": "This exact configured Neon database endpoint executed the defined controlled synthetic PHI-shaped technical qualification steps. This does not establish HIPAA compliance, a signed BAA, application-level encryption, provider-log nonretention, backup purge, or organizational/operational readiness.",
+  "compensatory_controls": [
+    {
+      "claim_ceiling": "No claim of application-level encrypted vault",
+      "compensating_control": "REAL_PHI_EXTERNAL=BLOCK; controlled synthetic PHI-shaped tests only",
+      "missing_control": "APPLICATION_LEVEL_PAYLOAD_ENCRYPTION",
+      "residual_risk": "production sensitive-plane design remains incomplete",
+      "result": "ACTIVE",
+      "risk": "database/provider can process plaintext controlled health-shaped fields",
+      "type": "CompensatoryControlFCO"
+    },
+    {
+      "claim_ceiling": "HIPAA_COMPLIANCE=NOT_VERIFIED",
+      "compensating_control": "REAL_PHI_EXTERNAL=BLOCK",
+      "missing_control": "VERIFIED_BAA",
+      "residual_risk": "account may be technically reachable but is not admitted for real PHI",
+      "result": "ACTIVE",
+      "risk": "contractual PHI processing authority unestablished",
+      "type": "CompensatoryControlFCO"
+    },
+    {
+      "claim_ceiling": "LOG_LEAK_TEST=PARTIAL unless all provider logs become inspectable",
+      "compensating_control": "controlled canary only; no real PHI; fail closed for PHI",
+      "missing_control": "COMPLETE_LOG_TRACE_INSPECTION",
+      "residual_risk": "Neon platform log surfaces not fully inspected",
+      "result": "ACTIVE",
+      "risk": "provider-side logs/traces may retain sensitive values",
+      "type": "CompensatoryControlFCO"
+    }
+  ],
+  "database": {
+    "application_level_payload_encryption": "NOT_IMPLEMENTED",
+    "canary_plaintext_recorded": false,
+    "canary_sha256": "0e99ee64a2d5b5b15039ce8b74ea382a6827b2ab358e2add386c76180ffdca39",
+    "control_plane": {
+      "account_identity_state": "PARTIAL_CONTROL_PLANE_ACCESS",
+      "branch_identity_state": "NOT_MATCHED",
+      "calls": {
+        "organizations": {
+          "count": 1,
+          "status": 200
+        },
+        "projects": {
+          "count": 1,
+          "status": 200
+        }
+      },
+      "credential_present": true,
+      "executed": true,
+      "matched_project_found": false,
+      "observed": false,
+      "project_identity_state": "NOT_MATCHED",
+      "region": "UNKNOWN"
+    },
+    "controlled_source_class": "CONTROLLED_SYNTHETIC_PHI_SHAPED",
+    "database_activity_canary_test": {
+      "canary_visible": true,
+      "pg_stat_activity_visible": true
+    },
+    "database_identity": {
+      "database_name_hash": "693fe5919fc2",
+      "role_name_hash": "6f1981911003",
+      "server_product": "PostgreSQL 18.6 (4e955f5)"
+    },
+    "endpoint": {
+      "channel_binding": "require",
+      "endpoint_id_hash": "260b3f36a09b",
+      "region_hint_from_hostname": "us-east-2",
+      "sanitized_host": "<endpoint>.c-6.us-east-2.aws.neon.tech",
+      "sslmode": "require"
+    },
+    "logical_deletion": "PASS_OBSERVED",
+    "pg_stat_statements_installed": false,
+    "rbac_observation": {
+      "rolbypassrls": true,
+      "rolcreatedb": true,
+      "rolcreaterole": true,
+      "rolreplication": true,
+      "rolsuper": false
+    },
+    "readback_identity_match": true,
+    "real_phi": "BLOCKED",
+    "request_identity": "56811030ef58b06fb84223f10a8c07a6e7085fdc4cbecf4aeae5c24b56b99bc4",
+    "response_identity": "219606a4f30618dbbfc19bb4db0b6646a896ff1eed16056679304585280f23dc",
+    "row_identity_hash": "58f459596bb95364",
+    "schema_cleanup": "PASS_OBSERVED",
+    "source_fco": {
+      "contains_real_phi": false,
+      "source_class": "CONTROLLED_SYNTHETIC_PHI_SHAPED",
+      "source_sha256": "219606a4f30618dbbfc19bb4db0b6646a896ff1eed16056679304585280f23dc",
+      "type": "ControlledHealthSourceFCO"
+    },
+    "sponsor_qualification_fco": {
+      "account_identity_state": "PARTIAL_CONTROL_PLANE_ACCESS",
+      "application_level_payload_encryption": "NOT_IMPLEMENTED",
+      "audit_logging_state": "UNKNOWN",
+      "baa_present": "BLOCKED_HUMAN_VERIFICATION",
+      "baa_scope": "UNKNOWN",
+      "backup_state": "UNKNOWN",
+      "branch_identity_state": "NOT_MATCHED",
+      "credential_present": true,
+      "database_at_rest_encryption": "UNKNOWN_ACCOUNT_SPECIFIC",
+      "deletion_state": "PASS_OBSERVED",
+      "dpa_state": "UNKNOWN",
+      "executed": true,
+      "hipaa_feature_state": "UNKNOWN",
+      "implemented": true,
+      "log_export_state": "UNKNOWN",
+      "observed": true,
+      "pitr_state": "UNKNOWN",
+      "project_identity_state": "NOT_MATCHED",
+      "rbac_state": "PARTIAL_CURRENT_ROLE_NON_SUPERUSER",
+      "receipt": "evidence/receipts/hipaa/neon_qualification.json",
+      "region": "UNKNOWN",
+      "request_identity": "56811030ef58b06fb84223f10a8c07a6e7085fdc4cbecf4aeae5c24b56b99bc4",
+      "response_identity": "219606a4f30618dbbfc19bb4db0b6646a896ff1eed16056679304585280f23dc",
+      "result": "FAIL",
+      "retention_state": "UNKNOWN",
+      "sdk_present": true,
+      "service": "Postgres",
+      "sponsor": "Neon",
+      "subprocessor_state": "UNKNOWN",
+      "tls_in_transit": "FAIL",
+      "training_use_state": "UNKNOWN",
+      "type": "SponsorQualificationFCO"
+    },
+    "successor_fco": {
+      "predecessor_source_sha256": "219606a4f30618dbbfc19bb4db0b6646a896ff1eed16056679304585280f23dc",
+      "source_sha256": "92a0c5fedb7389c9a508627e8d9c0a949ebeb136eba56eb936a7295ab244e1b6",
+      "state": "OBSERVED_SUCCESSOR",
+      "type": "ControlledHealthSourceFCO"
+    },
+    "transport_encryption": {
+      "bits": null,
+      "cipher": null,
+      "dsn_channel_binding": "require",
+      "dsn_sslmode": "require",
+      "libpq_ssl_in_use": true,
+      "pg_stat_ssl_observed": true,
+      "protocol": null,
+      "ssl": false
+    }
+  },
+  "hipaa_compliance": "NOT_VERIFIED",
+  "observed_at_end": "2026-10-04T21:47:43Z",
+  "observed_at_start": "2026-10-04T21:47:36Z",
+  "real_phi": "BLOCKED",
+  "schema": "baymax.hipaa_neon_qualification.v1",
+  "source_class": "CONTROLLED_SYNTHETIC_PHI_SHAPED"
+}

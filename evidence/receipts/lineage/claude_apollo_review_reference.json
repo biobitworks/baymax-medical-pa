@@ -1,0 +1,15 @@
+{
+  "attack_results_path": "redteam_lane/apollo_validator_attack/results.json",
+  "attack_results_sha256": "d6ce823008689756482d7a38f737084761fbbfe1340ce6f56f91f11eb68bd9a2",
+  "branch": "redteam/lane-golden-path-audit",
+  "chain_concatenated": false,
+  "claim_ceiling": "References exact independent audit bytes/commit; does not promote that branch into the canonical Baymax chain.",
+  "commit": "abbab6b1160e7baf22fce4404c933fbd672ed34f",
+  "finding_admitted": "BP-0024 validator accepted unsafe free-text classes and misattributed human-reported model identity; repaired here by positive ID-only selection and unverified identity states.",
+  "lineage_relation": "INDEPENDENT_VERIFICATION_REFERENCE_ONLY",
+  "receipt_path": "evidence/receipts/redteam_lane/apollo_iphone_review.json",
+  "receipt_sha256": "c490fb0706e0d91f93355ef8f1e772e8470b0846df5151aaca18adeefa4c5512",
+  "repository": "biobitworks/baymax-medical-pa",
+  "reverification_after_repair": "NOT_YET_INDEPENDENTLY_EXECUTED",
+  "schema": "baymax.independent_verification_reference.v1"
+}

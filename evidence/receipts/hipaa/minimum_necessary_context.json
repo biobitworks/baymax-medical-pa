@@ -1,0 +1,63 @@
+{
+  "adversarial_instruction_results": [
+    {
+      "disallowed_fields_absent": true,
+      "instruction_sha256": "409faa12d7de6b9b11ea63ead11806d89d0a3c966458302249f3737416f7fa70",
+      "packet_field_names": [
+        "diagnosis_code",
+        "value"
+      ],
+      "result": "PASS"
+    },
+    {
+      "disallowed_fields_absent": true,
+      "instruction_sha256": "2889520d898bd48f69f593cdb8f02f277242d860a9d4c27c6d58098f98123e42",
+      "packet_field_names": [
+        "diagnosis_code",
+        "value"
+      ],
+      "result": "PASS"
+    },
+    {
+      "disallowed_fields_absent": true,
+      "instruction_sha256": "6944a5e8a4d32956c48383736fe23767935b8b8e0a3009bc78bbe52b519b6bb9",
+      "packet_field_names": [
+        "diagnosis_code",
+        "value"
+      ],
+      "result": "PASS"
+    },
+    {
+      "disallowed_fields_absent": true,
+      "instruction_sha256": "b07cf881683d0fde0877bc02da2ac018369176da9c8464cca026e9e6f31af517",
+      "packet_field_names": [
+        "diagnosis_code",
+        "value"
+      ],
+      "result": "PASS"
+    }
+  ],
+  "allowed_packet_fields": [
+    "diagnosis_code",
+    "value"
+  ],
+  "claim_ceiling": "Deterministic field minimization and route gating passed for controlled inputs. No external model was invoked; no claim is made about model behavior or legal sufficiency.",
+  "deidentified_health_external_decision": "ALLOW_DEIDENTIFIED_EXTERNAL",
+  "downstream_model_coverage": "UNKNOWN",
+  "executed": true,
+  "executed_at": "2026-10-04T21:52:23Z",
+  "neon_ai_gateway_raw_phi": "BLOCKED",
+  "observed": true,
+  "omitted_field_names": [
+    "identifier",
+    "medication",
+    "patient_name",
+    "subject"
+  ],
+  "policy_version": "baymax.minimum-necessary.v1",
+  "raw_phi_external_decision": "LOCAL_ONLY",
+  "result": "PASS",
+  "schema": "baymax.minimum_necessary_execution.v1",
+  "source_class": "CONTROLLED_SYNTHETIC_PHI_SHAPED",
+  "source_sha256": "3e31fcf5aeb6263923339210db09639b2a1f636749f556bd3c52a7787ead4022"
+}

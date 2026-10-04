@@ -1,0 +1,20 @@
+{
+  "alternate_authorized_backend": {
+    "ANTHROPIC_API_KEY": "ABSENT",
+    "CLAUDE_CODE_USE_BEDROCK": "ABSENT",
+    "CLAUDE_CODE_USE_FOUNDRY": "ABSENT",
+    "CLAUDE_CODE_USE_VERTEX": "ABSENT"
+  },
+  "claim_ceiling": "Records only the failed attempt to launch Claude independent verification. It is not independent verification and must not be promoted to PASS.",
+  "execution_attempted": true,
+  "implementation_modified_by_claude": false,
+  "independent_verification": "BLOCKED",
+  "observed_at": "2026-10-04T21:41:45.226763+00:00",
+  "provider_error_class": "HTTP_412_ACCOUNT_SUSPENDED_OR_BILLING_LIMIT",
+  "requested_role": "INDEPENDENT_REDTEAM",
+  "schema": "baymax.independent_verification_attempt.v1",
+  "state": "BLOCKED_PROVIDER_ACCOUNT",
+  "test_execution": "NOT_STARTED",
+  "tested_commit": "d4edcfdeeb27d275f89894f0200a7c1faa630f7c",
+  "verification_id": "CLAUDE-LANE-MODEL-ADMISSION-REDTEAM-001"
+}

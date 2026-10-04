@@ -1,0 +1,54 @@
+{
+  "base_head": "572e93dd56265968240df0d5b6beeb5cda287385",
+  "branch": "integration/iphone-offline-v2",
+  "breakpoint_id": "BAYMAX-BP-0032",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 1519,
+        "path": "evidence/breakpoints/BAYMAX-BP-0031.json",
+        "sha256": "77dc7b377ce1974cc273ac4b8414d2a3bc4c2a4917c9af2c6f2a7855abb917f5"
+      },
+      {
+        "bytes": 2540,
+        "path": "fixtures/iphone/apollo_context_packet_v2.txt",
+        "sha256": "80e92bd4d0583fb58b261164ba2e53543ce7482a0f767bc7c3368c460de54147"
+      },
+      {
+        "bytes": 2331,
+        "path": "fixtures/iphone/apollo_catalog_v2.json",
+        "sha256": "648e0e87bc4ec024dd1d46283bd7697fc9de266aef6980d336c113c7311d8d8a"
+      },
+      {
+        "bytes": 8339,
+        "path": "ios/OfflineTravelDemo/ModelInference.swift",
+        "sha256": "bcd89a9833e055f957e55fcf1f6509fd87d9c05d90f4780d66c6b3e2f9b6f77a"
+      },
+      {
+        "bytes": 4293,
+        "path": "evidence/receipts/iphone/apollo_airplane_mode_local_model_observed.json",
+        "sha256": "5fa6bcf4c47484948ba14e575f1b1ae2208978022e33603776937d3eaea16aea"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 5,
+    "leaf_hashes": [
+      "de3c1b7366338158e0e644cde1a72ecee905bf235301f3902c0b1b7faed0bd20",
+      "375e635230ef9129d838cf960354bba56dc9fc1c39bd779dc2903421dc1033e5",
+      "e609303173e709611138f740f53255798d1e57526e8b4805889122a5f5369409",
+      "b5a1d2c12b6b2b7b99cc21aaa579f755edd2ead0963b280862b33a814a796391",
+      "90a5050f3237c7c0071012c8dbef1581dbd096fd3c2c5f197c4be4380102cb2c"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "061d59f89791a9e0eb6c8b0575f1a5b4031e5dcce38304367d467663ac22f2e0"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "Observed Liquid Apollo generation on a physical iPhone while Airplane Mode was enabled and Wi-Fi visibly disabled. Raw model JSON violated the required summary code and was correctly rejected by the deterministic Swift validator. Uploaded MP4 hash/metadata admitted; raw bytes are not yet present on magicPRO. Full Baymax-app offline E2E remains NOT_TESTED.",
+  "parent": "BAYMAX-BP-0031",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "PHYSICAL_IPHONE_APOLLO_AIRPLANE_MODE_INFERENCE",
+  "state": "PARTIAL",
+  "timestamp_utc": "2026-10-04T21:07:10.976695+00:00"
+}

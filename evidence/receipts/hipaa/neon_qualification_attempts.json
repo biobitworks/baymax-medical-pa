@@ -1,0 +1,45 @@
+{
+  "attempts": [
+    {
+      "attempt": 1,
+      "database_mutation": "NOT_EXECUTED",
+      "durable_receipt": "NULL",
+      "executed": false,
+      "failure": "ModuleNotFoundError: psycopg2",
+      "observed": true,
+      "state": "FAILED"
+    },
+    {
+      "attempt": 2,
+      "database_mutation": "EXECUTED_CONTROLLED_ONLY",
+      "durable_receipt": "NULL",
+      "executed": true,
+      "failure": "SECRET_LEAK_GUARD=FAIL_FALSE_POSITIVE_SCOPE",
+      "note": "Output guard ran after controlled roundtrip/cleanup; request/response identities were not durably preserved.",
+      "observed": "PARTIAL",
+      "state": "FAILED"
+    },
+    {
+      "attempt": 3,
+      "durable_receipt": "evidence/receipts/hipaa/neon_qualification_attempt3_FAIL.json",
+      "executed": true,
+      "failure": "TLS_PROBE_SEMANTICS_FALSE_NEGATIVE_PLUS_CANARY_ACTIVITY_EXPOSURE",
+      "observed": true,
+      "receipt_sha256": "18a0df2ab00e72c18e2b3b730dee7b19922a34d9abfdfc14148eee31ab6ad0c5",
+      "state": "FAILED"
+    },
+    {
+      "attempt": 4,
+      "durable_receipt": "evidence/receipts/hipaa/neon_qualification_attempt4.json",
+      "executed": true,
+      "failure": "CANARY_VISIBLE_IN_PG_STAT_ACTIVITY; PRIVILEGED_DATABASE_ROLE; CONTROL_PLANE_PROJECT_NOT_MATCHED; BAA_BLOCKED_HUMAN_VERIFICATION",
+      "observed": true,
+      "receipt_sha256": "a2be84695e749e3da46ced26adcb3fa7f7ec2f0e67147c1699ea237c1f55552f",
+      "state": "FAIL"
+    }
+  ],
+  "claim_ceiling": "Failure preservation only; attempt history does not establish causality beyond directly observed execution outcomes.",
+  "current_result": "FAIL",
+  "schema": "baymax.execution_attempts.v1",
+  "subject": "HIPAA_NEON_ACCOUNT_QUALIFICATION"
+}

@@ -1,0 +1,142 @@
+{
+  "claim_boundary": "single task; not validation",
+  "claim_promotion_permitted": false,
+  "justification": "350M NEGATIVE",
+  "results": [
+    {
+      "assessment": [
+        {
+          "all_match": false,
+          "extra_keys": [],
+          "parsed": true,
+          "parsed_output": {
+            "intent": "travel_medication_access",
+            "requires_external_location_lookup": true,
+            "requires_medical_advice": true,
+            "requires_payment": false,
+            "requires_private_health_context": true
+          }
+        },
+        {
+          "all_match": false,
+          "extra_keys": [],
+          "parsed": true,
+          "parsed_output": {
+            "intent": "travel_medication_access",
+            "requires_external_location_lookup": true,
+            "requires_medical_advice": true,
+            "requires_payment": false,
+            "requires_private_health_context": true
+          }
+        },
+        {
+          "all_match": false,
+          "extra_keys": [],
+          "parsed": true,
+          "parsed_output": {
+            "intent": "travel_medication_access",
+            "requires_external_location_lookup": true,
+            "requires_medical_advice": true,
+            "requires_payment": false,
+            "requires_private_health_context": true
+          }
+        }
+      ],
+      "classification": "NEGATIVE",
+      "identity": {
+        "family": "lfm2",
+        "format": "gguf",
+        "model": "hf.co/LiquidAI/LFM2.5-1.2B-Instruct-GGUF:Q4_K_M",
+        "parameter_size": "1.17B",
+        "quantization": "Q4_K_M"
+      },
+      "runs": [
+        {
+          "eval_count": 64,
+          "model_total_s": 0.839,
+          "prompt_eval_count": 109,
+          "request_sha256": "c6f5b8e373c94b21dbd58d2035ab95ecc5843bf170b3c35a91b177c2b10782ae",
+          "response_sha256": "54c27f1ffc75e1df790da1ac2c30d4521da5da348b273a5ff5e77210ee1d73ba",
+          "wall_s": 0.881
+        },
+        {
+          "eval_count": 64,
+          "model_total_s": 0.564,
+          "prompt_eval_count": 109,
+          "request_sha256": "c6f5b8e373c94b21dbd58d2035ab95ecc5843bf170b3c35a91b177c2b10782ae",
+          "response_sha256": "54c27f1ffc75e1df790da1ac2c30d4521da5da348b273a5ff5e77210ee1d73ba",
+          "wall_s": 0.567
+        },
+        {
+          "eval_count": 64,
+          "model_total_s": 0.642,
+          "prompt_eval_count": 109,
+          "request_sha256": "c6f5b8e373c94b21dbd58d2035ab95ecc5843bf170b3c35a91b177c2b10782ae",
+          "response_sha256": "54c27f1ffc75e1df790da1ac2c30d4521da5da348b273a5ff5e77210ee1d73ba",
+          "wall_s": 0.643
+        }
+      ]
+    },
+    {
+      "assessment": [
+        {
+          "all_match": false,
+          "extra_keys": [],
+          "parsed": false,
+          "parsed_output": null
+        },
+        {
+          "all_match": false,
+          "extra_keys": [],
+          "parsed": false,
+          "parsed_output": null
+        },
+        {
+          "all_match": false,
+          "extra_keys": [],
+          "parsed": false,
+          "parsed_output": null
+        }
+      ],
+      "classification": "HARNESS_LIMITED",
+      "identity": {
+        "family": "lfm2",
+        "format": "gguf",
+        "model": "hf.co/LiquidAI/LFM2.5-2.6B-GGUF:Q4_K_M",
+        "parameter_size": "2.7B",
+        "quantization": "Q4_K_M"
+      },
+      "note": "num_predict=400 exhausted by hidden reasoning; empty content. See model_followup_2p6B.json (num_predict=2000): 4/5 fields correct, requires_private_health_context wrong => NEGATIVE",
+      "runs": [
+        {
+          "eval_count": 400,
+          "model_total_s": 16.133,
+          "prompt_eval_count": 107,
+          "request_sha256": "7c691e0bdca0502de4d4900bec999f5c9472ab1756065e421949e33a63140109",
+          "response_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "wall_s": 16.138
+        },
+        {
+          "eval_count": 400,
+          "model_total_s": 8.837,
+          "prompt_eval_count": 107,
+          "request_sha256": "7c691e0bdca0502de4d4900bec999f5c9472ab1756065e421949e33a63140109",
+          "response_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "wall_s": 8.844
+        },
+        {
+          "eval_count": 400,
+          "model_total_s": 8.506,
+          "prompt_eval_count": 107,
+          "request_sha256": "7c691e0bdca0502de4d4900bec999f5c9472ab1756065e421949e33a63140109",
+          "response_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "wall_s": 8.509
+        }
+      ]
+    }
+  ],
+  "schema": "baymax.model_escalation_receipt.v1",
+  "seed": 42,
+  "task": "testA routing",
+  "temperature": 0
+}

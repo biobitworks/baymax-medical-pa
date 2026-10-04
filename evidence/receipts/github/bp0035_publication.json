@@ -1,0 +1,48 @@
+{
+  "canonical_breakpoint": "BAYMAX-BP-0035",
+  "canonical_commit": "7fa2399e543841a83c134a3bc391780a6fd93c98",
+  "claim_ceiling": "Publication receipt only. It proves observed issue/PR updates, not issue closure, merge readiness, independent verification, clinical correctness, HIPAA compliance, or Project-v2 board field mutation.",
+  "independent_verification": "BLOCKED_CLAUDE_PROVIDER_ACCOUNT",
+  "issues": [
+    {
+      "comment_id": 5984720047,
+      "number": 3,
+      "repository": "jerelvelarde/baymax-medical-pa",
+      "state_after_update": "OPEN_PARTIAL",
+      "title": "Offline-first AI"
+    },
+    {
+      "comment_id": 5984720340,
+      "number": 4,
+      "repository": "jerelvelarde/baymax-medical-pa",
+      "state_after_update": "OPEN_PARTIAL",
+      "title": "Privacy-first open-source template and HIPAA deployment-readiness roadmap"
+    },
+    {
+      "number": 5,
+      "repository": "jerelvelarde/baymax-medical-pa",
+      "state": "UNCHANGED_OPEN",
+      "update": "NOT_POSTED_NO_MATERIAL_WALLET_CHANGE"
+    }
+  ],
+  "observed_at": "2026-10-04T21:46:02.855880+00:00",
+  "prescription_purchase": "BLOCKED",
+  "project_board": {
+    "direct_field_mutation": "BLOCKED_MISSING_PROJECT_SCOPE",
+    "direct_field_read": "BLOCKED_MISSING_READ_PROJECT_SCOPE",
+    "underlying_issue_pr_sync": "PASS",
+    "url": "https://github.com/users/jerelvelarde/projects/3/views/1"
+  },
+  "publication_state": "PASS",
+  "pull_request": {
+    "draft": true,
+    "head_branch": "integration/iphone-offline-v2",
+    "head_commit_at_update": "7fa2399e543841a83c134a3bc391780a6fd93c98",
+    "number": 3,
+    "repository": "biobitworks/baymax-medical-pa",
+    "title": "Baymax: BP-0035 strict model admission + physical iPhone offline evidence"
+  },
+  "real_money": "NO",
+  "real_phi": "NONE",
+  "schema": "baymax.github_publication_receipt.v1"
+}

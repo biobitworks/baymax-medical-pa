@@ -1,0 +1,11 @@
+{
+  "current_probe_result": "PASS",
+  "phi_external_execution": "BLOCKED",
+  "repair_proposed": "make TLS verification semantics explicit before production/PHI use",
+  "schema": "baymax.security_warning.v1",
+  "sdk_package": "pg",
+  "sdk_version": "8.13.1",
+  "state": "OBSERVED_WARNING",
+  "technology_id": "NEON_POSTGRES",
+  "warning": "pg-connection-string reports upcoming SSL mode semantic changes; future pg v9 behavior may weaken semantics unless sslmode is explicit"
+}

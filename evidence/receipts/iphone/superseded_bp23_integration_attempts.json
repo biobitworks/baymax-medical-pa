@@ -1,0 +1,67 @@
+{
+  "base_commit": "9e08b7c4b748cfc1f97a0907dc77ff21f6823187",
+  "branch": "integration/iphone-offline-v1",
+  "canonical_admission": "NO",
+  "failure_receipts": [
+    {
+      "error_class": "TypeError",
+      "filename": "artifact_build_attempt1_failed.json",
+      "sha256": "5e3b9bea1dee8d8850a562128e1f5a3dd1013f31a99ebbf835cd80b7e9442957",
+      "stage": "IPHONE_OFFLINE_ARTIFACT_BUILD",
+      "state": "FAILED"
+    },
+    {
+      "error_class": "MISSING_VERIFICATION_SCRIPT",
+      "filename": "artifact_build_attempt2_failed.json",
+      "sha256": "f38df87e7950b4c78a1b113d14e19b00c742142600e9af9b476dd41cfb2881c6",
+      "stage": "IPHONE_OFFLINE_VERIFICATION_SETUP",
+      "state": "FAILED"
+    },
+    {
+      "error_class": "SWIFT_SOURCE_QUOTING",
+      "filename": "swift_check_attempt1_failed.json",
+      "sha256": "83ec457bb7c3b5165d5b5e82bafa54bf1e455072b6283b8149598bdc2a5e0fb4",
+      "stage": "SWIFT_OFFLINE_CHECK_COMPILE",
+      "state": "FAILED"
+    },
+    {
+      "error_class": "ASSERTION_MISMATCH",
+      "filename": "swift_check_attempt2_failed.json",
+      "sha256": "e6dc996d1e4c6ea657628d58a41dbe770072ca9fd690427c1cadb6597d58de4c",
+      "stage": "SWIFT_OFFLINE_CHECK_RUNTIME",
+      "state": "FAILED"
+    },
+    {
+      "error_class": "IOS_PLATFORM_COMPONENT_MISSING",
+      "filename": "xcode_build_attempt1_failed.json",
+      "sha256": "77f8ae5e82b1d6d0a15756e8f6b3d8335c91468f20ed53c2c690ffcc01921c18",
+      "stage": "IOS_GENERIC_BUILD",
+      "state": "BLOCKED"
+    },
+    {
+      "error_class": "SWIFT_SOURCE_QUOTING",
+      "filename": "xcode_build_attempt2_failed.json",
+      "sha256": "356a9a55897a940f4ef7a3f539713b65611c9b551a9ef4665ce5e7b4c9553551",
+      "stage": "IOS_TARGET_SWIFT_COMPILE",
+      "state": "FAILED"
+    },
+    {
+      "error_class": "SWIFTUI_TYPECHECK_AND_IDENTITY",
+      "filename": "xcode_build_attempt3_failed.json",
+      "sha256": "2d4d4389a04f28a8b41114c6351f021a612c10d6831101510eda66cc638b76a9",
+      "stage": "IOS_TARGET_SWIFT_COMPILE",
+      "state": "FAILED"
+    },
+    {
+      "error_class": "XCODEBUILD_ARGUMENT_CONSTRAINT",
+      "filename": "xcode_target_attempt1_failed.json",
+      "sha256": "571fa8b1535dfaf9f823b3064ee88085886dabd9ba6440f7b90c201cfc1ae4c9",
+      "stage": "IOS_TARGET_BUILD_COMMAND",
+      "state": "FAILED"
+    }
+  ],
+  "historical_failure_count": 8,
+  "note": "Preserves identities/classes of primary pre-BP25 build attempts without importing the competing app/packet as canonical product state.",
+  "schema": "baymax.superseded_execution_lane.v1",
+  "superseded_by": "integration/iphone-offline-v2 from BP-0025"
+}

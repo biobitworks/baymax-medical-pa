@@ -1,0 +1,86 @@
+{
+  "apollo_execution": "OBSERVED",
+  "base_head": "622226e6123e3cc1205a27bccbecc9750a8c832f",
+  "catalog": {
+    "path": "fixtures/iphone/apollo_catalog_v2.json",
+    "sha256": "648e0e87bc4ec024dd1d46283bd7697fc9de266aef6980d336c113c7311d8d8a"
+  },
+  "claim_ceiling": "Observed Apollo/Liquid local-model generation on a mirrored physical iPhone using the synthetic Baymax v2 packet, with a contract-valid visually transcribed JSON result. Full model revision, pasted destination bytes, network isolation/offline behavior, medical correctness, and clinical validity are not established.",
+  "execution_target": "PHYSICAL_IPHONE_VIA_APPLE_IPHONE_MIRRORING",
+  "full_model_identity": "UNKNOWN",
+  "iphone_mirroring": "OBSERVED",
+  "local_model_test": "PASS_NARROW_CLAIM",
+  "model_label_observed": "LFM2.5-1... Q5_K_M",
+  "model_label_state": "PARTIAL_TRUNCATED_BY_UI",
+  "model_provider": "Liquid AI",
+  "network_observation": {
+    "network_isolation": "NOT_TESTED",
+    "offline_mode": "NOT_TESTED",
+    "status_bar": "LTE_VISIBLE"
+  },
+  "observed_at": "2026-10-04T20:50:45Z",
+  "offline_first_acceptance": "PARTIAL_OFFLINE_NOT_TESTED",
+  "prescription_purchase": "BLOCKED",
+  "quantization_observed": "Q5_K_M",
+  "real_money": "NO",
+  "real_phi": "NONE",
+  "response_observation": {
+    "canonical_transcription_sha256": "e991a148233b00f4d7e0c05b2c054c809da22197984e49a9b9b8444707e9e78e",
+    "contract_checks": {
+      "keys_exact": true,
+      "known_ids_allowed": true,
+      "medical_action_none": true,
+      "question_ids_allowed": true,
+      "requires_clinician_true": true,
+      "summary_allowed": true,
+      "unknown_ids_allowed": true
+    },
+    "contract_validation": "PASS",
+    "correctness_state": "UNKNOWN",
+    "exact_destination_response_bytes": "NOT_VERIFIED",
+    "json": {
+      "known": [
+        0,
+        1,
+        2
+      ],
+      "medical_action": "NONE",
+      "recommended_questions": [
+        0,
+        1,
+        2
+      ],
+      "requires_clinician": true,
+      "summary": "SYNTHETIC_CONTEXT_ONLY",
+      "unknown": [
+        3,
+        4,
+        5
+      ]
+    },
+    "medical_authority": "NONE",
+    "model_output_class": "MODEL_INFERRED",
+    "transcription_method": "VISUAL_TRANSCRIPTION_FROM_SCREEN_RECORDING"
+  },
+  "runtime": "Apollo",
+  "schema": "baymax.iphone_apollo_local_model_observation.v1",
+  "screen_recording": {
+    "bytes": 9014548,
+    "duration_seconds": 70.719625,
+    "evidence_note": "Recording shows Apple iPhone Mirroring with Apollo prompt, model loading, and final JSON response.",
+    "raw_file_committed": false,
+    "sha256": "ef8b2d2b1d90bfd838d4a1e9be4ef3937b15b45b25d474375ea232c1ff1fc12b",
+    "source": "USER_UPLOADED_SCREEN_RECORDING",
+    "video_codec": "h264",
+    "video_dimensions": "690x1384"
+  },
+  "secrets_recorded": false,
+  "source_context_packet": {
+    "destination_byte_identity": "NOT_INDEPENDENTLY_VERIFIED",
+    "path": "fixtures/iphone/apollo_context_packet_v2.txt",
+    "sha256": "80e92bd4d0583fb58b261164ba2e53543ce7482a0f767bc7c3368c460de54147",
+    "transfer": "HUMAN_MEDIATED_PASTE"
+  },
+  "synthetic_only": true,
+  "xcode_direct_device_connection": "NOT_PRESENT"
+}

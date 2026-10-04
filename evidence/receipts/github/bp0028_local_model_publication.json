@@ -1,0 +1,39 @@
+{
+  "base_head": "e05ad75f0c5e1d307bbadb3b8c697d8f7a1afe49",
+  "claim_ceiling": "Publication receipt only. Comments report the narrow BP-0028 local-model observation and explicitly preserve issue #3 as OPEN/PARTIAL; publication does not establish offline inference, merge acceptance, authenticity, medical correctness, or regulatory compliance.",
+  "implementation_breakpoint": "BAYMAX-BP-0028",
+  "implementation_commit": "e05ad75f0c5e1d307bbadb3b8c697d8f7a1afe49",
+  "issue": {
+    "comment_id": 5984262465,
+    "number": 3,
+    "repository": "jerelvelarde/baymax-medical-pa",
+    "state_after_update": "OPEN_PARTIAL",
+    "title": "Offline-first AI",
+    "url": "https://github.com/jerelvelarde/baymax-medical-pa/issues/3"
+  },
+  "issue_5_updated_in_this_successor": false,
+  "local_model_result": "OBSERVED",
+  "observed_at": "2026-10-04T20:51:52Z",
+  "offline_result": "NOT_TESTED",
+  "project": "baymax-medical-pa",
+  "publication_state": "PASS",
+  "pull_requests": [
+    {
+      "comment_id": 5984262767,
+      "number": 3,
+      "repository": "biobitworks/baymax-medical-pa",
+      "role": "IMPLEMENTATION_REVIEW",
+      "url": "https://github.com/biobitworks/baymax-medical-pa/pull/3"
+    },
+    {
+      "comment_id": 5984263028,
+      "number": 14,
+      "repository": "jerelvelarde/baymax-medical-pa",
+      "role": "TEAM_PROGRESS_EVIDENCE",
+      "url": "https://github.com/jerelvelarde/baymax-medical-pa/pull/14"
+    }
+  ],
+  "real_phi": "NONE",
+  "schema": "baymax.github_publication_receipt.v1",
+  "secrets_recorded": false
+}

@@ -1,0 +1,36 @@
+{
+  "claim_ceiling": "Lineage references preserve implementation and red-team provenance without merging independent histories or upgrading blocked verification.",
+  "observed_at": "2026-10-04T21:41:45.226763+00:00",
+  "purpose": "MODEL_ADMISSION_STRUCTURAL_REPAIR",
+  "references": [
+    {
+      "base_commit": "d4389ecfa7589c4e376d9be14658b9d4494f7fd5",
+      "branch": "codex/model-admission-parity",
+      "canonical_continuity": "REFERENCE_ONLY_NOT_CHAIN_CONCATENATION",
+      "commit": "d4edcfdeeb27d275f89894f0200a7c1faa630f7c",
+      "receipt": "evidence/receipts/parallel/CODEX-LANE-MODEL-ADMISSION-STRICT-001.json",
+      "repository": "biobitworks/baymax-medical-pa",
+      "role": "IMPLEMENTATION",
+      "type": "ExternalLineageReferenceFCO"
+    },
+    {
+      "branch": "redteam/lane-golden-path-audit",
+      "canonical_continuity": "REFERENCE_ONLY_NOT_CHAIN_CONCATENATION",
+      "commit": "53666f3b587ee9e6b41ceef943ccf3cd80fc749c",
+      "finding": "V2 closed-catalog design closed earlier free-text bypass class; residual lenient parsing accepted 1.0 IDs, trailing comma, BOM.",
+      "repository": "biobitworks/baymax-medical-pa",
+      "role": "PREDECESSOR_REDTEAM_FINDING",
+      "tested_implementation": "510859101618ad5085f72691e47fcac96a726f3b",
+      "type": "IndependentVerificationFCO"
+    },
+    {
+      "canonical_continuity": "REFERENCE_ONLY_NOT_CHAIN_CONCATENATION",
+      "receipt": "evidence/receipts/parallel/CLAUDE-LANE-MODEL-ADMISSION-REDTEAM-001.json",
+      "role": "CURRENT_REVERIFY_ATTEMPT",
+      "state": "BLOCKED_PROVIDER_ACCOUNT",
+      "tested_commit": "d4edcfdeeb27d275f89894f0200a7c1faa630f7c",
+      "type": "IndependentVerificationFCO"
+    }
+  ],
+  "schema": "baymax.external_lineage_reference_set.v1"
+}

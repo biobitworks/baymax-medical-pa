@@ -1,0 +1,104 @@
+{
+  "base_breakpoint": "BAYMAX-BP-0033",
+  "base_commit": "d4389ecfa7589c4e376d9be14658b9d4494f7fd5",
+  "candidate_precommit_tree": "7ae8ce3654ca0e699d7d755ee85197536d24661d",
+  "canonical_breakpoint_minted": false,
+  "claim_ceiling": "Candidate implementation evidence only. PASS proves deterministic test/build behavior on the captured bytes, not clinical correctness, medical authority, HIPAA compliance, provider authenticity, physical Baymax-app offline E2E, or canonical admission.",
+  "env_ignored": true,
+  "env_tracked": false,
+  "files_changed": [
+    "docs/implementation/MODEL_ADMISSION.md",
+    "evidence/receipts/codex/model_parity_initial_failure.json",
+    "evidence/receipts/codex/model_parity_strict_v4.json",
+    "evidence/receipts/codex/model_parity_v3.json",
+    "ios/OfflineTravelDemo/GateCheck.swift",
+    "ios/OfflineTravelDemo/ModelInference.swift",
+    "ios/OfflineTravelDemo/OfflineTravelApp.swift",
+    "scripts/check_model_parity.py",
+    "src/baymax_travel/model.py",
+    "tests/ModelParity.swift",
+    "tests/test_model_contract.py",
+    "tests/vectors/model_admission_strict_edges_v1.json",
+    "tests/vectors/model_admission_v3.json"
+  ],
+  "final_gate_executor": "PRIMARY_INTEGRATION_LANE",
+  "implementation_authoring": "Codex gpt-6-astra in isolated worktree",
+  "iphoneos_build": {
+    "binary_bytes": 927392,
+    "binary_sha256": "e26f7a972eed4120daec46b23f20d395e1d8dfc3cc4358e8a57b25656fd70f72",
+    "state": "PASS_UNSIGNED_ARM64_IPHONEOS"
+  },
+  "lane_id": "CODEX-LANE-MODEL-ADMISSION-STRICT-001",
+  "observed_at": "2026-10-04T21:37:43.685680+00:00",
+  "phi_scan": {
+    "real_phi": "NONE_USED",
+    "scope": "synthetic model fixtures/corpora only; SSN/email pattern screen",
+    "state": "NO_SSN_OR_EMAIL_PATTERNS_OBSERVED"
+  },
+  "prescription_purchase": "BLOCKED",
+  "preserved_failures": [
+    {
+      "detail": "Initial validator/corpus run exposed Foundation leniency / corpus BOM transport differences; preserved in evidence/receipts/codex/model_parity_initial_failure.json.",
+      "stage": "FIRST_SHARED_PARITY_RUN",
+      "state": "FAILED"
+    },
+    {
+      "detail": "Codex sandbox could not write default Swift/Clang module cache. Repaired by redirecting caches to /tmp.",
+      "stage": "SWIFT_PARITY_SANDBOX_CACHE",
+      "state": "FAILED_ENVIRONMENT"
+    },
+    {
+      "detail": "First exact-selection parity harness trapped while serializing a Foundation selection. Harness repaired; 136-vector exact parity subsequently PASS.",
+      "stage": "SWIFT_PARITY_HARNESS_SERIALIZATION",
+      "state": "FAILED_HARNESS"
+    },
+    {
+      "detail": "Codex sandbox Xcode build could not write module-session/DerivedData state. Same candidate built successfully outside Codex sandbox via scripts/build_iphone_demo.sh.",
+      "stage": "IPHONEOS_BUILD_CODEX_SANDBOX",
+      "state": "FAILED_ENVIRONMENT"
+    },
+    {
+      "detail": "Codex account hit usage limit before final commit/push; primary captured the already-authored candidate without changing implementation semantics.",
+      "stage": "CODEX_FINALIZATION",
+      "state": "BLOCKED_USAGE_LIMIT"
+    }
+  ],
+  "python_tests": {
+    "count": 34,
+    "state": "PASS"
+  },
+  "real_money": "NO",
+  "real_phi": "NONE",
+  "result_commit": "PENDING_CAPTURE_COMMIT",
+  "role": "CODEX_IMPLEMENTATION_CAPTURED_BY_PRIMARY_AFTER_CODEX_USAGE_LIMIT",
+  "schema": "baymax.parallel_lane_receipt.v1",
+  "shared_adversarial_vectors": {
+    "accepted": 7,
+    "corpora_sha256": {
+      "tests/vectors/model_admission_strict_edges_v1.json": "b35f4fcf3a2ceea3a1ddf8a7f7f47f7ca0ca52678dd59473a719821ee80c01e9",
+      "tests/vectors/model_admission_v3.json": "8e10ab3796ca5fd6eb3c0e4818a0ca2fb9dffea1eb07ebf396783dfc31e17618"
+    },
+    "count": 136,
+    "rejected": 129,
+    "state": "PASS"
+  },
+  "side_lane_chain_verify": {
+    "reason": "Modified files are intentionally newer than their last canonical breakpoint descriptors; primary successor admission is required to restore current-byte verifier PASS.",
+    "state": "EXPECTED_FAIL_PENDING_CANONICAL_ADMISSION"
+  },
+  "swift_gate": {
+    "case_count": 24,
+    "provider_calls": 0,
+    "source_binding_and_execution_metadata": "PASS",
+    "state": "PASS",
+    "wallet_authority": "NONE"
+  },
+  "swift_python_parity": {
+    "mismatches": 0,
+    "scope": "Every vector: expected admission state and full decoded selection",
+    "state": "PASS"
+  },
+  "tracked_secret_scan": "PASS",
+  "validator_structural_repair": "IMPLEMENTED",
+  "wallet_mutation": "NONE"
+}

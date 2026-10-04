@@ -1,0 +1,72 @@
+{
+  "apollo_model": "UNKNOWN",
+  "apollo_offline_inference": "NOT_TESTED",
+  "apollo_transfer": "NOT_EXECUTED_V2; UI_READY_FOR_HUMAN_MEDIATED_COPY",
+  "apollo_used": "NO",
+  "apollo_version": "UNKNOWN",
+  "app_build": "PASS_UNSIGNED_ARM64_IPHONEOS",
+  "base_head": "226ddfeba4d0ce1e29c534f44a6132a423133b6b",
+  "baymax_native_local_model": "NOT_IMPLEMENTED",
+  "claim_ceiling": "Build-ready governed synthetic iPhoneOS application with exact BP-0021/BP-0023 data custody, deterministic compliance, read-only synthetic wallet, positive model-output selection contract, and repaired identity semantics. No physical iPhone execution, no Apollo inference, no clinical validation, no real PHI.",
+  "compliance_route": {
+    "credential_api_secret": "BLOCK",
+    "medication_purchase": "BLOCK",
+    "prescription_modification": "HUMAN_REVIEW_REQUIRED_PRODUCT_POLICY",
+    "real_health_external_disclosure": "BLOCK",
+    "synthetic_offline_context": "LOCAL_ONLY",
+    "user_information_lookup": "ALLOW_DEIDENTIFIED_EXTERNAL_WHEN_POLICY_PERMITS"
+  },
+  "context_packet_sha256": "80e92bd4d0583fb58b261164ba2e53543ce7482a0f767bc7c3368c460de54147",
+  "deferred": [
+    "Neon",
+    "Fly",
+    "Signet",
+    "Mastra",
+    "cloud inference",
+    "live pharmacy stock/hours"
+  ],
+  "failed": [
+    "historical BP-0019 Java default-runtime blocker",
+    "historical BP-0020 first Synthea generation attempt",
+    "BP-0024 model-output validator bypasses identified by independent Claude audit",
+    "primary pre-BP25 experimental build failures preserved by hash/class",
+    "v2 packet/Swift harness/build authoring failures preserved before repair"
+  ],
+  "healthkit": "NOT_IMPLEMENTED",
+  "integration_branch": "integration/iphone-offline-v2",
+  "ios_version": "UNKNOWN",
+  "model_output_class": "MODEL_INFERRED",
+  "not_tested": [
+    "physical app install",
+    "physical app launch",
+    "airplane-mode UI",
+    "physical restart persistence",
+    "Apollo offline inference",
+    "HealthKit",
+    "Secure Enclave"
+  ],
+  "observed_at": "2026-10-04T20:42:27.816271+00:00",
+  "offline_bundle": "AVAILABLE_AND_BUNDLED",
+  "offline_test": "PARTIAL_HOST_EXECUTED_NETWORK_FREE_DECODE_AND_GATES; PHYSICAL_OFFLINE_UI_NOT_TESTED",
+  "parent_breakpoint": "BAYMAX-BP-0025",
+  "partial": [
+    "physical phone Golden Path",
+    "restart persistence implemented but not physically observed",
+    "model identity/offline state can only be human-reported until physical Apollo test"
+  ],
+  "physical_iphone": "BLOCKED_DEVICE_CONNECTION",
+  "prescription_purchase": "BLOCKED",
+  "real_money": "NO",
+  "real_phi": "NONE",
+  "repo": "/Users/byron/projects/active/baymax-medical-pa",
+  "schema": "baymax.iphone_offline_primary_status.v1",
+  "secure_enclave": "NOT_IMPLEMENTED_NOT_TESTED",
+  "unknown": [
+    "physical iOS version",
+    "physical device class",
+    "Apollo version",
+    "Apollo local model identity"
+  ],
+  "unknown_preserved": "PASS_IN_PHONE_PACKAGE_AND_UI",
+  "wallet": "AVAILABLE_LOCAL_READ_ONLY_SYNTHETIC_SNAPSHOT"
+}

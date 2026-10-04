@@ -1,0 +1,71 @@
+.lab-card .lab-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+  margin: 10px 0;
+}
+.lab-row {
+  background: #f7f9f2;
+  border: 1px solid #e7eade;
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+.lab-row-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+}
+.lab-chip {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: #e0e8d5;
+  color: #3a5130;
+}
+.lab-chip.above,
+.lab-chip.below {
+  background: #f3dfcf;
+  color: #8a4b1f;
+}
+.lab-chip.none {
+  background: #ececec;
+  color: #666;
+}
+.lab-chart {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 6px 0 2px;
+}
+.lab-band {
+  fill: #d4e3c4;
+  opacity: 0.55;
+}
+.lab-line {
+  fill: none;
+  stroke: #6f8f5f;
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+.lab-dot {
+  fill: #3d543c;
+  stroke: white;
+  stroke-width: 1.5;
+}
+.lab-dot.above,
+.lab-dot.below {
+  fill: #c9824a;
+}
+.lab-val {
+  font-size: 10px;
+  fill: #3a4a35;
+  font-weight: 600;
+}
+.lab-row-foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  font-size: 11px;
+  color: #718a60;
+}

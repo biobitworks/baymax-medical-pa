@@ -1,0 +1,78 @@
+{
+  "actions": [
+    {
+      "exit_code": 0,
+      "number": 4,
+      "result": "PASS",
+      "surface": "issue",
+      "url": "https://github.com/jerelvelarde/baymax-medical-pa/issues/4#issuecomment-5984872980"
+    },
+    {
+      "exit_code": 0,
+      "number": 22,
+      "result": "PASS",
+      "surface": "issue",
+      "url": "https://github.com/jerelvelarde/baymax-medical-pa/issues/22#issuecomment-5984873232"
+    },
+    {
+      "exit_code": 0,
+      "number": 24,
+      "result": "PASS",
+      "surface": "issue",
+      "url": "https://github.com/jerelvelarde/baymax-medical-pa/issues/24#issuecomment-5984873522"
+    },
+    {
+      "exit_code": 0,
+      "number": 27,
+      "result": "PASS",
+      "surface": "issue",
+      "url": "https://github.com/jerelvelarde/baymax-medical-pa/issues/27#issuecomment-5984873805"
+    },
+    {
+      "exit_code": 0,
+      "number": 28,
+      "result": "PASS",
+      "surface": "issue",
+      "url": "https://github.com/jerelvelarde/baymax-medical-pa/issues/28#issuecomment-5984874015"
+    },
+    {
+      "exit_code": 0,
+      "number": 30,
+      "result": "PASS",
+      "surface": "issue",
+      "url": "https://github.com/jerelvelarde/baymax-medical-pa/issues/30#issuecomment-5984874259"
+    },
+    {
+      "exit_code": 0,
+      "number": 31,
+      "result": "PASS",
+      "surface": "issue",
+      "url": "https://github.com/jerelvelarde/baymax-medical-pa/issues/31#issuecomment-5984874477"
+    },
+    {
+      "exit_code": 0,
+      "number": 32,
+      "result": "PASS",
+      "surface": "issue",
+      "url": "https://github.com/jerelvelarde/baymax-medical-pa/issues/32#issuecomment-5984874756"
+    },
+    {
+      "exit_code": 0,
+      "number": 3,
+      "result": "PASS",
+      "surface": "pr",
+      "url": "https://github.com/biobitworks/baymax-medical-pa/pull/3#issuecomment-5984874961"
+    }
+  ],
+  "all_actions_pass": true,
+  "chain_head": "b9a5e7cd328dd245f36fdcc51cffabc824a36c11a7b6649525415e19386c2a48",
+  "claim_ceiling": "Receipt proves GitHub comment commands returned success and records their returned URLs; it does not prove third-party readers saw or acted on the comments.",
+  "hipaa_compliance": "NOT_VERIFIED",
+  "merkle_root": "884181020ac14e6a13f7b6723850f65b415ca9392c83e5b8ccebb89fc6c97811",
+  "project_v2_fields": "NOT_UPDATED_NOT_CLAIMED",
+  "published_at": "2026-10-04T22:02:14.910518+00:00",
+  "real_phi": "BLOCKED",
+  "schema": "baymax.github_publication_receipt.v1",
+  "source_breakpoint": "BAYMAX-BP-0037",
+  "source_commit": "ac2b1710a8550064ae27e7e128cd41ff24bc4e48"
+}

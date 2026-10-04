@@ -1,0 +1,36 @@
+{
+  "base_head": "7fa2399e543841a83c134a3bc391780a6fd93c98",
+  "branch": "integration/iphone-offline-v2",
+  "breakpoint_id": "BAYMAX-BP-0036",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 6117,
+        "path": "evidence/breakpoints/BAYMAX-BP-0035.json",
+        "sha256": "df7c2f62f3d501a3f09f8244bff62777f387ed00ce342d68ea50576a4ac9fae1"
+      },
+      {
+        "bytes": 1847,
+        "path": "evidence/receipts/github/bp0035_publication.json",
+        "sha256": "d60c95ad2e8c735b861c26faffd0fd1248fdb2645a5f5eae72c5128ae6002144"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 2,
+    "leaf_hashes": [
+      "5f0d744f52b92fb6cf40b1957b3777bab1a4458d2dc09ae68bb17ead309024ec",
+      "95e8af24cb40c0621fd9c498b9e0c1a13dd523c5e1c6950f92a17f774a980a81"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "f27ae78c8e004539bf9f119cf6d17e7adf69f8b95514d6ab16fdeba69cf59b9e"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "Publish BP-0035 structural validator repair to upstream Issues #3/#4 and Biobitworks PR #3. Issues remain OPEN/PARTIAL; Issue #5 unchanged; direct Project-v2 field mutation remains blocked by missing project OAuth scope.",
+  "parent": "BAYMAX-BP-0035",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "GITHUB_PUBLICATION",
+  "state": "PASS",
+  "timestamp_utc": "2026-10-04T21:46:02.950561+00:00"
+}

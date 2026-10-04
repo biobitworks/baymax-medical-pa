@@ -1,0 +1,113 @@
+{
+  "claim_ceiling": "The recording supports physical-iPhone Apollo generation while Airplane Mode is enabled and Wi-Fi is visibly disabled. No independent packet-level reachability probe was executed. The model output violates the admitted summary code and is correctly rejected by the Swift deterministic validator. This does not establish clinical correctness or a complete Baymax-app offline end-to-end flow.",
+  "contract_evaluation": {
+    "baymax_deterministic_gate": "PASS_BY_REJECTION",
+    "known_ids": "PASS_RANGE",
+    "medical_action_none": "PASS",
+    "observed_summary": "SYNTHETIC DEMO ONLY",
+    "raw_model_output_contract": "FAIL",
+    "recommended_question_ids": "PASS_RANGE",
+    "required_summary": "SYNTHETIC_CONTEXT_ONLY",
+    "requires_clinician_true": "PASS",
+    "summary_code": "FAIL",
+    "swift_validator_execution": "REJECTED_EXPECTED",
+    "unknown_ids": "PASS_RANGE"
+  },
+  "execution_target": "PHYSICAL_IPHONE_VIA_APPLE_IPHONE_MIRRORING",
+  "frame_observations": [
+    {
+      "approx_seconds": 0,
+      "observation": "Pre-test state shows Google Fi, Wi-Fi and VPN indicators; Airplane Mode not yet enabled."
+    },
+    {
+      "approx_seconds": 2,
+      "observation": "Airplane Mode control is orange/enabled and Wi-Fi control is disabled/crossed."
+    },
+    {
+      "approx_seconds": 3,
+      "observation": "Status bar shows airplane icon only; Wi-Fi remains disabled in Control Center."
+    },
+    {
+      "approx_seconds": 10,
+      "observation": "Apollo open with truncated Liquid model label while airplane icon remains visible."
+    },
+    {
+      "approx_seconds": 20,
+      "observation": "Frozen synthetic catalog prompt submitted; generation spinner active; airplane icon visible."
+    },
+    {
+      "approx_seconds": 40,
+      "observation": "Apollo begins rendering JSON response while airplane icon remains visible."
+    },
+    {
+      "approx_seconds": 50,
+      "observation": "JSON response complete while airplane icon remains visible."
+    }
+  ],
+  "generation_observation": {
+    "correctness_state": "UNKNOWN",
+    "destination_prompt_byte_identity": "NOT_INDEPENDENTLY_VERIFIED",
+    "generation_started_while_airplane_mode_visible": true,
+    "medical_authority": "NONE",
+    "model_output_class": "MODEL_INFERRED",
+    "prompt_transfer": "HUMAN_MEDIATED_PASTE",
+    "response_generation_observed": true
+  },
+  "model_identity": "PARTIAL_TRUNCATED_BY_UI",
+  "model_label_observed": "LFM2.5-1... Q5_K_M",
+  "model_provider": "Liquid AI",
+  "network_ui_observation": {
+    "airplane_mode": "OBSERVED_ENABLED",
+    "cellular": "DISABLED_BY_AIRPLANE_MODE_UI_STATE",
+    "claim": "OFFLINE_DEVICE_RADIO_STATE_OBSERVED",
+    "internet_reachability_probe": "NOT_EXECUTED",
+    "status_bar_during_inference": "AIRPLANE_ICON_ONLY_NO_WIFI_OR_CELLULAR_INDICATOR",
+    "wifi": "OBSERVED_DISABLED_IN_CONTROL_CENTER"
+  },
+  "observed_at": "2026-10-04T21:07:10.903046+00:00",
+  "offline_baymax_app_end_to_end": "NOT_YET_OBSERVED",
+  "offline_local_inference": "OBSERVED",
+  "parent_breakpoint": "BAYMAX-BP-0031",
+  "prescription_purchase": "BLOCKED",
+  "quantization_observed": "Q5_K_M",
+  "real_money": "NO",
+  "real_phi": "NONE_OBSERVED_VISUALLY",
+  "related_prior_local_model_breakpoint": "BAYMAX-BP-0028",
+  "runtime": "Liquid Apollo",
+  "schema": "baymax.iphone_apollo_airplane_mode_observation.v1",
+  "secrets_recorded": false,
+  "synthetic_only": true,
+  "uploaded_recording": {
+    "audio_codec": "aac",
+    "bytes": 16321771,
+    "custody_state": "HASH_AND_OBSERVATION_ADMITTED_RAW_BYTES_PENDING_SYNC",
+    "duration_seconds": 60.446667,
+    "filename": "ScreenRecording_10-04-2026 13-59-40_1.mp4",
+    "raw_file_committed": false,
+    "raw_file_present_on_magicpro": false,
+    "sha256": "0a27258360baff39f01cce47fb63148b6e2104c2d3e5bf0f1033447bc0e95866",
+    "video_codec": "h264",
+    "video_dimensions": "512x1108"
+  },
+  "visually_transcribed_response": {
+    "known": [
+      0,
+      1,
+      2
+    ],
+    "medical_action": "NONE",
+    "recommended_questions": [
+      0,
+      1,
+      2
+    ],
+    "requires_clinician": true,
+    "summary": "SYNTHETIC DEMO ONLY",
+    "unknown": [
+      3,
+      4,
+      5
+    ]
+  },
+  "visually_transcribed_response_sha256": "864d5be9fae8349e529ad7315618fa09c24ec881d1427a0a3a1813a447af89b3"
+}
