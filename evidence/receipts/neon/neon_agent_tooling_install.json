@@ -1,0 +1,46 @@
+{
+  "agents": [
+    "codex",
+    "claude-code"
+  ],
+  "api_key_minted": false,
+  "capability": "official agent skills + project-scoped MCP configuration",
+  "claim_ceiling": "Tooling installation/configuration only; does not establish MCP authentication, Neon project authorization, service deployment, HIPAA compliance, or medical correctness.",
+  "cli_version": "8.0.7",
+  "configuration_preservation": "No pre-existing Neon project/user MCP config was overwritten.",
+  "executed": true,
+  "existing_project_neon_skill_config": "ABSENT_BEFORE_INSTALL",
+  "existing_user_neon_mcp_reference": "ABSENT_BEFORE_INSTALL",
+  "implemented": true,
+  "mcp_auth_mode": "oauth",
+  "mcp_authenticated": "NOT_TESTED",
+  "mcp_project_pin": "cold-rice-87700506",
+  "mcp_server": "https://mcp.neon.tech/mcp",
+  "mcp_tool_call_observed": "NOT_TESTED",
+  "observed": true,
+  "observed_at": "2026-10-04T19:43:29.263076+00:00",
+  "official_skill_fetch_bytes": 32812,
+  "official_skill_fetch_sha256": "1071b8789dea0cb41c795059e728821756181ce55ae34f3f904120bfbfa8ff22",
+  "official_skill_source": "https://neon.com/.well-known/agent-skills/neon/SKILL.md",
+  "result": "PASS",
+  "schema": "baymax.technology_custody_receipt.v1",
+  "secret_scan_observation": {
+    "credential_value_observed": false,
+    "false_positive": "Installed Neon AI Gateway documentation contains literal placeholder prefix nt_live_...",
+    "state": "PASS_AFTER_CLASSIFICATION"
+  },
+  "skills": [
+    "neon",
+    "neon-ai-gateway",
+    "neon-auth",
+    "neon-functions",
+    "neon-object-storage",
+    "neon-postgres",
+    "neon-postgres-branches",
+    "neon-postgres-egress-optimizer"
+  ],
+  "skills_lock": "skills-lock.json",
+  "skills_scope": "project",
+  "technology_id": "NEON_AGENT_TOOLING",
+  "vendor": "Neon"
+}

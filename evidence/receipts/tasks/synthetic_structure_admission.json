@@ -1,0 +1,59 @@
+{
+  "adaptations": "Raw FHIR path changed to user-local storage; tests skip raw-dependent checks if unavailable",
+  "authorization": "User immediate priority 1: admit and push current untracked synthetic-data structure",
+  "clinical_values": "NOT_MAPPED",
+  "nodes": 119,
+  "raw_fhir": "LOCAL_ONLY_NOT_COMMITTED",
+  "raw_fhir_sha256": "93e322ae61082775f578b8833c343551939206bba8838af65e296994f2eb5504",
+  "redistribution_terms": "UNKNOWN_TERMS",
+  "schema": "baymax.synthetic_structure_admission.v1",
+  "shared_checkout_mutated": false,
+  "snapshot": [
+    {
+      "origin": "USER_AUTHORIZED_CURRENT_UNTRACKED_WORK",
+      "path": "src/baymax_evidence/__init__.py",
+      "sha256": "8b2d7d3bbe721d6a1445558358e69797c453bcd449903795263b1064e692aaed"
+    },
+    {
+      "origin": "USER_AUTHORIZED_CURRENT_UNTRACKED_WORK",
+      "path": "src/baymax_evidence/dataset.py",
+      "sha256": "8a26af435064a2a6a1b2815540b3ff12cda3f535af9b55ba74d7318161610e71"
+    },
+    {
+      "origin": "USER_AUTHORIZED_CURRENT_UNTRACKED_WORK",
+      "path": "src/baymax_evidence/fhir.py",
+      "sha256": "2521b9858348800e30317e27c99417c114c321dd12eaf179ec211abce4872ef6"
+    },
+    {
+      "origin": "USER_AUTHORIZED_CURRENT_UNTRACKED_WORK",
+      "path": "src/baymax_evidence/public_sources.py",
+      "sha256": "2a26e263b4cfd6ad2f5f0585aed217313402d14542bd72f6495b9e9018344e5e"
+    },
+    {
+      "origin": "USER_AUTHORIZED_CURRENT_UNTRACKED_WORK",
+      "path": "evidence/datasets/synthea_dataset_source_fco.json",
+      "sha256": "91683cbf124176cdf0e11e956b8a3c39fcdc34398411122b1731fa68f3bace40"
+    },
+    {
+      "origin": "USER_AUTHORIZED_CURRENT_UNTRACKED_WORK",
+      "path": "evidence/datasets/synthea_source_manifest.json",
+      "sha256": "aec2fbbd2ca092346fd23b9f31f604d66f991a7e60d09b6f1d69aed7c55eb510"
+    },
+    {
+      "origin": "USER_AUTHORIZED_CURRENT_UNTRACKED_WORK",
+      "path": "evidence/transforms/synthea_brock407_fcg.json",
+      "sha256": "ae3c5eb92b7aaf80a2c180206b2285df993aed965b2a7d9b4977588a5ba4612c"
+    },
+    {
+      "origin": "USER_AUTHORIZED_CURRENT_UNTRACKED_WORK",
+      "path": "scripts/build_synthea_evidence.py",
+      "sha256": "b809c33330b01a285e2f672ef7d867fc9ef7315def667ec2869c0c75226a349c"
+    },
+    {
+      "origin": "USER_AUTHORIZED_CURRENT_UNTRACKED_WORK",
+      "path": "tests/test_evidence.py",
+      "sha256": "ed26169b665d0fdc6f96f6f52bd11e5c0bf8d66197492dbae57c322970e017e2"
+    }
+  ],
+  "source_checkout_head": "1174d0a0fd64c1aa5998bdd3c19a2ed49298e3cf"
+}

@@ -1,0 +1,14 @@
+BAYMAX — APOLLO OFFLINE DEMO (SYNTHETIC ONLY)
+
+1. On iPhone, open Files > iCloud Drive > Baymax > Apollo Offline Demo > BP-0024. Download this folder before going offline.
+2. Install Liquid Apollo and download a local Liquid AI model while online. Record the exact model name Apollo offers; no model is assumed.
+3. Open apollo_context_packet_v1.txt, select all, and copy the complete packet into a new Apollo chat.
+4. Disable network tools/features. Enable airplane mode and explicitly turn Wi-Fi and cellular off.
+5. Run the packet with the downloaded local model. Return only the requested JSON.
+6. Preserve the exact response and record model, time, and observed network state after returning online. Model output is provisional; medical authority NONE and correctness UNKNOWN.
+
+The packet is synthetic and contains no patient/provider identifiers. Do not add real medical data. No prescribing, dose changes, substitutions, stock claims, autonomous calls or purchases. Apollo is a manual-transfer fallback; no inter-app API is implemented.
+
+iCloud is used to deliver the packet before the offline test. Saving here does not prove it synced to the phone or that Apollo executed offline. The phone lane must observe those steps.
+
+Custody: BAYMAX-BP-0024 (PARTIAL), derived from BP-0021. Actor: chatgpt-codex-synthea-v1.

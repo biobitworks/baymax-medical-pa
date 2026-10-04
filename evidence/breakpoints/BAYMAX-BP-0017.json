@@ -1,0 +1,102 @@
+{
+  "base_head": "afaf213f72be111ea17a702ddcb6fff05874773c",
+  "branch": "redteam/bp-0006-model-wallet",
+  "breakpoint_id": "BAYMAX-BP-0017",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 1773,
+        "path": "evidence/receipts/neon/neon_agent_tooling_install.json",
+        "sha256": "347ce241d5acebd709eb300948a7ceaa12a3d41d8803b4b5b28a8f933b9952bf"
+      },
+      {
+        "bytes": 137,
+        "path": ".mcp.json",
+        "sha256": "907e53fdb1df4275733f4192231023eddf4d90b5e431afbe7b9f6b5b56dc898d"
+      },
+      {
+        "bytes": 96,
+        "path": ".codex/config.toml",
+        "sha256": "410bdf7f376a1861ed393339619040b1a9fd7530c8198a4cf2e9972b057aa8fc"
+      },
+      {
+        "bytes": 2049,
+        "path": "skills-lock.json",
+        "sha256": "88827af9919a1946018f17f3114fbc0585f034fddfd307cf2690ec0f5f1a5a3f"
+      },
+      {
+        "bytes": 33350,
+        "path": ".agents/skills/neon/SKILL.md",
+        "sha256": "97bd6316e34ea48909e08b6585e5320639a697f59ad42d16a9da56ff022204fc"
+      },
+      {
+        "bytes": 20643,
+        "path": ".agents/skills/neon-ai-gateway/SKILL.md",
+        "sha256": "eab0545d5ee7626847ce5b5cdd5f4f03afad0ca5859ffd281389721b06c2bce0"
+      },
+      {
+        "bytes": 12404,
+        "path": ".agents/skills/neon-auth/SKILL.md",
+        "sha256": "5f91f328235382f3e9afef449729e304a531848a90c02b40c4fd1192709e0319"
+      },
+      {
+        "bytes": 49106,
+        "path": ".agents/skills/neon-functions/SKILL.md",
+        "sha256": "ef17cab6c81fba6e5545037205889dcb1b2dcd9748d5fbbf50465ee0a8a88d8d"
+      },
+      {
+        "bytes": 14253,
+        "path": ".agents/skills/neon-object-storage/SKILL.md",
+        "sha256": "fce96952845dfcf4b0c560fcf1ff0d2c0867931fd34ddb3acf0ec24fd118fd11"
+      },
+      {
+        "bytes": 16595,
+        "path": ".agents/skills/neon-postgres/SKILL.md",
+        "sha256": "83d3c75651bd81f06e5e8c47ffc306936cc4d2a1ac84d288e8f6a15fcfb724b4"
+      },
+      {
+        "bytes": 13663,
+        "path": ".agents/skills/neon-postgres-branches/SKILL.md",
+        "sha256": "9f47d5a49553a465837c1e8b2d90a90aac72a5313a996c081027290f259a8d71"
+      },
+      {
+        "bytes": 10227,
+        "path": ".agents/skills/neon-postgres-egress-optimizer/SKILL.md",
+        "sha256": "d7536270b6dd59a66fa5daf1578cc55a5b761d7163f6f6b1596662481b8d5d9b"
+      },
+      {
+        "bytes": 2710,
+        "path": "evidence/breakpoints/BAYMAX-BP-0016.json",
+        "sha256": "ce7565eb5565cf427bb6f7919428f9406b69cb4f678645f7d5356585fceb01b8"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 13,
+    "leaf_hashes": [
+      "0b44fa7273cf9570e6ea88ae04e1982900b8befea4b2bc396bb1f1b1b3ee9a96",
+      "84249d61d1ca2ffe46f77e50e1181435a733cd83a26cb67a3e560da0bfb885ad",
+      "2fe8895f5c6021db29e2d29eb7401e986cd24e8949eaeee6303bc9d06080b495",
+      "559b7b7969b4ba6dab939a9a5452a4e231a9556194e429c5f980b844cece82e0",
+      "fda88bc9206ce0be5310638027ba0b68c4955f58a4669a7d986979ada5d79f76",
+      "10f9ab9c507df1429554f80f712b72d0bade77ed3b5285396a7aa55879b91c51",
+      "d4673f045a87dcc879657896cc35f79bcc8217392666fc8fe6d874a9cfd4a42f",
+      "cdfcf8439ac97088179cab61274d035d94b263be5f98d7f2d1647ed286b7f675",
+      "be3c36de82f1e8606a108df2105a33113602f1ff78c6726f2185f9f4348f9fa1",
+      "5040f674a479bf4a305431d967f965144c36b6728834ba7b7ea3e4b3aa11debb",
+      "7caa392769f70ce859edaf628bf04cf57c6a5db31bc68ee16d2b189d99396742",
+      "c26e10c1b149ef32709b12bfaa84b1ff945083a548299a6937b65966c6897722",
+      "a9a7637207df0d78965635d83bb75ac2d325c5adffe8fbbb75d155b4f8de8831"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "8ee3f26f91172ffc5774f0749defe030d9c155869f394511cb9ab7e6f41790d4"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "Official Neon skill fetched and verified; project-local 8-skill set installed for Codex/Claude Code; OAuth MCP pinned to cold-rice-87700506; no API key minted; MCP authentication/tool execution NOT_TESTED; BP-0016 control-plane PARTIAL unchanged.",
+  "parent": "BAYMAX-BP-0016",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "NEON_AGENT_TOOLING_INSTALL",
+  "state": "PASS",
+  "timestamp_utc": "2026-10-04T19:43:29.335417+00:00"
+}
