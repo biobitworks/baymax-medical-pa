@@ -1390,7 +1390,7 @@ function App() {
               <Mascot small />
               <span className="eyebrow">MEET YOUR CARE COMPANION</span>
               <h2>
-                A little annoying.
+                A little adorable.
                 <br />A lot of love.
               </h2>
               <p>
