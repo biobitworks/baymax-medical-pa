@@ -1,0 +1,60 @@
+{
+  "capability": "bucket exists? PUT/GET/DELETE synthetic object; anonymous read denied?",
+  "claim_ceiling": "Synthetic object PUT/GET/DELETE round-trip and anonymous-read denial observed on one bucket. Private bucket != HIPAA compliance; no encryption/retention/audit review.",
+  "cli_version": null,
+  "config_file_identities": {
+    "upstream_neon.ts_git_blob": "a44c615eab4779333b0d47cad6a3344965d1f7a3"
+  },
+  "credential_presence": {
+    "AWS_ACCESS_KEY_ID": "PRESENT",
+    "AWS_ENDPOINT_URL_S3": "PRESENT",
+    "AWS_REGION": "PRESENT",
+    "AWS_SECRET_ACCESS_KEY": "PRESENT"
+  },
+  "env_var_names": [
+    "AWS_ACCESS_KEY_ID",
+    "AWS_SECRET_ACCESS_KEY",
+    "AWS_ENDPOINT_URL_S3",
+    "AWS_REGION"
+  ],
+  "executed": true,
+  "implemented": true,
+  "lockfile_identity": {
+    "note": "upstream lockfile contains 0 '@neon' entries",
+    "upstream_package-lock_git_blob": "3c679a532ac39cac2dec6982c115136c7a9c9115"
+  },
+  "observed": true,
+  "observed_at": "2026-10-04T19:11:38Z",
+  "phi": "none; synthetic data only",
+  "result": "PASS",
+  "sanitized_endpoint": "<branch-id>.storage.c-6.<REDACTED>.aws.neon.tech",
+  "sanitized_response_identity": {
+    "get_sha256": "6fd0732afa5d17ea43c4c0d027ba5bf5c786ab5b9f0ac4462bca68cc6396c5e8"
+  },
+  "schema": "baymax.technology_receipt.v1",
+  "sdk": "boto3",
+  "sdk_present": true,
+  "sdk_version": "1.43.14",
+  "source_commit": "34f992dd0cb2f06df7d2be05b7d3bc2edf77d6ef",
+  "steps": {
+    "anonymous_get_status": 403,
+    "bucket_medical-records_exists": true,
+    "delete": 204,
+    "get_after_delete": "ERR:NoSuchKey",
+    "get_identity_match": true,
+    "head_bucket": "OK",
+    "list_buckets_count": 1,
+    "put": 200
+  },
+  "synthetic_request_identity": {
+    "bucket": "medical-records",
+    "key_prefix": "baymax-probe/",
+    "object_sha256": "6fd0732afa5d17ea43c4c0d027ba5bf5c786ab5b9f0ac4462bca68cc6396c5e8"
+  },
+  "tags": [
+    "NEON",
+    "OBJECT_STORAGE"
+  ],
+  "technology_id": "NEON_OBJECT_STORAGE",
+  "vendor_request_id_put": null
+}
