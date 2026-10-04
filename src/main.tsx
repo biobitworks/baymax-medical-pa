@@ -46,6 +46,24 @@ import {
 } from "./mastra/lib/brief";
 import "./style.css";
 
+const GLASS_ML = 250;
+const WATER_GOAL = 8;
+const MOVEMENT_GOAL = 30;
+const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
+type WeekDay = {
+  date: string;
+  hydrationMl: number;
+  activeMinutes: number;
+  energy?: string;
+};
+type HealthOverview = {
+  today: { date: string; hydrationMl: number; activeMinutes: number };
+  todayCheckin: { date: string; energy: string } | null;
+  metrics: { date: string; hydrationMl: number; activeMinutes: number }[];
+  checkins: { date: string; energy: string }[];
+};
+
 function ModalShell({
   children,
   onClose,
@@ -663,6 +681,8 @@ function App() {
   const [energy, setEnergy] = useState("");
   const [done, setDone] = useState<string[]>([]);
   const [water, setWater] = useState(3);
+  const [activeMinutes, setActiveMinutes] = useState(0);
+  const [week, setWeek] = useState<WeekDay[]>([]);
   const [reminders, setReminders] = useState(true);
   const [nudge, setNudge] = useState("Gentle");
   const [city, setCity] = useState("San Francisco");
@@ -686,6 +706,60 @@ function App() {
   const notify = (s: string) => {
     setToast(s);
     setTimeout(() => setToast(""), 3500);
+  };
+  // Load today's numbers and the last week from the Mastra server. The agent
+  // tools read the same data, so the app and Baymax always agree.
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch("/health/overview?days=7");
+        if (!res.ok) throw new Error(`/health/overview ${res.status}`);
+        const data: HealthOverview = await res.json();
+        if (cancelled) return;
+        setWater(
+          Math.min(WATER_GOAL, Math.round(data.today.hydrationMl / GLASS_ML)),
+        );
+        setActiveMinutes(data.today.activeMinutes);
+        if (data.todayCheckin) setEnergy(capitalize(data.todayCheckin.energy));
+        const checkinByDate = new Map(
+          data.checkins.map((c) => [c.date, c.energy]),
+        );
+        setWeek(
+          [...data.metrics].reverse().map((m) => ({
+            date: m.date,
+            hydrationMl: m.hydrationMl,
+            activeMinutes: m.activeMinutes,
+            energy: checkinByDate.get(m.date),
+          })),
+        );
+      } catch (err) {
+        console.warn("Health data unavailable, using local defaults.", err);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+  const saveHealth = (path: string, body: object) =>
+    fetch(path, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(body),
+    }).catch((err) => console.warn("Could not save health data.", err));
+  const addWater = () => {
+    if (water >= WATER_GOAL) return;
+    setWater(water + 1);
+    void saveHealth("/health/water", { ml: GLASS_ML });
+  };
+  const saveEnergy = () => {
+    void saveHealth("/health/checkin", { energy: energy.toLowerCase() });
+    const today = new Date().toLocaleDateString("en-CA");
+    setWeek((w) =>
+      w.map((d) =>
+        d.date === today ? { ...d, energy: energy.toLowerCase() } : d,
+      ),
+    );
   };
   const download = () => {
     const u = URL.createObjectURL(new Blob([brief], { type: "text/plain" }));
@@ -955,17 +1029,17 @@ function App() {
                       <button
                         className="icon"
                         aria-label="Add one glass of water"
-                        onClick={() => setWater(Math.min(8, water + 1))}
+                        onClick={addWater}
                       >
                         <Plus size={17} />
                       </button>
                     </div>
                     <h3>
                       {water}
-                      <small> / 8 glasses</small>
+                      <small> / {WATER_GOAL} glasses</small>
                     </h3>
                     <div className="water-bars">
-                      {Array.from({ length: 8 }, (_, i) => (
+                      {Array.from({ length: WATER_GOAL }, (_, i) => (
                         <i key={i} className={i < water ? "filled" : ""} />
                       ))}
                     </div>
@@ -979,15 +1053,22 @@ function App() {
                       <span>MOVEMENT</span>
                     </div>
                     <h3>
-                      {done.includes("Take a 10-minute walk") ? "10" : "0"}
-                      <small> / 10 minutes</small>
+                      {activeMinutes +
+                        (done.includes("Take a 10-minute walk") ? 10 : 0)}
+                      <small> / {MOVEMENT_GOAL} minutes</small>
                     </h3>
                     <div className="track">
                       <i
                         style={{
-                          width: done.includes("Take a 10-minute walk")
-                            ? "100%"
-                            : "0%",
+                          width: `${Math.min(
+                            100,
+                            ((activeMinutes +
+                              (done.includes("Take a 10-minute walk")
+                                ? 10
+                                : 0)) /
+                              MOVEMENT_GOAL) *
+                              100,
+                          )}%`,
                         }}
                       />
                     </div>
@@ -1022,6 +1103,42 @@ function App() {
                     </button>
                   </article>
                 </div>
+                {week.length > 0 && (
+                  <section className="panel week-panel">
+                    <div className="section-heading">
+                      <h2>
+                        Your last 7 days <span>ENERGY, WATER, MOVEMENT</span>
+                      </h2>
+                    </div>
+                    <div className="week">
+                      {week.map((d) => (
+                        <div className="week-day" key={d.date}>
+                          <span
+                            className={`energy-dot ${d.energy ?? "none"}`}
+                            title={d.energy ? `Energy: ${d.energy}` : "No check-in"}
+                          />
+                          <div className="week-bar" title="Water">
+                            <i
+                              style={{
+                                height: `${Math.min(100, (d.hydrationMl / 2000) * 100)}%`,
+                              }}
+                            />
+                          </div>
+                          <small>
+                            {new Date(`${d.date}T12:00:00`).toLocaleDateString(
+                              undefined,
+                              { weekday: "short" },
+                            )}
+                          </small>
+                        </div>
+                      ))}
+                    </div>
+                    <p className="muted">
+                      Dots show energy (cloudy is low, bright is great). Bars
+                      show water against about 2 litres.
+                    </p>
+                  </section>
+                )}
                 <div className="lower-grid">
                   <section className="panel">
                     <div className="section-heading">
@@ -1451,6 +1568,7 @@ function App() {
                     className="primary"
                     disabled={!energy}
                     onClick={() => {
+                      saveEnergy();
                       setModal("");
                       notify(
                         "Check-in complete. Thank you for making a little time for yourself.",
