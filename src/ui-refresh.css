@@ -169,6 +169,7 @@ footer { border-top: 1px solid var(--line); margin: 40px 0 0; padding-top: 20px;
 .chat-first main { height: 100dvh; min-height: 0; display: flex; flex-direction: column; padding-bottom: 0; }
 .chat-first header { flex-shrink: 0; }
 .chat-first .content { flex: 1; min-height: 0; width: 100%; max-width: 1150px; display: flex; flex-direction: column; padding-top: 15px; padding-bottom: 20px; }
+.chat-first .conversation-workspace { display: flex; flex-direction: column; flex: 1; min-height: 0; }
 .chat-first .chat-panel { flex: 1; min-height: 0; padding: 0; }
 .chat-hub { height: 100%; display: flex; flex-direction: column; }
 .chat-hub-bar { flex-shrink: 0; padding: 0 0 12px; border-bottom: 1px solid var(--line); }
@@ -435,4 +436,18 @@ header .persistence-status:has([role='alert']) { flex-basis: 100%; max-width: 10
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; }
   .suggestions .welcome-action, .sidebar { transition: none; }
+}
+
+/* Keep the shared chat usable inside the team's Computer workspace. */
+.computer-workspace .chat-tools { padding: 0 20px; }
+.computer-workspace .chat-tools > span { display: none; }
+.computer-workspace .chat-tools .text-btn { margin-left: auto; }
+.computer-workspace .suggestions { grid-template-columns: 1fr; gap: 10px; }
+.computer-workspace .suggestions .welcome-action { flex-direction: row; align-items: center; min-height: 84px; padding: 16px; gap: 12px; }
+.computer-workspace .welcome-action-copy { flex: 1; }
+.computer-workspace .welcome-action-arrow { position: static; }
+.computer-workspace .message.user { font-size: 17px; }
+.computer-workspace .quick-actions button { font-size: 14px; }
+@media (min-width: 1024px) {
+  .computer-workspace .sidebar .sidebar-signoff, .computer-workspace .sidebar .nav-companion-dot { display: none; }
 }

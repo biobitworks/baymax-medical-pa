@@ -220,7 +220,7 @@ test('chat draft survives switching mobile workspace views and desktop shows bot
   await page.setViewportSize({ width: 390, height: 844 });
   const switcher = page.getByRole('group', { name: 'Workspace view' });
   await switcher.getByRole('button', { name: 'Chat', exact: true }).click();
-  const composer = page.getByPlaceholder('Tell Baymax what you need…');
+  const composer = page.getByRole('textbox', { name: 'Message Baymax' });
   await composer.fill('Keep this draft while I check the computer');
   await switcher.getByRole('button', { name: 'Computer', exact: true }).click();
   await expect(page.getByRole('region', { name: 'Baymax computer' })).toBeVisible();

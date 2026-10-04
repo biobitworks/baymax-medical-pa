@@ -1235,7 +1235,7 @@ const nav = [
   ["Computer", Monitor],
 ] as const;
 const NAV_LABELS: Record<string, string> = {
-  'Talk to Baymax': 'Talk', 'Today': 'Today', 'Your plan': 'Plan', 'Physical fitness': 'Activity', 'Running': 'Running', 'Travel care': 'Travel', 'Doctor brief': 'Doctor brief',
+  'Talk to Baymax': 'Talk', 'Today': 'Today', 'Your plan': 'Plan', 'Physical fitness': 'Activity', 'Running': 'Running', 'Travel care': 'Travel', 'Doctor brief': 'Doctor brief', 'Computer': 'Computer',
 };
 function App() {
   const [responding, setResponding] = useState(false);
@@ -1490,7 +1490,7 @@ function App() {
                 onClick={() => go(s)}
               >
                 <I size={19} />
-                {NAV_LABELS[s]}
+                {NAV_LABELS[s] ?? s}
                 {s === "Talk to Baymax" && <span className="nav-companion-dot" aria-hidden="true" />}
               </button>
             ))}
