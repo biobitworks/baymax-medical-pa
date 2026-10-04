@@ -23,6 +23,8 @@ build/
 test-results/
 playwright-report/
 mastra.db*
+.baymax-computer/
+.openmuse/
 
 # OS/editor
 .DS_Store

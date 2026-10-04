@@ -265,6 +265,12 @@ Baymax can render the same interactive components in chat using `fitnessOverview
 
 Run `npm run test:fitness` for goal validation and progress calculations, and `npm run build` for TypeScript and production bundling.
 
+## Baymax’s computer
+
+Baymax and you can share a persistent browser, an isolated Linux terminal, and files under `/workspace`. Open **Computer** to unlock access, watch or control browsing, run commands with saved receipts, and edit text files. The agent uses the same computer from chat. This adapts OpenMuse’s MIT-licensed browser worker and container helpers while keeping Baymax’s Mastra agent.
+
+See [setup, access, and verification](docs/baymax-computer.md). The feature needs explicit server configuration, a browser worker, and Docker for terminal/files. Commands run inside a network-disabled container, never on the server host.
+
 ---
 
 ## Biobitworks compliance-backend successor

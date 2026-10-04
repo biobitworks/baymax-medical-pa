@@ -1,0 +1,13 @@
+import React from 'react';
+type Props={size?:number;className?:string};
+const icon=(content:React.ReactNode)=>({size=24,className}:Props)=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>{content}</svg>;
+export const Check=icon(<path d="m5 12 4 4 10-10"/>);
+export const Plus=icon(<path d="M12 5v14M5 12h14"/>);
+export const Minus=icon(<path d="M5 12h14"/>);
+export const ArrowUpRight=icon(<path d="M6 18 18 6M6 6h12v12"/>);
+export const Pill=icon(<><path d="m8 16 8-8M6 18a6 6 0 0 1 0-8l4-4a6 6 0 0 1 8 8l-4 4a6 6 0 0 1-8 0Z"/></>);
+export const ShoppingBag=icon(<><path d="M5 7h14l1 14H4L5 7Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></>);
+export const Mail=icon(<><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 6 9 7 9-7"/></>);
+export const Water=icon(<path d="M12 3s-6 7-6 11a6 6 0 0 0 12 0c0-4-6-11-6-11Z"/>);
+export const Walk=icon(<><circle cx="14" cy="4" r="2"/><path d="m13 7-3 6 4 3 2 5M10 13l-3 8M13 7l3 5h4M11 8l-5 3"/></>);
+export const Sun=icon(<><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1 1M18 18l1 1M5 19l1-1M18 6l1-1"/></>);

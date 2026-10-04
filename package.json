@@ -19,6 +19,10 @@
     "test:pwa": "npm run build && playwright test",
     "icons": "node scripts/generate-icons.mjs",
     "record:notifications": "node scripts/record-notifications.mjs",
+    "computer:build": "docker build -t baymax-computer:local services/computer",
+    "test:computer": "node --import tsx scripts/smoke-computer.ts",
+    "browser:worker": "npm --prefix services/browser-worker start",
+    "test:computer:api": "node --import tsx scripts/smoke-computer-api.ts",
     "shortcut:local": "node scripts/shortcut-local.mjs",
     "shortcut:build": "python3 scripts/build-apple-health-shortcut.py --sign"
   },
