@@ -1,0 +1,41 @@
+{
+  "artifact_bytes": 9014548,
+  "artifact_path": "evidence/media/iphone/apollo_local_model_screen_recording_2026-10-04.mov",
+  "artifact_sha256": "ef8b2d2b1d90bfd838d4a1e9be4ef3937b15b45b25d474375ea232c1ff1fc12b",
+  "claim_ceiling": "This receipt establishes custody/identity of the exact committed recording bytes and the explicit user authorization to publish them. It does not prove authenticity of the human/device identity, offline inference, medical correctness, clinical validity, or regulatory compliance.",
+  "execution_claim": {
+    "correctness_state": "UNKNOWN",
+    "liquid_apollo_generation": "OBSERVED",
+    "medical_authority": "NONE",
+    "model_identity": "PARTIAL_TRUNCATED_UI_LABEL",
+    "network_observation": "LTE_VISIBLE",
+    "offline_network_isolation": "NOT_TESTED",
+    "physical_iphone_via_mirroring": "OBSERVED"
+  },
+  "media": {
+    "audio_codec": "aac",
+    "audio_track": "PRESENT_NON_SILENT",
+    "container": "QuickTime/MOV",
+    "duration_seconds": 70.719625,
+    "video_codec": "h264",
+    "video_dimensions": "690x1384"
+  },
+  "observed_at": "2026-10-04T20:57:17.278820+00:00",
+  "parent_breakpoint": "BAYMAX-BP-0029",
+  "privacy_review": {
+    "audio_review_limitation": "Speech recognition output was low-quality filler and is not a definitive guarantee that the audio contains no private information.",
+    "audio_review_method": "OpenAI Whisper tiny.en best-effort local transcription",
+    "audio_transcription_result": "NO_MEANINGFUL_INTELLIGIBLE_SPEECH_RECOGNIZED",
+    "user_authorization": "EXPLICIT_REQUEST_TO_COMMIT_AND_PUSH_RECORDING_AS_CHAIN_OF_CUSTODY",
+    "visual_observation": "Sampled frames show Apple iPhone Mirroring, Liquid Apollo, the synthetic Baymax context packet, and generated bounded JSON. No credential values or real PHI were observed.",
+    "visual_sample_review": "PASS_SYNTHETIC_DEMO_ONLY"
+  },
+  "raw_file_committed": true,
+  "real_phi": "NONE_OBSERVED",
+  "related_execution_breakpoint": "BAYMAX-BP-0028",
+  "schema": "baymax.iphone_screen_recording_custody.v1",
+  "secrets_recorded": "NONE_OBSERVED",
+  "source": "LOCAL_MAC_ORIGINAL_SCREEN_RECORDING",
+  "source_filename": "Screen Recording 2026-10-04 at 1.41.19 PM.mov",
+  "source_upload_hash_match": "PASS"
+}
