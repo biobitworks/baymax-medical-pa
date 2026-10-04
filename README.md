@@ -48,8 +48,9 @@ Requires Node.js 22.22+ or 24.11+ (Node.js 24 LTS recommended).
 
 ```bash
 npm ci
-cp .env.example .env
-# Fill in DATABASE_URL and Neon AI Gateway values in .env.
+cp .env.example .env.local
+# Fill in DATABASE_URL and Neon AI Gateway values in .env.local (git-ignored).
+# .env is committed and holds non-secret defaults only; never put credentials in it.
 npm run db:migrate
 npm run agent:dev
 # In a second terminal:

@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Baymax — a personal medical agent</title>
+  <meta name="description" content="Baymax is a privacy-first personal medical agent that checks in, keeps you on track, and helps you brief a new doctor while travelling.">
+  <link rel="icon" href="../public/icons/icon-192.png">
+  <style>
+    :root {
+      --ink: #1f3b30;
+      --ink-soft: #4f6359;
+      --green: #2f5d4a;
+      --sage: #e6ece1;
+      --cream: #faf8f3;
+      --line: #dfe3d9;
+      --peach: #f6e3d5;
+      --max: 1080px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    body {
+      margin: 0;
+      background: var(--cream);
+      color: var(--ink);
+      font: 18px/1.6 ui-sans-serif, -apple-system, "Segoe UI", system-ui, sans-serif;
+    }
+    a { color: var(--green); }
+    img { max-width: 100%; height: auto; display: block; }
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+
+    nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 0; }
+    nav .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 20px; text-decoration: none; color: var(--ink); }
+    nav ul { display: flex; gap: 24px; list-style: none; margin: 0; padding: 0; font-size: 16px; }
+    nav ul a { text-decoration: none; color: var(--ink-soft); }
+    nav ul a:hover { color: var(--ink); }
+
+    .sprite {
+      width: 56px; height: 56px;
+      background: url("../public/mascot/idle.webp") 0 0 / 300% 200% no-repeat;
+      image-rendering: pixelated;
+    }
+    .sprite.big { width: 240px; height: 240px; }
+
+    header.hero { display: grid; grid-template-columns: 1.3fr 1fr; gap: 48px; align-items: center; padding: 56px 0 72px; }
+    h1 { font-size: clamp(40px, 6vw, 64px); line-height: 1.05; letter-spacing: -0.02em; margin: 0 0 20px; }
+    .lede { font-size: 21px; color: var(--ink-soft); margin: 0 0 32px; max-width: 34em; }
+    .cta { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn { display: inline-block; padding: 12px 22px; border-radius: 999px; font-weight: 600; text-decoration: none; font-size: 16px; }
+    .btn.primary { background: var(--green); color: #fff; }
+    .btn.ghost { border: 1.5px solid var(--line); color: var(--ink); background: #fff; }
+    .hero-art { background: var(--sage); border-radius: 28px; aspect-ratio: 1; display: grid; place-items: center; position: relative; }
+    .bubble {
+      position: absolute; top: 28px; right: 24px; max-width: 220px;
+      background: #fff; border-radius: 16px 16px 4px 16px; padding: 10px 14px;
+      font-size: 15px; box-shadow: 0 2px 10px rgba(31, 59, 48, 0.08);
+    }
+
+    section { padding: 72px 0; border-top: 1px solid var(--line); }
+    h2 { font-size: 34px; letter-spacing: -0.01em; line-height: 1.15; margin: 0 0 16px; }
+    h3 { font-size: 22px; margin: 0 0 8px; }
+    .section-intro { color: var(--ink-soft); max-width: 40em; margin: 0 0 40px; }
+
+    blockquote {
+      margin: 0; padding: 32px 36px; background: #fff; border: 1px solid var(--line);
+      border-radius: 20px; font-size: 24px; line-height: 1.45;
+    }
+    blockquote p { margin: 0 0 12px; }
+    blockquote footer { font-size: 16px; color: var(--ink-soft); }
+
+    .feature { display: grid; grid-template-columns: 1fr 1.4fr; gap: 40px; align-items: center; margin-bottom: 64px; }
+    .feature:nth-of-type(even) { grid-template-columns: 1.4fr 1fr; }
+    .feature:nth-of-type(even) .media { order: -1; }
+    .feature p { color: var(--ink-soft); margin: 0; }
+    .media { border-radius: 16px; overflow: hidden; border: 1px solid var(--line); background: #fff; }
+    .media.phone { max-width: 300px; justify-self: center; border-radius: 28px; }
+    .note { font-size: 15px; margin-top: 12px !important; }
+
+    table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; font-size: 16px; }
+    th, td { text-align: left; padding: 14px 18px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { background: var(--sage); font-weight: 600; }
+    tr:last-child td { border-bottom: 0; }
+    .yes { color: var(--green); font-weight: 600; white-space: nowrap; }
+    .sim { color: #9a5b2e; font-weight: 600; white-space: nowrap; }
+
+    .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+    ul.plain { margin: 0; padding-left: 20px; color: var(--ink-soft); }
+    ul.plain li { margin-bottom: 8px; }
+    .warning { background: var(--peach); border-radius: 16px; padding: 20px 24px; margin-top: 32px; }
+
+    .stack { display: flex; flex-wrap: wrap; gap: 12px; }
+    .stack span { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 10px 16px; font-size: 16px; }
+    .stack b { display: block; }
+    .stack small { color: var(--ink-soft); }
+
+    footer.site { padding: 40px 0 56px; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: 15px; display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+
+    @media (max-width: 800px) {
+      nav ul { display: none; }
+      header.hero, .feature, .feature:nth-of-type(even), .cols { grid-template-columns: 1fr; }
+      .feature:nth-of-type(even) .media { order: 0; }
+      .hero-art { max-width: 360px; }
+      .sprite.big { width: 180px; height: 180px; }
+      blockquote { font-size: 20px; padding: 24px; }
+      th, td { padding: 10px 12px; }
+      .table-wrap { overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav>
+      <a class="brand" href="#"><span class="sprite" role="img" aria-label="Baymax mascot"></span>Baymax</a>
+      <ul>
+        <li><a href="#what">What it does</a></li>
+        <li><a href="#status">What's real</a></li>
+        <li><a href="#privacy">Privacy</a></li>
+        <li><a href="https://github.com/jerelvelarde/baymax-medical-pa">GitHub</a></li>
+      </ul>
+    </nav>
+
+    <header class="hero">
+      <div>
+        <h1>You have an assistant for work. Why not one for your health?</h1>
+        <p class="lede">Baymax is a personal medical agent. It checks in on your sleep, water and movement, keeps track of your medication, and drafts a health brief for a new doctor when you're away from home.</p>
+        <div class="cta">
+          <a class="btn primary" href="https://github.com/jerelvelarde/baymax-medical-pa">View the code</a>
+          <a class="btn ghost" href="#what">See it working</a>
+        </div>
+      </div>
+      <div class="hero-art">
+        <div class="bubble">You've had two glasses of water today. Want a reminder at 3?</div>
+        <div class="sprite big" role="img" aria-label="Pixel-art Baymax robot"></div>
+      </div>
+    </header>
+  </div>
+
+  <section>
+    <div class="wrap">
+      <blockquote>
+        <p>“I'm travelling for a hackathon next week. Help me prepare, keep me on track every day, and help me explain my health history if I need to see a doctor.”</p>
+        <footer>The request Baymax was built around. It answers with a preparation routine, daily check-ins, a medication checklist and a doctor brief you review before sharing.</footer>
+      </blockquote>
+    </div>
+  </section>
+
+  <section id="what">
+    <div class="wrap">
+      <h2>What it does</h2>
+      <p class="section-intro">Baymax works through conversation. Ask in plain language and it answers with cards you can edit, tick off and act on.</p>
+
+      <div class="feature">
+        <div>
+          <h3>Gets you through a busy week</h3>
+          <p>Baymax builds a plan around sleep, meals, water, movement and your medication schedule, then checks in each day. Small, achievable goals, not a fitness regime.</p>
+        </div>
+        <div class="media"><img src="../docs/media/care-plan.gif" alt="Reviewing a care plan and completing a daily energy check-in" loading="lazy" width="960" height="540"></div>
+      </div>
+
+      <div class="feature">
+        <div>
+          <h3>Briefs a new doctor</h3>
+          <p>Seeing a doctor who doesn't know you? Baymax drafts a short summary of your medications, allergies, history and questions. You edit it and decide who receives it.</p>
+        </div>
+        <div class="media"><img src="../docs/media/doctor-email.gif" alt="Editing a doctor brief and reviewing the email draft" loading="lazy" width="960" height="540"></div>
+      </div>
+
+      <div class="feature">
+        <div>
+          <h3>Helps with a refill while you're away</h3>
+          <p>Running low on a prescription? Baymax compares pharmacy options and prepares the order for you to review. It never issues prescriptions or suggests substitutes.</p>
+          <p class="note">Pharmacies, prices and stock in this demo are illustrative. No payment is taken and no order is sent.</p>
+        </div>
+        <div class="media"><img src="../docs/media/prescription-preview.gif" alt="Choosing a pharmacy and reviewing a sample prescription order" loading="lazy" width="960" height="540"></div>
+      </div>
+
+      <div class="feature">
+        <div>
+          <h3>Reminds you on your phone</h3>
+          <p>Short nudges to take your medication as prescribed, buy the next refill or go for a ten-minute walk. Each one opens the matching action. Baymax installs on your phone as an app.</p>
+          <p class="note">Lock-screen reminders are a simulated concept; live push delivery isn't connected yet.</p>
+        </div>
+        <div class="media phone"><img src="../docs/media/mobile-notifications.png" alt="Baymax reminders on a phone lock screen" loading="lazy" width="540" height="1020"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="status">
+    <div class="wrap">
+      <h2>What's real and what's simulated</h2>
+      <p class="section-intro">This is a hackathon prototype. Here's exactly where it stands.</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Capability</th><th>Status</th><th>Details</th></tr></thead>
+        <tbody>
+          <tr><td>Conversation with the agent</td><td class="yes">Working</td><td>Mastra agent with live responses, streaming into Assistant UI cards</td></tr>
+          <tr><td>Remembering your care space</td><td class="yes">Working</td><td>Opt-in, saved in Neon Postgres, deletable at any time</td></tr>
+          <tr><td>Apple Health</td><td class="yes">Working</td><td>An iPhone Shortcut you run sends steps, exercise, sleep and water</td></tr>
+          <tr><td>Web research</td><td class="yes">Working</td><td>Exa search with sources shown alongside the answer</td></tr>
+          <tr><td>Doctor brief</td><td class="yes">Working</td><td>Generated, editable, handed to your email app to send</td></tr>
+          <tr><td>Install on phone</td><td class="yes">Working</td><td>Progressive web app</td></tr>
+          <tr><td>Pharmacy orders</td><td class="sim">Simulated</td><td>Order preview only; no payment or fulfilment</td></tr>
+          <tr><td>Push reminders</td><td class="sim">Simulated</td><td>Recorded concept; no background delivery yet</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </section>
+
+  <section id="privacy">
+    <div class="wrap">
+      <h2>Your health information, under your control</h2>
+      <div class="cols">
+        <div>
+          <h3>Built in today</h3>
+          <ul class="plain">
+            <li>Nothing is saved unless you turn on memory</li>
+            <li>One action deletes everything Baymax stored</li>
+            <li>Credentials stay on the server, never in the browser</li>
+            <li>HttpOnly session cookies and origin checks on every save</li>
+            <li>Apple Health connection keys are stored only as hashes</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Still to do</h3>
+          <ul class="plain">
+            <li>Accounts and sign-in</li>
+            <li>Access audit logging</li>
+            <li>Exporting your full record</li>
+            <li>A formal HIPAA compliance review</li>
+          </ul>
+        </div>
+      </div>
+      <p class="warning"><b>HIPAA compliance has not been verified.</b> Baymax is a prototype: use synthetic data only. It supports organisation, habits and conversations with clinicians. It doesn't diagnose, prescribe or provide emergency care.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>How it's built</h2>
+      <p class="section-intro">React, TypeScript and Vite on the front end; a Mastra agent with tools on the back end.</p>
+      <div class="stack">
+        <span><b>Mastra</b><small>Agent, tools and workflows</small></span>
+        <span><b>Assistant UI</b><small>Chat interface and tool cards</small></span>
+        <span><b>Neon</b><small>Postgres storage and AI Gateway</small></span>
+        <span><b>Exa</b><small>Web research with sources</small></span>
+        <span><b>Fly.io</b><small>Deployment configuration</small></span>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <footer class="site">
+      <span>Baymax — built at the Build Personal Agents hackathon, San Francisco, October 2026.</span>
+      <a href="https://github.com/jerelvelarde/baymax-medical-pa">github.com/jerelvelarde/baymax-medical-pa</a>
+    </footer>
+  </div>
+</body>
+</html>
