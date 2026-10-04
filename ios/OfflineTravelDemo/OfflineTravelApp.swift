@@ -75,10 +75,11 @@ struct TravelView: View {
                     Section("Synthetic traveler · Bali") {
                         Label("SYNTHETIC DATA", systemImage: "testtube.2")
                         Text("Travel dates: UNKNOWN · destination Bali, Indonesia")
-                        if let legacy {
+                        if let legacy, let catalog {
                             Text("Medication context: \(legacy.medication_context.count) synthetic records")
-                            ForEach(Array(legacy.medication_context.prefix(4).enumerated()), id: \.offset) { index, item in
-                                Text("Record \(index + 1): \(describeMedication(item))").font(.caption)
+                            let safeMedicationFacts = catalog.known.filter { $0.text.hasPrefix("Synthetic active medication record:") }
+                            ForEach(safeMedicationFacts) { fact in
+                                Text(fact.text + " · code-owned allowlist · no modification authorized").font(.caption)
                             }
                         }
                         Text("Medical correctness: \(value.correctness_state)")
@@ -226,14 +227,26 @@ struct TravelView: View {
                   let walletURL = Bundle.main.url(forResource: "wallet_state_v1", withExtension: "json")
             else { throw CocoaError(.fileNoSuchFile) }
 
-            let loadedContext = try OfflineTravelBundleFCO.decode(Data(contentsOf: fcoURL))
+            let fcoData = try Data(contentsOf: fcoURL)
+            guard sha256(String(decoding: fcoData, as: UTF8.self)) == ModelContract.offlineFCOSHA256
+            else { throw CocoaError(.coderInvalidValue) }
+            let loadedContext = try OfflineTravelBundleFCO.decode(fcoData)
+
             let legacyData = try Data(contentsOf: legacyURL)
-            guard sha256(String(decoding: legacyData, as: UTF8.self)) == "36d5d72c202da795db07d50d807747e94922f3b958b9ee25fd646e3d038a0c93"
+            let projectionSHA = sha256(String(decoding: legacyData, as: UTF8.self))
+            guard projectionSHA == "36d5d72c202da795db07d50d807747e94922f3b958b9ee25fd646e3d038a0c93",
+                  loadedContext.source_projection_sha256 == projectionSHA
             else { throw CocoaError(.coderInvalidValue) }
 
             let loadedCatalog = try ApolloCatalog.decode(Data(contentsOf: catalogURL))
-            guard loadedCatalog.source_offline_bundle_sha256 == "36d5d72c202da795db07d50d807747e94922f3b958b9ee25fd646e3d038a0c93",
-                  loadedCatalog.source_offline_fco_id == loadedContext.fco_id
+            let boundedRefs = Set(loadedContext.resource_references.map(\.fco_id))
+            let requiredRefs = Set(loadedCatalog.known.map(\.source_fco_id).filter { $0 != loadedContext.fco_id })
+            guard loadedCatalog.source_offline_bundle_sha256 == projectionSHA,
+                  loadedCatalog.source_offline_fco_id == loadedContext.fco_id,
+                  loadedCatalog.source_dataset_fco_id == loadedContext.source_dataset_fco_id,
+                  loadedCatalog.source_graph_sha256 == loadedContext.source_graph_sha256,
+                  loadedCatalog.source_fhir_sha256 == loadedContext.source_bundle_sha256,
+                  requiredRefs.isSubset(of: boundedRefs)
             else { throw CocoaError(.coderInvalidValue) }
 
             let loadedPacket = try String(contentsOf: packetURL, encoding: .utf8)
@@ -249,17 +262,6 @@ struct TravelView: View {
         } catch {
             clearSession(reason: "UNKNOWN: local bundle could not be loaded")
         }
-    }
-
-    private func describeMedication(_ item: JSONValue) -> String {
-        guard case .object(let record) = item,
-              case .object(let concept) = record["medicationCodeableConcept"],
-              case .array(let coding) = concept["coding"],
-              let first = coding.first,
-              case .object(let code) = first,
-              case .string(let display) = code["display"]
-        else { return "UNKNOWN" }
-        return display + " · synthetic record · no modification authorized"
     }
 
     private func copyPacket() {

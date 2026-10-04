@@ -27,6 +27,9 @@ struct OfflineTravelBundleFCO: Decodable {
     let synthetic_state: String
     let correctness_state: String
     let source_dataset_fco_id: String
+    let source_graph_sha256: String
+    let source_bundle_sha256: String
+    let source_projection_sha256: String
     let resource_counts: [String: Int]
     let resource_references: [ResourceReference]
     let omitted_reference_count: Int
@@ -40,6 +43,9 @@ struct OfflineTravelBundleFCO: Decodable {
               value.fco_type == "OfflineTravelBundleFCO",
               value.synthetic_state == "SYNTHETIC",
               value.correctness_state == "UNKNOWN",
+              value.source_graph_sha256.count == 64,
+              value.source_bundle_sha256.count == 64,
+              value.source_projection_sha256.count == 64,
               value.resource_references.count <= 16,
               value.resource_references.allSatisfy({
                   $0.synthetic_state == "SYNTHETIC" &&

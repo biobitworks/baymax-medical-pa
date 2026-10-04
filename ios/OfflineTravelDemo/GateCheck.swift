@@ -7,17 +7,27 @@ import Foundation
 
     static func main() throws {
         guard CommandLine.arguments.count == 5 else { fatalError("expected FCO, legacy bundle, catalog, packet") }
-        let context = try OfflineTravelBundleFCO.decode(Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[1])))
+        let fcoData = try Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[1]))
+        guard sha256(String(decoding: fcoData, as: UTF8.self)) == ModelContract.offlineFCOSHA256
+        else { fatalError("offline FCO pin") }
+        let context = try OfflineTravelBundleFCO.decode(fcoData)
         let legacyData = try Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2]))
         let legacy = try JSONDecoder().decode(OfflineTravelBundle.self, from: legacyData)
         let catalog = try ApolloCatalog.decode(Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[3])))
         let packet = try String(contentsOfFile: CommandLine.arguments[4], encoding: .utf8)
 
+        let boundedRefs = Set(context.resource_references.map(\.fco_id))
+        let requiredRefs = Set(catalog.known.map(\.source_fco_id).filter { $0 != context.fco_id })
         guard legacy.synthetic_patient_context.count == 1,
               legacy.unknown_states.contains("medical_correctness"),
               catalog.source_offline_fco_id == context.fco_id,
+              catalog.source_dataset_fco_id == context.source_dataset_fco_id,
+              catalog.source_graph_sha256 == context.source_graph_sha256,
+              catalog.source_fhir_sha256 == context.source_bundle_sha256,
+              catalog.source_offline_bundle_sha256 == context.source_projection_sha256,
+              requiredRefs.isSubset(of: boundedRefs),
               packet.contains("APOLLO_CONTEXT_PACKET_V2")
-        else { fatalError("source package") }
+        else { fatalError("source package / lineage") }
 
         let goodObject: [String: Any] = [
             "summary": "SYNTHETIC_CONTEXT_ONLY",

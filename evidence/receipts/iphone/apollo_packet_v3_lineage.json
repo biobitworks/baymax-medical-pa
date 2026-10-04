@@ -1,0 +1,23 @@
+{
+  "catalog_canonical_sha256": "886c99caaa88063eeb805b5d7b4b0932834fcc00a751621b0d32dc0f48256733",
+  "catalog_sha256": "69ed134d95e82361891d7d2438f05bea3a81a4e3c383b2a81c727e2a25309f8c",
+  "claim_boundary": "Single-lineage source binding and trusted-text construction only; no medical correctness or model authority.",
+  "dataset_fco_id": "dataset:synthea-v4-424242",
+  "destination_byte_identity": "NOT_INDEPENDENTLY_VERIFIED",
+  "offline_fco_id": "offline-travel:624e0f36b050a3cd3e4a772719fac742fb71d531b775128872dfb07bdfd7d57b",
+  "offline_fco_sha256": "e6f93240e6f36806e09d9cf04ccabf70eeb9425b7e8bcfe3b8238d0420585b7f",
+  "packet_bytes": 2812,
+  "packet_sha256": "4c51c8d5623fb2110b41f2713ade576534c96d05de7c1f48c5d00b6ac2c8ea7f",
+  "required_source_fco_ids": [
+    "fco:355d325c6b36055bfbc52bee457d3189a1527f044df5855626c3f074f17487b0",
+    "fco:f445c4fa62deacf740c9917d1af59a9de9716eb331e8ab45f423bfdfdbd35eca",
+    "fco:ed54c127b9aa726cb17944d35c6649fd7a163681ffe09f7ff2e9743c5247e4cc"
+  ],
+  "schema": "baymax.apollo-packet-receipt.v3-lineage",
+  "source_fhir_sha256": "d318dc475e14731cfa3fc8ad06fcc897b3420b0b0fc5bc66372dd5de14eff05e",
+  "source_graph_sha256": "52af08f613a0eb51ab76458d71913a7fb0cf6a39ce713e1ec99a25e60fc57f8f",
+  "source_projection_sha256": "36d5d72c202da795db07d50d807747e94922f3b958b9ee25fd646e3d038a0c93",
+  "synthetic_only": true,
+  "transfer": "HUMAN_MEDIATED",
+  "trusted_text_policy": "STATIC_ALLOWLIST_FROM_VALIDATED_CODES; DATASET_DISPLAY_TEXT_IGNORED"
+}

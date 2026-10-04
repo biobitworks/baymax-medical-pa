@@ -16,9 +16,21 @@ OUTPUT_KEYS = {
 }
 SUMMARY_CODE = "SYNTHETIC_CONTEXT_ONLY"
 MEDICAL_ACTION = "NONE"
-PACKET_SHA256 = "80e92bd4d0583fb58b261164ba2e53543ce7482a0f767bc7c3368c460de54147"
-CATALOG_SHA256 = "648e0e87bc4ec024dd1d46283bd7697fc9de266aef6980d336c113c7311d8d8a"
-CATALOG_CANONICAL_SHA256 = "b4696fa3f798cf36df10d7b06efd9093c9492c5a4bcc5176ace7dc03200badff"
+PACKET_SHA256 = "4c51c8d5623fb2110b41f2713ade576534c96d05de7c1f48c5d00b6ac2c8ea7f"
+CATALOG_SHA256 = "69ed134d95e82361891d7d2438f05bea3a81a4e3c383b2a81c727e2a25309f8c"
+CATALOG_CANONICAL_SHA256 = "886c99caaa88063eeb805b5d7b4b0932834fcc00a751621b0d32dc0f48256733"
+
+RXNORM_SYSTEM = "http://www.nlm.nih.gov/research/umls/rxnorm"
+TRUSTED_RXNORM_LABELS = {
+    "198014": "Naproxen 500 MG oral tablet",
+    "1999667": "Bictegravir 50 MG / emtricitabine 200 MG / tenofovir alafenamide 25 MG oral tablet",
+}
+TRUSTED_GENDERS = {
+    "female": "female",
+    "male": "male",
+    "other": "other",
+    "unknown": "unknown",
+}
 
 def _first_patient(bundle):
     return (bundle.get("synthetic_patient_context") or [{}])[0]
@@ -26,36 +38,82 @@ def _first_patient(bundle):
 def _active_meds(bundle):
     return [m for m in bundle.get("medication_context", []) if m.get("status") == "active"][:4]
 
-def catalog(bundle, offline_fco, source_bundle_sha256):
+def _validate_lineage(bundle, offline_fco, source_bundle_sha256):
     if len(source_bundle_sha256) != 64:
-        raise ValueError("exact source bundle SHA-256 required")
+        raise ValueError("exact source projection SHA-256 required")
     if offline_fco.get("synthetic_state") != "SYNTHETIC":
         raise ValueError("trusted synthetic OfflineTravelBundleFCO required")
     if offline_fco.get("correctness_state") != "UNKNOWN":
         raise ValueError("unexpected correctness state")
 
+    source = bundle.get("source") or {}
+    dataset_id = source.get("dataset_fco_id")
+    graph_sha = source.get("fcg_sha256")
+    fhir_sha = source.get("fhir_sha256")
+    if not dataset_id or not graph_sha or not fhir_sha:
+        raise ValueError("bundle lineage metadata required")
+    if offline_fco.get("source_dataset_fco_id") != dataset_id:
+        raise ValueError("dataset lineage mismatch")
+    if offline_fco.get("source_graph_sha256") != graph_sha:
+        raise ValueError("graph lineage mismatch")
+    if offline_fco.get("source_bundle_sha256") != fhir_sha:
+        raise ValueError("FHIR lineage mismatch")
+    if offline_fco.get("source_projection_sha256") != source_bundle_sha256:
+        raise ValueError("projection lineage mismatch")
+
+    refs = {
+        ref.get("fco_id")
+        for ref in offline_fco.get("resource_references", [])
+        if ref.get("source_dataset_fco_id") == dataset_id
+    }
+    if not refs:
+        raise ValueError("bounded lineage references required")
+    return dataset_id, graph_sha, fhir_sha, refs
+
+def _trusted_medication_label(med):
+    source = med.get("source_fco_id")
+    concept = med.get("medicationCodeableConcept") or {}
+    coding = concept.get("coding") or []
+    if not source or len(coding) != 1:
+        raise ValueError("active medication source/single coding required")
+    code = coding[0]
+    if code.get("system") != RXNORM_SYSTEM:
+        raise ValueError("untrusted medication code system")
+    value = code.get("code")
+    if not isinstance(value, str) or not value.isascii() or not value.isdigit():
+        raise ValueError("untrusted medication code")
+    try:
+        return source, TRUSTED_RXNORM_LABELS[value]
+    except KeyError as exc:
+        raise ValueError("medication code not allowlisted") from exc
+
+def catalog(bundle, offline_fco, source_bundle_sha256):
+    dataset_id, graph_sha, fhir_sha, refs = _validate_lineage(
+        bundle, offline_fco, source_bundle_sha256
+    )
+
     patient = _first_patient(bundle)
     known = []
     patient_fco = patient.get("source_fco_id")
-    gender = patient.get("gender", "UNKNOWN")
-    if not patient_fco:
-        raise ValueError("patient source FCO required")
+    gender = patient.get("gender", "unknown")
+    if patient_fco not in refs:
+        raise ValueError("patient source absent from bounded FCO lineage")
+    if gender not in TRUSTED_GENDERS:
+        raise ValueError("patient gender not allowlisted")
     known.append({
         "id": len(known),
         "source_fco_id": patient_fco,
-        "text": f"Synthetic patient gender: {gender}.",
+        "text": f"Synthetic patient gender: {TRUSTED_GENDERS[gender]}.",
     })
 
     for med in _active_meds(bundle):
-        source = med.get("source_fco_id")
-        concept = med.get("medicationCodeableConcept") or {}
-        text = concept.get("text")
-        if not source or not text:
-            raise ValueError("active medication source/text required")
+        source, label = _trusted_medication_label(med)
+        if source not in refs:
+            raise ValueError("medication source absent from bounded FCO lineage")
         known.append({
             "id": len(known),
             "source_fco_id": source,
-            "text": f"Synthetic active medication record: {text}.",
+            "text": f"Synthetic active medication record: {label}.",
         })
 
     known.append({
@@ -86,13 +144,16 @@ def catalog(bundle, offline_fco, source_bundle_sha256):
         "synthetic_only": True,
         "source_offline_bundle_sha256": source_bundle_sha256,
         "source_offline_fco_id": offline_fco["fco_id"],
+        "source_dataset_fco_id": dataset_id,
+        "source_graph_sha256": graph_sha,
+        "source_fhir_sha256": fhir_sha,
         "known": known,
         "unknown": unknown,
         "recommended_questions": questions,
         "summary_codes": [SUMMARY_CODE],
         "medical_actions": [MEDICAL_ACTION],
         "required_requires_clinician": True,
-        "claim_boundary": "Model may select only pre-admitted local IDs. Baymax renders local catalog text; model free-form medical prose is not admitted.",
+        "claim_boundary": "Model may select only pre-admitted local IDs. Trusted display text is code-owned and allowlisted; dataset display/text and model free-form medical prose are not admitted.",
     }
 
 def packet(bundle, offline_fco, source_bundle_sha256):

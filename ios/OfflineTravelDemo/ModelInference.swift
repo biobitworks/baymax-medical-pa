@@ -2,8 +2,9 @@ import Foundation
 import CryptoKit
 
 enum ModelContract {
-    static let packetSHA256 = "80e92bd4d0583fb58b261164ba2e53543ce7482a0f767bc7c3368c460de54147"
-    static let catalogSHA256 = "648e0e87bc4ec024dd1d46283bd7697fc9de266aef6980d336c113c7311d8d8a"
+    static let packetSHA256 = "4c51c8d5623fb2110b41f2713ade576534c96d05de7c1f48c5d00b6ac2c8ea7f"
+    static let catalogSHA256 = "69ed134d95e82361891d7d2438f05bea3a81a4e3c383b2a81c727e2a25309f8c"
+    static let offlineFCOSHA256 = "e6f93240e6f36806e09d9cf04ccabf70eeb9425b7e8bcfe3b8238d0420585b7f"
 }
 
 struct CatalogKnown: Codable, Identifiable {
@@ -23,6 +24,9 @@ struct ApolloCatalog: Codable {
     let claim_boundary: String
     let source_offline_bundle_sha256: String
     let source_offline_fco_id: String
+    let source_dataset_fco_id: String
+    let source_graph_sha256: String
+    let source_fhir_sha256: String
     let known: [CatalogKnown]
     let unknown: [CatalogText]
     let recommended_questions: [CatalogText]
@@ -37,6 +41,9 @@ struct ApolloCatalog: Codable {
         guard value.schema == "baymax.apollo-catalog.v2",
               value.synthetic_only,
               value.source_offline_bundle_sha256.count == 64,
+              !value.source_dataset_fco_id.isEmpty,
+              value.source_graph_sha256.count == 64,
+              value.source_fhir_sha256.count == 64,
               value.known.indices.allSatisfy({ value.known[$0].id == $0 }),
               value.unknown.indices.allSatisfy({ value.unknown[$0].id == $0 }),
               value.recommended_questions.indices.allSatisfy({ value.recommended_questions[$0].id == $0 }),

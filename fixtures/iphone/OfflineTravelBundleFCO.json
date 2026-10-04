@@ -1,1 +1,212 @@
-{"bounds":{"clinical_values":"NOT_MAPPED","max_resource_references":16,"omission_state":"EXPLICIT_BOUNDED_SELECTION"},"correctness_state":"UNKNOWN","directory":[{"availability":"UNKNOWN","call_enabled":false,"id":"synthetic-pharmacy-1","label":"Synthetic demo pharmacy","phone":"UNKNOWN","purchase_enabled":false,"synthetic_state":"SYNTHETIC"}],"execution_policy":{"default_route":"LOCAL_ONLY","external_requests_enabled":false,"live_actions_enabled":false,"policy_id":"baymax.synthetic-offline-demo.v1"},"fco_id":"offline-travel:d3db604b1e40bf3b2faedc3027f04fe459a6c5a828ca735f185ff1a99af2fd72","fco_type":"OfflineTravelBundleFCO","freshness":{"live_state":"UNKNOWN","source_retrieved_at":"2026-10-04T19:51:00Z"},"medication_context":{"dosage":"UNKNOWN","names":"UNKNOWN","record_count":4,"travel_eligibility":"UNKNOWN"},"omitted_reference_count":103,"patient_context":{"label":"Synthetic traveler","medical_correctness":"UNKNOWN"},"resource_counts":{"AllergyIntolerance":7,"CarePlan":2,"Condition":15,"Encounter":16,"MedicationRequest":4,"Observation":74,"Patient":1},"resource_references":[{"correctness_state":"UNKNOWN","fco_id":"fco:MedicationRequest:a406f356-c8b4-54ad-1546-e7271fbae170","fco_type":"MedicationRequestFCO","source_dataset_fco_id":"dataset-source:76aa93fba611e305c9f952865ccb040168f36009e1b27ed99bca29f409b506d5","source_resource_id":"a406f356-c8b4-54ad-1546-e7271fbae170","source_resource_sha256":"091f09c1539dd5a1f563b91e68156ddd1cbb5c2189d0de5531aafbb3127ba526","source_resource_type":"MedicationRequest","synthetic_state":"SYNTHETIC"},{"correctness_state":"UNKNOWN","fco_id":"fco:MedicationRequest:a406f356-c8b4-54ad-459b-f18e6a687136","fco_type":"MedicationRequestFCO","source_dataset_fco_id":"dataset-source:76aa93fba611e305c9f952865ccb040168f36009e1b27ed99bca29f409b506d5","source_resource_id":"a406f356-c8b4-54ad-459b-f18e6a687136","source_resource_sha256":"80bc403ad473500f6a48d174d256ae66e30424263d7dd854b02692743321e7fd","source_resource_type":"MedicationRequest","synthetic_state":"SYNTHETIC"},{"correctness_state":"UNKNOWN","fco_id":"fco:MedicationRequest:a406f356-c8b4-54ad-96e8-2a26b2143d70","fco_type":"MedicationRequestFCO","source_dataset_fco_id":"dataset-source:76aa93fba611e305c9f952865ccb040168f36009e1b27ed99bca29f409b506d5","source_resource_id":"a406f356-c8b4-54ad-96e8-2a26b2143d70","source_resource_sha256":"b0f8ed50506e564fc88c0918a3fbd31d0222564584843dbe329476f8098cbaca","source_resource_type":"MedicationRequest","synthetic_state":"SYNTHETIC"},{"correctness_state":"UNKNOWN","fco_id":"fco:MedicationRequest:a406f356-c8b4-54ad-ff49-6a38d719fde3","fco_type":"MedicationRequestFCO","source_dataset_fco_id":"dataset-source:76aa93fba611e305c9f952865ccb040168f36009e1b27ed99bca29f409b506d5","source_resource_id":"a406f356-c8b4-54ad-ff49-6a38d719fde3","source_resource_sha256":"f186003f83c4bb20dc0138a494cc54118424fee34ca7f45a0680705bcbaa3bd2","source_resource_type":"MedicationRequest","synthetic_state":"SYNTHETIC"},{"correctness_state":"UNKNOWN","fco_id":"fco:AllergyIntolerance:a406f356-c8b4-54ad-6c6c-42c0540b0960","fco_type":"AllergyIntoleranceFCO","source_dataset_fco_id":"dataset-source:76aa93fba611e305c9f952865ccb040168f36009e1b27ed99bca29f409b506d5","source_resource_id":"a406f356-c8b4-54ad-6c6c-42c0540b0960","source_resource_sha256":"87f99d5c5d50fba33f43104bb70ccf8b4eee570d65a6beb38583b5edec1c807c","source_resource_type":"AllergyIntolerance","synthetic_state":"SYNTHETIC"},{"correctness_state":"UNKNOWN","fco_id":"fco:AllergyIntolerance:a406f356-c8b4-54ad-7396-540403811d3b","fco_type":"AllergyIntoleranceFCO","source_dataset_fco_id":"dataset-source:76aa93fba611e305c9f952865ccb040168f36009e1b27ed99bca29f409b506d5","source_resource_id":"a406f356-c8b4-54ad-7396-540403811d3b","source_resource_sha256":"07def4a2e7c32be4b1faf479a7eaa593aba90851a5bfb2f06582c6c46ab22c43","source_resource_type":"AllergyIntolerance","synthetic_state":"SYNTHETIC"},{"correctness_state":"UNKNOWN","fco_id":"fco:AllergyIntolerance:a406f356-c8b4-54ad-82ae-438cb7e741a0","fco_type":"AllergyIntoleranceFCO","source_dataset_fco_id":"dataset-source:76aa93fba611e305c9f952865ccb040168f36009e1b27ed99bca29f409b506d5","source_resource_id":"a406f356-c8b4-54ad-82ae-438cb7e741a0","source_resource_sha256":"b3a8926ccfc8a17e981ef9b0e5a78591f21b59c97a3a75e411410d466deed679","source_resource_type":"AllergyIntolerance","synthetic_state":"SYNTHETIC"},{"correctness_state":"UNKNOWN","fco_id":"fco:AllergyIntolerance:a406f356-c8b4-54ad-8416-5a125c1f04c9","fco_type":"AllergyIntoleranceFCO","source_dataset_fco_id":"dataset-source:76aa93fba611e305c9f952865ccb040168f36009e1b27ed99bca29f409b506d5","source_resource_id":"a406f356-c8b4-54ad-8416-5a125c1f04c9","source_resource_sha256":"f2815a335c30f45d893b8abee4939f8e503a2695fa9180947cc8dbb95119aa54","source_resource_type":"AllergyIntolerance","synthetic_state":"SYNTHETIC"},{"correctness_state":"UNKNOWN","fco_id":"fco:AllergyIntolerance:a406f356-c8b4-54ad-8b16-1705386d5e83","fco_type":"AllergyIntoleranceFCO","source_dataset_fco_id":"dataset-source:76aa93fba611e305c9f952865ccb040168f36009e1b27ed99bca29f409b506d5","source_resource_id":"a406f356-c8b4-54ad-8b16-1705386d5e83","source_resource_sha256":"9c320301be12fba7dbcbefac6662ffc02561cf5faf7499afa603f8b51a88b10c","source_resource_type":"AllergyIntolerance","synthetic_state":"SYNTHETIC"},{"correctness_state":"UNKNOWN","fco_id":"fco:AllergyIntolerance:a406f356-c8b4-54ad-9f11-a43fd84f7e16","fco_type":"AllergyIntoleranceFCO","source_dataset_fco_id":"dataset-source:76aa93fba611e305c9f952865ccb040168f36009e1b27ed99bca29f409b506d5","source_resource_id":"a406f356-c8b4-54ad-9f11-a43fd84f7e16","source_resource_sha256":"e42f4cb8db794dad2f331702ecefe5a94e922004024fe0043bb838553f10e9d2","source_resource_type":"AllergyIntolerance","synthetic_state":"SYNTHETIC"},{"correctness_state":"UNKNOWN","fco_id":"fco:AllergyIntolerance:a406f356-c8b4-54ad-e41d-79957825041b","fco_type":"AllergyIntoleranceFCO","source_dataset_fco_id":"dataset-source:76aa93fba611e305c9f952865ccb040168f36009e1b27ed99bca29f409b506d5","source_resource_id":"a406f356-c8b4-54ad-e41d-79957825041b","source_resource_sha256":"30c1ed6f019563765fce6b0c5cccbe314403b9250003aa418f92b23f52040f40","source_resource_type":"AllergyIntolerance","synthetic_state":"SYNTHETIC"},{"correctness_state":"UNKNOWN","fco_id":"fco:CarePlan:a406f356-c8b4-54ad-b519-ec585675b1e6","fco_type":"CarePlanFCO","source_dataset_fco_id":"dataset-source:76aa93fba611e305c9f952865ccb040168f36009e1b27ed99bca29f409b506d5","source_resource_id":"a406f356-c8b4-54ad-b519-ec585675b1e6","source_resource_sha256":"b7f4a63659887a35cc457c5bcaf4c5ab30ffabad225b8292b634ce202167ab4a","source_resource_type":"CarePlan","synthetic_state":"SYNTHETIC"},{"correctness_state":"UNKNOWN","fco_id":"fco:CarePlan:a406f356-c8b4-54ad-be19-787bb551d73e","fco_type":"CarePlanFCO","source_dataset_fco_id":"dataset-source:76aa93fba611e305c9f952865ccb040168f36009e1b27ed99bca29f409b506d5","source_resource_id":"a406f356-c8b4-54ad-be19-787bb551d73e","source_resource_sha256":"048c14a71cb6ae5bd6f97fd3798ac55f7d7a40746b396e8e759a011dabbd0d53","source_resource_type":"CarePlan","synthetic_state":"SYNTHETIC"},{"correctness_state":"UNKNOWN","fco_id":"fco:Condition:a406f356-c8b4-54ad-0c77-e5d8bb001093","fco_type":"ConditionFCO","source_dataset_fco_id":"dataset-source:76aa93fba611e305c9f952865ccb040168f36009e1b27ed99bca29f409b506d5","source_resource_id":"a406f356-c8b4-54ad-0c77-e5d8bb001093","source_resource_sha256":"54a149d4d23b63084f19ec2a6af614eb7e734aaaf80eab5d33d0af3b267f017f","source_resource_type":"Condition","synthetic_state":"SYNTHETIC"},{"correctness_state":"UNKNOWN","fco_id":"fco:Condition:a406f356-c8b4-54ad-11ec-09524f8a37cc","fco_type":"ConditionFCO","source_dataset_fco_id":"dataset-source:76aa93fba611e305c9f952865ccb040168f36009e1b27ed99bca29f409b506d5","source_resource_id":"a406f356-c8b4-54ad-11ec-09524f8a37cc","source_resource_sha256":"3ef43d491042a6619546bd5b2b416b27c85d9454f7977b1ae5b42d0f1f122151","source_resource_type":"Condition","synthetic_state":"SYNTHETIC"},{"correctness_state":"UNKNOWN","fco_id":"fco:Condition:a406f356-c8b4-54ad-12e1-efe4c9edf814","fco_type":"ConditionFCO","source_dataset_fco_id":"dataset-source:76aa93fba611e305c9f952865ccb040168f36009e1b27ed99bca29f409b506d5","source_resource_id":"a406f356-c8b4-54ad-12e1-efe4c9edf814","source_resource_sha256":"0a35cc330a29ff6ec11c4ba194a77a4268cfbc052974f6964768c7e4d2854f26","source_resource_type":"Condition","synthetic_state":"SYNTHETIC"}],"schema":"baymax.offline-travel-bundle-fco.v1","source_bundle_sha256":"93e322ae61082775f578b8833c343551939206bba8838af65e296994f2eb5504","source_dataset_fco_id":"dataset-source:76aa93fba611e305c9f952865ccb040168f36009e1b27ed99bca29f409b506d5","source_graph_sha256":"c7eef6958d7634238c76e71e3f32cddb351d52f1fb2ae3efa95438d369555c59","synthetic_state":"SYNTHETIC","trip_context":{"dates":"UNKNOWN","destination":"Bali, Indonesia"},"unknown_states":["Clinical values NOT_MAPPED","Medical correctness UNKNOWN","Travel medication eligibility UNKNOWN","Directory availability UNKNOWN","Generated-data terms UNKNOWN_TERMS"]}
+{
+  "bounds": {
+    "clinical_values": "NOT_MAPPED",
+    "max_resource_references": 16,
+    "omission_state": "EXPLICIT_BOUNDED_SELECTION"
+  },
+  "correctness_state": "UNKNOWN",
+  "directory": [
+    {
+      "availability": "UNKNOWN",
+      "call_enabled": false,
+      "id": "synthetic-pharmacy-1",
+      "label": "Synthetic demo pharmacy",
+      "phone": "UNKNOWN",
+      "purchase_enabled": false,
+      "synthetic_state": "SYNTHETIC"
+    }
+  ],
+  "execution_policy": {
+    "default_route": "LOCAL_ONLY",
+    "external_requests_enabled": false,
+    "live_actions_enabled": false,
+    "policy_id": "baymax.synthetic-offline-demo.v1"
+  },
+  "fco_id": "offline-travel:624e0f36b050a3cd3e4a772719fac742fb71d531b775128872dfb07bdfd7d57b",
+  "fco_type": "OfflineTravelBundleFCO",
+  "freshness": {
+    "live_state": "UNKNOWN",
+    "reference_date": "2026-01-01"
+  },
+  "medication_context": {
+    "dosage": "NO_ACTION_AUTHORITY",
+    "names": "ALLOWLIST_RENDERED_IN_CATALOG_ONLY",
+    "record_count": 11,
+    "travel_eligibility": "UNKNOWN"
+  },
+  "omitted_reference_count": 345,
+  "patient_context": {
+    "label": "Synthetic traveler",
+    "medical_correctness": "UNKNOWN"
+  },
+  "resource_counts": {
+    "CarePlan": 3,
+    "Condition": 36,
+    "Encounter": 49,
+    "MedicationRequest": 11,
+    "Observation": 261,
+    "Patient": 1
+  },
+  "resource_references": [
+    {
+      "correctness_state": "UNKNOWN",
+      "fco_id": "fco:355d325c6b36055bfbc52bee457d3189a1527f044df5855626c3f074f17487b0",
+      "source_dataset_fco_id": "dataset:synthea-v4-424242",
+      "source_resource_id": "5c2102a9-1e48-bc42-f711-e40c57b7f4e6",
+      "source_resource_sha256": "355d325c6b36055bfbc52bee457d3189a1527f044df5855626c3f074f17487b0",
+      "source_resource_type": "Patient",
+      "synthetic_state": "SYNTHETIC"
+    },
+    {
+      "correctness_state": "UNKNOWN",
+      "fco_id": "fco:f445c4fa62deacf740c9917d1af59a9de9716eb331e8ab45f423bfdfdbd35eca",
+      "source_dataset_fco_id": "dataset:synthea-v4-424242",
+      "source_resource_id": "5c2102a9-1e48-bc42-e72f-c87938374d2a",
+      "source_resource_sha256": "f445c4fa62deacf740c9917d1af59a9de9716eb331e8ab45f423bfdfdbd35eca",
+      "source_resource_type": "MedicationRequest",
+      "synthetic_state": "SYNTHETIC"
+    },
+    {
+      "correctness_state": "UNKNOWN",
+      "fco_id": "fco:ed54c127b9aa726cb17944d35c6649fd7a163681ffe09f7ff2e9743c5247e4cc",
+      "source_dataset_fco_id": "dataset:synthea-v4-424242",
+      "source_resource_id": "5c2102a9-1e48-bc42-f958-ba7b6e5292f4",
+      "source_resource_sha256": "ed54c127b9aa726cb17944d35c6649fd7a163681ffe09f7ff2e9743c5247e4cc",
+      "source_resource_type": "MedicationRequest",
+      "synthetic_state": "SYNTHETIC"
+    },
+    {
+      "correctness_state": "UNKNOWN",
+      "fco_id": "fco:133a5fc9d0051794936f79d0f16dc1e023f97822d94ab87cfd71843236dd4020",
+      "source_dataset_fco_id": "dataset:synthea-v4-424242",
+      "source_resource_id": "5c2102a9-1e48-bc42-372a-73392de394f9",
+      "source_resource_sha256": "133a5fc9d0051794936f79d0f16dc1e023f97822d94ab87cfd71843236dd4020",
+      "source_resource_type": "MedicationRequest",
+      "synthetic_state": "SYNTHETIC"
+    },
+    {
+      "correctness_state": "UNKNOWN",
+      "fco_id": "fco:2e4350fc1332c8d125ea4eca99b8052d7bdcf288406b64282aeb82eaec15f013",
+      "source_dataset_fco_id": "dataset:synthea-v4-424242",
+      "source_resource_id": "5c2102a9-1e48-bc42-0855-214aea99f1c0",
+      "source_resource_sha256": "2e4350fc1332c8d125ea4eca99b8052d7bdcf288406b64282aeb82eaec15f013",
+      "source_resource_type": "MedicationRequest",
+      "synthetic_state": "SYNTHETIC"
+    },
+    {
+      "correctness_state": "UNKNOWN",
+      "fco_id": "fco:6c46e4dc5509cf658018af3d289ad26d76dcf7c8b893c5ac2026a0377fd4a994",
+      "source_dataset_fco_id": "dataset:synthea-v4-424242",
+      "source_resource_id": "5c2102a9-1e48-bc42-39b7-9e19b79d1d16",
+      "source_resource_sha256": "6c46e4dc5509cf658018af3d289ad26d76dcf7c8b893c5ac2026a0377fd4a994",
+      "source_resource_type": "MedicationRequest",
+      "synthetic_state": "SYNTHETIC"
+    },
+    {
+      "correctness_state": "UNKNOWN",
+      "fco_id": "fco:8a077a571127b622f55adc721e7975e854db13c0eb785d160ddc853edd313134",
+      "source_dataset_fco_id": "dataset:synthea-v4-424242",
+      "source_resource_id": "5c2102a9-1e48-bc42-6c18-500c61870f33",
+      "source_resource_sha256": "8a077a571127b622f55adc721e7975e854db13c0eb785d160ddc853edd313134",
+      "source_resource_type": "MedicationRequest",
+      "synthetic_state": "SYNTHETIC"
+    },
+    {
+      "correctness_state": "UNKNOWN",
+      "fco_id": "fco:99f66a080de72e86dbdbbe9aa557f4f93ff7f502e9ae096a776e6dcfa94ed053",
+      "source_dataset_fco_id": "dataset:synthea-v4-424242",
+      "source_resource_id": "5c2102a9-1e48-bc42-5227-24e5a3824533",
+      "source_resource_sha256": "99f66a080de72e86dbdbbe9aa557f4f93ff7f502e9ae096a776e6dcfa94ed053",
+      "source_resource_type": "MedicationRequest",
+      "synthetic_state": "SYNTHETIC"
+    },
+    {
+      "correctness_state": "UNKNOWN",
+      "fco_id": "fco:b460776a1f5f3bbe09665783d138abab5b920ca542e88645f2802dd439c692a8",
+      "source_dataset_fco_id": "dataset:synthea-v4-424242",
+      "source_resource_id": "5c2102a9-1e48-bc42-e543-2b22a324e9c4",
+      "source_resource_sha256": "b460776a1f5f3bbe09665783d138abab5b920ca542e88645f2802dd439c692a8",
+      "source_resource_type": "MedicationRequest",
+      "synthetic_state": "SYNTHETIC"
+    },
+    {
+      "correctness_state": "UNKNOWN",
+      "fco_id": "fco:c65a23ab0b757e57f0683cd6c0589ae9211283ba6d1158b292791d925ac6a045",
+      "source_dataset_fco_id": "dataset:synthea-v4-424242",
+      "source_resource_id": "5c2102a9-1e48-bc42-3062-abe02a72b54e",
+      "source_resource_sha256": "c65a23ab0b757e57f0683cd6c0589ae9211283ba6d1158b292791d925ac6a045",
+      "source_resource_type": "MedicationRequest",
+      "synthetic_state": "SYNTHETIC"
+    },
+    {
+      "correctness_state": "UNKNOWN",
+      "fco_id": "fco:e3f61c4a5279bbaeda1059003035d850b0fe9c18ed2011d65d60a22115eb6b07",
+      "source_dataset_fco_id": "dataset:synthea-v4-424242",
+      "source_resource_id": "5c2102a9-1e48-bc42-d39a-f9810556719c",
+      "source_resource_sha256": "e3f61c4a5279bbaeda1059003035d850b0fe9c18ed2011d65d60a22115eb6b07",
+      "source_resource_type": "MedicationRequest",
+      "synthetic_state": "SYNTHETIC"
+    },
+    {
+      "correctness_state": "UNKNOWN",
+      "fco_id": "fco:fd3acd732b43fc7416ac153d3403d737aca68e8b53ff0964ac6e9309f87149cb",
+      "source_dataset_fco_id": "dataset:synthea-v4-424242",
+      "source_resource_id": "5c2102a9-1e48-bc42-1c81-8b732787309a",
+      "source_resource_sha256": "fd3acd732b43fc7416ac153d3403d737aca68e8b53ff0964ac6e9309f87149cb",
+      "source_resource_type": "MedicationRequest",
+      "synthetic_state": "SYNTHETIC"
+    },
+    {
+      "correctness_state": "UNKNOWN",
+      "fco_id": "fco:1c193efb7ce27c328e01bb6337a0a28e15e8843a7bb3a94ff207665683cf5c60",
+      "source_dataset_fco_id": "dataset:synthea-v4-424242",
+      "source_resource_id": "5c2102a9-1e48-bc42-afbe-2de2632b43b7",
+      "source_resource_sha256": "1c193efb7ce27c328e01bb6337a0a28e15e8843a7bb3a94ff207665683cf5c60",
+      "source_resource_type": "CarePlan",
+      "synthetic_state": "SYNTHETIC"
+    },
+    {
+      "correctness_state": "UNKNOWN",
+      "fco_id": "fco:8717b27eeae50ca21b9219476b567c51c562b5e89cadf0a00c00adc7174721d9",
+      "source_dataset_fco_id": "dataset:synthea-v4-424242",
+      "source_resource_id": "5c2102a9-1e48-bc42-5050-dbaf9da41c03",
+      "source_resource_sha256": "8717b27eeae50ca21b9219476b567c51c562b5e89cadf0a00c00adc7174721d9",
+      "source_resource_type": "CarePlan",
+      "synthetic_state": "SYNTHETIC"
+    },
+    {
+      "correctness_state": "UNKNOWN",
+      "fco_id": "fco:9436c80057e2dc53923bb2f7fdb6d059bf71252e8bdd6c4fabfaef8647142710",
+      "source_dataset_fco_id": "dataset:synthea-v4-424242",
+      "source_resource_id": "5c2102a9-1e48-bc42-e9a1-3fb110ca1e4c",
+      "source_resource_sha256": "9436c80057e2dc53923bb2f7fdb6d059bf71252e8bdd6c4fabfaef8647142710",
+      "source_resource_type": "CarePlan",
+      "synthetic_state": "SYNTHETIC"
+    },
+    {
+      "correctness_state": "UNKNOWN",
+      "fco_id": "fco:047607d69deba40df1583296d7ca0a187c70caa3befcf374292d9e08b61f4613",
+      "source_dataset_fco_id": "dataset:synthea-v4-424242",
+      "source_resource_id": "5c2102a9-1e48-bc42-bf63-d84e68c619aa",
+      "source_resource_sha256": "047607d69deba40df1583296d7ca0a187c70caa3befcf374292d9e08b61f4613",
+      "source_resource_type": "Condition",
+      "synthetic_state": "SYNTHETIC"
+    }
+  ],
+  "schema": "baymax.offline-travel-bundle-fco.v1",
+  "source_bundle_sha256": "d318dc475e14731cfa3fc8ad06fcc897b3420b0b0fc5bc66372dd5de14eff05e",
+  "source_dataset_fco_id": "dataset:synthea-v4-424242",
+  "source_graph_sha256": "52af08f613a0eb51ab76458d71913a7fb0cf6a39ce713e1ec99a25e60fc57f8f",
+  "source_projection_sha256": "36d5d72c202da795db07d50d807747e94922f3b958b9ee25fd646e3d038a0c93",
+  "synthetic_state": "SYNTHETIC",
+  "trip_context": {
+    "dates": "UNKNOWN",
+    "destination": "Bali, Indonesia"
+  },
+  "unknown_states": [
+    "Clinical correctness UNKNOWN",
+    "Travel medication eligibility UNKNOWN",
+    "Directory availability UNKNOWN",
+    "Generated-data terms UNKNOWN_TERMS"
+  ]
+}

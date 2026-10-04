@@ -1,0 +1,69 @@
+{
+  "base_breakpoint": "BAYMAX-BP-0036",
+  "base_head": "e374b87d4b7a970d61ce3c948ff89f5bf0ae366f",
+  "branch": "execution/model-lineage-f3f4",
+  "canonical_breakpoint_minted": false,
+  "claim_ceiling": "F3/F4 repairs are implemented and locally executed with deterministic fixture regeneration, full Python tests, Swift gate, 136-vector Swift/Python parity, and iPhoneOS typecheck. This side lane does not mint a canonical breakpoint and does not claim independent verification or physical execution of the new packet.",
+  "f3_lineage_repair": {
+    "dataset_fco_id": "dataset:synthea-v4-424242",
+    "fcg_file_sha256": "52af08f613a0eb51ab76458d71913a7fb0cf6a39ce713e1ec99a25e60fc57f8f",
+    "fhir_sha256": "d318dc475e14731cfa3fc8ad06fcc897b3420b0b0fc5bc66372dd5de14eff05e",
+    "offline_fco_sha256": "e6f93240e6f36806e09d9cf04ccabf70eeb9425b7e8bcfe3b8238d0420585b7f",
+    "old_brock407_phone_fco": "SUPERSEDED_FOR_NEW_PACKET_NOT_REWRITTEN_HISTORICALLY",
+    "repair": "Phone FCO regenerated from the same pinned seed-424242 DatasetSourceFCO/FCG used by the catalog; app binds dataset ID, raw FCG file SHA, source FHIR SHA, projection SHA, offline FCO file SHA, and required source-FCO references.",
+    "state": "IMPLEMENTED_EXECUTED_LOCALLY"
+  },
+  "f4_dataset_text_repair": {
+    "allowed_rxnorm_codes": [
+      "198014",
+      "1999667"
+    ],
+    "dataset_medication_display": "IGNORED",
+    "dataset_medication_text": "IGNORED",
+    "poison_test": "PASS_CATALOG_UNCHANGED_AND_POISON_NOT_RENDERED",
+    "state": "IMPLEMENTED_EXECUTED_LOCALLY",
+    "trusted_text_policy": "STATIC_CODE_OWNED_ALLOWLIST",
+    "ui_rendering": "PINNED_CATALOG_TEXT_ONLY",
+    "unknown_medication_code": "REJECT_FAIL_CLOSED"
+  },
+  "independent_redteam": {
+    "branch": "redteam/lane-golden-path-audit",
+    "head": "cfbc020c75538c31a5ef81ddd59287abe6afc12e",
+    "prior_finding_commit": "10af6199b56d5dba8150d7def1e75f783b0913ab",
+    "state": "ACTIVE_INDEPENDENT_VERIFICATION"
+  },
+  "new_source_identities": {
+    "catalog_canonical_sha256": "886c99caaa88063eeb805b5d7b4b0932834fcc00a751621b0d32dc0f48256733",
+    "catalog_sha256": "69ed134d95e82361891d7d2438f05bea3a81a4e3c383b2a81c727e2a25309f8c",
+    "offline_fco_sha256": "e6f93240e6f36806e09d9cf04ccabf70eeb9425b7e8bcfe3b8238d0420585b7f",
+    "packet_sha256": "4c51c8d5623fb2110b41f2713ade576534c96d05de7c1f48c5d00b6ac2c8ea7f",
+    "rebuild_determinism": "PASS"
+  },
+  "observed_at": "2026-10-04T21:56:00.891069+00:00",
+  "physical_execution": {
+    "new_packet_physical_iphone_execution": "NOT_TESTED",
+    "prior_airplane_mode_recording": "HISTORICAL_OLD_PACKET_EVIDENCE_PRESERVED"
+  },
+  "prescription_purchase": "BLOCKED",
+  "real_money": "NO",
+  "real_phi": "NONE_USED",
+  "schema": "baymax.model_lineage_f3f4_candidate.v1",
+  "state": "CANDIDATE_AWAITING_INDEPENDENT_REDTEAM",
+  "validation": {
+    "iphoneos_arm64_typecheck": "PASS_NO_WARNINGS",
+    "python_tests": {
+      "count": 37,
+      "state": "PASS"
+    },
+    "secret_gate": "PASS",
+    "swift_gate": "PASS",
+    "swift_python_parity": {
+      "accepted": 7,
+      "rejected": 129,
+      "selection_mismatches": 0,
+      "state": "PASS",
+      "vectors": 136
+    },
+    "typescript_validator": "NOT_IMPLEMENTED_IN_CANONICAL_OR_CODEX_REPAIR; NO_TS_PARITY_CLAIM"
+  }
+}
