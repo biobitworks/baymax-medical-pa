@@ -9,12 +9,19 @@ export type TravelSource = {
   summary: string;
 };
 
+export type ResearchPanel = { status: "loading" | "done"; sources: TravelSource[] };
 export type TravelResearch = {
   destination: string;
-  advisories: TravelSource[];
-  cityDetails: TravelSource[];
-  error?: string;
+  cdc: ResearchPanel;
+  smartraveller: ResearchPanel;
+  city: ResearchPanel;
 };
+export const loadingResearch = (destination: string): TravelResearch => ({
+  destination,
+  cdc: { status: "loading", sources: [] },
+  smartraveller: { status: "loading", sources: [] },
+  city: { status: "loading", sources: [] },
+});
 
 function SourceList({ sources }: { sources: TravelSource[] }) {
   return (
@@ -33,27 +40,31 @@ function SourceList({ sources }: { sources: TravelSource[] }) {
   );
 }
 
-/** Live Exa research shown above the brief: advisories first, then city notes. */
-export function TravelAdvisories({ research, loading }: { research: TravelResearch | null; loading: boolean }) {
-  if (!loading && !research) return null;
-  const where = research?.destination ? ` for ${research.destination}` : "";
+function Section({ title, panel, empty }: { title: string; panel: ResearchPanel; empty: string }) {
   return (
-    <section className="travel-advisories" aria-label="Travel advisories" aria-busy={loading}>
-      <span className="eyebrow"><Globe2 size={13} aria-hidden="true" /> LIVE WEB SEARCH · CDC &amp; TRAVEL ADVISORIES</span>
-      <h3>Advisories and restrictions{where}</h3>
-      {loading ? (
-        <p role="status">Baymax is searching official sources…</p>
-      ) : research && research.advisories.length ? (
-        <SourceList sources={research.advisories} />
+    <div className="travel-section" aria-busy={panel.status === "loading"}>
+      <h4>{title}</h4>
+      {panel.status === "loading" ? (
+        <p role="status">Searching…</p>
+      ) : panel.sources.length ? (
+        <SourceList sources={panel.sources} />
       ) : (
-        <p role="status">Could not verify current advisories right now. Check CDC Travelers’ Health before you go.</p>
+        <p role="status">{empty}</p>
       )}
-      {!loading && research && research.cityDetails.length > 0 && (
-        <>
-          <h4>Good to know in {research.destination}</h4>
-          <SourceList sources={research.cityDetails} />
-        </>
-      )}
+    </div>
+  );
+}
+
+/** Live Exa research shown above the brief. Each section fills in as its own search finishes. */
+export function TravelAdvisories({ research }: { research: TravelResearch | null }) {
+  if (!research) return null;
+  return (
+    <section className="travel-advisories" aria-label="Travel advisories">
+      <span className="eyebrow"><Globe2 size={13} aria-hidden="true" /> LIVE WEB SEARCH · ADVISORIES &amp; DESTINATION</span>
+      <h3>Advisories and restrictions for {research.destination}</h3>
+      <Section title="CDC and official travel notices" panel={research.cdc} empty="Could not verify current CDC notices right now. Check CDC Travelers’ Health before you go." />
+      <Section title="Smartraveller (Australian government)" panel={research.smartraveller} empty="No Smartraveller advice found. Check smartraveller.gov.au." />
+      <Section title={`Good to know in ${research.destination}`} panel={research.city} empty="No destination details found." />
       <small className="travel-foot">Search by Exa. Verify with official sources before relying on this.</small>
     </section>
   );

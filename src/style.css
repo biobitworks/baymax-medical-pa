@@ -207,6 +207,9 @@ header b {
   margin: auto;
   padding: 38px 44px 22px;
 }
+.content.content-wide {
+  max-width: 1905px;
+}
 .page-heading {
   display: flex;
   justify-content: space-between;
@@ -588,6 +591,10 @@ footer span:first-child {
   grid-template-columns: 1.15fr 1fr;
   gap: 22px;
 }
+.two-col.with-research {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr) minmax(0, 1fr);
+  align-items: start;
+}
 .panel h2 {
   font-family: Manrope, sans-serif;
   font-size: 21px;
@@ -938,7 +945,8 @@ select:focus {
   .lower-grid {
     grid-template-columns: 1.4fr 1fr;
   }
-  .two-col {
+  .two-col,
+  .two-col.with-research {
     grid-template-columns: 1fr;
   }
   .page-heading h1 {

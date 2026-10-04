@@ -8,6 +8,8 @@ import {
   buildBriefContext,
   contextSections,
   loadProfile,
+  searchCityDetails,
+  searchSmartraveller,
   searchTravelAdvisories,
   wellnessLines,
   type BriefContext,
@@ -46,7 +48,8 @@ const contextText = (ctx: BriefContext) => [
     : "Profile: unavailable.",
   `Energy and activity data:\n${wellnessLines(ctx.wellness).map((l) => `- ${l}`).join("\n") || "- none available"}`,
   ctx.labs.length ? `Flagged labs:\n${ctx.labs.map((l) => `- ${l.biomarker} ${l.value} ${l.unit} (${l.flag}, ${l.date})`).join("\n")}` : "",
-  findingsText("Travel advisories research", ctx.advisories),
+  findingsText("Travel advisories research (CDC and official)", ctx.advisories),
+  findingsText("Smartraveller (Australian government) research", ctx.smartraveller),
   findingsText(`City research for ${ctx.destination ?? "destination"}`, ctx.cityDetails),
 ].filter(Boolean).join("\n\n");
 
@@ -63,27 +66,42 @@ export const travelRoutes = [
     handler: async (c) => {
       const parsed = tripSchema.safeParse(await c.req.json().catch(() => ({})));
       if (!parsed.success) return c.json({ error: "Invalid trip details" }, 400);
-      const [profile, advisories] = await Promise.all([
-        loadProfile().catch(() => null),
-        searchTravelAdvisories(parsed.data.destination, c.req.raw.signal),
-      ]);
+      const profile = await loadProfile().catch(() => null);
       try {
         const agent = c.get("mastra").getAgent("baymaxAgent");
         const res = await agent.generate(
           `${tripLine(parsed.data)}
 The user's medications on record: ${profile?.medications.join(", ") || "none recorded"}. Conditions: ${profile?.conditions.join(", ") || "none recorded"}.
-${findingsText("Current travel advisories research", advisories)}
-Write a medication travel checklist of 4 to 5 short, actionable items (max 12 words each) for someone continuing these prescriptions on this trip. Name their real medications where useful. Reflect any relevant advisory or entry rule from the research (e.g. vaccines, medication import rules). Tailor timing to the departure date. Do not diagnose, prescribe, suggest substitutions, or change doses. The last item must be exactly "Prepare a doctor brief".`,
+Write a medication travel checklist of 4 to 5 short, actionable items (max 12 words each) for someone continuing these prescriptions on this trip. Name their real medications where useful. Include medication import rules and supply planning where relevant. Tailor timing to the departure date. Do not diagnose, prescribe, suggest substitutions, or change doses. The last item must be exactly "Prepare a doctor brief".`,
           {
             structuredOutput: { schema: checklistOutput, jsonPromptInjection: true },
           },
         );
         const items = checklistOutput.parse(res.object).items;
-        return c.json({ items, source: "agent", advisories: advisories.sources, advisoriesError: advisories.error });
+        return c.json({ items, source: "agent" });
       } catch (err) {
         console.warn("travel checklist fallback", err);
-        return c.json({ items: DEFAULT_TRAVEL_CHECKLIST, source: "fallback", advisories: advisories.sources, advisoriesError: advisories.error });
+        return c.json({ items: DEFAULT_TRAVEL_CHECKLIST, source: "fallback" });
       }
+    },
+  }),
+
+  // Each research card calls its own endpoint in parallel so it can render as soon as it finishes.
+  registerApiRoute("/travel/research/:kind", {
+    method: "POST",
+    handler: async (c) => {
+      const parsed = tripSchema.safeParse(await c.req.json().catch(() => ({})));
+      if (!parsed.success) return c.json({ error: "Invalid trip details" }, 400);
+      const { destination } = parsed.data;
+      const signal = c.req.raw.signal;
+      const kind = c.req.param("kind");
+      const findings =
+        kind === "cdc" ? await searchTravelAdvisories(destination, signal)
+        : kind === "smartraveller" ? await searchSmartraveller(destination, signal)
+        : kind === "city" ? await searchCityDetails(destination, signal)
+        : null;
+      if (!findings) return c.json({ error: "Unknown research kind" }, 404);
+      return c.json({ sources: findings.sources, error: findings.error });
     },
   }),
 
@@ -120,7 +138,7 @@ ${contextText(ctx)}
 Draft the doctor brief content as JSON:
 - reason: one sentence for the visit that mentions the destination and what the user wants help with (continuing their real medications while away).
 - history: up to 3 short factual notes connecting the user's own energy, sleep, water, activity and run data to this trip (include the numbers and timeframe; e.g. low energy alongside short sleep before a long flight). Observations only, never diagnoses.
-- questions: 4 to 6 specific questions for the doctor, drawing on the conditions, medications, the advisories research and the ${trip.destination} research (vaccines, outbreak or restriction notices, altitude/air quality/climate, carrying medication through customs, managing energy and sleep on the trip).
+- questions: 4 to 6 specific questions for the doctor, drawing on the conditions, medications, the CDC and Smartraveller research and the ${trip.destination} research (vaccines, outbreak or restriction notices, altitude/air quality/climate, carrying medication through customs, managing energy and sleep on the trip).
 Use only the facts above. Do not invent medications, doses, allergies, or history. Never suggest changing doses or substitutions.`,
           {
             structuredOutput: { schema: briefOutput, jsonPromptInjection: true },
@@ -144,9 +162,6 @@ Use only the facts above. Do not invent medications, doses, allergies, or histor
         brief,
         source,
         destination: ctx.destination,
-        advisories: ctx.advisories.sources,
-        advisoriesError: ctx.advisories.error,
-        cityDetails: ctx.cityDetails?.sources ?? [],
       });
     },
   }),

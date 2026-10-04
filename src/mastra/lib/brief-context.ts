@@ -60,11 +60,12 @@ const clip = (text: string, max: number) => {
   return flat.length > max ? `${flat.slice(0, max - 1).trimEnd()}…` : flat;
 };
 
-// Demo-friendly cache so the checklist and brief steps reuse one search.
+// Cache of in-flight and finished searches, so parallel requests for the same
+// query (the research cards and the brief) share one Exa call.
 const CACHE_MS = 10 * 60_000;
-const cache = new Map<string, { at: number; value: WebFindings }>();
+const cache = new Map<string, { at: number; value: Promise<WebFindings> }>();
 
-async function research(
+function research(
   query: string,
   numResults: number,
   includeDomains?: string[],
@@ -72,8 +73,10 @@ async function research(
 ): Promise<WebFindings> {
   const hit = cache.get(query);
   if (hit && Date.now() - hit.at < CACHE_MS) return hit.value;
-  const value = await runSearch(query, numResults, includeDomains, signal);
-  if (!value.error) cache.set(query, { at: Date.now(), value });
+  // Do not tie a shared search to one caller's abort signal.
+  const value = runSearch(query, numResults, includeDomains);
+  cache.set(query, { at: Date.now(), value });
+  void value.then((v) => { if (v.error) cache.delete(query); });
   return value;
 }
 
@@ -81,10 +84,9 @@ async function runSearch(
   query: string,
   numResults: number,
   includeDomains?: string[],
-  signal?: AbortSignal,
 ): Promise<WebFindings> {
   try {
-    const { results } = await searchExa({ query, numResults, includeDomains }, signal);
+    const { results } = await searchExa({ query, numResults, includeDomains });
     return {
       query,
       sources: results.map((r) => ({
@@ -107,8 +109,19 @@ export const searchTravelAdvisories = (destination: string | undefined, signal?:
     destination
       ? `current CDC travel health notices, outbreak alerts, vaccine recommendations and travel restrictions for ${destination}`
       : "current CDC travel health notices and international travel restrictions",
-    4,
+    2,
     OFFICIAL_TRAVEL_DOMAINS,
+    signal,
+  );
+
+/** Australia's Smartraveller advice for the destination. */
+export const searchSmartraveller = (destination: string | undefined, signal?: AbortSignal) =>
+  research(
+    destination
+      ? `Smartraveller travel advice and health risks for ${destination}`
+      : "Smartraveller travel advice health risks overseas",
+    2,
+    ["smartraveller.gov.au"],
     signal,
   );
 
@@ -116,7 +129,7 @@ export const searchTravelAdvisories = (destination: string | undefined, signal?:
 export const searchCityDetails = (destination: string, signal?: AbortSignal) =>
   research(
     `travelers health guide ${destination}: hospitals and pharmacies, bringing prescription medication, altitude, air quality and climate`,
-    4,
+    2,
     undefined,
     signal,
   );
@@ -213,6 +226,7 @@ export interface BriefContext {
   wellness: Wellness | null;
   labs: FlaggedLab[];
   advisories: WebFindings;
+  smartraveller: WebFindings;
   cityDetails: WebFindings | null;
 }
 
@@ -223,14 +237,15 @@ export async function buildBriefContext(
 ): Promise<BriefContext> {
   const destination = input.destination?.trim() || undefined;
   const settle = <T>(p: Promise<T>, fallback: T) => p.catch((err) => { console.warn("brief context", err); return fallback; });
-  const [profile, wellness, labs, advisories, cityDetails] = await Promise.all([
+  const [profile, wellness, labs, advisories, smartraveller, cityDetails] = await Promise.all([
     settle(loadProfile(), null),
     settle(loadWellness(context), null),
     loadFlaggedLabs(),
     searchTravelAdvisories(destination, signal),
+    searchSmartraveller(destination, signal),
     destination ? searchCityDetails(destination, signal) : Promise.resolve(null),
   ]);
-  return { destination, departureDate: input.departureDate?.trim() || undefined, profile, wellness, labs, advisories, cityDetails };
+  return { destination, departureDate: input.departureDate?.trim() || undefined, profile, wellness, labs, advisories, smartraveller, cityDetails };
 }
 
 const fmt = (n: number | null | undefined, unit = "") => (n == null ? "not available" : `${n}${unit}`);
@@ -267,7 +282,7 @@ export function wellnessLines(w: Wellness | null): string[] {
 const sourceLines = (f: WebFindings | null, fallbackNote: string) => {
   if (!f) return [];
   if (!f.sources.length) return [`- ${f.error ? "Could not be verified online right now." : "No relevant sources found."} ${fallbackNote}`];
-  return f.sources.slice(0, 3).map((s) => `- ${s.title} (${s.domain}): ${s.summary || "See source."} ${s.url}`);
+  return f.sources.slice(0, 2).map((s) => `- ${s.title} (${s.domain}): ${s.summary || "See source."} ${s.url}`);
 };
 
 /** The deterministic section text appended to every brief. */
@@ -278,6 +293,11 @@ export function contextSections(ctx: BriefContext): string[] {
     "",
     `Travel advisories and restrictions${where} (live web search, verify before relying on it):`,
     ...sourceLines(ctx.advisories, "Please check CDC Travelers' Health and the destination's official health authority."),
+  );
+  out.push(
+    "",
+    `Australian government advice (Smartraveller)${where}:`,
+    ...sourceLines(ctx.smartraveller, "Please check smartraveller.gov.au for current advice."),
   );
   if (ctx.cityDetails) {
     out.push("", `Notes on ${ctx.destination}:`, ...sourceLines(ctx.cityDetails, "Confirm local pharmacy and care access directly."));

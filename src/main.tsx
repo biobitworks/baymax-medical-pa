@@ -52,7 +52,7 @@ import {
   DEFAULT_TRAVEL_CHECKLIST,
   formatDoctorBrief,
 } from "./mastra/lib/brief";
-import { TravelAdvisories, type TravelResearch } from "./components/TravelAdvisories";
+import { TravelAdvisories, loadingResearch, type TravelResearch } from "./components/TravelAdvisories";
 import "./style.css";
 import { PwaControls } from "./pwa/PwaControls";
 import { initializeHealthOverview } from "./persistence/health-overview";
@@ -1347,7 +1347,6 @@ function App() {
         departureDate: travelDate,
       });
       setChecklist(data.items);
-      setResearch({ destination, advisories: data.advisories ?? [], cityDetails: [], error: data.advisoriesError });
     } catch (err) {
       console.warn("Agent unavailable, using default checklist.", err);
       setChecklist(DEFAULT_TRAVEL_CHECKLIST);
@@ -1359,7 +1358,15 @@ function App() {
     const destination = city.trim();
     go("Doctor brief");
     setBriefLoading(true);
-    setResearch(null);
+    setResearch(loadingResearch(destination));
+    // Each search runs in parallel and fills in its own section as it finishes.
+    const trip = { destination, departureDate: travelDate };
+    for (const [kind, key] of [["cdc", "cdc"], ["smartraveller", "smartraveller"], ["city", "city"]] as const) {
+      postTravel(`/travel/research/${kind}`, trip)
+        .then((r) => r.sources ?? [])
+        .catch(() => [])
+        .then((sources) => setResearch((prev) => prev && prev.destination === destination ? { ...prev, [key]: { status: "done", sources } } : prev));
+    }
     try {
       const data = await postTravel("/travel/brief", {
         destination,
@@ -1367,7 +1374,6 @@ function App() {
         checklist,
       });
       setBrief(data.brief);
-      setResearch({ destination, advisories: data.advisories ?? [], cityDetails: data.cityDetails ?? [], error: data.advisoriesError });
     } catch (err) {
       console.warn("Agent unavailable, using template brief.", err);
       setBrief(
@@ -1503,7 +1509,7 @@ function App() {
               <Bell size={20} />
             </button>
           </header>
-          <div className="content">
+          <div className={`content ${page === "Doctor brief" && research ? "content-wide" : ""}`}>
             <div className="persistence-status" role="status">
               <ShieldCheck size={14} /><span>{persistence.status}</span>
               {persistence.error && <><span role="alert">{persistence.error}</span><button className="text-btn" disabled={persistence.busy} onClick={async () => { if (await persistence.retry()) { setModal(""); setPage("Talk to Baymax"); } }}>Try again</button></>}
@@ -1866,7 +1872,6 @@ function App() {
                     >
                       Prepare checklist <ArrowUpRight size={16} />
                     </button>
-                    {tripReady && <TravelAdvisories research={research} loading={checklistLoading} />}
                   </section>
                   <section
                     className={`panel slide-panel ${tripReady ? "revealed" : ""}`}
@@ -1916,9 +1921,9 @@ function App() {
               </>
             )}
             {page === "Doctor brief" && (
-              <div className="two-col">
+              <div className={`two-col ${research ? "with-research" : ""}`}>
+                <TravelAdvisories research={research} />
                 <section className="panel brief-panel">
-                  <TravelAdvisories research={research} loading={briefLoading} />
                   <span className="eyebrow">REVIEW BEFORE YOU SHARE</span>
                   <h2>A brief for your next doctor.</h2>
                   <label>
