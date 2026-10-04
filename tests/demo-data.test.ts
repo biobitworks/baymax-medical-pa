@@ -92,10 +92,10 @@ test('reset restores seeded chats and habit data', async () => {
   assert.ok((await getRecentRuns(5, ctx)).length > 0);
   assert.ok((await listRecords(undefined, ctx)).length >= 2);
 });
-test('fitness preferences persist in Postgres and reset with the demo', async () => {
+test('fitness preferences are seeded, persist in Postgres and reset with the demo', async () => {
   const { getFitnessPreferences, saveActivityGoals, saveFitnessPreferences } = await import('../src/mastra/lib/fitness-store.ts');
   const initial = await getFitnessPreferences(ctx);
-  assert.equal(initial.onboarded, false);
+  assert.equal(initial.onboarded, true, 'seeded demo user skips onboarding');
   assert.deepEqual(initial.goals, { steps: 5000, activeMinutes: 20 });
   const saved = await saveFitnessPreferences({ name: 'Jordan', goals: { steps: 8000, activeMinutes: 30 }, notifications: 'enabled' }, ctx);
   assert.equal(saved.onboarded, true);
@@ -103,5 +103,7 @@ test('fitness preferences persist in Postgres and reset with the demo', async ()
   assert.equal((await saveActivityGoals({ steps: 9000, activeMinutes: 40 }, ctx)).notifications, 'enabled');
   assert.deepEqual((await getFitnessPreferences(ctx)).goals, { steps: 9000, activeMinutes: 40 });
   await resetDemo(q);
-  assert.equal((await getFitnessPreferences(ctx)).onboarded, false);
+  const reset = await getFitnessPreferences(ctx);
+  assert.equal(reset.onboarded, true);
+  assert.deepEqual(reset.goals, { steps: 5000, activeMinutes: 20 });
 });

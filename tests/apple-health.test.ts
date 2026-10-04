@@ -35,7 +35,7 @@ function payload(): AppleHealthImport {
   ] };
 }
 before(async () => {
-  for (const name of ['001_care_workspaces.sql', '002_monotonic_revisions.sql', '005_apple_health.sql']) await db.exec(await readFile(new URL(`../migrations/${name}`, import.meta.url), 'utf8'));
+  for (const name of ['001_care_workspaces.sql', '002_monotonic_revisions.sql', '003_demo_user_and_health_data.sql', '004_fitness_preferences.sql', '005_apple_health.sql', '006_link_health_and_seed_fitness.sql']) await db.exec(await readFile(new URL(`../migrations/${name}`, import.meta.url), 'utf8'));
 });
 after(async () => { await db.close(); });
 async function pair(n: number) {
@@ -140,4 +140,18 @@ test('server session binding replaces a forged request-context owner', () => {
   bindHealthSession(request('GET', 'connection'), context);
   assert.equal(context.get(HEALTH_SESSION_KEY), null);
   assert.equal(sessionHashOf(new Request(origin, { headers: { cookie: 'baymax_session=bad' } })), undefined);
+});
+
+test('a paired phone is linked to the app user so readings load without the browser session', async () => {
+  const { DEMO_USER_ID } = await import('../src/mastra/lib/demo-user');
+  await db.query(`INSERT INTO users (id, name, is_demo) VALUES ($1, 'Jordan Mercer', true) ON CONFLICT DO NOTHING`, [DEMO_USER_ID]);
+  const token = await pair(77);
+  assert.equal((await store.statusForUser(DEMO_USER_ID)).connected, true);
+  assert.equal((await store.statusForUser('00000000-0000-4000-8000-000000000000')).connected, false);
+  const imported = await handle(request('POST', 'import', '', payload(), token));
+  assert.equal(imported.status, 200);
+  const status = await store.statusForUser(DEMO_USER_ID);
+  assert.equal(status.daily[0].steps, 1200);
+  await store.disconnect(ownerOf(77));
+  assert.equal((await store.statusForUser(DEMO_USER_ID)).connected, false);
 });

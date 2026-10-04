@@ -27,6 +27,16 @@ function findDataDir(): string {
   }
 }
 
+/** Jordan has already completed activity onboarding, so new visits go straight to the app. */
+export async function seedFitnessPreferences(q: Query, userId = DEMO_USER_ID) {
+  await q(
+    `INSERT INTO user_fitness_preferences (user_id, steps_goal, active_minutes_goal, notifications, onboarded)
+     VALUES ($1, 5000, 20, 'off', true)
+     ON CONFLICT (user_id) DO NOTHING`,
+    [userId],
+  );
+}
+
 /**
  * The demo user's profile, conditions, body measurements, and built-in medical
  * records (with extracted lab results), all read from data/synthetic.
@@ -50,6 +60,7 @@ export async function seedProfile(q: Query, options: SeedOptions = {}) {
        email = EXCLUDED.email, date_of_birth = EXCLUDED.date_of_birth, sex = EXCLUDED.sex`,
     [userId, profile.id ?? null, profile.name, "jordan.mercer@example.com", profile.date_of_birth ?? null, profile.sex ?? null],
   );
+  await seedFitnessPreferences(q, userId);
   for (const c of health.conditions ?? []) {
     await q(
       `INSERT INTO user_conditions (user_id, name, status, notes) VALUES ($1, $2, $3, $4)
@@ -130,5 +141,6 @@ export async function resetDemo(q: Query, options: SeedOptions = {}) {
      DELETE FROM runs WHERE user_id = $1`,
     [userId],
   );
+  await seedFitnessPreferences(q, userId);
   await seedActivity(q, options);
 }

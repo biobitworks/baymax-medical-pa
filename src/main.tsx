@@ -613,7 +613,14 @@ function ModalShell({
     </dialog>
   );
 }
-const TEXT_FILE_ACCEPT = ".txt,.md,.csv,.tsv,.json,.xml,.log,text/*,application/json";
+const TEXT_FILE_ACCEPT = ".pdf,application/pdf,.txt,.md,.csv,.tsv,.json,.xml,.log,text/*,application/json";
+const isPdf = (file: File) => file.type === "application/pdf" || /\.pdf$/i.test(file.name);
+async function fileToBase64(file: File) {
+  const bytes = new Uint8Array(await file.arrayBuffer());
+  let binary = "";
+  for (let i = 0; i < bytes.length; i += 0x8000) binary += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+  return btoa(binary);
+}
 // Uploads go to the server as conversation artifacts; the agent reads them
 // with list-medical-records / read-medical-record rather than inline text.
 const createAttachmentAdapter = (conversationId: string): AttachmentAdapter => ({
@@ -635,7 +642,9 @@ const createAttachmentAdapter = (conversationId: string): AttachmentAdapter => (
       body: JSON.stringify({
         conversationId,
         name: attachment.name,
-        content: await attachment.file.text(),
+        ...(isPdf(attachment.file)
+          ? { contentBase64: await fileToBase64(attachment.file) }
+          : { content: await attachment.file.text() }),
       }),
     });
     const body = (await res.json().catch(() => ({}))) as {
@@ -1093,7 +1102,7 @@ function Chat({ conversationId, conversation, onConversation, onToolResult, work
           <ComposerPrimitive.AddAttachment
             className="attach"
             aria-label="Attach a medical record"
-            title="Attach a text file (txt, md, csv, json)"
+            title="Attach a PDF or text file (pdf, txt, md, csv, json)"
           >
             <Plus size={19} />
           </ComposerPrimitive.AddAttachment>

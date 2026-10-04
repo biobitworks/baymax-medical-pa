@@ -13,6 +13,7 @@ import { type LabRow, rowsForFormat } from "./lab-parse";
 export const MAX_UPLOAD_BYTES = 200_000;
 export const MAX_READ_CHARS = 20_000;
 export const TEXT_EXTENSIONS = [".txt", ".md", ".csv", ".json", ".tsv", ".xml", ".log"];
+export const UPLOAD_EXTENSIONS = [...TEXT_EXTENSIONS, ".pdf"];
 
 export type RecordSource = "library" | "upload";
 
@@ -30,7 +31,7 @@ export function extOf(name: string): string {
 }
 
 export function isSupportedUpload(name: string): boolean {
-  return TEXT_EXTENSIONS.includes(extOf(name));
+  return UPLOAD_EXTENSIONS.includes(extOf(name));
 }
 
 const summarize = (r: Record<string, unknown>): RecordSummary => ({

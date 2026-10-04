@@ -7,9 +7,13 @@ export const appleHealthStore = new AppleHealthStore(query);
 export async function importedHealth(context?: { requestContext?: { get: (key: string) => unknown } }, days = 7): Promise<AppleHealthStatus> {
   const sessionHash = context?.requestContext?.get(HEALTH_SESSION_KEY);
   const disconnected: AppleHealthStatus = { connected: false, lastSyncAt: null, daily: [] };
-  if (typeof sessionHash !== 'string') return disconnected;
   try {
-    return await appleHealthStore.status(sessionHash, days);
+    // Prefer the browser session; otherwise use the connection paired to the app's user.
+    if (typeof sessionHash === 'string') {
+      const own = await appleHealthStore.status(sessionHash, days);
+      if (own.connected) return own;
+    }
+    return await appleHealthStore.statusForUser(undefined, days);
   } catch {
     // Optional Health sync must not break the demo before migration or during an outage.
     // Callers explicitly identify fallback metrics/profile as synthetic demo data.
