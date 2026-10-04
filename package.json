@@ -18,6 +18,7 @@
     "test:fitness": "node --experimental-strip-types --test tests/fitness.test.ts",
     "test:pwa": "npm run build && playwright test",
     "icons": "node scripts/generate-icons.mjs",
+    "record:readme": "node scripts/record-readme.mjs",
     "record:notifications": "node scripts/record-notifications.mjs",
     "computer:build": "docker build -t baymax-computer:local services/computer",
     "test:computer": "node --import tsx scripts/smoke-computer.ts",

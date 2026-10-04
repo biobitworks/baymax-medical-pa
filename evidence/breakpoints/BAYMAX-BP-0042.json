@@ -1,0 +1,84 @@
+{
+  "base_head": "fb2ce0e73f6da685378de2c389ba486cf6e5615c",
+  "branch": "codex/readme-ui-gifs",
+  "breakpoint_id": "BAYMAX-BP-0042",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 20598,
+        "path": "README.md",
+        "sha256": "5579e1a40515904c0b4c5a61598f9856476584409048bd4884c06c127829a2b0"
+      },
+      {
+        "bytes": 2546,
+        "path": "package.json",
+        "sha256": "f2970bb8f64ddd1e5f19ba600064a9c5ca5cf41d761a8e62e453212b50b6b0d0"
+      },
+      {
+        "bytes": 8007,
+        "path": "scripts/record-readme.mjs",
+        "sha256": "4043ef12c14f2591330e902e075b5f6d2a8873e21b510677c2afe708f6d25d5d"
+      },
+      {
+        "bytes": 4470,
+        "path": "scripts/fixtures/readme-demo.mjs",
+        "sha256": "c8a5eb57e7f94fdb333fd4495cbfb27898b0e5df6e51a6a9949bfd60bbdc8c52"
+      },
+      {
+        "bytes": 552022,
+        "path": "docs/media/care-plan.gif",
+        "sha256": "7319366c7f44b191e24448be6a9523ad05b1e28efff1de906f9c3981145fe307"
+      },
+      {
+        "bytes": 399462,
+        "path": "docs/media/prescription-preview.gif",
+        "sha256": "2b9c2bc56a84f7e896cadac2f1554a5ede4695965258ed4e663a5d2f85a25310"
+      },
+      {
+        "bytes": 335843,
+        "path": "docs/media/doctor-email.gif",
+        "sha256": "b20b47f4f414283c115bc094866134475d30395189f35474062cb61606ff6e94"
+      },
+      {
+        "bytes": 454339,
+        "path": "docs/media/mobile-care.gif",
+        "sha256": "fd599f70d4529ef1c76de72cf66ac0d7689697c7ea8527a79cc05118b6fc487e"
+      },
+      {
+        "bytes": 247217,
+        "path": "docs/media/baymax-animation.gif",
+        "sha256": "9e670e0c12bfa7af7d72c6978de95e85e4c87b5f452eb50e4cec5efad0c19564"
+      },
+      {
+        "bytes": 2362,
+        "path": "evidence/receipts/ui/readme-gifs-2026-10-04.json",
+        "sha256": "1297782dfeff6f51fd6e3ba1ca64ddf95fac1194b16acf2e2ca822851216d7ad"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 10,
+    "leaf_hashes": [
+      "2094cdda080252312b5ea234d7168b49c8a3ef27a6bd364a12ba4f9932c3ef55",
+      "291d1c0945da82f94c2cafa1b52274a50c86fb8e0dfe3b64bdc63452f72fb614",
+      "6355aa24e05d9f0df4aadd3dc60106a16ab5f24a64ac010d8959261681ed7725",
+      "4008797ee213df2098c2fa6bd9bac6bd6b73fa0aa6a2820e2a89d19e87cfaacd",
+      "ffbaeff4d56c76cdd36e009dba4b68835fb4724f8c92602de0a87003ed82cd8a",
+      "b01761e5db83e7967d472d25344912be8edacdd0a1aa4c324891e07f3fde64a4",
+      "4dff72773cacf5ad6a322ef39fb10bda95cf4faa33a61b9756de7b54bb18a1a3",
+      "25602d8dc4e187b26e2aac8ae05fa83c2209907c14ffd0e00e2a7a1407b43738",
+      "f8bc8938ca50572aef1fbf716260419c09599d76bf850ba4d5639e3c65df3c7b",
+      "107c5b89fb227e23b843fd492acad32ce6061ea5829f48f7ce81cbe3852d3833"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "17094aa6482b904a4f5c02e5c3e349bfc727dd632902abeced1852da7a36ed71"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "Current UI recorded with synthetic fixtures. GIF timing, UI assertions, five README image links and 110 unit tests pass. Fourteen historical breakpoint mismatches predate this work; this successor commits only to its declared current artifacts.",
+  "parent": "BAYMAX-BP-0041",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "README_UI_RECORDINGS",
+  "state": "PASS",
+  "timestamp_utc": "2026-10-04T23:16:56.124805+00:00"
+}

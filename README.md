@@ -10,39 +10,47 @@ Baymax is a privacy-first personal medical assistant that helps you take care of
 
 ## UI walkthroughs
 
-A conversation-first care companion built with **Assistant UI**, React, TypeScript, and Vite. Baymax surfaces interactive care cards inside the chat, with a centered animated mascot, a pill composer, and bottom navigation.
+Built with **Assistant UI**, React, TypeScript, and Vite. Start in **Today** for a check-in and daily progress, or open **Talk** for interactive care cards. The current UI pairs a dark desktop sidebar with warm cards, larger body text, and mobile bottom navigation.
+
+These GIFs record the current app using a synthetic profile and mocked backend responses.
 
 ### Prepare for a hackathon
 
-Review your preparation plan, check off a small win, and complete a daily energy check-in.
+Save an energy check-in, log a glass of water, and tick off a walk in your preparation plan.
 
 ![Care plan and check-in walkthrough](docs/media/care-plan.gif)
 
 ### Prescription concierge
 
-Open **Shopping demo** in the chat quick actions to try a sample prescription cart. Choose between two demo pharmacies, adjust the pack count, review the total, and confirm a simulated order. Pharmacy names, prices, availability, and medication details are illustrative. No prescription is verified, no payment is collected, and no order is sent.
+Open **Talk → More ways I can help → Browse medicines** to see sample pharmacy options and product images inside the conversation. Choose between two demo pharmacies, adjust the pack count, review the total, and confirm a simulated order. Pharmacy names, prices, availability, and medication details are illustrative. No prescription is verified, no payment is collected, and no order is sent.
 
 ![Prescription order preview walkthrough](docs/media/prescription-preview.gif)
 
 ### Email a doctor brief
 
-Edit a fictional health brief, enter a sample recipient, and review the email draft. This walkthrough stops at the approved preview; opening the email app and sending remain user actions.
+Review a sample health brief, enter a recipient, and approve the email draft. This walkthrough stops at the approved preview; opening the email app and sending remain user actions.
 
 ![Doctor brief email walkthrough](docs/media/doctor-email.gif)
 
-### Mobile reminders: medication, refills and movement
+### Care on your phone
 
-A playful mobile notification concept uses short Baymax nudges, bright action buttons, and small-win celebrations while asking you to take your scheduled medication as prescribed, buy your next refill, and start a ten-minute walk. Each reminder opens a corresponding care action. The lock screen and care screens are simulated using fictional information; live push delivery and refill purchases are not connected.
+Check in, add water, review activity rings, and move into a conversation using the bottom navigation. The composer stays above the navigation so you can keep typing.
 
-![Mobile notification demo: medication, refills and exercise](docs/media/mobile-notifications.gif)
+![Current mobile UI: check-in, hydration, activity, and chat](docs/media/mobile-care.gif)
 
-[Watch the MP4 recording](docs/media/mobile-notifications.mp4). After starting the app, open `/demo/notifications.html` to replay the interactive demo. Re-record it with `npm run record:notifications` while the production preview is running (default: `http://localhost:4181`, configurable with `BAYMAX_DEMO_URL`). Requires FFmpeg and Playwright Chromium.
+The separate [mobile reminder concept (MP4)](docs/media/mobile-notifications.mp4) simulates medication, refill, and walking notifications. It is not a recording of live push delivery. Open `/demo/notifications.html` to replay it; `npm run record:notifications` rebuilds that concept recording.
 
 ### Our 2D companion
 
-An authored sprite companion with greeting, idle breathing and blinking, and thinking animations. The preview shows the artwork enlarged and at its actual header size. The app respects reduced-motion preferences.
+Baymax’s sprite brings greeting, breathing, blinking, and thinking animations into the app. This recording shows the companion in the current Today check-in card. The app respects reduced-motion preferences.
 
 ![Animated Baymax companion](docs/media/baymax-animation.gif)
+
+### Refresh these recordings
+
+Start the frontend with `npm run dev`, then run `npm run record:readme` in another terminal. The recorder uses Playwright Chromium and Sharp, intercepts backend requests with synthetic fixtures, and stops before opening the email app. It does not require the agent or shared database. Install the browser once with `npx playwright install chromium`.
+
+Set `BAYMAX_DEMO_URL` to a different local frontend URL if needed (default: `http://localhost:5173`). Set `PLAYWRIGHT_CHROMIUM_EXECUTABLE` to use an existing Chromium binary. The separate notification-concept recorder also requires FFmpeg.
 
 ## Run locally
 

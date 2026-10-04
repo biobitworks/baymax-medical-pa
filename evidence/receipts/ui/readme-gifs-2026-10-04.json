@@ -1,0 +1,82 @@
+{
+  "source_commit": "fb2ce0e73f6da685378de2c389ba486cf6e5615c",
+  "purpose": "Refresh the README walkthroughs from the current application UI.",
+  "data": "Synthetic profile and mocked backend responses. No shared database, model calls, email handoff, or purchases.",
+  "captures": [
+    {
+      "path": "docs/media/care-plan.gif",
+      "width": 1024,
+      "height": 752,
+      "frames": 24,
+      "duration_ms": 11520,
+      "bytes": 552022,
+      "loop": "infinite"
+    },
+    {
+      "path": "docs/media/prescription-preview.gif",
+      "width": 1024,
+      "height": 752,
+      "frames": 16,
+      "duration_ms": 14400,
+      "bytes": 399462,
+      "loop": "infinite"
+    },
+    {
+      "path": "docs/media/doctor-email.gif",
+      "width": 1024,
+      "height": 752,
+      "frames": 5,
+      "duration_ms": 8960,
+      "bytes": 335843,
+      "loop": "infinite"
+    },
+    {
+      "path": "docs/media/mobile-care.gif",
+      "width": 390,
+      "height": 844,
+      "frames": 27,
+      "duration_ms": 11200,
+      "bytes": 454339,
+      "loop": "infinite"
+    },
+    {
+      "path": "docs/media/baymax-animation.gif",
+      "width": 960,
+      "height": 307,
+      "frames": 14,
+      "duration_ms": 6400,
+      "bytes": 247217,
+      "loop": "infinite"
+    }
+  ],
+  "validation": {
+    "recorder_assertions": "PASS: expected UI states, no runtime errors, no visible alerts, no horizontal overflow, looping GIFs, exact playback timing",
+    "readme_image_links": "PASS: five local image files",
+    "unit_tests": {
+      "passed": 110,
+      "failed": 0
+    },
+    "visual_review": "Contact sheets reviewed for all five recordings; pharmacy cards checked at full size"
+  },
+  "prior_checkpoint_verification": {
+    "state": "FAIL before this work",
+    "historical_mismatch_count": 14,
+    "historical_mismatches": [
+      "BAYMAX-BP-0000.json",
+      "BAYMAX-BP-0001.json",
+      "BAYMAX-BP-0002.json",
+      "BAYMAX-BP-0003.json",
+      "BAYMAX-BP-0007.json",
+      "BAYMAX-BP-0009.json",
+      "BAYMAX-BP-0017.json",
+      "BAYMAX-BP-0023.json",
+      "BAYMAX-BP-0024.json",
+      "BAYMAX-BP-0026.json",
+      "BAYMAX-BP-0028.json",
+      "BAYMAX-BP-0032.json",
+      "BAYMAX-BP-0040.json",
+      "BAYMAX-BP-0041.json"
+    ],
+    "note": "Historical breakpoint files are unchanged. Their current-file hash mismatches predate this README update."
+  }
+}
