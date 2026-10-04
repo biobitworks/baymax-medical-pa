@@ -47,6 +47,33 @@ npm run dev
 
 Open the local URL Vite prints.
 
+### Agent web search with Exa
+
+Baymax's Mastra agent has a server-side `search-web` tool powered by
+[Exa Search](https://exa.ai/docs/reference/search). It returns source links,
+publication dates when available, and relevant excerpts for current web information.
+
+Add `EXA_API_KEY` to your local `.env` (see `.env.example`), keep the existing
+Neon AI Gateway credentials, and start the agent:
+
+```bash
+npm run agent:dev
+```
+
+Try asking Baymax to find official guidance for travelling with prescription
+medication to Spain. The agent is instructed to use general queries, keep
+identifiable health details out of search, and cite its sources. Search requires
+an Exa key and does not purchase medication or confirm personal treatment advice.
+Restart the agent after changing `.env`. Never use a `VITE_` prefix for the key.
+If port 4111 is busy, Mastra prints another port. Set `MASTRA_API_URL` in `.env`
+to that server URL (for example, `http://localhost:4112`) and restart Vite.
+
+Run the search integration tests (mocked API responses, no API key required):
+
+```bash
+npm run test:search
+```
+
 ```bash
 npm run build
 npm run preview
@@ -68,12 +95,12 @@ npm run preview
 | Sponsor | Status |
 | --- | --- |
 | Assistant UI | Implemented: runtime, message primitives, composer, suggestions, tool UI |
-| Mastra | Next: replace the fixture adapter with server-side agent orchestration |
+| Mastra | Implemented: server-side Baymax agent; frontend falls back to fixture responses when unreachable |
 | Neon | Next: consent-based profile and agent memory |
-| Exa | Next: source-backed travel and pharmacy research |
+| Exa | Implemented: server-side agent search with source URLs and excerpts; requires `EXA_API_KEY` |
 | Fly.io | Dockerfile, Nginx config, and starter Fly configuration included; not deployed |
 
-The frontend has no live LLM, pharmacy, payment, email delivery, database, or background notification connection. The GIFs use fictional details. UI copy avoids implementation badges while the repository documents these limits.
+The frontend connects to the local Mastra agent for live LLM responses and Exa search when server credentials are configured. Pharmacy fulfilment, payment, email delivery, persistent user data, and background notifications remain unconnected. The GIFs use fictional details.
 
 ## Fly.io deployment preparation
 
@@ -172,4 +199,3 @@ Baymax is intended to support organization, habits, and healthcare conversations
 ---
 
 **Baymax: caring enough to remind you again.**
-
