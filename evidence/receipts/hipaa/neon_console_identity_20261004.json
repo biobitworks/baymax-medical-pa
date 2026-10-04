@@ -1,0 +1,50 @@
+{
+  "branch": {
+    "branch_id": "br-falling-block-b5qoil65",
+    "branch_name_state": "USER_PROVIDED_CONSOLE_VALUE_NOT_REPEATED_IN_TEXT",
+    "branch_protection_enabled": "UNKNOWN"
+  },
+  "breakpoint_reason": "No new sponsor execution occurred; active Neon/red-team lanes may mint the next canonical successor. This receipt preserves the console identity observation without racing canonical breakpoint numbering.",
+  "canonical_breakpoint_minted": false,
+  "claim_ceiling": "The user-provided Neon console identifies project cold-rice-87700506 and branch br-falling-block-b5qoil65, and the project ID matches the repository's existing Neon MCP project pin. This does not prove database endpoint/branch identity, BAA execution, HIPAA feature enablement, account PHI eligibility, least privilege, application encryption, or HIPAA compliance.",
+  "console_surfaces_observed_in_user_text": [
+    "General",
+    "Postgres",
+    "Networking",
+    "Credentials",
+    "Functions",
+    "HIPAA compliance",
+    "Project permissions"
+  ],
+  "hipaa": {
+    "account_eligibility_for_phi": "UNKNOWN",
+    "baa_state": "UNKNOWN",
+    "hipaa_feature_enabled": "UNKNOWN",
+    "hipaa_settings_surface_present": "OBSERVED_IN_USER_PROVIDED_CONSOLE_NAV",
+    "real_phi": "BLOCKED"
+  },
+  "observed_at": "2026-10-04T22:52:07.799964+00:00",
+  "prior_failures_preserved": {
+    "application_payload_encryption": "NOT_IMPLEMENTED_PREVIOUSLY_OBSERVED",
+    "keychain_secure_enclave": "NOT_IMPLEMENTED_PREVIOUSLY_OBSERVED",
+    "least_privilege_database_role": "FAIL_PREVIOUSLY_OBSERVED",
+    "pg_stat_activity_plaintext_canary": "FAIL_PREVIOUSLY_OBSERVED"
+  },
+  "project": {
+    "default_label": "Default",
+    "environment_label": "production",
+    "name": "bay-max",
+    "project_id": "cold-rice-87700506"
+  },
+  "repo_correlation": {
+    "database_endpoint_to_branch_match": "NOT_COMPUTED",
+    "database_endpoint_to_project_match": "NOT_COMPUTED",
+    "existing_mcp_project_pin": "cold-rice-87700506",
+    "project_id_matches_existing_mcp_pin": true,
+    "region_match": "NOT_COMPUTED"
+  },
+  "schema": "baymax.neon.console_identity.v1",
+  "source_authenticity": "NOT_INDEPENDENTLY_AUTHENTICATED_BY_THIS_LANE",
+  "source_class": "USER_PROVIDED_NEON_CONSOLE_SETTINGS_TEXT",
+  "state": "PARTIAL_IDENTITY_EVIDENCE"
+}
