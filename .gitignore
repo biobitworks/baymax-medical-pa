@@ -19,6 +19,10 @@ node_modules/
 .next/
 dist/
 build/
+.mastra/
+test-results/
+playwright-report/
+mastra.db*
 
 # OS/editor
 .DS_Store

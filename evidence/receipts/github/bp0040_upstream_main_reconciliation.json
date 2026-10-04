@@ -1,0 +1,49 @@
+{
+  "claim_ceiling": "Records conflict reconciliation and validation of the merged candidate. It does not establish upstream review, approval, cryptographic signature, merge, HIPAA compliance, or correctness beyond the executed gates.",
+  "conflicts": [
+    ".gitignore",
+    "README.md",
+    "skills-lock.json"
+  ],
+  "merge_base": "74bfe7708ba1a94dd856bd69ed852f8288f72bf7",
+  "merge_head": "0fccd24e8f8ff6cbf0c16c688d1fc4aa832d772e",
+  "observed_at": "2026-10-04T22:19:14.019508+00:00",
+  "parent_breakpoint": "BAYMAX-BP-0039",
+  "pre_merge_head": "232ecea1eb56548e12cc6ba8fe859550b577b0c5",
+  "resolution": {
+    ".gitignore": "UNION_BRANCH_AND_UPSTREAM_RULES",
+    "README.md": "UPSTREAM_CURRENT_PLUS_BIOBITWORKS_COMPLIANCE_CUSTODY_SECTION",
+    "skills-lock.json": "UPSTREAM_SUPERSET"
+  },
+  "schema": "baymax.upstream_main_reconciliation.v1",
+  "signature_state": "NOT_COMPUTED_LOCAL_SIGNING_KEY_NOT_CONFIGURED",
+  "upstream_main": "0fccd24e8f8ff6cbf0c16c688d1fc4aa832d772e",
+  "validation": {
+    "full_diff_check": {
+      "path": "output/pdf/jordan-mercer-health-followup-2026-10-04.pdf",
+      "state": "PARTIAL_INHERITED_UPSTREAM_PDF_WHITESPACE"
+    },
+    "node_test": {
+      "state": "PASS",
+      "tests": 64
+    },
+    "npm_build": {
+      "state": "PASS"
+    },
+    "npm_install_audit": {
+      "high_severity_count": 6,
+      "remediation": "NOT_AUTOMATICALLY_APPLIED_BREAKING_FORCE_FIX",
+      "state": "OBSERVED_WARNING"
+    },
+    "python_unittest": {
+      "state": "PASS",
+      "tests": 37
+    },
+    "resolved_file_diff_check": {
+      "state": "PASS"
+    },
+    "secret_gate": {
+      "state": "PASS"
+    }
+  }
+}
