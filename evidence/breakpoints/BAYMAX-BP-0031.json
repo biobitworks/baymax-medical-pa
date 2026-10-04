@@ -1,0 +1,30 @@
+{
+  "base_head": "7d425b42bf920e9225c48bf174c77dfd1ee61f13",
+  "branch": "integration/iphone-offline-v2",
+  "breakpoint_id": "BAYMAX-BP-0031",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 3091,
+        "path": "evidence/receipts/github/project3_bp0030_sync.json",
+        "sha256": "48741c5dee0e89aef899ac1ffe80ddb8d27e4359fc679126c4471c40e54f9a93"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 1,
+    "leaf_hashes": [
+      "5abb6d8541fc9b2409b8e491a227e47e341c9735ff86cf593e868e7a676525e7"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "5abb6d8541fc9b2409b8e491a227e47e341c9735ff86cf593e868e7a676525e7"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "Synchronized BP-0030 recording status across underlying Project #3 issues/tasks and draft PR #3. Direct GitHub Project board status fields remain BLOCKED because current gh auth lacks read:project/project scope. Offline network isolation remains NOT_TESTED.",
+  "parent": "BAYMAX-BP-0030",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "PROJECT3_ISSUE_PR_SYNC",
+  "state": "PARTIAL",
+  "timestamp_utc": "2026-10-04T20:59:32.448851+00:00"
+}
