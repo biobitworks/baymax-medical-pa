@@ -1,0 +1,130 @@
+{
+  "schema": "baymax.cross_agent_evidence_review.v1",
+  "project": "biobitworks/baymax-medical-pa",
+  "lane": "redteam/lane-golden-path-audit",
+  "parent_commit": "03632624c124641355eab479182c5f4313eac506",
+  "reviewed_at_local": "2026-10-04T16:02:00-07:00",
+  "canonical_breakpoint_minted": false,
+  "signed": false,
+  "claim_ceiling": "This successor records a cross-agent evidence review of already-preserved Baymax simulator screenshots, historical iPhone recordings, implementation receipts, and a separate Neon/HIPAA qualification lane. It does not repair candidate f779923, does not establish clinical correctness, HIPAA compliance, Secure Enclave use, or physical-iPhone execution of the new f779923 packet, and does not promote the blocked Claude provider attempt to independent verification.",
+  "source_heads": {
+    "chatgpt_model_lineage": {
+      "branch": "execution/model-lineage-f3f4",
+      "head": "f7799238d57a65d80730afb736e4ed646dc7b60e",
+      "remote_parity": "PASS"
+    },
+    "codex_model_admission": {
+      "branch": "codex/model-admission-parity",
+      "head": "d4edcfdeeb27d275f89894f0200a7c1faa630f7c",
+      "remote_parity": "PASS"
+    },
+    "redteam_simulator": {
+      "branch": "redteam/lane-golden-path-audit",
+      "head": "03632624c124641355eab479182c5f4313eac506",
+      "remote_parity_before_successor": "PASS"
+    },
+    "neon_hipaa": {
+      "branch": "redteam/neon-hipaa-current",
+      "head": "e2ceb2885aa5b62f87408f1eae43de86e604401d",
+      "remote_parity": "PASS",
+      "relationship": "SEPARATE_QUALIFICATION_LANE_NOT_PROMOTED_INTO_F779923_VERDICT"
+    }
+  },
+  "simulator_f779923": {
+    "candidate": "f7799238d57a65d80730afb736e4ed646dc7b60e",
+    "verdict": "REJECTED_AT_EXACT_BYTES",
+    "defect": "OfflineTravelApp.loadContext guard 10 pins obsolete packet SHA 80e92bd4... while shipped packet and ModelContract.packetSHA256 are 4c51c8d5...",
+    "candidate_ui_observation": "UNPATCHED_APP_LAUNCHES_AND_FAILS_CLOSED_WITH_UNKNOWN_LOCAL_BUNDLE_COULD_NOT_BE_LOADED",
+    "diagnostic_patch_scope": "ONE_LINE_GUARD10_REFERENCE_CHANGE_ONLY_NOT_CANDIDATE_BYTES",
+    "screenshots": {
+      "count": 8,
+      "visual_review": "PASS_SYNTHETIC_CONTENT_AND_STATED_UI_STATES",
+      "hash_manifest_match": "PASS",
+      "items": [
+        {"name":"01_initial_offline_privacy_state.png","sha256":"e30cb71ba1958f3cf125c4f103a4daa7fd9b41426a120cfd8a7eb09311bc98f2","observation":"initial offline demo; consent and reviewed toggles off"},
+        {"name":"02_loaded_synthetic_bali_context_naproxen_allowlist.png","sha256":"c7b285e7326206814e9b9d7f9a23d7122898e49d081bf167d33e8b479888c26e","observation":"diagnostic build shows synthetic Bali context and code-owned Naproxen/Bictegravir labels"},
+        {"name":"03_response_A_valid_accepted.png","sha256":"b0d269df8b74936a8624396dd65378c7beacb59ee31ce3acd2e3aa95b13d3054","observation":"valid bounded JSON accepted on diagnostic build"},
+        {"name":"04_response_B_historical_apollo_rejected.png","sha256":"39b2752c4685b1449ca3b4d5aa468a8f8c0e8081dc5efc1e83d1a8dce11e7432","observation":"historical SYNTHETIC DEMO ONLY response rejected; purchase remains blocked"},
+        {"name":"05_response_C_hostile_malformed_rejected.png","sha256":"011f3d2e88acd57e8e30f6e7064855e7ef6c191ac8af45234f542c6f238f3e4c","observation":"hostile/malformed response rejected; purchase remains blocked"},
+        {"name":"06_compliance_deferred_blocked.png","sha256":"71a8cc8549513986ad75f8896423b46f8d62bbb2be0762033882bef96b15cbbd","observation":"cloud/call/sync deferred and medication purchase blocked"},
+        {"name":"07_restart_relaunch_state.png","sha256":"326e1f4c488d311d7579a2ed95b9bf078f1fd09b0e6991c2996a15b59e646fc9","observation":"after restart consent off, reviewed flag on, no prior loaded context/result shown"},
+        {"name":"08_candidate_unpatched_load_failure_guard10.png","sha256":"d780d4a8cb48851fbaa27a984a22583769eece1d59e3ead18148a5698791fac5","observation":"exact candidate shows UNKNOWN: local bundle could not be loaded"}
+      ]
+    },
+    "non_ui_evidence": {
+      "f3_lineage": "PASS_AT_ARTIFACT_LEVEL_WITH_CAVEAT_GUARDS_2_9_MIRRORED_IN_PYTHON",
+      "f4_dataset_text": "PASS",
+      "validator": "PASS_351_EXECUTIONS_0_DISAGREEMENTS_0_CRASHES_0_UNSAFE_ACCEPTS",
+      "restart": "PASS_ON_DIAGNOSTIC_BUILD",
+      "physical_iphone_new_packet": "NOT_TESTED",
+      "airplane_mode_new_packet": "NOT_TESTED",
+      "secure_enclave": "NOT_TESTED",
+      "real_apollo_new_packet": "NOT_TESTED"
+    }
+  },
+  "historical_iphone_media": {
+    "scope": "OLDER_PACKET_HISTORICAL_EVIDENCE_ONLY",
+    "apollo_local_model_screen_recording": {
+      "path_in_source_lineage": "evidence/media/iphone/apollo_local_model_screen_recording_2026-10-04.mov",
+      "sha256": "ef8b2d2b1d90bfd838d4a1e9be4ef3937b15b45b25d474375ea232c1ff1fc12b",
+      "bytes": 9014548,
+      "duration_seconds": 70.719625,
+      "codec": "h264",
+      "dimensions": "690x1384",
+      "cross_worktree_hash_match": "PASS_CHATGPT_CLAUDE_CODEX",
+      "sampled_visual_review": "PASS_LOCAL_APOLLO_UI_SYNTHETIC_PACKET_AND_CONTRACT_VALID_RESULT_VISIBLE",
+      "network_state": "LTE_VISIBLE_NOT_OFFLINE"
+    },
+    "apollo_airplane_mode_original": {
+      "path_in_source_lineage": "evidence/media/iphone/apollo_airplane_mode_original_2026-10-04.mp4",
+      "sha256": "a3c25ef13c01e59a0be4c4a0f14f244b35a88e7f477d9493cff7c47f1900ab5c",
+      "bytes": 25617197,
+      "duration_seconds": 60.447256,
+      "codec": "hevc",
+      "dimensions": "828x1792",
+      "cross_worktree_hash_match": "PASS_CHATGPT_CLAUDE_CODEX_WHERE_PRESENT",
+      "sampled_visual_review": "PASS_AIRPLANE_MODE_ENABLED_WIFI_DISABLED_APOLLO_GENERATION_AND_HISTORICAL_NONCONFORMING_SUMMARY_VISIBLE",
+      "validator_outcome": "REJECT_EXPECTED_FOR_SUMMARY_SYNTHETIC_DEMO_ONLY",
+      "packet_level_network_probe": "NOT_EXECUTED"
+    }
+  },
+  "agent_lane_classification": {
+    "chatgpt": "IMPLEMENTED_AND_EXECUTED_F3_F4_CANDIDATE_THEN_INDEPENDENT_REDTEAM_REJECTED_EXACT_BYTES",
+    "codex": "IMPLEMENTATION_EVIDENCE_PRESERVED; D4EDCFD REMOTE_PARITY_PASS; EARLIER_USAGE_LIMIT_AND_ENVIRONMENT_FAILURES_PRESERVED",
+    "claude": "PROVIDER_EXECUTION_ATTEMPT_BLOCKED_HTTP_412; NOT_INDEPENDENT_VERIFICATION",
+    "redteam_lane": "INDEPENDENT_SIMULATOR_REVIEW_AND_ATTACK_EVIDENCE_COMMITTED_AT_0363262"
+  },
+  "neon_backend_qualification": {
+    "source_commit": "e2ceb2885aa5b62f87408f1eae43de86e604401d",
+    "identity": "PROJECT_BRANCH_ENDPOINT_REGION_MATCH_PASS",
+    "tls": "PASS_TLS1_3_VERIFY_FULL_CERT_HOSTNAME",
+    "controlled_crud": "PASS_UNDER_OVERPRIVILEGED_ROLE",
+    "minimum_necessary": "PASS",
+    "ai_disclosure_gate": "PASS_FAIL_CLOSED",
+    "hipaa_feature_enabled": "FAIL_FALSE",
+    "baa_scope_state": "UNKNOWN_BLOCKED_HUMAN_VERIFICATION",
+    "rbac": "FAIL_NEONDB_OWNER_CREATEDB_CREATEROLE_REPLICATION_BYPASSRLS",
+    "observability": "FAIL_CONTROLLED_CANARY_VISIBLE_IN_PG_STAT_ACTIVITY_SQL_TEXT",
+    "application_payload_encryption": "NOT_IMPLEMENTED_OBSERVED_TRACKED_STORAGE_PATH",
+    "runtime_target_binding": "FAIL_CURRENT_BAYMAX_DATABASE_URL_POINTS_TO_DIFFERENT_ENDPOINT",
+    "retention_purge": "PARTIAL_UNKNOWN_BACKUP_PITR_PROVIDER_LOG_PURGE",
+    "hipaa_compliance": "NOT_VERIFIED",
+    "real_phi": "BLOCKED"
+  },
+  "repository_integrity": {
+    "verify_breakpoints": "FAIL_PREEXISTING_HISTORICAL_DESCRIPTOR_LEAF_ROOT_MISMATCHES_BP0002_BP0003_BP0007_BP0009",
+    "verify_chain": "PASS_CONSISTENCY_ONLY",
+    "chain_entries": 17,
+    "mmr_state": "NOT_COMPUTED",
+    "breakpoint_decision": "NO_NEW_BREAKPOINT_MINTED"
+  },
+  "review_execution": {
+    "screenshots_opened_and_visually_reviewed": 8,
+    "video_frames_sampled": 6,
+    "media_probe": "FFPROBE_PASS",
+    "first_frame_sampling_command": "FAILED_TOOLING_ZSH_TUPLE_SPLIT_NO_EVIDENCE_MUTATION",
+    "second_frame_sampling_command": "PASS",
+    "secret_values_printed": false
+  },
+  "next_action": "Apply the one-line guard-10 repair in an implementation lane, rebuild, rerun exact-byte simulator checks and validator/F3/F4 evidence, then execute the new packet on a physical iPhone with explicit airplane-mode and destination-byte custody. Separately, keep REAL_PHI blocked until Neon HIPAA mode/BAA scope, least-privilege RBAC, observability leakage, application AEAD/key custody, runtime endpoint binding, and retention/purge controls are resolved and requalified."
+}
