@@ -33,7 +33,6 @@
     "@electric-sql/pglite": "^0.5.8",
     "@types/node": "^26.6.4",
     "@neon/config": "^1.8.3",
-    "@types/node": "^26.6.4",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@types/react-test-renderer": "^19.3.0",

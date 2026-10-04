@@ -48,3 +48,25 @@ test('preserves health cards alongside generated care plans and replaces repeate
   assert.equal(cards[1].toolCallId, 'r2');
   assert.deepEqual(cards[1].args, { metric: 'running', data: { miles: 3 } });
 });
+
+test('preserves streamed search sources alongside fitness and actual care results', async () => {
+  const frames = [
+    { type: 'tool-call', payload: { toolName: 'webSearchTool', toolCallId: 's1' } },
+    { type: 'tool-result', payload: { toolName: 'webSearchTool', toolCallId: 's1', result: { results: [{ title: 'Source', url: 'https://example.org', highlights: ['Verified excerpt'] }] } } },
+    { type: 'tool-result', payload: { toolName: 'fitnessOverviewTool', toolCallId: 'f1', result: { goals: { steps: 5000, activeMinutes: 20 } } } },
+    { type: 'tool-result', payload: { toolName: 'carePlanTool', toolCallId: 'p1', result: { title: 'Actual plan', items: [{ label: 'Actual task', done: false }] } } },
+    { type: 'finish' },
+  ];
+  const adapter = createAgentAdapter({
+    fetch: async () => response(frames.map(frame => `data: ${JSON.stringify(frame)}\n\n`)),
+    getToolCards: (tool, result, id) => tool === 'fitnessOverviewTool' ? [{ type: 'tool-call', toolName: 'health_card', toolCallId: id, args: { metric: 'fitness', overview: result }, argsText: '{}', result: { ready: true } }] : [],
+  });
+  const output = [];
+  for await (const item of adapter.run({ messages: [], abortSignal: new AbortController().signal } as any)) output.push(item);
+  const cards = output.at(-1)!.content!.filter(part => part.type === 'tool-call');
+  assert.equal(cards.length, 3);
+  assert.equal(cards.find(card => card.toolName === 'web_search')?.args.state, 'complete');
+  assert.equal(cards.find(card => card.toolName === 'health_card')?.args.metric, 'fitness');
+  assert.equal(cards.find(card => card.toolName === 'care_action')?.result?.title, 'Actual plan');
+  assert.ok(output.some(item => item.content?.some(part => part.type === 'tool-call' && part.toolName === 'web_search' && part.args.state === 'loading')));
+});

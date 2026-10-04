@@ -1,15 +1,14 @@
 import { createTool } from '@mastra/core/tools';
 import { z } from 'zod';
-import { buildFitnessOverview } from '../lib/fitness';
+import { getFitnessOverview } from '../lib/fitness-data';
 import { getFitnessPreferences } from '../lib/fitness-store';
-import { getRecentMetrics } from '../lib/health-data';
 
 export const fitnessOverviewTool = createTool({
   id: 'get-fitness-overview',
   description: 'Open the interactive fitness dashboard with daily step and active-minute rings, saved goals, and seven-day progress. Use for fitness, movement progress, activity goals, or changing goals. These are demo metrics, not device measurements. The user can edit goals in the card; never claim goals were changed by reading this tool.',
   inputSchema: z.object({}),
   execute: async () => ({
-    ...buildFitnessOverview(await getRecentMetrics(7), (await getFitnessPreferences()).goals),
+    ...await getFitnessOverview(),
     source: 'demo',
   }),
 });

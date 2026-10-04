@@ -1,3 +1,4 @@
+import { getFitnessOverview } from "../lib/fitness-data";
 import { registerApiRoute } from "@mastra/core/server";
 import { z } from "zod";
 import {
@@ -14,7 +15,7 @@ import {
   summarizeRuns,
 } from "../lib/health-data";
 
-import { buildFitnessOverview, goalsSchema, preferencesSchema } from "../lib/fitness";
+import { goalsSchema, preferencesSchema } from "../lib/fitness";
 import { getFitnessPreferences, saveActivityGoals, saveFitnessPreferences } from "../lib/fitness-store";
 
 const checkinBody = z.object({
@@ -42,7 +43,7 @@ export const healthRoutes = [
     handler: async (c) => {
       const preferences = await getFitnessPreferences();
       return c.json({
-        ...buildFitnessOverview(await getRecentMetrics(7), preferences.goals),
+        ...await getFitnessOverview(),
         preferences, source: "demo",
       });
     },
