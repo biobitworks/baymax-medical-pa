@@ -1,6 +1,7 @@
 import { createTool } from "@mastra/core/tools";
 import { z } from "zod";
 import { getRecentRuns, summarizeRuns } from "../lib/health-data";
+import { importedHealth } from '../lib/health-reader';
 
 /**
  * Reads the user's recent runs (distance and time). Stored in Postgres per user.
@@ -39,7 +40,9 @@ export const recentRunsTool = createTool({
       observations: z.array(z.string()),
     }),
   }),
-  execute: async ({ count }) => {
+  execute: async ({ count }, context) => {
+    const health = await importedHealth(context);
+    if (health.connected) return { runs: [], summary: { ...summarizeRuns([]), observations: ['Running workouts are not included in this Shortcut. Ask the user for their runs; do not infer that they did not exercise.'] } };
     const runs = await getRecentRuns(count);
     return { runs, summary: summarizeRuns(runs) };
   },

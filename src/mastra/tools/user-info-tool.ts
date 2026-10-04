@@ -1,6 +1,7 @@
 import { createTool } from "@mastra/core/tools";
 import { z } from "zod";
 import { dbOf, userIdOf } from "../lib/demo-user";
+import { importedHealth } from '../lib/health-reader';
 
 const userInfoSchema = z.object({
   name: z.string(),
@@ -18,7 +19,11 @@ export const userInfoTool = createTool({
     "Get basic information about the current user, including their name, age, health conditions, medications, and allergies. Use this to personalize advice and before drafting care plans or doctor briefs.",
   inputSchema: z.object({}),
   outputSchema: userInfoSchema,
-  execute: async () => {
+  execute: async (_input, context) => {
+    if ((await importedHealth(context)).connected) return {
+      name: 'Not provided', conditions: [], medications: [], allergies: [],
+      notes: "Use the user's care workspace context for their name. Apple Health metrics do not establish their age, diagnoses, medications, or allergy status; empty lists mean not provided, not confirmed absent.",
+    };
     const q = dbOf();
     const userId = userIdOf();
     const [[user], conditions, medications, allergies] = await Promise.all([

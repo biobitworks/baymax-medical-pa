@@ -14,6 +14,7 @@ import {
   summarizeMetrics,
   summarizeRuns,
 } from "../lib/health-data";
+import { importedHealth } from '../lib/health-reader';
 
 import { goalsSchema, preferencesSchema } from "../lib/fitness";
 import { getFitnessPreferences, saveActivityGoals, saveFitnessPreferences } from "../lib/fitness-store";
@@ -110,6 +111,8 @@ export const healthRoutes = [
     method: "GET",
     handler: async (c) => {
       const count = Math.min(30, Math.max(1, Number(c.req.query("count")) || 10));
+      const health = await importedHealth({ requestContext: c.get('requestContext') });
+      if (health.connected) return c.json({ runs: [], summary: { ...summarizeRuns([]), observations: ['Running workouts are not included in the Apple Health Shortcut.'] } });
       const runs = await getRecentRuns(count);
       return c.json({ runs, summary: summarizeRuns(runs) });
     },

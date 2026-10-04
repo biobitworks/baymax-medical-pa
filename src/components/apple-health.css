@@ -1,0 +1,10 @@
+.apple-health-panel { grid-column: 1 / -1; }
+.apple-health-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0; }
+.apple-health-readings { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 20px 0; }
+.apple-health-readings dt { color: var(--muted, #6b716b); font-size: 12px; }
+.apple-health-readings dd { margin: 6px 0 0; font-weight: 650; font-size: 20px; }
+.apple-health-readings small { grid-column: 1 / -1; }
+.apple-health-setup { border-top: 1px solid #e3e8df; padding-top: 18px; margin-top: 20px; }
+.apple-health-setup input { width: 100%; box-sizing: border-box; }
+.apple-health-setup a { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; margin: 10px 0; }
+@media (max-width: 600px) { .apple-health-readings { grid-template-columns: repeat(2, 1fr); } }

@@ -67,6 +67,7 @@ import { searchCardFromEvent, type SearchCardPart, type WebSearchCardArgs } from
 import "./components/prescription-shopping.css";
 import { ActivityOnboarding, FitnessDashboard, FITNESS_CHANGED, fitnessRequest, type SavedPreferences } from "./components/Fitness";
 import type { FitnessOverview } from "./mastra/lib/fitness";
+import { AppleHealthConnection } from './components/AppleHealthConnection';
 
 // Triggers the agent to read all of the user's health data and answer with a
 // week-in-review, which also renders the water, movement, sleep, energy and
@@ -88,10 +89,10 @@ type HealthOverview = {
 // get-recent-checkins, the tool result is turned into cards shown in the chat.
 type DailyMetric = {
   date: string;
-  steps: number;
-  activeMinutes: number;
-  hydrationMl: number;
-  sleepHours: number;
+  steps: number | null;
+  activeMinutes: number | null;
+  hydrationMl: number | null;
+  sleepHours: number | null;
 };
 type Run = {
   date: string;
@@ -119,7 +120,8 @@ type HealthCardArgs =
       metric: MetricKey;
       /** Newest first, as returned by get-daily-metrics */
       daily: DailyMetric[];
-      averages: Partial<Record<string, number>>;
+      averages: Partial<Record<string, number | null>>;
+      source?: 'demo' | 'apple_health';
       targets: { hydrationMl: number; steps: number; activeMinutes: number; sleepHours: number };
     }
   | {
@@ -168,6 +170,7 @@ function healthCardsFromTool(toolName: string, result: any): HealthCardArgs[] {
       daily,
       averages: summary.averages,
       targets: summary.targets,
+      source: result.source,
     }));
   }
   if (toolName === "recentRunsTool" && Array.isArray(result.runs)) {
@@ -246,6 +249,7 @@ function MetricCard({
   daily,
   averages,
   targets,
+  source,
 }: Extract<HealthCardArgs, { metric: MetricKey }>) {
   const ui = METRIC_UI[metric];
   const Icon = ui.icon;
@@ -253,12 +257,15 @@ function MetricCard({
   const days = [...daily].reverse();
   const target = ui.target(targets);
   const bonus = metric === "hydration" ? extraMl : 0;
-  const values = days.map((d, i) =>
-    ui.pick(d) + (i === days.length - 1 ? bonus : 0),
-  );
-  const today = values[values.length - 1] ?? 0;
-  const avg = averages[ui.avgKey] ?? 0;
-  const below = values.filter((v) => v < target).length;
+  const values = days.map((d, i) => {
+    const value = ui.pick(d);
+    return value === null ? null : value + (i === days.length - 1 ? bonus : 0);
+  });
+  const latest = values[values.length - 1];
+  const avg = averages[ui.avgKey];
+  const recorded = values.filter((value): value is number => value !== null);
+  const below = recorded.filter(v => v < target).length;
+  const format = (value: number | null | undefined) => value == null ? 'Not shared' : ui.format(value);
   const addGlass = () => {
     setExtraMl((n) => n + GLASS_ML);
     void fetch("/health/water", {
@@ -274,20 +281,20 @@ function MetricCard({
           <Icon size={18} />
         </span>
         <span>{ui.label}</span>
-        <span className="agent-status">Last {days.length} days</span>
+        <span className="agent-status">{source === 'apple_health' ? 'Apple Health' : 'Sample data'}</span>
       </div>
       <h3>
-        {ui.format(today)}
-        <small> today · goal {ui.goal(target)}</small>
+        {format(latest)}
+        <small> {days.length ? shortDate(days[days.length - 1].date) : 'no readings yet'} · goal {ui.goal(target)}</small>
       </h3>
       <div className="metric-bars">
         {days.map((d, i) => (
-          <div key={d.date} title={`${weekday(d.date)}: ${ui.format(values[i])}`}>
+          <div key={d.date} title={`${weekday(d.date)}: ${format(values[i])}`}>
             <div className="metric-bar">
               <i
                 style={{
-                  height: `${Math.max(4, Math.min(100, (values[i] / target) * 100))}%`,
-                  background: values[i] >= target ? ui.color : `${ui.color}99`,
+                  height: values[i] === null ? '0%' : `${Math.max(4, Math.min(100, (values[i]! / target) * 100))}%`,
+                  background: (values[i] ?? 0) >= target ? ui.color : `${ui.color}99`,
                 }}
               />
               <span className="metric-goal" />
@@ -297,10 +304,9 @@ function MetricCard({
         ))}
       </div>
       <p className="fine">
-        Averaging {ui.format(avg)} a day, under your {ui.goal(target)} goal on{" "}
-        {below} of {days.length} days.
+        {recorded.length ? `Averaging ${format(avg)} on recorded days; under the ${ui.goal(target)} goal on ${below} of ${recorded.length} recorded days.` : 'No readings shared for this metric.'}
       </p>
-      {metric === "hydration" && (
+      {metric === "hydration" && source !== 'apple_health' && (
         <button className="text-btn" onClick={addGlass}>
           Add a glass <Plus size={14} />
         </button>
@@ -1974,6 +1980,7 @@ function App() {
             )}
             {page === "Privacy & preferences" && (
               <div className="two-col">
+                <AppleHealthConnection remember={workspace.remember} saved={persistence.status === 'Saved for your next visit'} />
                 <section className="panel">
                   <h2>How should I check in?</h2>
                   <button
