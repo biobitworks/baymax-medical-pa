@@ -1,0 +1,76 @@
+{
+  "claim_boundary": "Model may select only pre-admitted local IDs. Baymax renders local catalog text; model free-form medical prose is not admitted.",
+  "known": [
+    {
+      "id": 0,
+      "source_fco_id": "fco:355d325c6b36055bfbc52bee457d3189a1527f044df5855626c3f074f17487b0",
+      "text": "Synthetic patient gender: female."
+    },
+    {
+      "id": 1,
+      "source_fco_id": "fco:f445c4fa62deacf740c9917d1af59a9de9716eb331e8ab45f423bfdfdbd35eca",
+      "text": "Synthetic active medication record: Naproxen 500 MG Oral Tablet."
+    },
+    {
+      "id": 2,
+      "source_fco_id": "fco:ed54c127b9aa726cb17944d35c6649fd7a163681ffe09f7ff2e9743c5247e4cc",
+      "text": "Synthetic active medication record: bictegravir 50 MG / emtricitabine 200 MG / tenofovir alafenamide 25 MG Oral Tablet."
+    },
+    {
+      "id": 3,
+      "source_fco_id": "offline-travel:d3db604b1e40bf3b2faedc3027f04fe459a6c5a828ca735f185ff1a99af2fd72",
+      "text": "Synthetic trip destination: Bali, Indonesia."
+    }
+  ],
+  "medical_actions": [
+    "NONE"
+  ],
+  "recommended_questions": [
+    {
+      "id": 0,
+      "text": "What documentation should be confirmed with a pharmacist or clinician before travel?"
+    },
+    {
+      "id": 1,
+      "text": "What travel medication eligibility information is still unknown?"
+    },
+    {
+      "id": 2,
+      "text": "What current pharmacy stock and hours must be verified from a live source when connectivity is available?"
+    }
+  ],
+  "required_requires_clinician": true,
+  "schema": "baymax.apollo-catalog.v2",
+  "source_offline_bundle_sha256": "36d5d72c202da795db07d50d807747e94922f3b958b9ee25fd646e3d038a0c93",
+  "source_offline_fco_id": "offline-travel:d3db604b1e40bf3b2faedc3027f04fe459a6c5a828ca735f185ff1a99af2fd72",
+  "summary_codes": [
+    "SYNTHETIC_CONTEXT_ONLY"
+  ],
+  "synthetic_only": true,
+  "unknown": [
+    {
+      "id": 0,
+      "text": "Medical correctness is UNKNOWN."
+    },
+    {
+      "id": 1,
+      "text": "Generated-data terms remain UNKNOWN_TERMS."
+    },
+    {
+      "id": 2,
+      "text": "US Core conformance is UNKNOWN."
+    },
+    {
+      "id": 3,
+      "text": "Travel medication eligibility is UNKNOWN."
+    },
+    {
+      "id": 4,
+      "text": "Live pharmacy stock is UNKNOWN."
+    },
+    {
+      "id": 5,
+      "text": "Live pharmacy hours are UNKNOWN."
+    }
+  ]
+}

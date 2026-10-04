@@ -9,7 +9,7 @@ def uid(name):
 objects=[]
 def obj(name,body): objects.append(f'{uid(name)} = {{ {body} }};');return uid(name)
 sources=['OfflineTravelDemo/OfflineTravelApp.swift','OfflineTravelDemo/TravelModel.swift','OfflineTravelDemo/ModelInference.swift','../fixtures/iphone/OfflineBundle.swift']
-resources=['../fixtures/iphone/offline_travel_bundle_v1.json','../fixtures/iphone/OfflineTravelBundleFCO.json','../fixtures/iphone/apollo_context_packet_v1.txt']
+resources=['../fixtures/iphone/offline_travel_bundle_v1.json','../fixtures/iphone/OfflineTravelBundleFCO.json','../fixtures/iphone/apollo_context_packet_v2.txt','../fixtures/iphone/apollo_catalog_v2.json','../fixtures/iphone/wallet_state_v1.json']
 refs=[];sb=[];rb=[]
 for path in sources+resources:
  ref=obj('file:'+path,f'isa = PBXFileReference; path = "{path}"; sourceTree = "<group>";');refs.append(ref)

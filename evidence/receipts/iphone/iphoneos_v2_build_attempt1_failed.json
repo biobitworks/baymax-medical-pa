@@ -1,0 +1,13 @@
+{
+  "claim_ceiling": "Source compile failure only; no app/device execution.",
+  "effect": "Resources copied to staging; arm64 Swift compile failed before link.",
+  "error": "Two SwiftUI Text expressions with nested quoted interpolation were malformed during shell-authored source creation.",
+  "error_class": "SWIFT_UI_QUOTING",
+  "observed_at": "2026-10-04T20:40:10.185914+00:00",
+  "real_phi": "NONE",
+  "repair": "Use explicit string concatenation for call/purchase and real-money labels, then rebuild unchanged target/SDK.",
+  "schema": "baymax.iphone_repair_failure.v1",
+  "secret_values_recorded": false,
+  "stage": "IPHONEOS_ARM64_BUILD_V2",
+  "state": "FAILED"
+}

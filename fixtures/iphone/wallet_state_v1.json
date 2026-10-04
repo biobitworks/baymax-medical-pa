@@ -1,0 +1,18 @@
+{
+  "autonomous_pharmacy_purchase": false,
+  "claim_boundary": "Read-only snapshot of synthetic wallet execution evidence. No real funds, payment rail, phone signing key, or prescription purchase.",
+  "currency": "SYN",
+  "human_approval_gate": "REQUIRED_WHEN_POLICY_REQUIRES",
+  "phone_key_state": "SIMULATED_KEY_NOT_SECURE_ENCLAVE",
+  "prescription_purchase": "BLOCKED",
+  "real_money": false,
+  "schema": "baymax.iphone-wallet-snapshot.v1",
+  "source_receipt": "evidence/receipts/wallet/e2e_local.json",
+  "source_receipt_sha256": "b8808e0e6f85ffc9f1af00fad1a7e94ef85e5f150d0d8cf178bccf0d41c18f09",
+  "state": "LOCAL_READ_ONLY_SNAPSHOT",
+  "synthetic_balance": 97000,
+  "wallet_leaf_count": 3,
+  "wallet_root": "cc3c5172ef1c1c810fd202d2ddb7a94d6c4fc31ed56c55e9f596eab66069bf40",
+  "wallet_root_state": "COMPUTED (two internal impls agree; independent replay agrees); NOT externally verified",
+  "wallet_type": "SYNTHETIC_ZERO_REAL_FUNDS"
+}

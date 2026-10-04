@@ -1,0 +1,13 @@
+{
+  "claim_ceiling": "Tooling/source-authoring failure only.",
+  "effect": "No Apollo v2 packet/catalog generated.",
+  "error": "Shell-authored model.py converted the intended newline escape into an unterminated Python string literal.",
+  "error_class": "PYTHON_SOURCE_ESCAPE_ERROR",
+  "observed_at": "2026-10-04T20:33:31.167336+00:00",
+  "real_phi": "NONE",
+  "repair": "Append newline as bytes([10]) to avoid shell escape ambiguity.",
+  "schema": "baymax.iphone_repair_failure.v1",
+  "secret_values_recorded": false,
+  "stage": "APOLLO_V2_PACKET_BUILD",
+  "state": "FAILED"
+}
