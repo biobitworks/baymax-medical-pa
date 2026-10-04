@@ -1,0 +1,21 @@
+{
+  "task": "Project site refresh",
+  "date": "2026-10-04",
+  "site": "https://thinkun.github.io/baymax-site/",
+  "source": "site/index.html",
+  "export": "node scripts/build-project-site.mjs <output-directory>",
+  "checks": {
+    "unit_tests": "110 passed",
+    "browser": "Chromium; 1440, 768, 390 and 320px; all four walkthrough controls; no overflow, missing assets or page errors",
+    "accessibility": "Explicit playback; static initial images; reduced-motion behavior; keyboard-native buttons; skip link; valid section anchors; no-JS links",
+    "visual_review": "Desktop and phone full-page screenshots reviewed locally",
+    "historical_breakpoints": "Same 14 historical mismatches before and after; historical files unchanged"
+  },
+  "content_evidence": [
+    "src/mastra/routes/records.ts",
+    "src/mastra/lib/records.ts",
+    "src/mastra/tools/lab-trends-tool.ts",
+    "README.md"
+  ],
+  "data": "Existing synthetic README recordings only; no application backend calls."
+}
