@@ -7,6 +7,8 @@ export type BriefInput = {
   allergies?: string[];
   history?: string[];
   questions?: string[];
+  /** Pre-formatted blocks (web advisories, activity data) placed before the questions. */
+  extraSections?: string[];
 };
 
 export const DEFAULT_TRAVEL_CHECKLIST = [
@@ -22,6 +24,7 @@ export function formatDoctorBrief({
   allergies = [],
   history = [],
   questions = [],
+  extraSections = [],
 }: BriefInput): string {
   const list = (items: string[], fallback: string) =>
     items.length ? items.map((i) => `- ${i}`).join("\n") : fallback;
@@ -39,6 +42,7 @@ export function formatDoctorBrief({
     "",
     "Relevant history:",
     list(history, "- Not yet confirmed."),
+    ...extraSections,
     "",
     "Questions for the doctor:",
     list(questions, "- What records do you need?"),

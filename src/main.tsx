@@ -52,6 +52,7 @@ import {
   DEFAULT_TRAVEL_CHECKLIST,
   formatDoctorBrief,
 } from "./mastra/lib/brief";
+import { TravelAdvisories, type TravelResearch } from "./components/TravelAdvisories";
 import "./style.css";
 import { PwaControls } from "./pwa/PwaControls";
 import { initializeHealthOverview } from "./persistence/health-overview";
@@ -1247,6 +1248,7 @@ function App() {
   const setChecklist = (value: string[]) => setField("checklist", value);
   const [checklistLoading, setChecklistLoading] = useState(false);
   const [briefLoading, setBriefLoading] = useState(false);
+  const [research, setResearch] = useState<TravelResearch | null>(null);
   const [mobile, setMobile] = useState(false);
   const toggle = (label: string) => setWorkspace(previous => {
     const checked = !previous.done.includes(label);
@@ -1345,6 +1347,7 @@ function App() {
         departureDate: travelDate,
       });
       setChecklist(data.items);
+      setResearch({ destination, advisories: data.advisories ?? [], cityDetails: [], error: data.advisoriesError });
     } catch (err) {
       console.warn("Agent unavailable, using default checklist.", err);
       setChecklist(DEFAULT_TRAVEL_CHECKLIST);
@@ -1356,6 +1359,7 @@ function App() {
     const destination = city.trim();
     go("Doctor brief");
     setBriefLoading(true);
+    setResearch(null);
     try {
       const data = await postTravel("/travel/brief", {
         destination,
@@ -1363,6 +1367,7 @@ function App() {
         checklist,
       });
       setBrief(data.brief);
+      setResearch({ destination, advisories: data.advisories ?? [], cityDetails: data.cityDetails ?? [], error: data.advisoriesError });
     } catch (err) {
       console.warn("Agent unavailable, using template brief.", err);
       setBrief(
@@ -1861,6 +1866,7 @@ function App() {
                     >
                       Prepare checklist <ArrowUpRight size={16} />
                     </button>
+                    {tripReady && <TravelAdvisories research={research} loading={checklistLoading} />}
                   </section>
                   <section
                     className={`panel slide-panel ${tripReady ? "revealed" : ""}`}
@@ -1912,6 +1918,7 @@ function App() {
             {page === "Doctor brief" && (
               <div className="two-col">
                 <section className="panel brief-panel">
+                  <TravelAdvisories research={research} loading={briefLoading} />
                   <span className="eyebrow">REVIEW BEFORE YOU SHARE</span>
                   <h2>A brief for your next doctor.</h2>
                   <label>

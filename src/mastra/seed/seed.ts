@@ -37,6 +37,19 @@ export async function seedFitnessPreferences(q: Query, userId = DEMO_USER_ID) {
   );
 }
 
+/** Synthetic demo medications and allergies, consistent with Jordan's type 2 diabetes. */
+export const DEMO_MEDICATIONS = ["Metformin 500 mg, twice daily with meals"];
+export const DEMO_ALLERGIES = ["Penicillin (rash)"];
+
+export async function seedMedicationsAndAllergies(q: Query, userId = DEMO_USER_ID) {
+  for (const name of DEMO_MEDICATIONS) {
+    await q("INSERT INTO user_medications (user_id, name) VALUES ($1, $2) ON CONFLICT DO NOTHING", [userId, name]);
+  }
+  for (const name of DEMO_ALLERGIES) {
+    await q("INSERT INTO user_allergies (user_id, name) VALUES ($1, $2) ON CONFLICT DO NOTHING", [userId, name]);
+  }
+}
+
 /**
  * The demo user's profile, conditions, body measurements, and built-in medical
  * records (with extracted lab results), all read from data/synthetic.
@@ -61,6 +74,7 @@ export async function seedProfile(q: Query, options: SeedOptions = {}) {
     [userId, profile.id ?? null, profile.name, "jordan.mercer@example.com", profile.date_of_birth ?? null, profile.sex ?? null],
   );
   await seedFitnessPreferences(q, userId);
+  await seedMedicationsAndAllergies(q, userId);
   for (const c of health.conditions ?? []) {
     await q(
       `INSERT INTO user_conditions (user_id, name, status, notes) VALUES ($1, $2, $3, $4)

@@ -1,0 +1,13 @@
+.travel-advisories { background: #f4f8ee; border: 1px solid #dfe8d3; border-radius: 16px; padding: 16px 18px; margin: 0 0 18px; }
+button + .travel-advisories { margin-top: 22px; }
+.travel-advisories .eyebrow { display: inline-flex; gap: 6px; align-items: center; }
+.travel-advisories h3 { margin: 6px 0 10px; font-size: 18px; }
+.travel-advisories h4 { margin: 14px 0 6px; font-size: 14px; }
+.travel-sources { list-style: none; padding: 0; margin: 0; }
+.travel-sources li { padding: 10px 0; border-bottom: 1px solid #e4ecd9; }
+.travel-sources li:last-child { border-bottom: 0; }
+.travel-sources a { display: inline-flex; gap: 6px; align-items: baseline; color: #334b28; font-weight: 600; font-size: 14px; text-decoration: none; }
+.travel-sources a:hover { text-decoration: underline; }
+.travel-sources small { display: block; color: #6c7365; margin-top: 2px; }
+.travel-sources p { margin: 6px 0 0; font-size: 13px; color: #4e5548; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.travel-foot { display: block; margin-top: 8px; color: #6c7365; font-size: 11px; }
