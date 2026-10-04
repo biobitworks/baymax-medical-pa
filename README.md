@@ -18,7 +18,7 @@ Plan your date, check off small wins, and complete a daily energy check-in witho
 
 ### Prescription concierge
 
-Open **Shopping demo** in the chat quick actions to try a sample prescription cart. Choose between two fictional pharmacies, adjust the pack count, review the total, and confirm a simulated order. Pharmacy names, prices, availability, and medication details are illustrative. No prescription is verified, no payment is collected, and no order is sent.
+Open **Shopping demo** in the chat quick actions to try a sample prescription cart. Choose between two demo pharmacies, adjust the pack count, review the total, and confirm a simulated order. Pharmacy names, prices, availability, and medication details are illustrative. No prescription is verified, no payment is collected, and no order is sent.
 
 A diabetes medication refill **order preview** with a visible workflow, professional verification requirements, and review controls. No medication is purchased or prescribed by this frontend.
 
@@ -90,7 +90,7 @@ npm run preview
 | Exa | Next: source-backed travel and pharmacy research |
 | Fly.io | Dockerfile, Nginx config, and starter Fly configuration included; not deployed |
 
-The app has live LLM and database connections. Pharmacy fulfilment, payment, server-side email delivery, web research, and background notifications remain unimplemented. The GIFs use fictional details.
+The app has live LLM and database connections. Pharmacy fulfilment, payment, server-side email delivery, web research, and background notifications remain unimplemented. The GIFs use sample details.
 
 ## Fly.io deployment preparation
 
