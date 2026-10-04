@@ -6,6 +6,77 @@
 
 Baymax is a privacy-first personal medical assistant that helps you take care of yourself before health becomes an emergency. It remembers what matters, nudges you to follow through, and helps you carry your health context wherever life takes you.
 
+## UI walkthroughs
+
+A conversation-first care companion built with **Assistant UI**, React, TypeScript, and Vite. Baymax surfaces interactive care cards inside the chat, with a centered animated mascot, a pill composer, and bottom navigation.
+
+### Prepare for a hackathon
+
+Plan your date, check off small wins, and complete a daily energy check-in without leaving the conversation.
+
+![Care plan and check-in walkthrough](docs/media/care-plan.gif)
+
+### Prescription concierge
+
+A diabetes medication refill **order preview** with a visible workflow, professional verification requirements, and review controls. No medication is purchased or prescribed by this frontend.
+
+![Prescription order preview walkthrough](docs/media/prescription-preview.gif)
+
+### Email a doctor brief
+
+Edit the brief in chat, enter a recipient, and review the email before opening a draft in your email app. The user sends the email there; server-side delivery is not implemented.
+
+![Doctor brief email walkthrough](docs/media/doctor-email.gif)
+
+### Our 2D companion
+
+SVG animation with gentle breathing, waving, and blinking. Respects reduced-motion preferences.
+
+![Animated Baymax companion](docs/media/baymax-animation.gif)
+
+## Run locally
+
+Requires Node.js 22+.
+
+```bash
+npm ci
+npm run dev
+```
+
+Open the local URL Vite prints.
+
+```bash
+npm run build
+npm run preview
+```
+
+## Implemented frontend
+
+- Conversation-first Assistant UI runtime with streamed fixture responses.
+- Generative UI rendered through `makeAssistantToolUI` and tool-call message parts.
+- Editable inline care plans and travel checklists.
+- Prescription order preview with review and confirmation states.
+- Doctor brief editing, recipient validation, email review, and `mailto:` handoff.
+- Daily check-ins, hydration logging, movement tasks, and preferences.
+- Session-only state; navigation preserves the conversation, refresh clears it.
+- Mobile and desktop layouts, keyboard-accessible dialogs, and reduced-motion support.
+
+## Sponsor integration status
+
+| Sponsor | Status |
+| --- | --- |
+| Assistant UI | Implemented: runtime, message primitives, composer, suggestions, tool UI |
+| Mastra | Next: replace the fixture adapter with server-side agent orchestration |
+| Neon | Next: consent-based profile and agent memory |
+| Exa | Next: source-backed travel and pharmacy research |
+| Fly.io | Dockerfile, Nginx config, and starter Fly configuration included; not deployed |
+
+The frontend has no live LLM, pharmacy, payment, email delivery, database, or background notification connection. The GIFs use fictional details. UI copy avoids implementation badges while the repository documents these limits.
+
+## Fly.io deployment preparation
+
+The included Dockerfile builds the Vite frontend and serves it on port 8080. Choose an available app name in `fly.toml`, then use your Fly account to create and deploy the app. No deployment or billing action has been performed.
+
 ## The idea
 
 You have an assistant for work. Why not one for your health?
@@ -86,7 +157,7 @@ Baymax turns that request into a preparation routine, daily check-ins, a medicat
 
 ## Project status
 
-**README-first submission scaffold.** Application code, integrations, deployment, and compliance verification are still to be built.
+**Frontend implemented.** Interactive UI flows and animated walkthroughs are ready for the hackathon. Sponsor backend integrations, real prescription fulfilment, email delivery, deployment, and compliance verification remain to be built.
 
 ## Medical boundaries
 
@@ -95,3 +166,4 @@ Baymax is intended to support organization, habits, and healthcare conversations
 ---
 
 **Baymax: caring enough to remind you again.**
+
