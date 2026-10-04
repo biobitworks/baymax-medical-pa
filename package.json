@@ -6,17 +6,21 @@
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "tsc --noEmit && vite build",
-    "preview": "vite preview --host 0.0.0.0"
+    "preview": "vite preview --host 0.0.0.0",
+    "agent:dev": "mastra dev"
   },
   "dependencies": {
     "@assistant-ui/react": "0.11.54",
+    "@mastra/core": "^1.74.0",
     "lucide-react": "^0.577.0",
     "react": "19.2.0",
-    "react-dom": "19.2.0"
+    "react-dom": "19.2.0",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
+    "mastra": "^1.32.1",
     "typescript": "^5.9.3",
     "vite": "^7.3.1"
   },
