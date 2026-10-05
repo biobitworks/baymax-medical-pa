@@ -1,0 +1,83 @@
+{
+  "LOCAL_SECRET_SCAN": {
+    "exit": 1,
+    "findings_count": "UNKNOWN",
+    "note": "expected: ignored .env credentials. NOT the push gate. Matches not preserved.",
+    "scope": "whole directory incl. ignored files (gitleaks --no-git --redact)"
+  },
+  "TRACKED_GIT_SECRET_SCAN": {
+    "exit": 0,
+    "result": "SECRET_GATE=PASS files=111",
+    "scope": "tracked+staged files only (scripts/secret_gate.py)"
+  },
+  "env": {
+    "ignored": true,
+    "in_any_commit": false,
+    "mode_octal": "600",
+    "staged": false,
+    "tracked": false,
+    "variable_names_presence": {
+      "AWS_ACCESS_KEY_ID": "PRESENT",
+      "AWS_ENDPOINT_URL_S3": "PRESENT",
+      "AWS_REGION": "PRESENT",
+      "AWS_SECRET_ACCESS_KEY": "PRESENT",
+      "DATABASE_URL": "PRESENT",
+      "DATABASE_URL_UNPOOLED": "PRESENT",
+      "NEON_AI_GATEWAY_BASE_URL": "PRESENT",
+      "NEON_AI_GATEWAY_TOKEN": "PRESENT",
+      "NEON_API_KEY": "EMPTY",
+      "NEON_AUTH_BASE_URL": "PRESENT",
+      "NEON_AUTH_JWKS_URL": "PRESENT",
+      "NEON_BRANCH": "PRESENT"
+    }
+  },
+  "neon_config_review": {
+    "classification": "CONFIG_DECLARED (not RUNTIME_INTEGRATED): @neon/config absent from manifest+lock; neon.ts outside tsconfig include",
+    "declares": [
+      "auth",
+      "aiGateway(preview)",
+      "bucket medical-records private"
+    ],
+    "neon.ts_blob": "a44c615eab4779333b0d47cad6a3344965d1f7a3",
+    "neon.ts_in_typecheck": false,
+    "package_json_has_@neon/config": false,
+    "package_lock_@neon_entries": 0,
+    "tsconfig_include": [
+      "src"
+    ],
+    "upstream_gap_preserved": true
+  },
+  "observed_at": "2026-10-04T19:12:14Z",
+  "schema": "baymax.hygiene_upstream_receipt.v1",
+  "upstream": {
+    "classification": {
+      "105da26": {
+        "ADMITTED_TO_BRANCH": false,
+        "BUILT": "NOT_TESTED",
+        "EXECUTED": "NOT_TESTED",
+        "FETCHED": true,
+        "LOCAL_OBJECT_PRESENT": true,
+        "OBSERVED": "NOT_TESTED"
+      },
+      "1d2a57c": {
+        "ADMITTED_TO_BRANCH": false,
+        "BUILT": "NOT_TESTED",
+        "EXECUTED": "NOT_TESTED",
+        "FETCHED": true,
+        "LOCAL_OBJECT_PRESENT": true,
+        "OBSERVED": "NOT_TESTED"
+      },
+      "34f992d": {
+        "ADMITTED_TO_BRANCH": false,
+        "BUILT": "NOT_TESTED",
+        "EXECUTED": "NOT_TESTED",
+        "FETCHED": true,
+        "LOCAL_OBJECT_PRESENT": true,
+        "OBSERVED": "NOT_TESTED"
+      }
+    },
+    "divergence": "upstream lineage not admitted to this red-team branch; preserved",
+    "main": "34f992dd0cb2f06df7d2be05b7d3bc2edf77d6ef",
+    "remote": "jerelvelarde/baymax-medical-pa"
+  }
+}

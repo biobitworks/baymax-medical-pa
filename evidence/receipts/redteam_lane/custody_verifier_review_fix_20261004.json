@@ -1,0 +1,31 @@
+{
+  "baseline": {
+    "chain_entry_count_matches_breakpoint_count": true,
+    "current_byte_failures": [],
+    "overall_result": "FAIL",
+    "summary": {
+      "FAIL": 2,
+      "PASS": 15
+    }
+  },
+  "claim_boundary": "Verifier regression evidence only. Historical BP-0002/BP-0003 artifact mismatches remain failures; no canonical BAYMAX breakpoint is minted.",
+  "executed_at": "2026-10-04T23:13:52.798687+00:00",
+  "review_findings": {
+    "P1_current_breakpoint_mutation": {
+      "breakpoint_result": "FAIL",
+      "current_breakpoint_bytes_match_chain_file_sha": false,
+      "expected": "FAIL",
+      "mutation": "append newline to BAYMAX-BP-0004.json in isolated detached worktree"
+    },
+    "P2_surplus_chain_entry": {
+      "breakpoint_files": 17,
+      "chain_entries": 18,
+      "chain_entry_count_matches_breakpoint_count": false,
+      "expected": "FAIL",
+      "mutation": "append one existing chain entry as a phantom trailing entry in isolated detached worktree",
+      "overall_result": "FAIL"
+    }
+  },
+  "schema": "baymax.redteam_lane.custody_verifier_review_fix.v1",
+  "verifier_commit": "4497eb4bc432c8fafb478bb8c17ff3bdf1b084f3"
+}

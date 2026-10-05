@@ -1,0 +1,48 @@
+{
+  "base_head": "1bf1371e842c049b1dee1a41d392900aaff43ec8",
+  "branch": "redteam/bp-0006-model-wallet",
+  "breakpoint_id": "BAYMAX-BP-0011",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 4393,
+        "path": "evidence/receipts/neon/live_validation_initial.json",
+        "sha256": "ef7ed6c793fa6f60498eae1b0a10402a7166535aa37215e588d40917695e7d2f"
+      },
+      {
+        "bytes": 854,
+        "path": "evidence/receipts/neon/ai_gateway_failed_temperature.json",
+        "sha256": "41a7b9164575a786ca92598b9e25dbe56baed4c05ebc963967b3cd8d2f941681"
+      },
+      {
+        "bytes": 781,
+        "path": "evidence/receipts/neon/upstream_integration_review.json",
+        "sha256": "b623acfafd663069620074c53943fe5b47d9dd3b82920553e5152cfffa8ab4ce"
+      },
+      {
+        "bytes": 477,
+        "path": "evidence/receipts/neon/postgres_ssl_semantics_warning.json",
+        "sha256": "4743eaea23b68ad8a94858a5f2a30f4fb8f56317f03abb47fdf1674574605ed1"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 4,
+    "leaf_hashes": [
+      "20c2d73ff23364235b28ac850c28d467b88b712a76063230fcd4820f4910c4b7",
+      "6ecbb019ef126f25880dce42708608de9ea698354d5ba1b80368537156423c9e",
+      "992491728abcece0ed9728259b3b322322aa83b1310a51892f0aaaf8ac632cda",
+      "4c99b24b3d681bf39b90add44e88db12fca749603ddf6f1833134c9d96654f29"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "ffe1de203601a87c68904edeb225b8c8b699b65ce848601d71f589daf6c646b3"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "Independent synthetic Neon validation after BP-0010: Postgres PASS, Auth JWKS reachability PASS, object storage lifecycle PASS. AI Gateway catalog PASS (49 models) but chosen claude-opus-4-8 inference FAILED HTTP 400 because temperature parameter unsupported. NEON_API_KEY absent; control plane remains BLOCKED_CREDENTIAL. Mistral absent from live branch catalog. Upstream Neon config remains not admitted.",
+  "parent": "BAYMAX-BP-0010",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "NEON_INDEPENDENT_VALIDATION_TEMPERATURE_FAILURE",
+  "state": "PARTIAL",
+  "timestamp_utc": "2026-10-04T19:17:06.247845+00:00"
+}

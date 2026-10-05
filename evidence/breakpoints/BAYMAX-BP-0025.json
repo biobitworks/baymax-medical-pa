@@ -1,0 +1,60 @@
+{
+  "base_head": "e7a6f7faff791b40075118ff31232d5e68db4184",
+  "branch": "codex/synthea-pinned-iphone-fixture-v1",
+  "breakpoint_id": "BAYMAX-BP-0025",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 7540,
+        "path": "evidence/breakpoints/BAYMAX-BP-0024.json",
+        "sha256": "46f2cb6e7d5d14531796fc21f8548ada667fd45a9cf7193fbab8ce9464039319"
+      },
+      {
+        "bytes": 1323,
+        "path": "fixtures/iphone/apollo_start_here_v1.txt",
+        "sha256": "3c87a39929c89119ac217557d314cde787e1afb5ea7f195285dc604676a4c4b3"
+      },
+      {
+        "bytes": 1986,
+        "path": "fixtures/iphone/apollo_context_packet_v1.txt",
+        "sha256": "b7ef25064b0af0368d1a95f3551e2c1d9f134cd7d26306eee600de8184ff2cac"
+      },
+      {
+        "bytes": 703,
+        "path": "evidence/receipts/iphone/apollo_packet.json",
+        "sha256": "7c538897e584a289f7fa919e3b29839e209d24cd731485dccbe62f8b3313edf9"
+      },
+      {
+        "bytes": 884,
+        "path": "evidence/receipts/iphone/icloud_delivery.json",
+        "sha256": "275ff4f74e51a543c9b8ed3d0eed542f7af18e29fd3a34b7c7919db8903d0125"
+      },
+      {
+        "bytes": 555,
+        "path": "evidence/receipts/iphone/icloud_delivery_signature.json",
+        "sha256": "d46d0b44b2be60c16b1fb888a698b4366289ac35f4e66f85c0933223210dea28"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 6,
+    "leaf_hashes": [
+      "6ef7b740f8f1735718da5895e30a715107bcae075bf881e5a6a7fd1303565245",
+      "5a935926c6b8ed90c48b9e96d77194e8694720bf0948684e4c9d3b7ddaa2863a",
+      "2bcb964c4274494dd3afa9a3bacfc6f678b99583706536179cbd534d77237d38",
+      "ae9be6b20634a1f213a1546114dc15515d60ba779fce6a94955333ab4e2615ae",
+      "b4e8a81a4a4f576c30b145e36753fdd6e529aeb95c04bd2247e95e8a6ba8be04",
+      "ead83d737cbaa4c81e7aff3c18c106d2eb97c8aade5819c99a15f811532b548d"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "e2ed689ce140786d343e650224e4ea71f64ddc5a4ed3b2736eeb06ee245cf672"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "Local synthetic packet copy to iCloud Drive verified; signed actor delivery receipt; remote sync and physical inference not observed.",
+  "parent": "BAYMAX-BP-0024",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "APOLLO_ICLOUD_DELIVERY",
+  "state": "PARTIAL",
+  "timestamp_utc": "2026-10-04T20:27:06.990570+00:00"
+}

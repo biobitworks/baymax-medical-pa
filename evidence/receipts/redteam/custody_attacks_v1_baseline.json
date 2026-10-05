@@ -1,0 +1,167 @@
+{
+  "attacks": [
+    {
+      "attack": "01",
+      "evidence_tail": "VERIFY=FAIL\nFAILURE=BAYMAX-BP-0001.json: artifact descriptors mismatch\nFAILURE=BAYMAX-BP-0001.json: leaf hashes mismatch\nFAILURE=BAYMAX-BP-0001.json: root mismatch\n",
+      "expected": "REJECT",
+      "name": "modify historical breakpoint header (parent/state) without touching merkle block",
+      "observed": "REJECT",
+      "result": "PASS"
+    },
+    {
+      "attack": "01b",
+      "evidence_tail": "VERIFY=PASS\nBREAKPOINTS=2\nMMR_STATE=NOT_COMPUTED\nROOT=BAYMAX-BP-0000:c742e860bdc8519e3f5180666a12d24afba2930f5bdebfced01c0f421d7c3cf0\nROOT=BAYMAX-BP-0001:9ab9144240c904375cdca252bf3ce577c163380f64b8a0f88aa451a7acdbcb31\n",
+      "expected": "REJECT",
+      "name": "modify TAIL breakpoint header (state) - nothing downstream commits to it",
+      "observed": "ACCEPT",
+      "result": "FAIL"
+    },
+    {
+      "attack": "02",
+      "evidence_tail": "VERIFY=FAIL\nFAILURE=BAYMAX-BP-0001.json: artifact read failure: [Errno 2] No such file or directory: '/private/var/folders/sc/z6dn_f195t7cfdfmwj9tltx00000gn/T/bmx-rt-6ck3ypl8/r/evidence/breakpoints/BAYMAX-BP-0000.json'\n",
+      "expected": "REJECT",
+      "name": "delete historical breakpoint BP-0000",
+      "observed": "REJECT",
+      "result": "PASS"
+    },
+    {
+      "attack": "02b",
+      "evidence_tail": "VERIFY=PASS\nBREAKPOINTS=1\nMMR_STATE=NOT_COMPUTED\nROOT=BAYMAX-BP-0000:c742e860bdc8519e3f5180666a12d24afba2930f5bdebfced01c0f421d7c3cf0\n",
+      "expected": "REJECT",
+      "name": "delete TAIL breakpoint file (chain entry left in place)",
+      "observed": "ACCEPT",
+      "result": "FAIL"
+    },
+    {
+      "attack": "02c",
+      "evidence_tail": "VERIFY=PASS\nBREAKPOINTS=1\nMMR_STATE=NOT_COMPUTED\nROOT=BAYMAX-BP-0000:c742e860bdc8519e3f5180666a12d24afba2930f5bdebfced01c0f421d7c3cf0\n",
+      "expected": "REJECT",
+      "name": "truncate tail: delete tail breakpoint AND its chain entry (needs external anchor)",
+      "observed": "ACCEPT",
+      "result": "FAIL"
+    },
+    {
+      "attack": "03",
+      "evidence_tail": "VERIFY=FAIL\nFAILURE=BAYMAX-BP-0001.json: root mismatch\n",
+      "expected": "REJECT",
+      "name": "reorder leaves in BP-0001 (artifacts+leaf_hashes swapped, claimed root kept)",
+      "observed": "REJECT",
+      "result": "PASS"
+    },
+    {
+      "attack": "04",
+      "evidence_tail": "VERIFY=PASS\nBREAKPOINTS=3\nMMR_STATE=NOT_COMPUTED\nROOT=BAYMAX-BP-0000:c742e860bdc8519e3f5180666a12d24afba2930f5bdebfced01c0f421d7c3cf0\nROOT=BAYMAX-BP-0001:9ab9144240c904375cdca252bf3ce577c163380f64b8a0f88aa451a7acdbcb31\nROOT=BAYMAX-BP-0001:9ab9144240c904375cdca252bf3ce577c163380f64b8a0f88aa451a7acdbcb31\n",
+      "expected": "REJECT",
+      "name": "duplicate breakpoint ID under a second filename",
+      "observed": "ACCEPT",
+      "result": "FAIL"
+    },
+    {
+      "attack": "05",
+      "evidence_tail": "VERIFY=PASS\nBREAKPOINTS=2\nMMR_STATE=NOT_COMPUTED\nROOT=BAYMAX-BP-0000:c742e860bdc8519e3f5180666a12d24afba2930f5bdebfced01c0f421d7c3cf0\nROOT=BAYMAX-BP-0001:383268a4967085b2e512824d6dda3116bf0134b3e24f0565b5159102d192cddc\n",
+      "expected": "REJECT",
+      "name": "duplicate leaf (same artifact twice), merkle recomputed consistently",
+      "observed": "ACCEPT",
+      "result": "FAIL"
+    },
+    {
+      "attack": "06",
+      "evidence_tail": "VERIFY=FAIL\nFAILURE=BAYMAX-BP-0001.json: root mismatch\n",
+      "expected": "REJECT",
+      "name": "correct leaves, wrong claimed root",
+      "observed": "REJECT",
+      "result": "PASS"
+    },
+    {
+      "attack": "07",
+      "evidence_tail": "VERIFY=FAIL\nFAILURE=BAYMAX-BP-0001.json: ordering mismatch\n",
+      "expected": "REJECT",
+      "name": "correct root, incorrect claimed ordering label",
+      "observed": "REJECT",
+      "result": "PASS"
+    },
+    {
+      "attack": "09",
+      "evidence_tail": "VERIFY=PASS\nBREAKPOINTS=2\nMMR_STATE=NOT_COMPUTED\nROOT=BAYMAX-BP-0000:c742e860bdc8519e3f5180666a12d24afba2930f5bdebfced01c0f421d7c3cf0\nROOT=BAYMAX-BP-0001:84bf2a1720dcd831c103556e6eb2b9aba8b08db6a40e15b0d72a5b534f569c02\n",
+      "expected": "REJECT",
+      "name": "unicode: same file referenced via NFD path alias, resealed",
+      "observed": "ACCEPT",
+      "result": "FAIL"
+    },
+    {
+      "attack": "10",
+      "evidence_tail": "VERIFY=PASS\nBREAKPOINTS=2\nMMR_STATE=NOT_COMPUTED\nROOT=BAYMAX-BP-0000:c742e860bdc8519e3f5180666a12d24afba2930f5bdebfced01c0f421d7c3cf0\nROOT=BAYMAX-BP-0001:b12c884bc48fe5426db00b10194a1679e8e54153dd4b2d9b4695653223e4afb4\n",
+      "expected": "REJECT",
+      "name": "symlink substitution: committed artifact is a symlink to an outside file, resealed",
+      "observed": "ACCEPT",
+      "result": "FAIL"
+    },
+    {
+      "attack": "10b",
+      "evidence_tail": "VERIFY=PASS\nBREAKPOINTS=2\nMMR_STATE=NOT_COMPUTED\nROOT=BAYMAX-BP-0000:c742e860bdc8519e3f5180666a12d24afba2930f5bdebfced01c0f421d7c3cf0\nROOT=BAYMAX-BP-0001:c7e69aa2d9991c68464738e37fea58b6e224e5389fe9f1a3b33ef96a9a0542a5\n",
+      "expected": "REJECT",
+      "name": "path traversal: artifact path ../outside, resealed",
+      "observed": "ACCEPT",
+      "result": "FAIL"
+    },
+    {
+      "attack": "11",
+      "evidence_tail": "VERIFY=FAIL\nFAILURE=BAYMAX-BP-0001.json: artifact descriptors mismatch\nFAILURE=BAYMAX-BP-0001.json: leaf hashes mismatch\nFAILURE=BAYMAX-BP-0001.json: root mismatch\n",
+      "expected": "REJECT",
+      "name": "artifact bytes changed after hashing",
+      "observed": "REJECT",
+      "result": "PASS"
+    },
+    {
+      "attack": "12",
+      "evidence_tail": "VERIFY=FAIL\nFAILURE=BAYMAX-BP-0001.json: artifact read failure: [Errno 2] No such file or directory: '/private/var/folders/sc/z6dn_f195t7cfdfmwj9tltx00000gn/T/bmx-rt-hszl2zbv/r/nope.txt'\n",
+      "expected": "REJECT",
+      "name": "breakpoint references nonexistent artifact",
+      "observed": "REJECT",
+      "result": "PASS"
+    },
+    {
+      "attack": "13",
+      "evidence_tail": "VERIFY=PASS\nBREAKPOINTS=2\nMMR_STATE=NOT_COMPUTED\nROOT=BAYMAX-BP-0000:c742e860bdc8519e3f5180666a12d24afba2930f5bdebfced01c0f421d7c3cf0\nROOT=BAYMAX-BP-0001:9ab9144240c904375cdca252bf3ce577c163380f64b8a0f88aa451a7acdbcb31\n",
+      "expected": "REJECT",
+      "name": "breakpoint base_head references nonexistent git commit",
+      "observed": "ACCEPT",
+      "result": "FAIL"
+    },
+    {
+      "attack": "14",
+      "evidence_tail": "VERIFY=PASS\nBREAKPOINTS=2\nMMR_STATE=NOT_COMPUTED\nROOT=BAYMAX-BP-0000:c742e860bdc8519e3f5180666a12d24afba2930f5bdebfced01c0f421d7c3cf0\nROOT=BAYMAX-BP-0001:9ab9144240c904375cdca252bf3ce577c163380f64b8a0f88aa451a7acdbcb31\n",
+      "expected": "REJECT",
+      "name": "cross-project artifact substitution: repository field rewritten",
+      "observed": "ACCEPT",
+      "result": "FAIL"
+    },
+    {
+      "attack": "14b",
+      "evidence_tail": "VERIFY=PASS\nBREAKPOINTS=2\nMMR_STATE=NOT_COMPUTED\nROOT=BAYMAX-BP-0000:c742e860bdc8519e3f5180666a12d24afba2930f5bdebfced01c0f421d7c3cf0\nROOT=BAYMAX-BP-0001:9ab9144240c904375cdca252bf3ce577c163380f64b8a0f88aa451a7acdbcb31\n",
+      "expected": "REJECT",
+      "name": "broken parent link: BP-0001 parent rewritten",
+      "observed": "ACCEPT",
+      "result": "FAIL"
+    },
+    {
+      "attack": "20",
+      "evidence_tail": "gitleaks exit=1",
+      "expected": "REJECT",
+      "name": "secret admitted to evidence (fake AWS key in an artifact + gitleaks gate)",
+      "observed": "REJECT",
+      "result": "PASS"
+    }
+  ],
+  "control_unmutated": {
+    "exit": 0,
+    "output_tail": "VERIFY=PASS\nBREAKPOINTS=2\nMMR_STATE=NOT_COMPUTED\nROOT=BAYMAX-BP-0000:c742e860bdc8519e3f5180666a12d24afba2930f5bdebfced01c0f421d7c3cf0\nROOT=BAYMAX-BP-0001:9ab9144240c904375cdca252bf3ce577c163380f64b8a0f88aa451a7acdbcb31\n"
+  },
+  "schema": "baymax.redteam_receipt.v1",
+  "summary": {
+    "fail": 11,
+    "pass": 8,
+    "total": 19
+  },
+  "verifier": "scripts/verify_breakpoints.py"
+}

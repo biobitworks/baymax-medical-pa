@@ -1,0 +1,112 @@
+{
+ "schema": "baymax.redteam_lane.codex_repair_verification.v1",
+ "observed_at": "2026-10-04T21:44:00Z",
+ "lane": "INDEPENDENT_RED_TEAM_SIDE_LANE (no canonical BP; no primary/Codex worktree modified)",
+ "subject": {
+  "what": "Codex validator repair ('isolated repair'), reviewed as a HASHED SNAPSHOT of uncommitted working-tree files",
+  "worktrees": [
+   "/Users/byron/projects/active/baymax-codex-admission-isolated (branch codex/model-admission-parity-isolated)",
+   "/Users/byron/projects/active/baymax-codex-model-admission (branch codex/model-admission-parity) - validator bytes IDENTICAL to the isolated one"
+  ],
+  "base_head": "d4389ecfa7589c4e376d9be14658b9d4494f7fd5",
+  "COMMITTED": false,
+  "PUSHED": false,
+  "CODEX_REPAIR_HEAD": "NONE - repair exists only as uncommitted local changes; cannot be canonically admitted until committed",
+  "codex_status": "Codex reported its usage limit reached; no further changes observed (re-hash stable)",
+  "snapshot_identity": {
+   "ModelInference.swift": "0b364f57b2268e8023a97e4411647e9fe9b9cdc0554e4ff39490dbc61f26b6f5",
+   "model.py": "3cde9c7455ab0970195a352fd7f8b2e5fc9ea2d1e06b6cac90ae26ec4dd751cf",
+   "OfflineTravelApp.swift": "9823d315eefd28577c77bc11ea08299d2be4347b644ff50346943c2b73cd16e0",
+   "catalog_v2": "648e0e87bc4ec024dd1d46283bd7697fc9de266aef6980d336c113c7311d8d8a",
+   "packet_v2": "80e92bd4d0583fb58b261164ba2e53543ce7482a0f767bc7c3368c460de54147",
+   "codex_corpus_v4": "1cdca39af8c8a05725915fb85d110a5e731d1708c2b7f05c1c7205d8110436b2"
+  },
+  "attacked_before": {
+   "ModelInference.swift": "bcd89a9833e0...",
+   "model.py": "037f259f..."
+  },
+  "codex_snapshot_receipt_staleness": "8 of 9 overlapping files byte-identical to my snapshot; scripts/check_model_parity.py was edited after Codex's own snapshot receipt (validator unaffected)"
+ },
+ "what_the_repair_changes_verified_in_code": [
+  "catalog SHA-256 pinned at ApolloCatalog.decode (F2 closed)",
+  "record() requires exact frozen packet SHA and byte-equality of packet-embedded catalog incl. claim_boundary",
+  "strict lexeme scanner in Swift (BOM, trailing commas, non-integer number spellings, trailing values)",
+  "Python rejects float/constant tokens, handles RecursionError, NFC-aware duplicate keys; Swift NFC-normalizes decoded keys",
+  "identity fields are caller-owned observations: provider/model/substrate = HUMAN_REPORTED_UNVERIFIED; response text cannot set them"
+ ],
+ "RESULTS": {
+  "engine": "my own harness compiling the snapshot's REAL Swift ModelOutput.parse + the snapshot's REAL Python validate_response; Codex's check_model_parity.py NOT used",
+  "executions": 351,
+  "unique_vector_texts": 285,
+  "by_corpus": {
+   "model_admission_v4.json": {
+    "n": 136,
+    "swift_wrong": 0,
+    "python_wrong": 0,
+    "disagree": 0
+   },
+   "parity_vectors_138_SIMULATED.json": {
+    "n": 138,
+    "swift_wrong": 1,
+    "python_wrong": 1,
+    "disagree": 0
+   },
+   "fresh_vectors_77_SIMULATED.json": {
+    "n": 77,
+    "swift_wrong": 0,
+    "python_wrong": 0,
+    "disagree": 0
+   }
+  },
+  "PARITY": "PASS",
+  "state_and_decoded_selection_disagreements": 0,
+  "unsafe_content_accepted": 0,
+  "crashes": 0,
+  "codex_136_corpus": "0 disagreements, 0 wrong vs expected (63 of its 136 vectors are MY earlier vectors, so this corpus alone is not independent)",
+  "my_138_unseen_by_codex": "0 disagreements; 5 earlier disagreements (floats 1.0/1e0/0.0, trailing comma, BOM) now GONE; 1 expectation mismatch on both sides: '-0' accepted by both (documented design: Codex lists NEGATIVE_ZERO as accept; decodes to id 0; non-canonical bytes)",
+  "fresh_77_authored_after_reading_the_scanner": "0 disagreements, 0 wrong; includes 1500-deep nesting (no crash), lexeme edges, control chars, lone surrogates, escaped keys, framing, bounds, order preservation, 4096/4097 size",
+  "decoded_selection_parity": "compared for every accepted vector (known/unknown/recommended_questions, order-sensitive): identical",
+  "pin_and_identity_tests": {
+   "identity_cloud_label": {
+    "execution_substrate": "OpenRouter",
+    "model_label": "gpt-5-6-luna (cloud)",
+    "model_revision": "UNKNOWN",
+    "model_revision_state": "UNKNOWN",
+    "network_ui_state": "USER_REPORTED_AIRPLANE_MODE",
+    "provider": "UNKNOWN",
+    "provider_state": "HUMAN_REPORTED_UNVERIFIED"
+   },
+   "record_exact_packet_and_catalog": "ACCEPTED",
+   "record_packet_one_char_changed": "REJECTED",
+   "record_with_tampered_catalog_struct": "REJECTED",
+   "tampered_catalog_decode": "REJECTED"
+  }
+ },
+ "claims_from_codex_message": {
+  "canonical 136-vector corpus identical Python/Swift admission and decoded selections": "VERIFIED (independent harness)",
+  "TypeScript validator passes all 136": "NOT_TESTED (node blocked in this workspace; not worked around). TS validator is a THIRD implementation: parity with it is unverified",
+  "native app builds unsigned for iPhoneOS": "PARTIALLY VERIFIED: typecheck-only PASS (arm64-apple-ios17.0, iPhoneOS26.1 SDK, 0 errors/0 warnings, app sources + OfflineBundle.swift). Not linked, not signed, not installed, not run on a device",
+  "four mobile WebKit flows pass": "NOT_TESTED (Playwright/node not run by me)",
+  "WebKit offline-reload failure recorded, outside the passing claim": "NOTED - correctly excluded; offline reload remains NOT_PASSING"
+ },
+ "STILL_OPEN": {
+  "F3_lineage_split": "UNCHANGED (travel FCO from Brock407 lineage; 0 of 16 refs in catalog's FCG; app has no lineage check)",
+  "F4_dataset_text_injection": "UNCHANGED (poisoned medication text still enters catalog -> packet -> UI)",
+  "physical_vs_simulator": "app records UIDevice.current.model ('iPhone' on simulator too) - does not distinguish physical from simulated",
+  "negative_zero": "accepted by both; consider rejecting for canonical response bytes",
+  "decoded-catalog_text_trust": "catalog text is now hash-pinned but its CONTENT still derives from unsanitized dataset text at build time",
+  "TS_validator_parity": "NOT_TESTED",
+  "raw_response_bytes_and_reachability": "still not captured/probed (operator run needed)"
+ },
+ "VERDICT": {
+  "validator_repair": "VERIFIED for the Swift/Python pair at snapshot identity above (state + decoded-selection parity over 351 executions; catalog pin and record() binding hold)",
+  "admission_readiness": "NOT READY: uncommitted; TS validator and WebKit flows unverified by red team; F3/F4 open",
+  "claim_ceiling": "snapshot of uncommitted files; simulated vectors; no device run; no reachability probe; no clinical claim"
+ },
+ "required_next": [
+  "Codex commits the repair (and pushes) so a commit SHA binds these exact bytes; I re-verify the commit equals snapshot identity",
+  "extend parity corpus to the TypeScript validator in an environment where node is permitted",
+  "fix F3 (single dataset lineage with fail-closed check) and F4 (allowlist catalog text) before any 'safe path' claim",
+  "operator Airplane-Mode rerun capturing RAW response bytes + a reachability probe; verify with verify_apollo_run.py and parity_runner_v3.py"
+ ]
+}

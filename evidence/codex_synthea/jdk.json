@@ -1,0 +1,12 @@
+{
+  "INSTALL_METHOD": "brew install openjdk@17: already installed; explicit executable selected",
+  "INSTALL_SOURCE": "Homebrew openjdk@17",
+  "JAVA_PATH": "/opt/homebrew/opt/openjdk@17/bin/java",
+  "JAVA_SHA256": "4ac51957da9d64cc468d4ce67fc2f53644edc5585f8c4c92ce08ea30ee71db8a",
+  "JAVA_STATE_AFTER": "PASS",
+  "JAVA_STATE_BEFORE": "BLOCKED_NO_RUNTIME_DEFAULT_LAUNCHER",
+  "JDK_VENDOR": "Homebrew OpenJDK",
+  "JDK_VERSION": "17.0.20.1+0",
+  "java_version": "openjdk version \"17.0.20.1\" 2026-08-18\nOpenJDK Runtime Environment Homebrew (build 17.0.20.1+0)\nOpenJDK 64-Bit Server VM Homebrew (build 17.0.20.1+0, mixed mode, sharing)\n",
+  "platform": "macOS-26.6.2-arm64-arm-64bit"
+}

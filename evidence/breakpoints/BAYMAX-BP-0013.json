@@ -1,0 +1,54 @@
+{
+  "base_head": "3bdf82c0d10ea9b687895aabed932d81f43b5887",
+  "branch": "redteam/bp-0006-model-wallet",
+  "breakpoint_id": "BAYMAX-BP-0013",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 1597,
+        "path": "evidence/breakpoints/BAYMAX-BP-0012.json",
+        "sha256": "49d338a67b1c5727ef47e5415553d937f2200ae5ed0b032799c7461d4557f560"
+      },
+      {
+        "bytes": 812,
+        "path": "evidence/receipts/git/push_bp0012.json",
+        "sha256": "3f01bafa429a4acba389ab7caa5fffa2d8b1ac2deb75bc141b9bb3d951285151"
+      },
+      {
+        "bytes": 693,
+        "path": "evidence/receipts/git/concurrent_state_change_before_bp0013.json",
+        "sha256": "6dd88f729e960f6dbf58aff9c418c51324e792cc0cd40fb46e128dc61994f9c6"
+      },
+      {
+        "bytes": 849,
+        "path": "evidence/turns/BAYMAX-TURN-0002.json",
+        "sha256": "71ede19bac1ea79d45a4be533b9a9b5abc73a2477673922fac9b507b12599fbe"
+      },
+      {
+        "bytes": 887,
+        "path": "evidence/receipts/verification/preflight_bp0013.json",
+        "sha256": "4c7e1d8a41bfb05c9f670cc83c387605b032606a49bed93458b1e54a0f83b0c8"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 5,
+    "leaf_hashes": [
+      "c75eba42c984bf0aea30176ec1627738453b4baaa109790835b6103f557ab0b4",
+      "bf5569df03ba5b2b6bd5a1428b07d794ee2d4aef51c5dbc47ff3a6cdec28c1c8",
+      "d9b297d5a2745f4a5c48e2f9184388acaeb4c0a1f7d6d37defea0ffb5835174b",
+      "2bc2251108a30cb429f951822090326f502d9025ce22bd9317ff231ba2c84dc6",
+      "92ce6001bf16b4384ca40fd84ebf1be5b0b6c6811ba20eb57bee1785d1587fde"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "a65e61c70ea48ba6585ffc11e053f70f18343d7f133f10e4f37f931c2d84e14e"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "Records verified origin parity for BP-0012, the concurrent successor observed during sealing, the sanitized user push request, and preflight gates. Merkle root is a cryptographic commitment, not a digital signature; no local Git signing key was available.",
+  "parent": "BAYMAX-BP-0012",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "REMOTE_PUSH_CUSTODY_SEAL",
+  "state": "PASS",
+  "timestamp_utc": "2026-10-04T19:21:24.519270+00:00"
+}

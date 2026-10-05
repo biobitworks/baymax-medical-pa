@@ -1,0 +1,5 @@
+--- a/ios/OfflineTravelDemo/OfflineTravelApp.swift (f779923)
++++ b/ios/OfflineTravelDemo/OfflineTravelApp.swift (diagnostic, not candidate bytes)
+@@ loadContext() guard 10 @@
+-        guard sha256(loadedPacket) == "80e92bd4d0583fb58b261164ba2e53543ce7482a0f767bc7c3368c460de54147"
++        guard sha256(loadedPacket) == ModelContract.packetSHA256

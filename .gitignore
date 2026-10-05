@@ -1,0 +1,34 @@
+# Secrets / local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# JS/build
+node_modules/
+.next/
+dist/
+build/
+
+# OS/editor
+.DS_Store
+.vscode/
+.idea/
+
+# Sensitive/runtime payloads: commit only sanitized receipts/manifests
+private/
+sensitive/
+artifacts/private/
+evidence/runtime/
+*.sqlite
+*.db

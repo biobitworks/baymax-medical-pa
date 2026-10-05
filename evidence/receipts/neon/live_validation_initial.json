@@ -1,0 +1,129 @@
+{
+  "control_plane": {
+    "claim_ceiling": "credential/profile state only",
+    "cli_version": "8.0.6",
+    "credential_present": "ABSENT",
+    "executed": false,
+    "implemented": "NO_ACTIVE_BRANCH_PROJECT_CODE",
+    "observed": true,
+    "result": "BLOCKED_CREDENTIAL",
+    "sdk_package": "neon-cli",
+    "technology_id": "NEON_CONTROL_API",
+    "vendor": "Neon"
+  },
+  "credential_presence": {
+    "AWS_ACCESS_KEY_ID": "PRESENT",
+    "AWS_ENDPOINT_URL_S3": "PRESENT",
+    "AWS_REGION": "PRESENT",
+    "AWS_SECRET_ACCESS_KEY": "PRESENT",
+    "DATABASE_URL": "PRESENT",
+    "DATABASE_URL_UNPOOLED": "PRESENT",
+    "NEON_AI_GATEWAY_BASE_URL": "PRESENT",
+    "NEON_AI_GATEWAY_TOKEN": "PRESENT",
+    "NEON_API_KEY": "ABSENT",
+    "NEON_AUTH_BASE_URL": "PRESENT",
+    "NEON_AUTH_JWKS_URL": "PRESENT",
+    "NEON_BRANCH": "PRESENT"
+  },
+  "lanes": {
+    "ai_gateway": {
+      "catalog_latency_ms": 1122,
+      "catalog_result": "PASS",
+      "chosen_model": "claude-opus-4-8",
+      "claim_ceiling": "synthetic gateway inference transport/model execution only; no medical correctness",
+      "credential_present": "PRESENT",
+      "executed": true,
+      "inference_http": "400",
+      "inference_latency_ms": 1023,
+      "inference_result": "FAIL",
+      "mistral_catalog_ids": [],
+      "model_catalog_count": 49,
+      "model_catalog_http": "200",
+      "model_catalog_identity": "ffd4172fce84b32007126ddcc03f51f400f8c8bb38f6548de15b83cc87289ad3",
+      "observed": true,
+      "response_identity": "0b534fbb04dc6ea836a58d0943a87f2e1e1c144afdca5ae487e4f86bc678a6a1",
+      "sdk_package": "curl/raw HTTPS",
+      "semantic_exact_match": false,
+      "synthetic_request_identity": "0c2482c16f37405c5d7869ec4c412c8da36aab5b77cfeb2f40312507b67d6ed1",
+      "technology_id": "NEON_AI_GATEWAY",
+      "vendor": "Neon",
+      "vendor_request_id": null
+    },
+    "auth": {
+      "claim_ceiling": "public JWKS reachability/key publication only; sign-in flow not verified",
+      "config_declared_upstream": true,
+      "executed": true,
+      "http_status": "200",
+      "jwks_key_count": 1,
+      "latency_ms": 849,
+      "observed": true,
+      "response_identity": "0fffd8bae5a78e228dd0dbbbd26759910ae1f46d2ca43d71bcbd443c694846a7",
+      "result": "PASS",
+      "sdk_package": "curl/raw HTTPS",
+      "technology_id": "NEON_AUTH",
+      "vendor": "Neon"
+    },
+    "object_storage": {
+      "bucket": "medical-records",
+      "claim_ceiling": "synthetic object lifecycle only; bucket privacy/compliance not inferred",
+      "credential_present": "PRESENT",
+      "delete_rc": 0,
+      "executed": true,
+      "get_rc": 0,
+      "head_rc": 0,
+      "observed": true,
+      "put_rc": 0,
+      "readback_identity": "6e2f2b8e4c72b0b7f2ec58f658db0b9ada4251cdf580cd904ba530f9fac29ac1",
+      "readback_match": true,
+      "result": "PASS",
+      "sdk_package": "aws-cli",
+      "synthetic_payload_identity": "6e2f2b8e4c72b0b7f2ec58f658db0b9ada4251cdf580cd904ba530f9fac29ac1",
+      "technology_id": "NEON_OBJECT_STORAGE",
+      "vendor": "Neon"
+    },
+    "postgres": {
+      "claim_ceiling": "synthetic DB round-trip only",
+      "credential_present": "PRESENT",
+      "error_class": null,
+      "error_code": null,
+      "executed": true,
+      "observed": true,
+      "response_identity": "ccbd00c137e042937bd91bff74c3714557bc9d8c7ba102486cb85b7ad3f504fe",
+      "result": "PASS",
+      "sdk_package": "pg",
+      "sdk_version": "8.13.1",
+      "synthetic_insert_read_delete": true,
+      "technology_id": "NEON_POSTGRES",
+      "vendor": "Neon"
+    }
+  },
+  "phi_external_execution": "BLOCKED",
+  "sanitized_endpoints": {
+    "ai_gateway": {
+      "host": "br-wild-art-b45sf9zf-api.ai.c-6.us-east-2.aws.neon.tech",
+      "path": "/",
+      "port": null,
+      "scheme": "https"
+    },
+    "auth_jwks": {
+      "host": "ep-old-rain-b4r3pct3.neonauth.c-6.us-east-2.aws.neon.tech",
+      "path": "/neondb/auth/.well-known/jwks.json",
+      "port": null,
+      "scheme": "https"
+    },
+    "object_storage": {
+      "host": "br-wild-art-b45sf9zf.storage.c-6.us-east-2.aws.neon.tech",
+      "path": "/",
+      "port": null,
+      "scheme": "https"
+    },
+    "postgres": {
+      "host": "ep-old-rain-b4r3pct3-pooler.c-6.us-east-2.aws.neon.tech",
+      "path": "/neondb",
+      "port": null,
+      "scheme": "postgresql"
+    }
+  },
+  "schema": "baymax.neon_live_validation.v1",
+  "synthetic_only": true
+}

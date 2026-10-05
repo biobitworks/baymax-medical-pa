@@ -1,0 +1,18 @@
+{
+  "claim_ceiling": "synthetic gateway inference transport/model execution only; no medical correctness",
+  "content_nonempty": true,
+  "error": null,
+  "http_status": "200",
+  "latency_ms": 2003,
+  "model": "claude-opus-4-8",
+  "repair_of": "BAYMAX-BP-0011 temperature-parameter failure",
+  "request_identity": "e37cab3e823195b8d98c99e153f2f5ed59404c69473b3c00284e2b63355f0d30",
+  "response_identity": "28748b1c6035146afda9dc58235cae045c4440da333c0003dc058fa1b0439289",
+  "result": "PASS",
+  "schema": "baymax.neon_ai_gateway_repair.v1",
+  "semantic_exact_match": true,
+  "synthetic_only": true,
+  "technology_id": "NEON_AI_GATEWAY",
+  "vendor": "Neon",
+  "vendor_request_id": "msg_bdrk_gfjmkrrqfpngcubjihz3lamadvgypjd2ie2vwbnynbv4h7oeqgmq"
+}

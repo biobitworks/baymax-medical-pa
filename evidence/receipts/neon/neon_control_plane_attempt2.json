@@ -1,0 +1,73 @@
+{
+  "calls": {
+    "GET /api_keys": {
+      "latency_s": 0.513,
+      "status": 404
+    },
+    "GET /projects": {
+      "body_sha256": "a40d71950abf9ea8f59e84b9ddda7fa30bc10ef706efea3093ba13bd14332cfa",
+      "count": 0,
+      "latency_s": 0.681,
+      "status": 200
+    },
+    "GET /users/me": {
+      "body_sha256": "0ebaeff401e855a8ea0d73c53fa1b6ec52d0623b15056620a0f3873e0402b9f2",
+      "error_code": "",
+      "latency_s": 1.647,
+      "request_id": "1f158bae-35b4-4499-919d-340153e740a1",
+      "status": 404
+    },
+    "neon me (CLI)": {
+      "exit": 1,
+      "stderr_class": "ERROR: not allowed for organization API keys\n",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "capability": "project/branch/endpoint identity + key-scope inference via REST and CLI",
+  "claim_ceiling": "Read-only control-plane identity observed. IDs hashed. Key scope is INFERRED from endpoint access, not read from an authoritative scope field. No mutation of Neon resources performed.",
+  "cli_version": "8.0.6",
+  "config_file_identities": {
+    "upstream_neon.ts_git_blob": "a44c615eab4779333b0d47cad6a3344965d1f7a3"
+  },
+  "credential_presence": {
+    "DATABASE_URL": "PRESENT",
+    "NEON_API_KEY": "PRESENT",
+    "NEON_BRANCH": "PRESENT"
+  },
+  "database_endpoint_id_hash": "260b3f36a09b",
+  "env_var_names": [
+    "NEON_API_KEY",
+    "DATABASE_URL",
+    "NEON_BRANCH"
+  ],
+  "executed": true,
+  "implemented": true,
+  "key_scope_inference": {
+    "api_keys_list_ok": false,
+    "label": "INFERRED_NOT_AUTHORITATIVE",
+    "projects_list_ok": true,
+    "reading": "narrower scope or org/project-scoped key",
+    "recommendation": "prefer a project-scoped key for automation; rotate this one if it is account-wide",
+    "users_me_ok": false
+  },
+  "lockfile_identity": {
+    "note": "upstream lockfile contains 0 '@neon' entries",
+    "upstream_package-lock_git_blob": "3c679a532ac39cac2dec6982c115136c7a9c9115"
+  },
+  "matched_project_found": false,
+  "observed": false,
+  "observed_at": "2026-10-04T19:30:16Z",
+  "phi": "none; synthetic data only",
+  "result": "PARTIAL",
+  "sanitized_endpoint": "console.neon.tech/api/v2",
+  "schema": "baymax.technology_receipt.v1",
+  "sdk": "requests+neon CLI",
+  "sdk_present": true,
+  "sdk_version": "2.32.5",
+  "source_commit": "34f992dd0cb2f06df7d2be05b7d3bc2edf77d6ef",
+  "tags": [
+    "NEON",
+    "CONTROL_PLANE"
+  ],
+  "technology_id": "NEON_CONTROL_PLANE"
+}

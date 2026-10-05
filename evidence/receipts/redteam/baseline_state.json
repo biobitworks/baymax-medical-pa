@@ -1,0 +1,41 @@
+{
+  "anchor": "none - no signed tag possible; tail truncation (attack 02c) undetectable until human sets up signing",
+  "hipaa": "DESIGN_GOAL / NOT_VERIFIED",
+  "ios_stack": {
+    "executorch": "NOT_PRESENT",
+    "healthkit": "NOT_PRESENT",
+    "mapkit": "NOT_PRESENT",
+    "state": "NOT_IMPLEMENTED",
+    "swift_sources": 0,
+    "xcodeproj": 0
+  },
+  "liquid_models": {
+    "LFM2.5-1.2B": "NOT_TESTED",
+    "LFM2.5-2.6B": "NOT_TESTED",
+    "LFM2.5-350M": "NOT_TESTED",
+    "ollama_list_lfm": "3"
+  },
+  "observed_utc": "2026-10-04T18:50:07Z",
+  "prior_lineage": "BAYMAX-BP-0000, BAYMAX-BP-0001 by prior agent; preserved unmodified",
+  "repo": {
+    "local": "/Users/byron/projects/active/baymax-medical-pa",
+    "origin": "biobitworks/baymax-medical-pa (fork)",
+    "origin_branch_compliance/golden-years-backend-v01": "4b26dd15eb9b81008920d2649df0be1f780c89dc",
+    "pr1_head_matches": true,
+    "session_cwd_note": "session cwd /Users/byron/projects/active/bay-max is an EMPTY dir under an unrelated parent repo; not the Baymax repo",
+    "upstream": "jerelvelarde/baymax-medical-pa",
+    "upstream_main": "74bfe7708ba1a94dd856bd69ed852f8288f72bf7"
+  },
+  "schema": "baymax.baseline_state_receipt.v1",
+  "signing": {
+    "action": "no key generated or substituted",
+    "observed": [
+      "no user.signingkey/gpg.format/commit.gpgsign in git config",
+      "ssh-agent: no identities",
+      "gpg keyring query blocked by lock timeout",
+      "HEAD 4b26dd1 %G?=N (unsigned)"
+    ],
+    "state": "BLOCKED_HUMAN_SIGNING_SETUP"
+  },
+  "sponsors": "CREDENTIAL/SDK/IMPLEMENTED/EXECUTED all NOT_TESTED; no sponsor code in repo"
+}

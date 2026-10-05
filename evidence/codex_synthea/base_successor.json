@@ -1,0 +1,9 @@
+{
+  "adopted_parent": "BAYMAX-BP-0020",
+  "adopted_pushed_head": "1174d0a0fd64c1aa5998bdd3c19a2ed49298e3cf",
+  "comparison": "BP-0020 FAILED; no generated patient admitted there; independent pinned JAR lane succeeds",
+  "original_admission_base": "780f80fd473c43d186a0fc00ab8ca1827336c1c7",
+  "original_shared_worktree_dirty": true,
+  "reason": "Concurrent remote advancement observed before successor allocation; fast-forward only; original actor signed payload preserved",
+  "shared_worktree_modified": false
+}

@@ -1,0 +1,3 @@
+{"decision":"keep prior agent PR branch untouched; successor branch redteam/bp-0002-custody","decision2":"no key generated; signing BLOCKED_HUMAN_SIGNING_SETUP; commit local+unsigned, no tag, no push","ts":"2026-10-04"}
+{"decision":"neon blocked: Neon vars ABSENT in process; an ignored .env appeared mid-session but was NOT read (access denied by guard, not circumvented); human to confirm intent","ts":"2026-10-04"}
+{"decision":"fly BLOCKED_HUMAN_FLY_AUTH (no flyctl, no token); signet NOT_TESTED (no credential, docs not reviewed, no registration); signing still blocked; commit local unsigned","ts":"2026-10-04"}

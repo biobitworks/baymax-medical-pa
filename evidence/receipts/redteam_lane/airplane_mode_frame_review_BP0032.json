@@ -1,0 +1,66 @@
+{
+ "schema": "baymax.redteam_lane.airplane_mode_frame_review.v1",
+ "observed_at": "2026-10-04T21:17:46Z",
+ "reviewer": "Claude (independent red-team lane)",
+ "recording": {
+  "path_basename": "ScreenRecording_10-04-2026 13-59-40_1.MP4",
+  "sha256": "a3c25ef13c01e59a0be4c4a0f14f244b35a88e7f477d9493cff7c47f1900ab5c",
+  "bytes": 25617197,
+  "video": "hevc 828x1792",
+  "duration_seconds": 60.447256,
+  "creation_time_utc": "2026-10-04T20:59:41Z",
+  "raw_committed": false,
+  "why_not_committed": "contains phone UI/status details; hashes are sufficient for custody"
+ },
+ "identity_relation_to_BP0032": {
+  "bp0032_admitted_sha256": "0a27258360baff39f01cce47fb63148b6e2104c2d3e5bf0f1033447bc0e95866",
+  "bp0032_bytes": 16321771,
+  "bp0032_codec": "h264 512x1108",
+  "relation": "DIFFERENT_BYTES_SAME_RECORDING_LIKELY (duration 60.4473 vs 60.4467 s; creation time matches filename 13:59:40 local); BP-0032 hash is of the uploaded copy, original bytes differ",
+  "bp0030_mov_sha256_matches_its_receipt": "ef8b2d2b1d90bfd838d4a1e9be4ef3937b15b45b25d474375ea232c1ff1fc12b (9,014,548 B)"
+ },
+ "agreement_with_codex_side_lane": "commit 87f9608 receipt offline_video_successor_observation.json reports identical bytes/sha256/codec/duration for this file; my independent numbers match",
+ "frames_viewed": [
+  {
+   "t": 0,
+   "obs": "cellular signal + Wi-Fi + VPN indicators present; Control Center Airplane OFF, Wi-Fi ON"
+  },
+  {
+   "t": 3,
+   "obs": "status bar shows airplane icon only; Airplane control ON; Wi-Fi control crossed out; cellular dimmed; Bluetooth still on"
+  },
+  {
+   "t": 10,
+   "obs": "Apollo open; airplane icon only; model label 'LFM2.5-1\u2026 \u00b7 Q5_K_M' (truncated by UI)"
+  },
+  {
+   "t": 20,
+   "obs": "prompt visible ending 'Live pharmacy hours are UNKNOWN.'; generation spinner; airplane icon only"
+  },
+  {
+   "t": 50,
+   "obs": "reply rendered: summary 'SYNTHETIC DEMO ONLY', known [0,1,2], unknown [3,4,5], recommended_questions [0,1,2], medical_action NONE, requires_clinician true; airplane icon only"
+  },
+  {
+   "t": 58,
+   "obs": "scrolled-up prompt shows required summary 'SYNTHETIC_CONTEXT_ONLY' and catalog-id instructions; airplane icon still only indicator"
+  }
+ ],
+ "classification": {
+  "PHYSICAL_IPHONE": "OBSERVED_VISUALLY (real cellular indicators and battery; not a simulator UI)",
+  "AIRPLANE_MODE_DURING_GENERATION": "OBSERVED_VISUALLY",
+  "APOLLO_LOCAL_GENERATION": "OBSERVED_VISUALLY",
+  "INTERNET_REACHABILITY": "NOT_PROBED",
+  "MODEL_IDENTITY": "PARTIAL (label truncated; revision UNKNOWN)",
+  "APOLLO_VERSION": "UNKNOWN",
+  "RESPONSE_CONTRACT": "FAIL (model wrote 'SYNTHETIC DEMO ONLY' instead of the required code) - validator rejection is CORRECT",
+  "RESPONSE_BYTES": "NOT_CAPTURED (rendering shows typographic quotes; reply identity exists only as a visual transcription)",
+  "DESTINATION_PROMPT_BYTES": "NOT_VERIFIED (paste); only fragments visible"
+ },
+ "caveats": [
+  "airplane icon + crossed Wi-Fi supports radio state; it is not a reachability probe",
+  "a screen recording does not prove authenticity of the human/device",
+  "tester could have re-enabled Wi-Fi off-camera; none seen in sampled frames (0,2,3,10,20,40,50,58 s)"
+ ],
+ "claim_ceiling": "Visual evidence review of one recording. Not a complete Baymax-app offline end-to-end test. No PHI observed."
+}

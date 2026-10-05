@@ -1,0 +1,114 @@
+{
+ "schema": "baymax.redteam_lane.classification.v1",
+ "lane": "INDEPENDENT_RED_TEAM_AND_VERIFICATION",
+ "execution_agent": "Claude",
+ "reviewed": {
+  "primary_branch": "redteam/bp-0006-model-wallet",
+  "primary_commit": "afaf213f72be111ea17a702ddcb6fff05874773c",
+  "upstream_main": "fdbdbfc2b01ae9a7d216291194254f4aac818342",
+  "upstream_src_main_tsx_sha256": "122ebda53cb8d3dce902ade6828eb72748b1a0d19cb1ca8309b64146458d9ebd"
+ },
+ "classification": {
+  "PRIMARY_BREAKPOINT_REVIEWED": "BAYMAX-BP-0000..0016",
+  "REMOTE_PARITY": "PASS (afaf213 == origin; NOT authenticity)",
+  "DATA_SOURCE_PROVENANCE": "NOT_TESTED (no Synthea/Kaggle/FHIR/Bali artifact exists on any ref, commit message, or worktree)",
+  "LICENSE_GATE": "NOT_TESTED / UNKNOWN_TERMS (no dataset selected). MIMIC-IV: OUT_OF_SCOPE",
+  "SYNTHETIC_CLASSIFICATION": "FAIL_BY_ABSENCE (no distinct SYNTHETIC/DEIDENTIFIED/PUBLIC_AGGREGATE/REAL_PERSONAL_HEALTH/MODEL_INFERRED classes in code; policy.py has sensitive-class set only)",
+  "FHIR_TRANSFORM": "NOT_TESTED (LOADS/TRANSFORMS/ROUNDTRIP/SEMANTIC all NOT_TESTED)",
+  "FCG_PROVENANCE": "NOT_TESTED",
+  "OFFLINE_EXECUTION": "NOT_TESTED (no offline bundle exists)",
+  "FIXTURE_FALLBACK": "FAIL: fixtureAdapter canned responses shown with only console.warn; no user-visible fixture label; code comment calls it 'offline fallback'",
+  "LOCAL_MODEL": "NOT_IN_PRODUCT_PATH (Mastra agent = external neon/gpt-5-6-luna); local Liquid routing NEGATIVE x3 (BP-0006)",
+  "DIRECTORY": "NOT_IMPLEMENTED",
+  "MAP_DATA": "NOT_IMPLEMENTED",
+  "CALL_ACTION": "NOT_IMPLEMENTED (no tel:/call UI; AUTONOMOUS_CALL=NOT_IMPLEMENTED; no UI implies a call placed)",
+  "MEDICATION_BOUNDARY": "PARTIAL: honest text ('No purchase has been made'; 'Professional verification required'); FAIL on visuals: green check on 'Match a licensed local pharmacy' with no pharmacy data (SIMULATED rendered as completed); keyword 'diabet' renders 'Your diabetes medication refill' (negation-blind, MODEL/keyword-INFERRED shown as user fact)",
+  "MASTRA_DISCLOSURE_GATE": "COMPLIANCE_PRE_GATE=MISSING for real health data: adapter POSTs JSON.stringify({messages: history}) (full history, every turn) to /api/agents/baymaxAgent/stream -> Mastra -> external model; only zod length checks on /travel routes; privacy is prompt-level only",
+  "MODEL_AUTHORITY": "PASS-with-caveat: prompts forbid diagnosis/prescribing, but enforcement is prompt-only; doctorBriefTool medications/allergies/history are model-populated",
+  "UI_PRIVACY_CLAIM": "FAIL for real data: 'Your information stays in this session' contradicted by per-turn external-model disclosure",
+  "PUBLIC_ENDPOINT": "P1 once deployed: fly.toml public http_service; agent stream route has no auth middleware visible",
+  "MERKLE_RECOMPUTE": "15/17 PASS; BP-0002 and BP-0003 FAIL against bytes at admitting commit d3308c7 (BP-0002..0005 batched in one commit; files edited/redacted between mint and commit; those byte versions never existed in git). Roots internally consistent, UNVERIFIABLE against history",
+  "CHAIN_VERIFY": "PASS (repo verify_chain; consistency only)",
+  "LEGACY_VERIFY": "FAIL (verify_breakpoints.py conflict unchanged; visible)",
+  "MMR_STATE": "NOT_COMPUTED (repo chain)",
+  "SIGNATURE_STATE": "UNSIGNED",
+  "SECRET_SCAN": "PASS for credential-class values over 145 tracked files (3 files match only non-credential AWS_REGION/NEON_BRANCH values); .env ignored/untracked; no PII-pattern hits",
+  "REAL_PHI": "NONE FOUND (synthetic labels present in experiments; not exhaustively proven)",
+  "NEON_STATE_VS_EXPECTED": "MATCHES: CONTROL_PLANE=PARTIAL, POSTGRES=PASS_SYNTHETIC, AUTH=PARTIAL, AI_GATEWAY=PASS_SYNTHETIC (tiny n; sample size not recorded in primary receipts), OBJECT_STORAGE=PASS_SYNTHETIC, PROJECT_MATCH=UNKNOWN",
+  "DOC_OVERCLAIM": "docs/MODEL_PROVIDER_MATRIX.md lists LFM 1.2B 'edge/on-device primary... suitable local privacy lane' from vendor sources; contradicted by BP-0006 measured NEGATIVE routing; LFM licence terms not verified"
+ },
+ "ranked_findings": [
+  {
+   "p": "P0*",
+   "id": "RT-01",
+   "finding": "No compliance pre-gate before external model; full history sent each turn",
+   "scope": "*P0 only if real health data; acceptable for synthetic demo"
+  },
+  {
+   "p": "P0*",
+   "id": "RT-02",
+   "finding": "UI privacy copy ('information stays in this session') false w.r.t. external model disclosure",
+   "scope": "same"
+  },
+  {
+   "p": "P1",
+   "id": "RT-03",
+   "finding": "Silent fixture fallback presented as normal response; 'offline' wording conflates fixture with offline AI"
+  },
+  {
+   "p": "P1",
+   "id": "RT-04",
+   "finding": "Order-preview check marks imply pharmacy matched/license checked without data"
+  },
+  {
+   "p": "P1",
+   "id": "RT-05",
+   "finding": "Keyword-inferred condition ('diabet') shown as user's medication; negation-blind"
+  },
+  {
+   "p": "P1",
+   "id": "RT-06",
+   "finding": "Provider matrix claims Liquid suitability contradicting local measurements"
+  },
+  {
+   "p": "P1",
+   "id": "RT-07",
+   "finding": "Own-lane custody gap: BP-0002/0003 unverifiable at admission; batch commit of 4 breakpoints"
+  },
+  {
+   "p": "P1",
+   "id": "RT-08",
+   "finding": "Public Fly deployment would expose unauthenticated agent endpoint"
+  },
+  {
+   "p": "P2",
+   "id": "RT-09",
+   "finding": "No distinct data-classification states in code; synthetic could collapse into generic health data"
+  },
+  {
+   "p": "P2",
+   "id": "RT-10",
+   "finding": ".mcp.json (Neon MCP URL only) untracked and not gitignored; model receipts lack sample-size fields"
+  }
+ ],
+ "counts": {
+  "PASS": 6,
+  "PARTIAL": 2,
+  "FAIL": 8,
+  "NEGATIVE": 1,
+  "BLOCKED": 1,
+  "UNKNOWN": 3,
+  "DEFERRED": 0,
+  "NOT_TESTED": 9
+ },
+ "claim_ceiling": "Static review of upstream/main 2d913a4 + primary branch afaf213 and independent git-object recompute. No dynamic UI execution, no network-denied run, no dataset work possible (none exists). Synthetic != clinically validated.",
+ "required_repair": [
+  "Insert deterministic ComplianceKernel + bounded ContextPacket between Assistant UI and Mastra",
+  "Label fixture responses visibly; rename 'offline fallback'",
+  "Remove completion checkmarks for unexecuted steps; replace keyword inference with explicit user-confirmed fields",
+  "Correct privacy copy to disclose external model processing",
+  "One breakpoint per commit; admit RT evidence by reference",
+  "Auth/rate-limit agent route before public Fly deploy"
+ ],
+ "next_action": "Primary lane adds a data-class enum (SYNTHETIC|DEIDENTIFIED|PUBLIC_AGGREGATE|REAL_PERSONAL_HEALTH|MODEL_INFERRED) and a ComplianceKernel stub with tests BEFORE integrating Synthea/Kaggle; red-team lane then verifies dataset provenance/licence once a dataset is actually selected."
+}

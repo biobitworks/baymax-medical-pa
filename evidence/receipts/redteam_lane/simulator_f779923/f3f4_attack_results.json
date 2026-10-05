@@ -1,0 +1,492 @@
+{
+ "candidate_root": "/tmp/rt_cand",
+ "results": [
+  {
+   "group": "BASELINE",
+   "case": "baseline unmodified",
+   "rejected_at": "NONE",
+   "outcome": "ACCEPT_BASELINE",
+   "reason": "passed all mirrored guards"
+  },
+  {
+   "group": "BASELINE",
+   "case": "python catalog regenerates shipped catalog byte-equal",
+   "rejected_at": "NONE",
+   "outcome": "ACCEPT",
+   "reason": "canonical equality"
+  },
+  {
+   "group": "F3_BUILDER",
+   "case": "dataset ID changed in bundle",
+   "rejected_at": "BUILDER",
+   "outcome": "REJECT",
+   "reason": "bundle dataset lineage mismatch"
+  },
+  {
+   "group": "F3_BUILDER",
+   "case": "source FHIR hash changed in bundle",
+   "rejected_at": "BUILDER",
+   "outcome": "REJECT",
+   "reason": "bundle FHIR lineage mismatch"
+  },
+  {
+   "group": "F3_BUILDER",
+   "case": "FCG hash changed in bundle",
+   "rejected_at": "BUILDER",
+   "outcome": "REJECT",
+   "reason": "bundle FCG lineage mismatch"
+  },
+  {
+   "group": "F3_BUILDER",
+   "case": "FCG node with foreign dataset id",
+   "rejected_at": "BUILDER",
+   "outcome": "REJECT",
+   "reason": "bundle FCG lineage mismatch"
+  },
+  {
+   "group": "F3_BUILDER_REPINNED",
+   "case": "FCG node with foreign dataset id [bundle FCG hash re-pinned]",
+   "rejected_at": "BUILDER",
+   "outcome": "REJECT",
+   "reason": "FCG node lineage mismatch"
+  },
+  {
+   "group": "F3_BUILDER",
+   "case": "FCG foreign node inserted (extra node, foreign dataset)",
+   "rejected_at": "BUILDER",
+   "outcome": "REJECT",
+   "reason": "bundle FCG lineage mismatch"
+  },
+  {
+   "group": "F3_BUILDER_REPINNED",
+   "case": "FCG foreign node inserted (extra node, foreign dataset) [bundle FCG hash re-pinned]",
+   "rejected_at": "BUILDER",
+   "outcome": "REJECT",
+   "reason": "FCG node lineage mismatch"
+  },
+  {
+   "group": "F3_BUILDER",
+   "case": "required patient ref removed from FCG",
+   "rejected_at": "BUILDER",
+   "outcome": "REJECT",
+   "reason": "bundle FCG lineage mismatch"
+  },
+  {
+   "group": "F3_BUILDER_REPINNED",
+   "case": "required patient ref removed from FCG [bundle FCG hash re-pinned]",
+   "rejected_at": "BUILDER",
+   "outcome": "REJECT",
+   "reason": "required catalog source absent from FCG"
+  },
+  {
+   "group": "F3_BUILDER",
+   "case": "required active medication ref removed from FCG",
+   "rejected_at": "BUILDER",
+   "outcome": "REJECT",
+   "reason": "bundle FCG lineage mismatch"
+  },
+  {
+   "group": "F3_BUILDER_REPINNED",
+   "case": "required active medication ref removed from FCG [bundle FCG hash re-pinned]",
+   "rejected_at": "BUILDER",
+   "outcome": "REJECT",
+   "reason": "required catalog source absent from FCG"
+  },
+  {
+   "group": "F3_BUILDER",
+   "case": "bundle medication fabricated ref not in FCG",
+   "rejected_at": "BUILDER",
+   "outcome": "REJECT",
+   "reason": "bundle FCG lineage mismatch"
+  },
+  {
+   "group": "F3_BUILDER_REPINNED",
+   "case": "bundle medication fabricated ref not in FCG [bundle FCG hash re-pinned]",
+   "rejected_at": "BUILDER",
+   "outcome": "REJECT",
+   "reason": "required catalog source absent from FCG"
+  },
+  {
+   "group": "F3_BUILDER",
+   "case": "source FHIR manifests disagree",
+   "rejected_at": "BUILDER",
+   "outcome": "REJECT",
+   "reason": "single reproducible FHIR identity required"
+  },
+  {
+   "group": "F3_BUILDER",
+   "case": "source type wrong",
+   "rejected_at": "BUILDER",
+   "outcome": "REJECT",
+   "reason": "controlled synthetic DatasetSourceFCO required"
+  },
+  {
+   "group": "F3_BUILDER",
+   "case": "source synthetic_state not synthetic",
+   "rejected_at": "BUILDER",
+   "outcome": "REJECT",
+   "reason": "controlled synthetic DatasetSourceFCO required"
+  },
+  {
+   "group": "F3_BUILDER",
+   "case": "FCG file bytes changed (whitespace) vs pinned bundle hash",
+   "rejected_at": "BUILDER",
+   "outcome": "REJECT",
+   "reason": "bundle FCG lineage mismatch"
+  },
+  {
+   "group": "F3_SHIPPED_PINS_BYPASSED",
+   "case": "Brock407 FCO (232ecea) with candidate catalog",
+   "rejected_at": "SWIFT_GUARDS_2_9",
+   "outcome": "REJECT",
+   "reason": "required field missing: 'source_projection_sha256'"
+  },
+  {
+   "group": "F3_SHIPPED",
+   "case": "Brock407 FCO (232ecea) with candidate catalog",
+   "rejected_at": "SWIFT_GUARD_1_FCO_SHA_PIN",
+   "outcome": "REJECT",
+   "reason": "fco decode=REJECT sha_pin=MISMATCH"
+  },
+  {
+   "group": "F3_SHIPPED",
+   "case": "Brock407 FCO to python catalog()",
+   "rejected_at": "CATALOG",
+   "outcome": "REJECT",
+   "reason": "dataset lineage mismatch"
+  },
+  {
+   "group": "F3_SHIPPED_PINS_BYPASSED",
+   "case": "FCO dataset ID changed",
+   "rejected_at": "SWIFT_GUARDS_2_9",
+   "outcome": "REJECT",
+   "reason": "catalog dataset id mismatch"
+  },
+  {
+   "group": "F3_SHIPPED",
+   "case": "FCO dataset ID changed",
+   "rejected_at": "SWIFT_GUARD_1_FCO_SHA_PIN",
+   "outcome": "REJECT",
+   "reason": "fco decode=REJECT sha_pin=MISMATCH"
+  },
+  {
+   "group": "F3_SHIPPED_PINS_BYPASSED",
+   "case": "FCO graph sha changed",
+   "rejected_at": "SWIFT_GUARDS_2_9",
+   "outcome": "REJECT",
+   "reason": "catalog graph sha mismatch"
+  },
+  {
+   "group": "F3_SHIPPED",
+   "case": "FCO graph sha changed",
+   "rejected_at": "SWIFT_GUARD_1_FCO_SHA_PIN",
+   "outcome": "REJECT",
+   "reason": "fco decode=ACCEPT sha_pin=MISMATCH"
+  },
+  {
+   "group": "F3_SHIPPED_PINS_BYPASSED",
+   "case": "FCO fhir sha changed",
+   "rejected_at": "SWIFT_GUARDS_2_9",
+   "outcome": "REJECT",
+   "reason": "catalog fhir sha mismatch"
+  },
+  {
+   "group": "F3_SHIPPED",
+   "case": "FCO fhir sha changed",
+   "rejected_at": "SWIFT_GUARD_1_FCO_SHA_PIN",
+   "outcome": "REJECT",
+   "reason": "fco decode=ACCEPT sha_pin=MISMATCH"
+  },
+  {
+   "group": "F3_SHIPPED_PINS_BYPASSED",
+   "case": "FCO projection sha changed",
+   "rejected_at": "SWIFT_GUARDS_2_9",
+   "outcome": "REJECT",
+   "reason": "catalog bundle sha != FCO projection"
+  },
+  {
+   "group": "F3_SHIPPED",
+   "case": "FCO projection sha changed",
+   "rejected_at": "SWIFT_GUARD_1_FCO_SHA_PIN",
+   "outcome": "REJECT",
+   "reason": "fco decode=ACCEPT sha_pin=MISMATCH"
+  },
+  {
+   "group": "F3_SHIPPED",
+   "case": "FCO bytes whitespace-only change",
+   "rejected_at": "SWIFT_GUARD_1_FCO_SHA_PIN",
+   "outcome": "REJECT",
+   "reason": "fco decode=ACCEPT sha_pin=MISMATCH"
+  },
+  {
+   "group": "F3_SHIPPED_PINS_BYPASSED",
+   "case": "FCO required patient ref removed",
+   "rejected_at": "SWIFT_GUARDS_2_9",
+   "outcome": "REJECT",
+   "reason": "catalog source not in FCO refs"
+  },
+  {
+   "group": "F3_SHIPPED",
+   "case": "FCO required patient ref removed",
+   "rejected_at": "SWIFT_GUARD_1_FCO_SHA_PIN",
+   "outcome": "REJECT",
+   "reason": "fco decode=ACCEPT sha_pin=MISMATCH"
+  },
+  {
+   "group": "F3_SHIPPED_PINS_BYPASSED",
+   "case": "FCO foreign ref inserted",
+   "rejected_at": "SWIFT_DECODE",
+   "outcome": "REJECT",
+   "reason": "fco decode=REJECT sha_pin=MISMATCH"
+  },
+  {
+   "group": "F3_SHIPPED",
+   "case": "FCO foreign ref inserted",
+   "rejected_at": "SWIFT_GUARD_1_FCO_SHA_PIN",
+   "outcome": "REJECT",
+   "reason": "fco decode=REJECT sha_pin=MISMATCH"
+  },
+  {
+   "group": "F3_SHIPPED",
+   "case": "catalog dataset ID changed",
+   "rejected_at": "SWIFT_CATALOG_SHA_PIN",
+   "outcome": "REJECT",
+   "reason": "catalog decode=REJECT sha_pin=MISMATCH"
+  },
+  {
+   "group": "F3_SHIPPED",
+   "case": "catalog FCO id changed",
+   "rejected_at": "SWIFT_CATALOG_SHA_PIN",
+   "outcome": "REJECT",
+   "reason": "catalog decode=REJECT sha_pin=MISMATCH"
+  },
+  {
+   "group": "F3_SHIPPED",
+   "case": "catalog source-FCO id swapped to foreign",
+   "rejected_at": "SWIFT_CATALOG_SHA_PIN",
+   "outcome": "REJECT",
+   "reason": "catalog decode=REJECT sha_pin=MISMATCH"
+  },
+  {
+   "group": "F3_SHIPPED",
+   "case": "catalog graph sha changed",
+   "rejected_at": "SWIFT_CATALOG_SHA_PIN",
+   "outcome": "REJECT",
+   "reason": "catalog decode=REJECT sha_pin=MISMATCH"
+  },
+  {
+   "group": "F3_SHIPPED",
+   "case": "catalog fhir sha changed",
+   "rejected_at": "SWIFT_CATALOG_SHA_PIN",
+   "outcome": "REJECT",
+   "reason": "catalog decode=REJECT sha_pin=MISMATCH"
+  },
+  {
+   "group": "F3_SHIPPED",
+   "case": "catalog bundle sha changed",
+   "rejected_at": "SWIFT_CATALOG_SHA_PIN",
+   "outcome": "REJECT",
+   "reason": "catalog decode=REJECT sha_pin=MISMATCH"
+  },
+  {
+   "group": "F4_TEXT",
+   "case": "payload in med.text #0",
+   "rejected_at": "NONE",
+   "outcome": "ACCEPT_NO_LEAK",
+   "reason": "payload_in_catalog_or_packet=False"
+  },
+  {
+   "group": "F4_TEXT",
+   "case": "payload in coding.display #0",
+   "rejected_at": "NONE",
+   "outcome": "ACCEPT_NO_LEAK",
+   "reason": "payload_in_catalog_or_packet=False"
+  },
+  {
+   "group": "F4_TEXT",
+   "case": "payload in med.text #1",
+   "rejected_at": "NONE",
+   "outcome": "ACCEPT_NO_LEAK",
+   "reason": "payload_in_catalog_or_packet=False"
+  },
+  {
+   "group": "F4_TEXT",
+   "case": "payload in coding.display #1",
+   "rejected_at": "NONE",
+   "outcome": "ACCEPT_NO_LEAK",
+   "reason": "payload_in_catalog_or_packet=False"
+  },
+  {
+   "group": "F4_TEXT",
+   "case": "payload in med.text #2",
+   "rejected_at": "NONE",
+   "outcome": "ACCEPT_NO_LEAK",
+   "reason": "payload_in_catalog_or_packet=False"
+  },
+  {
+   "group": "F4_TEXT",
+   "case": "payload in coding.display #2",
+   "rejected_at": "NONE",
+   "outcome": "ACCEPT_NO_LEAK",
+   "reason": "payload_in_catalog_or_packet=False"
+  },
+  {
+   "group": "F4_TEXT",
+   "case": "payload in med.text #3",
+   "rejected_at": "NONE",
+   "outcome": "ACCEPT_NO_LEAK",
+   "reason": "payload_in_catalog_or_packet=False"
+  },
+  {
+   "group": "F4_TEXT",
+   "case": "payload in coding.display #3",
+   "rejected_at": "NONE",
+   "outcome": "ACCEPT_NO_LEAK",
+   "reason": "payload_in_catalog_or_packet=False"
+  },
+  {
+   "group": "F4_TEXT",
+   "case": "payload in med.text #4",
+   "rejected_at": "NONE",
+   "outcome": "ACCEPT_NO_LEAK",
+   "reason": "payload_in_catalog_or_packet=False"
+  },
+  {
+   "group": "F4_TEXT",
+   "case": "payload in coding.display #4",
+   "rejected_at": "NONE",
+   "outcome": "ACCEPT_NO_LEAK",
+   "reason": "payload_in_catalog_or_packet=False"
+  },
+  {
+   "group": "F4_TEXT",
+   "case": "payload in med.text #5",
+   "rejected_at": "NONE",
+   "outcome": "ACCEPT_NO_LEAK",
+   "reason": "payload_in_catalog_or_packet=False"
+  },
+  {
+   "group": "F4_TEXT",
+   "case": "payload in coding.display #5",
+   "rejected_at": "NONE",
+   "outcome": "ACCEPT_NO_LEAK",
+   "reason": "payload_in_catalog_or_packet=False"
+  },
+  {
+   "group": "F4_TEXT",
+   "case": "gender poison",
+   "rejected_at": "CATALOG",
+   "outcome": "REJECT",
+   "reason": "patient gender not allowlisted"
+  },
+  {
+   "group": "F4_TEXT",
+   "case": "gender case variant Female",
+   "rejected_at": "CATALOG",
+   "outcome": "REJECT",
+   "reason": "patient gender not allowlisted"
+  },
+  {
+   "group": "F4_TEXT",
+   "case": "gender missing key",
+   "rejected_at": "NONE",
+   "outcome": "ACCEPT_NO_LEAK",
+   "reason": "payload_in_catalog_or_packet=False"
+  },
+  {
+   "group": "F4_TEXT",
+   "case": "RxNorm system changed",
+   "rejected_at": "CATALOG",
+   "outcome": "REJECT",
+   "reason": "untrusted medication code system"
+  },
+  {
+   "group": "F4_TEXT",
+   "case": "code changed to unknown",
+   "rejected_at": "CATALOG",
+   "outcome": "REJECT",
+   "reason": "medication code not allowlisted"
+  },
+  {
+   "group": "F4_TEXT",
+   "case": "code missing",
+   "rejected_at": "CATALOG",
+   "outcome": "REJECT",
+   "reason": "untrusted medication code"
+  },
+  {
+   "group": "F4_TEXT",
+   "case": "multiple codings",
+   "rejected_at": "CATALOG",
+   "outcome": "REJECT",
+   "reason": "active medication source/single coding required"
+  },
+  {
+   "group": "F4_TEXT",
+   "case": "no codings",
+   "rejected_at": "CATALOG",
+   "outcome": "REJECT",
+   "reason": "active medication source/single coding required"
+  },
+  {
+   "group": "F4_TEXT",
+   "case": "arabic-indic digits code",
+   "rejected_at": "CATALOG",
+   "outcome": "REJECT",
+   "reason": "untrusted medication code"
+  },
+  {
+   "group": "F4_TEXT",
+   "case": "code with newline",
+   "rejected_at": "CATALOG",
+   "outcome": "REJECT",
+   "reason": "untrusted medication code"
+  },
+  {
+   "group": "F4_TEXT",
+   "case": "code with space",
+   "rejected_at": "CATALOG",
+   "outcome": "REJECT",
+   "reason": "untrusted medication code"
+  },
+  {
+   "group": "F4_TEXT",
+   "case": "code leading zero",
+   "rejected_at": "CATALOG",
+   "outcome": "REJECT",
+   "reason": "medication code not allowlisted"
+  },
+  {
+   "group": "F4_TEXT",
+   "case": "code int type",
+   "rejected_at": "CATALOG",
+   "outcome": "REJECT",
+   "reason": "untrusted medication code"
+  },
+  {
+   "group": "F4_TEXT",
+   "case": "med source_fco_id missing",
+   "rejected_at": "CATALOG",
+   "outcome": "REJECT",
+   "reason": "active medication source/single coding required"
+  },
+  {
+   "group": "APP_GUARD10",
+   "case": "hard-coded packet SHA literal in loadContext equals shipped packet",
+   "rejected_at": "SWIFT_GUARD_10",
+   "outcome": "REJECT_BENIGN_DATA",
+   "reason": "literal_in_app=True shipped_packet_sha=4c51c8d5623f contract_pin=4c51c8d5623f"
+  }
+ ],
+ "summary": {
+  "APP_GUARD10:REJECT_BENIGN_DATA": 1,
+  "BASELINE:ACCEPT": 1,
+  "BASELINE:ACCEPT_BASELINE": 1,
+  "F3_BUILDER:REJECT": 12,
+  "F3_BUILDER_REPINNED:REJECT": 5,
+  "F3_SHIPPED:REJECT": 15,
+  "F3_SHIPPED_PINS_BYPASSED:REJECT": 7,
+  "F4_TEXT:ACCEPT_NO_LEAK": 13,
+  "F4_TEXT:REJECT": 13
+ }
+}

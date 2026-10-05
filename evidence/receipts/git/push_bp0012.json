@@ -1,0 +1,17 @@
+{
+  "branch": "redteam/bp-0006-model-wallet",
+  "breakpoint": "BAYMAX-BP-0012",
+  "breakpoint_merkle_root": "e8a593c91e31e00989e945713764fa79e90622eb8081391458e7aa306c8c5714",
+  "claim_boundary": "Remote parity proves the observed Git ref matched the local commit at observation time; it is not an independent digital signature.",
+  "commit_signature_state": "UNSIGNED",
+  "external_anchor_observation": "remote branch head equals local head",
+  "git_signature_status": "N",
+  "local_head": "3bdf82c0d10ea9b687895aabed932d81f43b5887",
+  "observed_at": "2026-10-04T19:20:56Z",
+  "remote": "origin",
+  "remote_head": "3bdf82c0d10ea9b687895aabed932d81f43b5887",
+  "remote_parity": "PASS",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.git_push_receipt.v1",
+  "secret_values_recorded": false
+}

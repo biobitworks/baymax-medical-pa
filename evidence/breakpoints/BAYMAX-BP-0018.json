@@ -1,0 +1,36 @@
+{
+  "base_head": "a8f53d2af335d9e110088322d88011cc71d6ae64",
+  "branch": "redteam/bp-0006-model-wallet",
+  "breakpoint_id": "BAYMAX-BP-0018",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 760,
+        "path": "evidence/receipts/git/push_bp0017.json",
+        "sha256": "8cac5dd61b391fb5165c6ea1b3cd4cab162592f9642c22d12c591e1c8379df8f"
+      },
+      {
+        "bytes": 4547,
+        "path": "evidence/breakpoints/BAYMAX-BP-0017.json",
+        "sha256": "9ab9f4a5dd8a272bd39c9cfdaf6b07be61f680607e7b6d2e867f632035f8a9a5"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 2,
+    "leaf_hashes": [
+      "e571259178547a57a7e817e8a0fbdd12f1d47fa69e78c23389b0303e603c65e3",
+      "f0fffc3cd7747b0c3e2577a92d135746d910c98c8f1983c75ca2cc29dace5218"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "3437f4e23accd047f788083e801347622bb999a2c3b31515817881a18edbff5d"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "BP-0017 pushed non-force to Biobitworks origin; remote branch head independently matched local a8f53d2; commit remains UNSIGNED.",
+  "parent": "BAYMAX-BP-0017",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "NEON_AGENT_TOOLING_REMOTE_PARITY",
+  "state": "PASS",
+  "timestamp_utc": "2026-10-04T19:44:40.915017+00:00"
+}

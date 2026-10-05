@@ -1,0 +1,30 @@
+{
+  "base_head": "780f80fd473c43d186a0fc00ab8ca1827336c1c7",
+  "branch": "redteam/bp-0006-model-wallet",
+  "breakpoint_id": "BAYMAX-BP-0020",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 1154,
+        "path": "evidence/receipts/synthea/generation_attempt1_failed.json",
+        "sha256": "4eadeccad4944dcd82eee67e0bf70ac989f29e88d00917c6a1e00a953a7a79df"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 1,
+    "leaf_hashes": [
+      "3014caae0655a78a2332340c1ae87ff834352c7ebd8ca051314a18c7487e0fa4"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "3014caae0655a78a2332340c1ae87ff834352c7ebd8ca051314a18c7487e0fa4"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "Official-source Synthea generation attempt failed because external source checkout was concurrently removed/replaced; no generated patient admitted.",
+  "parent": "BAYMAX-BP-0019",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "SYNTHEA_GENERATION_ATTEMPT_1",
+  "state": "FAILED",
+  "timestamp_utc": "2026-10-04T19:59:43.853289+00:00"
+}

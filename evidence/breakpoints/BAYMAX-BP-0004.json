@@ -1,0 +1,54 @@
+{
+  "base_head": "4b26dd15eb9b81008920d2649df0be1f780c89dc",
+  "branch": "redteam/bp-0002-custody",
+  "breakpoint_id": "BAYMAX-BP-0004",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 6598,
+        "path": "scripts/verify_chain.py",
+        "sha256": "e68476eb818ee6ef4202cc409b191a1b294e37ba940ee5a680b48e555c705a48"
+      },
+      {
+        "bytes": 746,
+        "path": "evidence/receipts/redteam/gitleaks_bp0002_finding.json",
+        "sha256": "c3545bfde4def470fce91947f197085f4a1060e56c2ad5b3737e5468d65b61a9"
+      },
+      {
+        "bytes": 10541,
+        "path": "evidence/receipts/redteam/custody_attacks_v2_hardened_r2.json",
+        "sha256": "b31f10a9100c4dd7f31aa09fedf11d90374761508c76ec4c1c9ebf749b521fcb"
+      },
+      {
+        "bytes": 26,
+        "path": "evidence/receipts/redteam/gitleaks_bp0003.txt",
+        "sha256": "e796b84ab4fe8a9b5897544b4c1994339ced792bfad5dd5e49a72c9db5ceb9c5"
+      },
+      {
+        "bytes": 1910,
+        "path": "evidence/breakpoints/BAYMAX-BP-0003.json",
+        "sha256": "e65839a9cace85e5beba8d1412d00278a9326ab6f069fd9476e3bb7ab8da2821"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 5,
+    "leaf_hashes": [
+      "749d9774750b9c74089c2d4a9a6659608e5a801592bd65833433af26ee283cd3",
+      "67f911ea45963e281d65e17b85c968a87d15cd63d85727c4c1abac92fdbda08a",
+      "8e1986c158033d8690983b4607b61af6fe8555e1fca7931a5d92dadac81422cf",
+      "6e01e86babe468dc56447c091fcbfa32445815603f313611e96eadf131bb7808",
+      "effe1c10e26877f0dd8f3d3c4341257a078df8a249390cec74f2245ce9032451"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "ae6667d11e802f2f62c533ae835686bfa01a0f7268cb2e8e44a9f494f13889eb"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "Verifier fix: artifacts verified against latest listing breakpoint (worktree-wide check broke history on legit edits). Redacted finding receipt. Preserves r2/gitleaks failure receipts.",
+  "parent": "BAYMAX-BP-0003",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "VERIFIER_LATEST_DESCRIPTOR_RULE",
+  "state": "PASS",
+  "timestamp_utc": "2026-10-04T18:51:42.856181+00:00"
+}

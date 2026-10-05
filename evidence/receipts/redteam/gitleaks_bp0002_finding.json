@@ -1,0 +1,19 @@
+{
+  "schema": "baymax.gitleaks_finding_redacted.v1",
+  "scan": "gitleaks detect --no-git on tree incl. BP-0002 artifacts",
+  "exit": 1,
+  "findings": [
+    {
+      "rule": "aws-access-token",
+      "file": "redteam/custody_attacks.py",
+      "line": 126
+    },
+    {
+      "rule": "generic-api-key",
+      "file": "redteam/custody_attacks.py",
+      "line": 126
+    }
+  ],
+  "classification": "synthetic fixture literal (attack 20), not a real credential; match text redacted",
+  "remediation": "fixture assembled at runtime (BP-0003). NOTE: BP-0003 originally committed the UNREDACTED raw finding file by workflow error (rm blocked aborted the redaction step); the raw bytes were never committed to git; redacted successor admitted in BP-0004"
+}

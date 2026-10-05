@@ -1,0 +1,22 @@
+{
+  "assistant_ui_commit": "1d2a57c9275cc5f72afa9cbcd58402422fcf05e0",
+  "claim_ceiling": "upstream byte/code review only; no active-branch integration or build claimed",
+  "neon_commit": "105da26ca4cf993190634c90485f468663cfb95d",
+  "neon_ts": {
+    "ai_gateway": true,
+    "auth": true,
+    "bucket": "medical-records",
+    "bucket_access": "private"
+  },
+  "package_manifest_observation": {
+    "neon_config_dependency_declared": false,
+    "neon_config_imported_by_neon_ts": true,
+    "state": "NEGATIVE"
+  },
+  "schema": "baymax.upstream_integration_review.v1",
+  "states": {
+    "assistant_ui_commit": "FETCHED_LOCAL_OBJECT_PRESENT_NOT_ADMITTED",
+    "neon_commit": "FETCHED_LOCAL_OBJECT_PRESENT_NOT_ADMITTED"
+  },
+  "upstream_repository": "jerelvelarde/baymax-medical-pa"
+}
