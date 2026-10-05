@@ -1,5 +1,7 @@
 # BayMax - Medical Personal Agent
 
+![Status: Alpha](https://img.shields.io/badge/status-alpha-e7ae58)
+
 > **An adorable Medical Personal Agent that cares for you, designed to be secure and compliant.**
 
 **Build Personal Agents Hackathon Project Submission**
@@ -7,6 +9,10 @@
 **Project site:** [thinkun.github.io/baymax-site](https://thinkun.github.io/baymax-site/) (source in [`site/`](site/index.html))
 
 Baymax is a privacy-first personal medical assistant that helps you take care of yourself before health becomes an emergency. It remembers what matters, nudges you to follow through, and helps you carry your health context wherever life takes you.
+
+![Baymax: daily care, reminders, and prescription shopping](docs/media/baymax-hero.gif)
+
+[Explore the launch presentation](presentation/README.md) · Component-driven demo with illustrative data.
 
 ## UI walkthroughs
 

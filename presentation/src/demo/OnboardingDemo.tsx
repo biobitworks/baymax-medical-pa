@@ -4,7 +4,7 @@ import {Cue,InteractionProvider} from './Interaction';
 import {MascotSprite} from './MascotSprite';
 const goals=[{icon:'◷',title:'Stay on top of medications',detail:'Reminders and refill planning'},{icon:'♡',title:'Prepare for appointments',detail:'Your notes, questions, and records'},{icon:'◉',title:'Build a daily routine',detail:'Small goals and gentle check-ins'}];
 export const OnboardingDemo=()=>{
- const f=useCurrentFrame();const step=Math.min(3,Math.floor(f/100));const local=f-step*100;
+ const frame=useCurrentFrame();const f=frame>=350?frame-150:frame;const step=Math.min(3,Math.floor(f/100));const local=f-step*100;
  const selected=(i:number)=>step>0?i<2:i===0?local>20:i===1&&local>45;
  return <InteractionProvider scene="onboarding" step={step} frame={local}><div className="onboarding-stage"><div className="onboarding-steps">{['Your goals','Medical records','Review'].map((label,i)=><span className={step>=i?'active':''} key={label}><b>{step>i?'✓':i+1}</b>{label}</span>)}</div>
  {step===0?<><h2>What would you like help with?</h2><p className="onboarding-subtitle">Choose what matters to you. You can change this anytime.</p><div className="goal-options">{goals.map((g,i)=><div key={g.title} className={`goal-option ${selected(i)?'selected':''}`}><span className="goal-icon">{g.icon}</span><div><h3>{g.title}</h3><p>{g.detail}</p></div><span className="goal-check">{selected(i)?'✓':''}</span><Cue id={g.title}/></div>)}</div><button className="onboarding-action">Set my goals <span>↗</span><Cue id="Set my goals"/></button></>:

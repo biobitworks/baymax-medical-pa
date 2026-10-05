@@ -43,3 +43,20 @@
 .closing .closing-sprite{top:35px;left:805px;width:310px;height:310px;transform-origin:top center}.closing .outro-copy{top:405px}.closing .outro-copy h1{font-size:100px;margin-bottom:35px}.closing .outro-copy .brand{font-size:64px}.closing .outro-copy .positioning{font-size:28px;margin-top:22px}.open-source-cta{margin-top:42px;display:flex;flex-direction:column;align-items:center;gap:18px}.open-source-cta strong{font-size:45px;font-weight:650;letter-spacing:-1px}.open-source-cta a{display:flex;align-items:center;gap:18px;font-size:32px;color:#426136;text-decoration:none;letter-spacing:-.5px}
 /* Large repository badge, matching the supplied closing-card reference. */
 .closing .outro-copy{top:355px}.closing .outro-copy h1{font-size:94px;margin-bottom:24px}.closing .outro-copy .positioning{margin-top:18px}.open-source-cta{margin-top:38px;gap:24px}.open-source-cta strong{font-size:52px}.open-source-cta a{width:1720px;gap:28px;font-size:61px;font-weight:650;letter-spacing:-2px;color:#283f34}.open-source-cta a svg{flex-shrink:0;width:132px;height:132px;padding:18px;border:3px solid #fff;border-radius:50%;background:#f8fbf0;box-shadow:0 15px 40px #304f3212}.open-source-cta a span{flex:1;white-space:nowrap;padding:35px 28px;background:#ffffffaa;border:3px solid #fff;border-radius:42px;box-shadow:0 15px 40px #304f3212}
+
+/* Diabetes + marathon shopping: distinct products, readable labels and context. */
+.variant-shopping .rx-caption{display:none}
+.variant-shopping .rx-pharmacies legend{width:100%;display:flex;justify-content:space-between;align-items:center}
+.rx-example-prices{font-size:21px;font-weight:400;color:#718168}
+.variant-shopping .rx-card-image{height:280px;background:#fbfaf7}
+.variant-shopping .rx-card-category{font-size:17px;letter-spacing:1.3px;color:#77866b;margin:17px 7px 0!important;font-weight:650}
+.variant-shopping .rx-card-title{font-size:30px;line-height:1.2;margin-top:10px;min-height:40px}
+.variant-shopping .rx-card-detail{font-size:22px;min-height:50px;line-height:1.35;margin-bottom:10px}
+.variant-shopping .rx-card-context b{font-size:22px;font-weight:500;line-height:1.35;display:block;min-height:48px}
+.variant-shopping .rx-card-context small{font-size:19px!important;line-height:1.4}
+.variant-shopping .rx-pharmacy>strong{font-size:34px!important;margin-top:12px;text-align:left}
+.variant-shopping .rx-quantity{margin:8px 0}
+.layout-refill:not(.variant-shopping) .rx-caption{font-size:21px;line-height:1.4;margin:0;color:#6c7e5d}
+.layout-refill:not(.variant-shopping) .rx-product{margin:0}
+.layout-refill:not(.variant-shopping) .rx-product p{font-size:23px}
+.layout-refill:not(.variant-shopping) .rx-product-thumb{object-fit:contain;background:#fbfaf7}

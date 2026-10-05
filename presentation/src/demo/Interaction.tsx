@@ -15,13 +15,13 @@ export const events:Record<string,Record<string,number>>={
  'care:5':{'Water':12},
  'travel:0':{'Prepare checklist':62},
  'travel:2':{'Confirm remaining supply with your clinician':12,'Bring prescription and medication packaging':28,'Open doctor brief':51},
- 'prescription:1':{'travel':14,'Plus':37,'Review demo order':72},
+ 'prescription:1':{'glucose':14,'Plus':37,'Review demo order':72},
  'prescription:3':{'Consent':10,'Confirm demo order':30},
  'brief:1':{'Review email':34},
  'brief:3':{'Email consent':14,'Open email app':42},
 };
 const Interaction=createContext({frame:0,actions:{} as Record<string,number>});
-export const InteractionProvider=({scene,step,frame,children}:{scene:string;step:number;frame:number;children:React.ReactNode})=><Interaction.Provider value={{frame,actions:events[`${scene}:${step}`]??{}}}>{children}</Interaction.Provider>;
+export const InteractionProvider=({scene,step,frame,children,actions}:{scene:string;step:number;frame:number;children:React.ReactNode;actions?:Record<string,number>})=><Interaction.Provider value={{frame,actions:actions??events[`${scene}:${step}`]??{}}}>{children}</Interaction.Provider>;
 export const at=(scene:string,step:number,key:string)=>events[`${scene}:${step}`]?.[key]??Infinity;
 export function Cue({id}:{id:string}){
  const {frame,actions}=useContext(Interaction);const click=actions[id];

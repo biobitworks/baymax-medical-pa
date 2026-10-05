@@ -3,6 +3,9 @@ import {AbsoluteFill, Sequence, interpolate, spring, useCurrentFrame, useVideoCo
 import sceneData from './scene-data.json';
 import {OnboardingDemo} from './demo/OnboardingDemo';
 import {ReminderDemo} from './demo/ReminderDemo';
+import {ComputerDemo} from './demo/ComputerDemo';
+import {TodayDemo} from './demo/TodayDemo';
+import {PrivacySlide, UseCasesSlide} from './demo/OverviewSlides';
 import {DemoApp} from './demo/DemoApp';
 import {MascotSprite} from './demo/MascotSprite';
 import './video.css';
@@ -28,13 +31,17 @@ export const DemoChapter:React.FC<{scene:DemoScene;index:number}>=({scene,index}
  const current=Math.max(0,scene.captions.findLastIndex(c=>c.at*fps<=f));
  const captionAt=Math.round((scene.captions[current]?.at??0)*fps);
  const enter=interpolate(f,[0,12],[0,1],clamp);
- if(scene.id==='welcome')return <AbsoluteFill className="canvas onboarding-scene"><div className="onboarding-copy"><div className="scene-kicker">MEET BAYMAX</div><h1>{f<100?<>Your goals.<br/>Your care.</>:f<300?<>A little<br/>context.<br/>Better care.</>:<>Ready<br/>for you.</>}</h1></div><OnboardingDemo/></AbsoluteFill>;
+ if(scene.id==='summary')return <UseCasesSlide/>;
+ if(scene.id==='welcome'&&f>=200&&f<350)return <PrivacySlide/>;
+ if(scene.id==='computer')return <AbsoluteFill className="canvas"><ComputerDemo/></AbsoluteFill>;
+ if(scene.id==='care')return <AbsoluteFill className="canvas"><TodayDemo/></AbsoluteFill>;
+ if(scene.id==='welcome')return <AbsoluteFill className="canvas onboarding-scene"><div className="onboarding-copy"><div className="scene-kicker">MEET BAYMAX</div><h1>{f<100?<>Your goals.<br/>Your care.</>:f<450?<>A little<br/>context.<br/>Better care.</>:<>Ready<br/>for you.</>}</h1></div><OnboardingDemo/></AbsoluteFill>;
  if(scene.id==='reminders')return <AbsoluteFill className="canvas reminder-scene"><div className="reminder-copy"><div className="scene-kicker">BAYMAX · REMINDERS</div><h2>Small steps.<br/>Big Baymax<br/>energy.</h2><p>A little nudge.<br/>You choose when.</p></div><ReminderDemo/></AbsoluteFill>;
  const wide=(scene.id==='welcome'&&current===3)||(scene.id==='care'&&current===5)||scene.id==='brief'||(scene.id==='travel'&&current===3);
  const mode=wide?'overview':scene.id==='prescription'?'refill':scene.id==='care'&&current===0?'conversation':scene.id==='travel'?'travel':'personal';
- const title=scene.id==='care'?(current===0?'Make room\nfor you.':current===3?'How are\nyou, really?':current===4?'A little\nwin.':'Small steps.\nEvery day.'):scene.id==='prescription'?(current>=4?'All set.':current>=2?'One last\nlook.':'A refill.\nMade simple.'):scene.id==='travel'?'Care,\nwherever\nyou go.':scene.id==='welcome'?'Start with\nhello.':headlines[scene.id];
+ const title=scene.id==='care'?(current===0?'Make room\nfor you.':current===3?'How are\nyou, really?':current===4?'A little\nwin.':'Small steps.\nEvery day.'):scene.id==='prescription'?(current>=4?'All set.':current>=2?'One last\nlook.':'For the miles ahead.'):scene.id==='travel'?'Care,\nwherever\nyou go.':scene.id==='welcome'?'Start with\nhello.':headlines[scene.id];
  return <AbsoluteFill className={`canvas demo layout-${mode} ${scene.id==='care'&&(current===3||current===4)?'variant-checkin':''} ${scene.id==='prescription'&&current<2?'variant-shopping':''}`}>
- <div className="scene-copy" style={{opacity:enter}}><div className="scene-kicker">{scene.id==='prescription'?'PRESCRIPTION REFILL':scene.id==='travel'?'TRAVEL CARE':scene.id==='brief'?'DOCTOR BRIEF':scene.id==='welcome'?'MEET BAYMAX':'EVERYDAY CARE'}</div><h2>{wide?headlines[scene.id]:title}</h2><div className="scene-rule"/></div>
+ <div className="scene-copy" style={{opacity:enter}}><div className="scene-kicker">{scene.id==='prescription'?'DIABETES CARE · MARATHON PREP':scene.id==='travel'?'TRAVEL CARE':scene.id==='brief'?'DOCTOR BRIEF':scene.id==='welcome'?'MEET BAYMAX':'EVERYDAY CARE'}</div><h2>{wide?headlines[scene.id]:title}</h2><div className="scene-rule"/></div>
  <div className="feature-stage" style={{opacity:enter}}><DemoApp sceneId={scene.id} step={current} stepFrame={f-captionAt}/></div>
  </AbsoluteFill>;
 };

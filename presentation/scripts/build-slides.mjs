@@ -1,0 +1,14 @@
+import {build} from 'esbuild';
+import {readFile, mkdir, writeFile} from 'node:fs/promises';
+import {fileURLToPath} from 'node:url';
+import path from 'node:path';
+const root = fileURLToPath(new URL('../', import.meta.url));
+const files = ['mascot/idle.webp', 'mascot/greeting.webp', 'medicines/marathon/metformin.jpg', 'medicines/marathon/glucose.jpg', 'medicines/marathon/strips.jpg'];
+const assets = Object.fromEntries(await Promise.all(files.map(async file => [file, `data:image/${file.endsWith('.webp') ? 'webp' : 'jpeg'};base64,${(await readFile(path.join(root, 'public', file))).toString('base64')}`])));
+const result = await build({absWorkingDir: root, entryPoints: ['src/BrowserSlides.tsx'], bundle: true, minify: true, write: false, outfile: 'slides.js', format: 'iife', define: {'process.env.NODE_ENV': '"production"', '__BAYMAX_ASSETS__': JSON.stringify(assets)}});
+const js = result.outputFiles.find(file => file.path.endsWith('.js')).text.replaceAll('</script', '<\\/script');
+const css = result.outputFiles.find(file => file.path.endsWith('.css')).text;
+const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Baymax — Presentation</title><style>${css}</style></head><body><div id="root"></div><script>${js}</script></body></html>`;
+await mkdir(path.join(root, 'out'), {recursive: true});
+await writeFile(path.join(root, 'out', 'baymax-slides.html'), html);
+console.log('Created presentation/out/baymax-slides.html — self-contained, works offline.');
