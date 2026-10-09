@@ -1,0 +1,90 @@
+{
+  "base_head": "97fb98bde21518ffea1b9565fbae9d3485f2f089",
+  "branch": "codex/baymax-exa-egress-043",
+  "breakpoint_id": "BAYMAX-BP-0044-ANTIGENCE-EGRESS",
+  "claim_boundary": "Merkle root commits to exact declared artifact descriptors and ordering; it does not establish correctness, authorization, medical validity, or regulatory compliance.",
+  "merkle": {
+    "artifacts": [
+      {
+        "bytes": 2447,
+        "path": "CANON.md",
+        "sha256": "92bf2a1d1099d8dde111fdae22358ec50bdd8f334f7259a30a6b36d05a3e1f11"
+      },
+      {
+        "bytes": 3036,
+        "path": "AGENTS.md",
+        "sha256": "452dee4c40ecd4bda0fe50e78850df760ea95bbef3581d99854ef3d2e604e8c3"
+      },
+      {
+        "bytes": 2582,
+        "path": "package.json",
+        "sha256": "e50d6c77ba3b9b71b13ff6cbf4fa59ea699d6dfe7e1314d9f6a06972e3477123"
+      },
+      {
+        "bytes": 3874,
+        "path": "src/mastra/lib/exa-search.ts",
+        "sha256": "079830c09d292c00a71d46b33423e2a21ca38ae8043e17e27524075c8b72e439"
+      },
+      {
+        "bytes": 2610,
+        "path": "tests/exa-egress-policy-043.test.ts",
+        "sha256": "a6c098620c24f718746d9902b06ea7195c7aa51a5dad42350a2357596ca9da04"
+      },
+      {
+        "bytes": 2708,
+        "path": "tests/exa-search.test.ts",
+        "sha256": "e412f7e18301b9530c6ae095251bdf344fec2261baf6472d5133786b5cffcc5d"
+      },
+      {
+        "bytes": 2650,
+        "path": "tests/web-search-ui.test.ts",
+        "sha256": "e5bf47d8e1ea82c9fc07f7c2f1cb11fe738fb6cb4d76f9ba924d9685e6d8975a"
+      },
+      {
+        "bytes": 4084,
+        "path": "docs/ANTIGENCE_EXA_EGRESS_043.md",
+        "sha256": "4b6e60ac78bb119b13ae98ce5174c4d7ccd2f7a0338d593742c9976e7f4a4f97"
+      },
+      {
+        "bytes": 3081,
+        "path": "scripts/verify_antigense_044.py",
+        "sha256": "af7db28ecd9e93a2d7dee04bbb6755df0a2510a6926e2e452e54efb83a100ebb"
+      },
+      {
+        "bytes": 1858,
+        "path": "scripts/breakpoint_common.py",
+        "sha256": "81f0464ef88a87aeb779ad8ffccda1da2df2f93219da0790db68541cd3dfa128"
+      },
+      {
+        "bytes": 1970,
+        "path": "scripts/create_breakpoint.py",
+        "sha256": "2d41f0cbf688a0d6931344e3533562768e2ddbdda5030b4ec3084ce5970d9357"
+      }
+    ],
+    "construction": "baymax-ordered-merkle-v1: leaf=sha256(0x00||sha256(canonical_leaf_utf8)); node=sha256(0x01||raw(left)||raw(right)); odd=promote; order=argv",
+    "leaf_count": 11,
+    "leaf_hashes": [
+      "18a16bcfa1eca0b3177c42502396f1d7c2041b0fca38bd64b806608abec69cf2",
+      "ad82842531fbe957087b65feb41811829500891fdf319aefa0c6f604e45c0152",
+      "a05d2d1f74fab0e6e411d7c4b3ac169502eade53e9f6337df2b264a06b5e2575",
+      "67aa6c71f103baa0cc1f936bbab57be55f0719668184e65e7ff8ca3f44ca3595",
+      "08cc5590936703637006433cd8c3fca5e5a25189f8f6e77c88e1ed08d3056430",
+      "ba8b1899c5c092730b3ccca23649ef9aad4892e86fa9eb641ae2f29b27a57447",
+      "02d39799ae3f33bfe4717e6e6a102b9a573e1d2145b492ad6977db7ff6463a7c",
+      "0e518a0915657873215c5aaa9c91b047d19c9f04df9a123dff2509abf1b564d7",
+      "4fca429d8670a6bb0eacce81ca215046c3df22771fb8a0224830a679e9aa7979",
+      "7679c72feec55999780af1554eaa3eba38da98a232cee9f1bcb4ee8e39d7aeb0",
+      "f8b9b3bc5455202bcaf8051cafeb38c3643d7ba943e4ce142f72fe5eae702680"
+    ],
+    "leaf_ordering": "artifact_argv_order",
+    "merkle_root": "e5e27bba288af8ac6f552832d232d954b9f3e0543e810899fe3c00bbe94dde39"
+  },
+  "mmr_state": "NOT_COMPUTED",
+  "note": "Historical parent is referential only: global historical verification FAIL; synthetic search test and source commit are pinned; MMR NOT_COMPUTED",
+  "parent": "BAYMAX-BP-0043",
+  "repository": "biobitworks/baymax-medical-pa",
+  "schema": "baymax.breakpoint.v1",
+  "stage": "EXA_EGRESS_SECURITY_CONTROL",
+  "state": "EXECUTED_BOUNDED_LOCAL_20_OF_20_PASS",
+  "timestamp_utc": "2026-10-09T22:18:08.285605+00:00"
+}
