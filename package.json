@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "test:search": "node --experimental-strip-types --test tests/exa-search.test.ts tests/web-search-ui.test.ts",
+    "test:search": "node --experimental-strip-types --test tests/exa-search.test.ts tests/web-search-ui.test.ts tests/exa-egress-policy-043.test.ts",
     "dev": "vite --host 0.0.0.0",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview --host 0.0.0.0",

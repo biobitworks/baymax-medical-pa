@@ -25,12 +25,46 @@ export const exaSearchOutputSchema = z.object({
   })),
 });
 
+/** Narrow, deterministic pre-egress guard for identifiable text.
+ * It is a high-confidence blocker, NOT a general PHI classifier or a HIPAA determination.
+ * Do not echo the rejected query in errors or analytics.
+ */
+export function assertGeneralExternalSearchQuery(query: string, domains?: string[]) {
+  const sensitive = [
+    /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i,
+    /\b(?:\+?\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}\b/,
+    /\b\d{3}[- ]?\d{2}[- ]?\d{4}\b/,
+    /\b(?:date of birth|dob|medical record|mrn|patient id|insurance id|member id)\b/i,
+    /\b(?:my|i have|i am|i'm|i take)\b[^.!?\n]{0,120}\b(?:prescription|medication|diagnos(?:ed|is)|allerg(?:y|ies)|treatment)\b/i,
+  ];
+  const variants = [query.normalize("NFKC")];
+  for (let pass = 0; pass < 2; pass++) {
+    const current = variants[variants.length - 1];
+    try {
+      const decoded = decodeURIComponent(current).normalize("NFKC");
+      if (decoded === current) break;
+      variants.push(decoded);
+    } catch {
+      break;
+    }
+  }
+  if (variants.some((text) => text.length > 240 || /[\r\n]/.test(text)
+      || sensitive.some((rule) => rule.test(text)))) {
+    throw new Error("External search requires a short, general, de-identified query.");
+  }
+  const hostnameOnly = /^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$/i;
+  if (domains?.some((domain) => !hostnameOnly.test(domain))) {
+    throw new Error("External search domain filters must be ordinary hostnames.");
+  }
+}
+
 /** Server-only search. Do not pass user profiles or private health records. */
 export async function searchExa(
   input: z.input<typeof exaSearchInputSchema>,
   abortSignal?: AbortSignal,
 ) {
   const { query, numResults, includeDomains } = exaSearchInputSchema.parse(input);
+  assertGeneralExternalSearchQuery(query, includeDomains);
   const apiKey = process.env.EXA_API_KEY?.trim();
   if (!apiKey) throw new Error("Exa search is not configured. Set EXA_API_KEY in the server .env.");
 
